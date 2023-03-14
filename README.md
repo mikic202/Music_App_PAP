@@ -10,7 +10,7 @@
 - Jakub Kierasiński
 
 <h2>Pomysł</h2>
-Aplikacja Desktopowa do wspólnego odtwarzania muzyki i filmów.
+Aplikacja Desktopowa do wspólnego odtwarzania muzyki.
 
 <h2>Technologie</h2>
 
