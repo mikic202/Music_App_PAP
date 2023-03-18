@@ -1,5 +1,6 @@
 package DatabaseInteractors;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 
 public class ConversationDataAccesor implements DataAccesorInterface {
@@ -18,8 +19,8 @@ public class ConversationDataAccesor implements DataAccesorInterface {
         return usr_data;
     }
 
-    public static Hashtable<String, String> get_data_with_email(String email) {
-        Hashtable<String, String> usr_data = new Hashtable<String, String>();
-        return usr_data;
+    public static ArrayList<Integer> get_users_in_conversation(String email) {
+        ArrayList<Integer> users = new ArrayList<Integer>();
+        return users;
     }
 }
