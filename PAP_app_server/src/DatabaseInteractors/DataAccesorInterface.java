@@ -2,7 +2,7 @@ package DatabaseInteractors;
 
 import java.util.Hashtable;
 
-public interface UserDataAccesor {
+public interface DataAccesorInterface {
     Hashtable<String, String> get_user_data(int user_id);
 
     Hashtable<String, String> get_user_data(String username);
