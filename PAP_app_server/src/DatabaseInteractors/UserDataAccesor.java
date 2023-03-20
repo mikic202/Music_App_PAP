@@ -41,8 +41,9 @@ public class UserDataAccesor implements DataAccesorInterface {
     public static ArrayList<Integer> get_user_conversations(int id) {
         ArrayList<Integer> conversations = new ArrayList<Integer>();
 
-        String querry = String.format("Select conversation_id from %s where user_id='%s'",
-                DatabseInformation.USER_CONVERSATION_TABLE.value(), id);
+        String querry = String.format("Select %s from %s where %s='%s'",
+                UserDatabaseInformation.CONVERSATION_ID_COLUMN.value(),
+                UserDatabaseInformation.USER_CONVERSATION_TABLE.value(), UserDatabaseInformation.ID_COLUMN.value(), id);
 
         ResultSet result;
         try {
