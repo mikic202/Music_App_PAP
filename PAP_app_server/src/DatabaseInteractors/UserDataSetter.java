@@ -14,8 +14,11 @@ public class UserDataSetter implements DataSetterInterface {
 
             Statement stat = connection.createStatement();
             String request = String.format(
-                    "update users set username='%s', email='%s', password='%s' where user_id=%s",
-                    data.get("username"), data.get("email"), data.get("password"),
+                    "update %s set %s='%s', %s='%s', %s='%s' where %s=%s",
+                    UserDatabaseInformation.USER_TABLE.value(), UserDatabaseInformation.USERNAME_COLUMN.value(),
+                    data.get("username"), UserDatabaseInformation.EMAIL_COLUMN.value(), data.get("email"),
+                    UserDatabaseInformation.PASSWORD_COLUMN.value(),
+                    data.get("password"), UserDatabaseInformation.ID_COLUMN.value(),
                     data.get("ID"));
 
             stat.executeUpdate(request);
@@ -38,7 +41,9 @@ public class UserDataSetter implements DataSetterInterface {
 
             Statement stat = connection.createStatement();
             String request = String.format(
-                    "insert into users (username, email, password) values ('%s', '%s', '%s')",
+                    "insert into %s (%s, %s, %s) values ('%s', '%s', '%s')",
+                    UserDatabaseInformation.USER_TABLE.value(), UserDatabaseInformation.USERNAME_COLUMN.value(),
+                    UserDatabaseInformation.EMAIL_COLUMN.value(), UserDatabaseInformation.PASSWORD_COLUMN.value(),
                     data.get("username"), data.get("email"), data.get("password"));
 
             stat.executeUpdate(request);
