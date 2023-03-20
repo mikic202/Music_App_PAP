@@ -7,13 +7,10 @@ import java.sql.Statement;
 
 public class UserDataSetter implements DataSetterInterface {
     static public void set_data(int id, Hashtable<String, String> data) {
-        String db_url = "jdbc:mysql://localhost:3306/PAP_app";
-        String db_username = "root";
-        String password = "";
-
         try {
 
-            Connection connection = DriverManager.getConnection(db_url, db_username, password);
+            Connection connection = DriverManager.getConnection(DatabseInformation.URL.value(),
+                    DatabseInformation.USER.value(), DatabseInformation.PASSWORD.value());
 
             Statement stat = connection.createStatement();
             String request = String.format(
@@ -34,6 +31,25 @@ public class UserDataSetter implements DataSetterInterface {
 
     static public void add_data(Hashtable<String, String> data) {
 
-    }
+        try {
 
+            Connection connection = DriverManager.getConnection(DatabseInformation.URL.value(),
+                    DatabseInformation.USER.value(), DatabseInformation.PASSWORD.value());
+
+            Statement stat = connection.createStatement();
+            String request = String.format(
+                    "insert into users (username, email, password) values ('%s', '%s', '%s')",
+                    data.get("username"), data.get("email"), data.get("password"));
+
+            stat.executeUpdate(request);
+
+            connection.close();
+        } catch (Exception e) {
+            System.out.println(e);
+
+        } finally {
+
+        }
+
+    }
 }
