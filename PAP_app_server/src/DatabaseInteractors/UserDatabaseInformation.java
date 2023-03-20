@@ -11,7 +11,7 @@ public enum UserDatabaseInformation {
         _value = value;
     }
 
-    String value() {
+    public String value() {
         return _value;
     }
 }
