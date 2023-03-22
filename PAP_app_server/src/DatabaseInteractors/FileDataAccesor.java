@@ -13,7 +13,7 @@ public class FileDataAccesor implements DataAccesorInterface {
     static final String TABLENAME = FileDatabsaeInformation.FILE_TABLE.value();
 
     public static Hashtable<String, String> get_data(int id) {
-        return get_data(null, null);
+        return get_data(FileDatabsaeInformation.ID_COLUMN.value(), id);
     }
 
     public static Hashtable<String, String> get_data(String column_name, String column_value) {
@@ -59,9 +59,9 @@ public class FileDataAccesor implements DataAccesorInterface {
         try {
             while (result.next()) {
                 user_data.put("ID", result.getString(1));
-                user_data.put("username", result.getString(2));
-                user_data.put("email", result.getString(3));
-                user_data.put("password", result.getString(4));
+                user_data.put("file_name", result.getString(2));
+                user_data.put("user", result.getString(3));
+                user_data.put("file_path", result.getString(4));
             }
         } catch (Exception e) {
             System.out.println(e);
