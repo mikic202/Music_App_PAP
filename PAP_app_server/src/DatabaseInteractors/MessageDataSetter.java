@@ -43,7 +43,7 @@ public class MessageDataSetter implements DataSetterInterface {
 
             Statement stat = connection.createStatement();
             String request = String.format(
-                    "insert into %s (%s, %s, %s, %s) values ('%s', '%s', '%s, %s')",
+                    "insert into %s (%s, %s, %s, %s) values ('%s', '%s', '%s', '%s')",
                     MessagesDatabaseInformation.MESSAGES_TABLE.value(),
                     MessagesDatabaseInformation.SENDER_COLUMN.value(),
                     MessagesDatabaseInformation.CONVERSATION_COLUMN.value(),
