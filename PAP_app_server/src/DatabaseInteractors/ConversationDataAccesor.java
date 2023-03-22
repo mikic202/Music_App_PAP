@@ -92,10 +92,8 @@ public class ConversationDataAccesor implements DataAccesorInterface {
         try {
             while (result.next()) {
                 umessage_data.put("ID", result.getString(1));
-                umessage_data.put("sender", result.getString(2));
-                umessage_data.put("conversation", result.getString(3));
-                umessage_data.put("send_date", result.getString(4));
-                umessage_data.put("text", result.getString(5));
+                umessage_data.put("name", result.getString(2));
+                umessage_data.put("number_of_users", result.getString(3));
             }
         } catch (Exception e) {
             System.out.println(e);
