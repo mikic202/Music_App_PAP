@@ -9,7 +9,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 
 public class ConversationDataAccesor implements DataAccesorInterface {
-    final static String TABLENAME = "";
+    final static String TABLENAME = "conversarion";
 
     public static Hashtable<String, String> get_data(int id) {
         return get_data(null, null);
@@ -24,13 +24,65 @@ public class ConversationDataAccesor implements DataAccesorInterface {
         return get_data(column_name, String.format("%d", column_value));
     }
 
-    public static ArrayList<Integer> get_users_in_conversation() {
+    public static ArrayList<Integer> get_users_in_conversation(int conversation_id) {
         ArrayList<Integer> users = new ArrayList<Integer>();
+        ResultSet result = null;
+
+        String querry = String.format("Select %s from %s where %s = '%s'",
+                ConversationDatabsaeInformation.USER_COLUMN.value(),
+                UserDatabaseInformation.USER_CONVERSATION_TABLE.value(),
+                UserDatabaseInformation.CONVERSATION_ID_COLUMN.value(), conversation_id);
+
+        try {
+
+            Connection connection = DriverManager.getConnection(DatabseInformation.URL.value(),
+                    DatabseInformation.USER.value(), DatabseInformation.PASSWORD.value());
+
+            Statement stat = connection.createStatement();
+            String request = String.format(querry);
+
+            result = stat.executeQuery(request);
+            while (result.next()) {
+                users.add(result.getInt(1));
+            }
+            connection.close();
+        } catch (Exception e) {
+            System.out.println(e);
+
+        } finally {
+
+        }
         return users;
     }
 
-    public static ArrayList<Integer> get_mesages_in_conversation() {
+    public static ArrayList<Integer> get_mesages_in_conversation(int conversation_id) {
         ArrayList<Integer> messages = new ArrayList<Integer>();
+        ResultSet result = null;
+
+        String querry = String.format("Select %s from %s where %s = '%s'",
+                MessagesDatabaseInformation.ID_COLUMN.value(),
+                MessagesDatabaseInformation.MESSAGES_TABLE.value(),
+                MessagesDatabaseInformation.CONVERSATION_COLUMN.value(), conversation_id);
+
+        try {
+
+            Connection connection = DriverManager.getConnection(DatabseInformation.URL.value(),
+                    DatabseInformation.USER.value(), DatabseInformation.PASSWORD.value());
+
+            Statement stat = connection.createStatement();
+            String request = String.format(querry);
+
+            result = stat.executeQuery(request);
+            while (result.next()) {
+                messages.add(result.getInt(1));
+            }
+            connection.close();
+        } catch (Exception e) {
+            System.out.println(e);
+
+        } finally {
+
+        }
         return messages;
     }
 
