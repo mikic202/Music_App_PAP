@@ -1,7 +1,7 @@
 package Chat;
 
 public enum RequestTypes {
-    GET_MESSAGES("messages");
+    GET_MESSAGES("messages"), GET_USERS_CONVERSATIONS("user conversations");
 
     private String _value;
 
