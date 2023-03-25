@@ -9,7 +9,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 
 public class ConversationDataAccesor implements DataAccesorInterface {
-    final static String TABLENAME = "conversarion";
+    final static String TABLENAME = ConversationDatabsaeInformation.CONVERSATION_TABLE.value();
 
     public static Hashtable<String, String> get_data(int id) {
         return get_data(ConversationDatabsaeInformation.ID_COLUMN.value(), id);
