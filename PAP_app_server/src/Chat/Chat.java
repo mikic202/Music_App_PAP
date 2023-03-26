@@ -5,10 +5,13 @@ import java.util.Hashtable;
 import java.util.ArrayList;
 
 import DatabaseInteractors.ConversationDataAccesor;
+import DatabaseInteractors.ConversationDataSetter;
 import DatabaseInteractors.MessageDataAccesor;
 import DatabaseInteractors.MessageDataSetter;
 import DatabaseInteractors.MessagesDatabaseInformation;
 import DatabaseInteractors.UserDataAccesor;
+import DatabaseInteractors.UserDataSetter;
+
 import java.sql.Timestamp;
 
 public class Chat {
@@ -37,8 +40,6 @@ public class Chat {
     private ArrayList<Hashtable<String, String>> _send_message(String request) {
         ArrayList<Hashtable<String, String>> response = new ArrayList<Hashtable<String, String>>();
         ArrayList<String> decoded_req = _decode_send_message_request(request);
-        // data.get("sender"), data.get("conversation"), data.get("send_date"),
-        // data.get("text")
         Hashtable<String, String> data = new Hashtable<>();
         data.put("sender", decoded_req.get(0));
         data.put("conversation", decoded_req.get(1));
@@ -63,6 +64,41 @@ public class Chat {
         return decoded_req;
     }
 
+    private ArrayList<Hashtable<String, String>> _create_conversation(String request) {
+        ArrayList<Hashtable<String, String>> response = new ArrayList<Hashtable<String, String>>();
+        ArrayList<String> processed_request = _process_add_conversation_request(request);
+        String name = processed_request.get(0);
+        int number_of_users = processed_request.size() - 1;
+        int new_conversation = _add_conversation(name, number_of_users);
+        processed_request.remove(0);
+        _add_users_to_conversation(processed_request, new_conversation);
+        response.add(ConversationDataAccesor.get_data(new_conversation));
+        return response;
+    }
+
+    private int _add_conversation(String name, int number_of_users) {
+        Hashtable<String, String> data = new Hashtable<>();
+        data.put("name", name);
+        data.put("number_of_users", Integer.toString(number_of_users));
+        ConversationDataSetter.add_data(data);
+        return ConversationDataAccesor.get_latest_conversation();
+    }
+
+    private ArrayList<String> _process_add_conversation_request(String request) {
+        ArrayList<String> processed_request = new ArrayList<>();
+        String[] split_req = request.split(";");
+        for (String item : split_req) {
+            processed_request.add(item);
+        }
+        return processed_request;
+    }
+
+    private void _add_users_to_conversation(ArrayList<String> users, int conversation_id) {
+        for (String user : users) {
+            UserDataSetter.add_user_to_conversation(conversation_id, Integer.parseInt(user));
+        }
+    }
+
     private ArrayList<Hashtable<String, String>> _generate_response(RequestTypes req_type, String request) {
         ArrayList<Hashtable<String, String>> response = new ArrayList<Hashtable<String, String>>();
         switch (req_type) {
@@ -74,6 +110,9 @@ public class Chat {
                 break;
             case SEND_MESSAGE:
                 response = _send_message(request);
+                break;
+            case CREATE_CONVERSATION:
+                response = _create_conversation(request);
                 break;
         }
         return response;
