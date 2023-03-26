@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import DatabaseInteractors.ConversationDataAccesor;
 import DatabaseInteractors.MessageDataAccesor;
 import DatabaseInteractors.MessageDataSetter;
+import DatabaseInteractors.MessagesDatabaseInformation;
 import DatabaseInteractors.UserDataAccesor;
 import java.sql.Timestamp;
 
@@ -45,7 +46,11 @@ public class Chat {
         Timestamp timestamp = new Timestamp(date.getTime());
         data.put("send_date", timestamp.toString());
         data.put("text", decoded_req.get(2));
+        String time_stamp_string = timestamp.toString().split("\\.")[0];
         MessageDataSetter.add_data(data);
+        response.add(
+                MessageDataAccesor.get_data(MessagesDatabaseInformation.DATE_COLUMN.value(),
+                        time_stamp_string));
         return response;
     }
 
