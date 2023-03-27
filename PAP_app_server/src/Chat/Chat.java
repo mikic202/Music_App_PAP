@@ -6,9 +6,9 @@ import java.util.ArrayList;
 
 import DatabaseInteractors.ConversationDataAccesor;
 import DatabaseInteractors.ConversationDataSetter;
+import DatabaseInteractors.ConversationDatabsaeInformation;
 import DatabaseInteractors.MessageDataAccesor;
 import DatabaseInteractors.MessageDataSetter;
-import DatabaseInteractors.MessagesDatabaseInformation;
 import DatabaseInteractors.UserDataAccesor;
 import DatabaseInteractors.UserDataSetter;
 
@@ -97,6 +97,29 @@ public class Chat {
         }
     }
 
+    private ArrayList<Hashtable<String, String>> _process_add_users_to_conversation(String request) {
+        ArrayList<Hashtable<String, String>> response = new ArrayList<>();
+        ArrayList<String> decoded_requests = _decode_add_users_request(request);
+        int number_of_users = decoded_requests.size() - 1;
+        int conversation_id = Integer.parseInt(decoded_requests.get(0));
+        decoded_requests.remove(0);
+        _add_users_to_conversation(decoded_requests, conversation_id);
+        Hashtable<String, String> previous_data = ConversationDataAccesor.get_data(conversation_id);
+        previous_data.put(ConversationDatabsaeInformation.NUMBER_OF_USERS_COLUMN.value(),
+                previous_data.get(ConversationDatabsaeInformation.NUMBER_OF_USERS_COLUMN.value()) + number_of_users);
+        ConversationDataSetter.set_data(conversation_id, previous_data);
+        return response;
+    }
+
+    private ArrayList<String> _decode_add_users_request(String request) {
+        ArrayList<String> procesed_request = new ArrayList<>();
+        String[] split_req = request.split(";");
+        for (String item : split_req) {
+            procesed_request.add(item);
+        }
+        return procesed_request;
+    }
+
     private ArrayList<Hashtable<String, String>> _generate_response(RequestTypes req_type, String request) {
         ArrayList<Hashtable<String, String>> response = new ArrayList<Hashtable<String, String>>();
         switch (req_type) {
@@ -111,6 +134,9 @@ public class Chat {
                 break;
             case CREATE_CONVERSATION:
                 response = _create_conversation(request);
+                break;
+            case ADD_USER_TO_CONVERSATION:
+                response = _process_add_users_to_conversation(request);
                 break;
         }
         return response;
