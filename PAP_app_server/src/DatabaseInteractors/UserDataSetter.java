@@ -58,7 +58,8 @@ public class UserDataSetter implements DataSetterInterface {
 
     }
 
-    public static void add_user_to_conversation(int conversation_id, int user_id) {
+    public static int add_user_to_conversation(int conversation_id, int user_id) {
+        int added_id = 0;
         try {
 
             Connection connection = DriverManager.getConnection(DatabseInformation.URL.value(),
@@ -73,7 +74,7 @@ public class UserDataSetter implements DataSetterInterface {
                     conversation_id, user_id);
 
             stat.executeUpdate(request);
-
+            added_id = UserDataAccesor.get_latest_user();
             connection.close();
         } catch (Exception e) {
             System.out.println(e);
@@ -81,5 +82,6 @@ public class UserDataSetter implements DataSetterInterface {
         } finally {
 
         }
+        return added_id;
     }
 }
