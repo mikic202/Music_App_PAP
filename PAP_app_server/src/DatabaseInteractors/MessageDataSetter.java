@@ -35,7 +35,8 @@ public class MessageDataSetter implements DataSetterInterface {
         }
     }
 
-    static public void add_data(Hashtable<String, String> data) {
+    static public int add_data(Hashtable<String, String> data) {
+        int added_id = 0;
         try {
 
             Connection connection = DriverManager.getConnection(DatabseInformation.URL.value(),
@@ -52,6 +53,7 @@ public class MessageDataSetter implements DataSetterInterface {
                     data.get("sender"), data.get("conversation"), data.get("send_date"), data.get("text"));
 
             stat.executeUpdate(request);
+            added_id = UserDataAccesor.get_latest_user();
 
             connection.close();
         } catch (Exception e) {
@@ -60,6 +62,7 @@ public class MessageDataSetter implements DataSetterInterface {
         } finally {
 
         }
+        return added_id;
     }
 
 }
