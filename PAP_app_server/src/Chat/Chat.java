@@ -47,11 +47,10 @@ public class Chat {
         Timestamp timestamp = new Timestamp(date.getTime());
         data.put("send_date", timestamp.toString());
         data.put("text", decoded_req.get(2));
-        String time_stamp_string = timestamp.toString().split("\\.")[0];
-        MessageDataSetter.add_data(data);
+        // String time_stamp_string = timestamp.toString().split("\\.")[0];
+        int added_msg = MessageDataSetter.add_data(data);
         response.add(
-                MessageDataAccesor.get_data(MessagesDatabaseInformation.DATE_COLUMN.value(),
-                        time_stamp_string));
+                MessageDataAccesor.get_data(added_msg));
         return response;
     }
 
@@ -80,8 +79,7 @@ public class Chat {
         Hashtable<String, String> data = new Hashtable<>();
         data.put("name", name);
         data.put("number_of_users", Integer.toString(number_of_users));
-        ConversationDataSetter.add_data(data);
-        return ConversationDataAccesor.get_latest_conversation();
+        return ConversationDataSetter.add_data(data);
     }
 
     private ArrayList<String> _process_add_conversation_request(String request) {
