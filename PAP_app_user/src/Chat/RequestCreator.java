@@ -17,8 +17,12 @@ public class RequestCreator {
         return request;
     }
 
-    public static String create_get_messages_request(int user_id) {
-        return String.format("%s;%d", RequestTypes.GET_MESSAGES.value(), user_id);
+    public static String create_get_messages_request(int conversation_id) {
+        return String.format("%s;%d", RequestTypes.GET_MESSAGES.value(), conversation_id);
 
+    }
+
+    public static String create_get_conversations_request(int user_id) {
+        return String.format("%s;%d", RequestTypes.GET_USERS_CONVERSATIONS.value(), user_id);
     }
 }
