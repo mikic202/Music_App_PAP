@@ -16,4 +16,9 @@ public class RequestCreator {
         }
         return request;
     }
+
+    public static String create_get_messages_request(int user_id) {
+        return String.format("%s;%d", RequestTypes.GET_MESSAGES.value(), user_id);
+
+    }
 }
