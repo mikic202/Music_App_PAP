@@ -25,4 +25,13 @@ public class RequestCreator {
     public static String create_get_conversations_request(int user_id) {
         return String.format("%s;%d", RequestTypes.GET_USERS_CONVERSATIONS.value(), user_id);
     }
+
+    public static String create_add_user_to_conversation_request(int conversation_id, ArrayList<Integer> users_ids) {
+        String request = RequestTypes.ADD_USER_TO_CONVERSATION.value();
+        request += ";" + Integer.toString(conversation_id);
+        for (int user_id : users_ids) {
+            request += ";" + Integer.toString(user_id);
+        }
+        return request;
+    }
 }
