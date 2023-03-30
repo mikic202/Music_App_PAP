@@ -39,9 +39,7 @@ public class ClientHandler implements Runnable {
 					Client client = it.next();
 					try {
 						if(client.hasMessage()) {
-							String message = "message: " + client.getMessage() + "\n";
-							System.out.print(message);
-							client.write(message.getBytes());
+							handleClient(client);
 						}
 					}
 					catch(IOException exception) {
@@ -54,6 +52,10 @@ public class ClientHandler implements Runnable {
 				}
 			}
 		}
+	}
+	
+	void handleClient(Client client) throws IOException {
+		client.write(("message: " + client.getMessage() + "\n").getBytes());
 	}
 }
 
