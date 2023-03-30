@@ -61,21 +61,26 @@ class Client {
 	Socket socket;
 	InputStream in;
 	OutputStream out;
-	Scanner scanner;
+	String message = "";
 	
 	public Client(Socket socket) throws IOException {
 		this.socket = socket;
 		in = socket.getInputStream();
 		out = socket.getOutputStream();
-		scanner = new Scanner(in, "UTF-8");
 	}
 	
 	public boolean hasMessage() throws IOException {
-		return in.available() > 0;
+		if(in.available() > 0) {
+			message += new String(in.readNBytes(in.available()), StandardCharsets.UTF_8);
+		}
+		return message.contains("\n");
 	}
 	
-	public String getMessage() throws IOException {
-		return new String(in.readNBytes(in.available()), StandardCharsets.UTF_8);
+	public String getMessage() {
+		int index = message.indexOf("\n");
+		String result = message.substring(0, index);
+		message = message.substring(index + 1);
+		return result;
 	}
 	
 	public void write(byte[] data) throws IOException {
