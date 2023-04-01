@@ -96,6 +96,9 @@ public class Chat {
         previous_data.put(ConversationDatabsaeInformation.NUMBER_OF_USERS_COLUMN.value(),
                 previous_data.get(ConversationDatabsaeInformation.NUMBER_OF_USERS_COLUMN.value()) + number_of_users);
         ConversationDataSetter.set_data(conversation_id, previous_data);
+        Hashtable<String, String> outcome = new Hashtable<>();
+        outcome.put("outcome", "true");
+        response.add(outcome);
         return response;
     }
 
