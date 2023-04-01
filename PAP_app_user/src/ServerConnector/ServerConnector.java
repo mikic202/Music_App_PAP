@@ -13,7 +13,8 @@ public class ServerConnector {
     BufferedReader input;
     OutputStreamWriter output;
 
-    public ServerConnector() {
+    public JSONObject send_request(JSONObject request) {
+        String response = "";
         try {
             socket = new Socket("localhost", 8000);
             input = new BufferedReader(
@@ -23,16 +24,12 @@ public class ServerConnector {
         } catch (Exception e) {
             System.out.println(e);
         }
-
-    }
-
-    public JSONObject send_request(JSONObject request) {
-        String response = "";
         try {
             output.write(request.toString());
             while (!input.ready()) {
             }
             response = input.readLine();
+            socket.close();
         } catch (Exception e) {
             System.out.println(e);
         }
