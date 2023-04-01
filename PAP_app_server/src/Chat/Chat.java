@@ -14,63 +14,58 @@ import DatabaseInteractors.UserDataSetter;
 
 import java.sql.Timestamp;
 
+import org.json.JSONObject;
+
 public class Chat {
-    public ArrayList<Hashtable<String, String>> proces_requests(RequestTypes req_type, String request) {
+    public ArrayList<Hashtable<String, String>> proces_requests(RequestTypes req_type, JSONObject request) {
         return _generate_response(req_type, request);
     }
 
-    private ArrayList<Hashtable<String, String>> _get_messeges_in_conversation(String request) {
+    private ArrayList<Hashtable<String, String>> _get_messeges_in_conversation(JSONObject request) {
         ArrayList<Hashtable<String, String>> response = new ArrayList<Hashtable<String, String>>();
-        ArrayList<Integer> messages = ConversationDataAccesor.get_mesages_in_conversation(Integer.parseInt(request));
+        ArrayList<Integer> messages = ConversationDataAccesor
+                .get_mesages_in_conversation(request.getInt("conversation_id"));
         for (Integer message_id : messages) {
             response.add(MessageDataAccesor.get_data(message_id));
         }
         return response;
     }
 
-    private ArrayList<Hashtable<String, String>> _get_users_conversations(String request) {
+    private ArrayList<Hashtable<String, String>> _get_users_conversations(JSONObject request) {
         ArrayList<Hashtable<String, String>> response = new ArrayList<Hashtable<String, String>>();
-        ArrayList<Integer> conversations = UserDataAccesor.get_user_conversations(Integer.parseInt(request));
+        ArrayList<Integer> conversations = UserDataAccesor.get_user_conversations(request.getInt("user_id"));
         for (Integer conversation_id : conversations) {
             response.add(ConversationDataAccesor.get_data(conversation_id));
         }
         return response;
     }
 
-    private ArrayList<Hashtable<String, String>> _send_message(String request) {
+    private ArrayList<Hashtable<String, String>> _send_message(JSONObject request) {
         ArrayList<Hashtable<String, String>> response = new ArrayList<Hashtable<String, String>>();
-        ArrayList<String> decoded_req = _decode_send_message_request(request);
         Hashtable<String, String> data = new Hashtable<>();
-        data.put("sender", decoded_req.get(0));
-        data.put("conversation", decoded_req.get(1));
+        data.put("sender", request.getString("sender_id"));
+        data.put("conversation", request.getString("conversation_id"));
         java.util.Date date = new java.util.Date();
         Timestamp timestamp = new Timestamp(date.getTime());
         data.put("send_date", timestamp.toString());
-        data.put("text", decoded_req.get(2));
-        // String time_stamp_string = timestamp.toString().split("\\.")[0];
+        data.put("text", request.getString("text"));
+        ;
         int added_msg = MessageDataSetter.add_data(data);
         response.add(
                 MessageDataAccesor.get_data(added_msg));
         return response;
     }
 
-    private ArrayList<String> _decode_send_message_request(String request) {
-        String[] split_req = request.split(";", 3);
-        ArrayList<String> decoded_req = new ArrayList<>();
-        decoded_req.add(split_req[0]);
-        decoded_req.add(split_req[1]);
-        decoded_req.add(split_req[2]);
-        return decoded_req;
-    }
-
-    private ArrayList<Hashtable<String, String>> _create_conversation(String request) {
+    private ArrayList<Hashtable<String, String>> _create_conversation(JSONObject request) {
         ArrayList<Hashtable<String, String>> response = new ArrayList<Hashtable<String, String>>();
-        ArrayList<String> processed_request = _process_add_conversation_request(request);
-        String name = processed_request.get(0);
-        int number_of_users = processed_request.size() - 1;
+        String name = request.getString("name");
+        int number_of_users = request.getJSONArray("users").length();
         int new_conversation = _add_conversation(name, number_of_users);
-        processed_request.remove(0);
-        _add_users_to_conversation(processed_request, new_conversation);
+        ArrayList<Integer> users = new ArrayList<>();
+        for (int i = 0; i < request.getJSONArray("users").length(); i++) {
+            users.add(request.getJSONArray("users").getInt(i));
+        }
+        _add_users_to_conversation(users, new_conversation);
         response.add(ConversationDataAccesor.get_data(new_conversation));
         return response;
     }
@@ -82,28 +77,21 @@ public class Chat {
         return ConversationDataSetter.add_data(data);
     }
 
-    private ArrayList<String> _process_add_conversation_request(String request) {
-        ArrayList<String> processed_request = new ArrayList<>();
-        String[] split_req = request.split(";");
-        for (String item : split_req) {
-            processed_request.add(item);
-        }
-        return processed_request;
-    }
-
-    private void _add_users_to_conversation(ArrayList<String> users, int conversation_id) {
-        for (String user : users) {
-            UserDataSetter.add_user_to_conversation(conversation_id, Integer.parseInt(user));
+    private void _add_users_to_conversation(ArrayList<Integer> users, int conversation_id) {
+        for (int user : users) {
+            UserDataSetter.add_user_to_conversation(conversation_id, user);
         }
     }
 
-    private ArrayList<Hashtable<String, String>> _process_add_users_to_conversation(String request) {
+    private ArrayList<Hashtable<String, String>> _process_add_users_to_conversation(JSONObject request) {
         ArrayList<Hashtable<String, String>> response = new ArrayList<>();
-        ArrayList<String> decoded_requests = _decode_add_users_request(request);
-        int number_of_users = decoded_requests.size() - 1;
-        int conversation_id = Integer.parseInt(decoded_requests.get(0));
-        decoded_requests.remove(0);
-        _add_users_to_conversation(decoded_requests, conversation_id);
+        int number_of_users = request.getJSONArray("users").length();
+        int conversation_id = request.getInt("conversation_id");
+        ArrayList<Integer> users = new ArrayList<>();
+        for (int i = 0; i < request.getJSONArray("users").length(); i++) {
+            users.add(request.getJSONArray("users").getInt(i));
+        }
+        _add_users_to_conversation(users, conversation_id);
         Hashtable<String, String> previous_data = ConversationDataAccesor.get_data(conversation_id);
         previous_data.put(ConversationDatabsaeInformation.NUMBER_OF_USERS_COLUMN.value(),
                 previous_data.get(ConversationDatabsaeInformation.NUMBER_OF_USERS_COLUMN.value()) + number_of_users);
@@ -111,16 +99,7 @@ public class Chat {
         return response;
     }
 
-    private ArrayList<String> _decode_add_users_request(String request) {
-        ArrayList<String> procesed_request = new ArrayList<>();
-        String[] split_req = request.split(";");
-        for (String item : split_req) {
-            procesed_request.add(item);
-        }
-        return procesed_request;
-    }
-
-    private ArrayList<Hashtable<String, String>> _generate_response(RequestTypes req_type, String request) {
+    private ArrayList<Hashtable<String, String>> _generate_response(RequestTypes req_type, JSONObject request) {
         ArrayList<Hashtable<String, String>> response = new ArrayList<Hashtable<String, String>>();
         switch (req_type) {
             case GET_MESSAGES:
