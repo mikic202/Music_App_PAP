@@ -1,15 +1,13 @@
 package Chat;
 
-import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Hashtable;
 import org.json.JSONObject;
 
 import ServerConnector.ServerConnector;
 
-public class ChatSender {
-    public ChatSender() {
-        server_connector = new ServerConnector();
+public class ChatAccesors {
+    public ChatAccesors(ServerConnector server_connector) {
+        this.server_connector = server_connector;
     }
 
     public JSONObject send_message(int conversation_id, int sender_id, String text) {
