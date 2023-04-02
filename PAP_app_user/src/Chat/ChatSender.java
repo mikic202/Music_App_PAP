@@ -21,28 +21,28 @@ public class ChatSender {
     }
 
     public Hashtable<String, String> add_conversation(String name, ArrayList<Integer> users_ids) {
-        Hashtable<String, String> added_msg_data = new Hashtable<>();
+        Hashtable<String, String> added_conversation = new Hashtable<>();
         JSONObject procesed_request = RequestCreator.create_add_conversation_request(name, users_ids);
-        return added_msg_data;
+        return added_conversation;
     }
 
     public Hashtable<String, String> get_messages_in_conversation(int conversation_id) {
-        Hashtable<String, String> added_msg_data = new Hashtable<>();
+        Hashtable<String, String> msg_data = new Hashtable<>();
         JSONObject procesed_request = RequestCreator.create_get_messages_request(conversation_id);
-        return added_msg_data;
+        return msg_data;
     }
 
     public Hashtable<String, String> get_users_conversations(int user_id) {
-        Hashtable<String, String> added_msg_data = new Hashtable<>();
+        Hashtable<String, String> conversation_data = new Hashtable<>();
         JSONObject procesed_request = RequestCreator.create_get_conversations_request(user_id);
-        return added_msg_data;
+        return conversation_data;
     }
 
     public Hashtable<String, String> add_users_to_conversation(int conversation_id, ArrayList<Integer> users_ids) {
-        Hashtable<String, String> added_msg_data = new Hashtable<>();
+        Hashtable<String, String> outcome = new Hashtable<>();
         JSONObject procesed_request = RequestCreator.create_add_user_to_conversation_request(conversation_id,
                 users_ids);
-        return added_msg_data;
+        return outcome;
     }
 
     private Socket message_socket;
