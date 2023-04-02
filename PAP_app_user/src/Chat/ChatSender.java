@@ -9,40 +9,40 @@ import ServerConnector.ServerConnector;
 
 public class ChatSender {
     public ChatSender() {
-
+        server_connector = new ServerConnector();
     }
 
-    public Hashtable<String, String> send_message(int conversation_id, int sender_id, String text) {
-        Hashtable<String, String> added_msg_data = new Hashtable<>();
+    public JSONObject send_message(int conversation_id, int sender_id, String text) {
         JSONObject procesed_request = RequestCreator.create_send_msg_request(conversation_id, sender_id, text);
-        ServerConnector server_connector = new ServerConnector();
         JSONObject response = server_connector.send_request(procesed_request);
-        return added_msg_data;
+        return response.getJSONObject("value");
     }
 
-    public Hashtable<String, String> add_conversation(String name, ArrayList<Integer> users_ids) {
-        Hashtable<String, String> added_conversation = new Hashtable<>();
+    public JSONObject add_conversation(String name, ArrayList<Integer> users_ids) {
         JSONObject procesed_request = RequestCreator.create_add_conversation_request(name, users_ids);
-        return added_conversation;
+        JSONObject response = server_connector.send_request(procesed_request);
+        return response.getJSONObject("value");
     }
 
-    public Hashtable<String, String> get_messages_in_conversation(int conversation_id) {
-        Hashtable<String, String> msg_data = new Hashtable<>();
+    public JSONObject get_messages_in_conversation(int conversation_id) {
         JSONObject procesed_request = RequestCreator.create_get_messages_request(conversation_id);
-        return msg_data;
+        JSONObject response = server_connector.send_request(procesed_request);
+        return response.getJSONObject("value");
     }
 
-    public Hashtable<String, String> get_users_conversations(int user_id) {
-        Hashtable<String, String> conversation_data = new Hashtable<>();
+    public JSONObject get_users_conversations(int user_id) {
         JSONObject procesed_request = RequestCreator.create_get_conversations_request(user_id);
-        return conversation_data;
+        JSONObject response = server_connector.send_request(procesed_request);
+        return response.getJSONObject("value");
     }
 
-    public Hashtable<String, String> add_users_to_conversation(int conversation_id, ArrayList<Integer> users_ids) {
-        Hashtable<String, String> outcome = new Hashtable<>();
+    public JSONObject add_users_to_conversation(int conversation_id, ArrayList<Integer> users_ids) {
         JSONObject procesed_request = RequestCreator.create_add_user_to_conversation_request(conversation_id,
                 users_ids);
-        return outcome;
+        JSONObject response = server_connector.send_request(procesed_request);
+        return response.getJSONObject("value");
     }
+
+    private ServerConnector server_connector;
 
 }
