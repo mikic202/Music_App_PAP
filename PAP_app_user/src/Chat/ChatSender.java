@@ -8,10 +8,6 @@ import org.json.JSONObject;
 import ServerConnector.ServerConnector;
 
 public class ChatSender {
-    public ChatSender(Socket msg_socket) {
-        message_socket = msg_socket;
-    }
-
     public ChatSender() {
 
     }
