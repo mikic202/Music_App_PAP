@@ -14,9 +14,11 @@ public class Chat {
     Hashtable<Integer, ArrayList<JSONObject>> messages_in_users_conversation;
     ChatAccesors chat_accesor;
     int current_conversation;
+    int user_id;
 
     public Chat(int user_id, int current_conv, ServerConnector server_connector) {
         current_conversation = current_conv;
+        this.user_id = user_id;
         chat_accesor = new ChatAccesors(server_connector);
         JSONObject conversations = chat_accesor.get_users_conversations(user_id);
         users_conversations = new Hashtable<>();
@@ -58,6 +60,10 @@ public class Chat {
         }
         messages_in_users_conversation.put(current_conversation, new_messages);
         return new_messages;
+    }
+
+    public JSONObject send_message(String text) {
+        return chat_accesor.send_message(current_conversation, user_id, text);
     }
 
     private void convert_conversations_response_to_hashtable(JSONObject response) {
