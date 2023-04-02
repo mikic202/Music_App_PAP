@@ -5,11 +5,9 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import org.json.JSONObject;
 
-public class ChatSender {
-    public ChatSender(Socket msg_socket) {
-        message_socket = msg_socket;
-    }
+import ServerConnector.ServerConnector;
 
+public class ChatSender {
     public ChatSender() {
 
     }
@@ -17,6 +15,8 @@ public class ChatSender {
     public Hashtable<String, String> send_message(int conversation_id, int sender_id, String text) {
         Hashtable<String, String> added_msg_data = new Hashtable<>();
         JSONObject procesed_request = RequestCreator.create_send_msg_request(conversation_id, sender_id, text);
+        ServerConnector server_connector = new ServerConnector();
+        JSONObject response = server_connector.send_request(procesed_request);
         return added_msg_data;
     }
 
@@ -45,5 +45,4 @@ public class ChatSender {
         return outcome;
     }
 
-    private Socket message_socket;
 }
