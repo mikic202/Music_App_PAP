@@ -7,8 +7,8 @@ public class FileDataSetter implements DataSetterInterface {
 
     }
 
-    static public void add_data(Hashtable<String, String> data) {
-
+    static public int add_data(Hashtable<String, String> data) {
+        return 0;
     }
 
 }

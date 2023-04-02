@@ -2,7 +2,7 @@ package DatabaseInteractors;
 
 public enum MessagesDatabaseInformation {
     MESSAGES_TABLE("messages"),
-    MESSAGE_COLUMN("text"), ID_COLUMN("message_id"), SENDER_COLUMN("sendr_id"),
+    MESSAGE_COLUMN("text"), ID_COLUMN("message_id"), SENDER_COLUMN("sender_id"),
     CONVERSATION_COLUMN("conversation_id"), DATE_COLUMN("creation_date");
 
     private String _value;
