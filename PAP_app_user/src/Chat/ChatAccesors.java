@@ -41,6 +41,14 @@ public class ChatAccesors {
         return response.getJSONObject("value");
     }
 
+    public JSONObject get_user_info(int user_id) {
+        return new JSONObject();
+    }
+
+    public JSONObject get_user_info(String username) {
+        return new JSONObject();
+    }
+
     private ServerConnector server_connector;
 
 }

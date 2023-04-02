@@ -13,7 +13,7 @@ public class ServerConnector {
     BufferedReader input;
     OutputStreamWriter output;
 
-    ServerConnector(Socket socket) {
+    public ServerConnector(Socket socket) {
         this.socket = socket;
         try {
             input = new BufferedReader(

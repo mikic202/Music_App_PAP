@@ -28,19 +28,6 @@ public class Chat {
 
     }
 
-    // private Hashtable<String, String> _convert_JSON_to_hashtable(JSONObject
-    // json_object) {
-    // Hashtable<String, String> to_return = new Hashtable<>();
-    // Set<String> keys = json_object.keySet();
-    // for (String key : keys) {
-    // if (json_object.get(key) instanceof Integer) {
-    // to_return.put(key, Integer.toString(json_object.getInt(key)));
-    // } else {
-    // to_return.put(key, json_object.getString(key));
-    // }
-    // }
-    // return to_return;
-    // }
     public boolean set_current_conversation(int new_current_conv) {
         if (!users_conversations.containsKey(new_current_conv)) {
             return false;
@@ -71,6 +58,18 @@ public class Chat {
         for (int i = 0; i < conversations.length(); i += 1) {
             users_conversations.put(conversations.getJSONObject(i).getInt("ID"), response);
         }
+    }
+
+    public JSONObject get_curent_conversation_info() {
+        return users_conversations.get(current_conversation);
+    }
+
+    public JSONObject get_user_information(int id) {
+        return chat_accesor.get_user_info(id).getJSONObject("value");
+    }
+
+    public JSONObject get_user_information(String username) {
+        return chat_accesor.get_user_info(username).getJSONObject("value");
     }
 
 }
