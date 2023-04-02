@@ -34,7 +34,8 @@ public class ConversationDataSetter implements DataSetterInterface {
         }
     }
 
-    static public void add_data(Hashtable<String, String> data) {
+    static public int add_data(Hashtable<String, String> data) {
+        int added_id = 0;
         try {
 
             Connection connection = DriverManager.getConnection(DatabseInformation.URL.value(),
@@ -49,6 +50,7 @@ public class ConversationDataSetter implements DataSetterInterface {
                     data.get("name"), data.get("number_of_users"));
 
             stat.executeUpdate(request);
+            added_id = ConversationDataAccesor.get_latest_conversation();
 
             connection.close();
         } catch (Exception e) {
@@ -57,6 +59,7 @@ public class ConversationDataSetter implements DataSetterInterface {
         } finally {
 
         }
+        return added_id;
     }
 
 }

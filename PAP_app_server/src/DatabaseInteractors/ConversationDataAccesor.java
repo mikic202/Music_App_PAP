@@ -86,6 +86,36 @@ public class ConversationDataAccesor implements DataAccesorInterface {
         return messages;
     }
 
+    public static int get_latest_conversation() {
+        ResultSet result = null;
+        int id = 0;
+
+        String querry = String.format("Select MAX(%s) from %s",
+                ConversationDatabsaeInformation.ID_COLUMN.value(),
+                TABLENAME);
+
+        try {
+
+            Connection connection = DriverManager.getConnection(DatabseInformation.URL.value(),
+                    DatabseInformation.USER.value(), DatabseInformation.PASSWORD.value());
+
+            Statement stat = connection.createStatement();
+            String request = String.format(querry);
+
+            result = stat.executeQuery(request);
+            while (result.next()) {
+                id = result.getInt(1);
+            }
+            connection.close();
+        } catch (Exception e) {
+            System.out.println(e);
+
+        } finally {
+
+        }
+        return id;
+    }
+
     protected static Hashtable<String, String> process_result_to_full_data(ResultSet result) {
         Hashtable<String, String> umessage_data = new Hashtable<String, String>();
 
