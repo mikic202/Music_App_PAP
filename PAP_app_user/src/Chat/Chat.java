@@ -21,6 +21,8 @@ public class Chat {
         JSONObject conversations = chat_accesor.get_users_conversations(user_id);
         users_conversations = new Hashtable<>();
         convert_conversations_response_to_hashtable(conversations);
+        messages_in_users_conversation = new Hashtable<>();
+        get_current_messages();
 
     }
 
@@ -37,6 +39,26 @@ public class Chat {
     // }
     // return to_return;
     // }
+    public boolean set_current_conversation(int new_current_conv) {
+        if (!users_conversations.containsKey(new_current_conv)) {
+            return false;
+        }
+        current_conversation = new_current_conv;
+        return true;
+    }
+
+    public ArrayList<JSONObject> get_current_messages() {
+        if (messages_in_users_conversation.containsKey(current_conversation)) {
+            return messages_in_users_conversation.get(current_conversation);
+        }
+        ArrayList<JSONObject> new_messages = new ArrayList<>();
+        JSONObject response = chat_accesor.get_messages_in_conversation(current_conversation);
+        for (int i = 0; i < response.getJSONArray("value").length(); i += 1) {
+            new_messages.add(response.getJSONArray("value").getJSONObject(i));
+        }
+        messages_in_users_conversation.put(current_conversation, new_messages);
+        return new_messages;
+    }
 
     private void convert_conversations_response_to_hashtable(JSONObject response) {
         JSONArray conversations = response.getJSONArray("value");
