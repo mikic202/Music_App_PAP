@@ -42,11 +42,15 @@ public class ChatAccesors {
     }
 
     public JSONObject get_user_info(int user_id) {
-        return new JSONObject();
+        JSONObject request = RequestCreator.create_get_user_information_request(user_id);
+        JSONObject response = server_connector.send_request(request);
+        return response.getJSONObject("value");
     }
 
     public JSONObject get_user_info(String username) {
-        return new JSONObject();
+        JSONObject request = RequestCreator.create_get_user_information_request(username);
+        JSONObject response = server_connector.send_request(request);
+        return response.getJSONObject("value");
     }
 
     private ServerConnector server_connector;
