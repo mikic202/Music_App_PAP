@@ -1,0 +1,12 @@
+Data Accesors
+All of the classes haw similar structer. And most of them have specific methods for given dataset (for exaple get data with email)
+To access any data you can use specific methods for data you want to aquire or get_data method that takes in column name and value you are searching for. Column names are stored in Enums that end with DatabaseInformation.
+Most of the methods return Hashtables with result of a querry where keys are most of the time the same as column names but you can check specific name in source files.
+Some of the classes have datatype specific methods like get_user_conversations. Before you write your own function to do specific things its best to check weather the code can't do it already.
+
+
+Data Setters
+Most of the classes have similar structure.
+To update the data you need to pass into the set_data method hashtable with all of the values (excluding id) no matter weather they were changed or not. Keys are most of the time the same as column names but you can check specific name in source files.
+To add data you need to pass into the add_data method hashtable with all of the values (excluding id). Keys are most of the time the same as column names but you can check specific name in source files. This method returns id of the newly added item.
+Some classes have datatype specific methods like add_user_to_conversation.
