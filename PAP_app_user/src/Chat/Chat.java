@@ -50,7 +50,7 @@ public class Chat {
     }
 
     public JSONObject send_message(String text) {
-        return chat_accesor.send_message(current_conversation, user_id, text);
+        return chat_accesor.send_message(current_conversation, user_id, text).getJSONObject("value");
     }
 
     private void convert_conversations_response_to_hashtable(JSONObject response) {
