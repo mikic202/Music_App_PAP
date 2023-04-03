@@ -37,4 +37,16 @@ public class RequestCreator {
                                                 RequestTypes.ADD_USER_TO_CONVERSATION.value(), conversation_id,
                                                 users_ids));
         }
+
+        public static JSONObject create_get_user_information_request(int user_id) {
+                return new JSONObject(
+                                String.format("{\"type\":\"%s\", \"value\":{\"user_id\":%s, \"type\": user_id}}",
+                                                RequestTypes.GET_USERS_CONVERSATIONS.value(), user_id));
+        }
+
+        public static JSONObject create_get_user_information_request(String username) {
+                return new JSONObject(
+                                String.format("{\"type\":\"%s\", \"value\":{\"user_id\":%s, \"type\": username}}",
+                                                RequestTypes.GET_USERS_CONVERSATIONS.value(), username));
+        }
 }
