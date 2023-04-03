@@ -11,6 +11,7 @@ import DatabaseInteractors.MessageDataAccesor;
 import DatabaseInteractors.MessageDataSetter;
 import DatabaseInteractors.UserDataAccesor;
 import DatabaseInteractors.UserDataSetter;
+import DatabaseInteractors.UserDatabaseInformation;
 
 import java.sql.Timestamp;
 
@@ -109,6 +110,17 @@ public class Chat {
         return json_response;
     }
 
+    private JSONObject _check_users_info(JSONObject request) {
+        if (request.getString("type").equals("username")) {
+            Hashtable<String, String> hash_response = UserDataAccesor
+                    .get_data(UserDatabaseInformation.USERNAME_COLUMN.value(), request.getString("username"));
+            return _convert_response_to_json(hash_response, RequestTypes.USER_INFO);
+        }
+        Hashtable<String, String> hash_response = UserDataAccesor
+                .get_data(UserDatabaseInformation.USERNAME_COLUMN.value(), request.getString("user_id"));
+        return _convert_response_to_json(hash_response, RequestTypes.USER_INFO);
+    }
+
     private JSONObject _convert_response_to_json(ArrayList<Hashtable<String, String>> response, RequestTypes req_type) {
         JSONObject json_response = new JSONObject();
         json_response.put("type", req_type.value());
@@ -143,6 +155,10 @@ public class Chat {
             case ADD_USER_TO_CONVERSATION:
                 response = _process_add_users_to_conversation(request);
                 break;
+            case USER_INFO:
+                response = _check_users_info(request);
+                break;
+
         }
         return response;
     }
