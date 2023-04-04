@@ -46,7 +46,13 @@ public class RequestCreator {
 
         public static JSONObject create_get_user_information_request(String username) {
                 return new JSONObject(
-                                String.format("{\"type\":\"%s\", \"value\":{\"user_id\":%s, \"type\": username}}",
+                                String.format("{\"type\":\"%s\", \"value\":{\"username\":%s, \"type\": username}}",
                                                 RequestTypes.GET_USERS_CONVERSATIONS.value(), username));
+        }
+
+        public static JSONObject get_users_in_conversation(int conversation_id) {
+                return new JSONObject(
+                                String.format("{\"type\":\"%s\", \"value\":{\"conversation_id\":%s}}",
+                                                RequestTypes.GET_USERS_IN_CONVERSATION.value(), conversation_id));
         }
 }
