@@ -88,4 +88,12 @@ public class Chat {
         return chat_accesor.add_users_to_conversation(current_conversation, users_id).getJSONObject("value");
     }
 
+    public Hashtable<String, Integer> get_conversations_names_to_ids() {
+        Hashtable<String, Integer> conv = new Hashtable<>();
+        for (int id_key : users_conversations.keySet()) {
+            conv.put(users_conversations.get(id_key).getString("name"), id_key);
+        }
+        return conv;
+    }
+
 }
