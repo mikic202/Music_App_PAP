@@ -32,9 +32,11 @@ public class Conversations extends javax.swing.JFrame {
 
         private void set_conversation_text(ArrayList<JSONObject> messages) {
                 String to_return = "";
+                Hashtable<Integer, JSONObject> users_in_conv = chat.get_users_in_current_conversation();
                 for (JSONObject message : messages) {
-                        // to_return += message.getString("send_date") + "\n";
+                        to_return += users_in_conv.get(message.getInt("user_id")) + "\n";
                         to_return += message.getString("text") + "\n\n";
+                        // to_return += message.getString("send_date") + "\n";
                 }
                 System.out.println(to_return);
                 jTextArea1.setText(to_return);
