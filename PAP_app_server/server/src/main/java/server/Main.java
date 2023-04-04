@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.security.NoSuchAlgorithmException;
 
+import server.ClientHandlers.ClientHandler;
+
 public class Main {
 	static ClientHandler handler = new ClientHandler();
 	public static void main(String[] args) throws IOException, NoSuchAlgorithmException {

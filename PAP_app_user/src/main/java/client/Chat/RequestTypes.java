@@ -1,4 +1,4 @@
-package server.Chat;
+package client.Chat;
 
 public enum RequestTypes {
     GET_MESSAGES("messages"), GET_USERS_CONVERSATIONS("user conversations"), SEND_MESSAGE("send message"),

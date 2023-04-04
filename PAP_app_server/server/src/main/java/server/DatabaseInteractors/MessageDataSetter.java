@@ -1,4 +1,4 @@
-package DatabaseInteractors;
+package server.DatabaseInteractors;
 
 import java.util.Hashtable;
 import java.sql.Connection;

@@ -1,22 +1,21 @@
-package Chat;
-
-import java.util.Hashtable;
-import java.util.Set;
-import java.util.ArrayList;
-
-import DatabaseInteractors.ConversationDataAccesor;
-import DatabaseInteractors.ConversationDataSetter;
-import DatabaseInteractors.ConversationDatabsaeInformation;
-import DatabaseInteractors.MessageDataAccesor;
-import DatabaseInteractors.MessageDataSetter;
-import DatabaseInteractors.UserDataAccesor;
-import DatabaseInteractors.UserDataSetter;
-import DatabaseInteractors.UserDatabaseInformation;
+package server.Chat;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.Set;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import server.DatabaseInteractors.ConversationDataAccesor;
+import server.DatabaseInteractors.ConversationDataSetter;
+import server.DatabaseInteractors.ConversationDatabsaeInformation;
+import server.DatabaseInteractors.MessageDataAccesor;
+import server.DatabaseInteractors.MessageDataSetter;
+import server.DatabaseInteractors.UserDataAccesor;
+import server.DatabaseInteractors.UserDataSetter;
+import server.DatabaseInteractors.UserDatabaseInformation;
 
 public class Chat {
     public JSONObject proces_requests(RequestTypes req_type, JSONObject request) {
