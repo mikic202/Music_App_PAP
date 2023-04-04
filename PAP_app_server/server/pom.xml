@@ -16,6 +16,8 @@
       <artifactId>maven-jar-plugin</artifactId>
       <version>3.3.0</version>
       <configuration>
+      <fork>true</fork>
+					<executable>"C:\Program Files\RedHat\java-1.8.0-openjdk-1.8.0.362-1\bin\javac.exe"</executable>
         <archive>
           <manifest>
             <addClasspath>true</addClasspath>
