@@ -10,11 +10,12 @@ import ServerConnector.ServerConnector;
 
 public class Chat {
 
-    Hashtable<Integer, JSONObject> users_conversations;
-    Hashtable<Integer, ArrayList<JSONObject>> messages_in_users_conversation;
-    ChatAccesors chat_accesor;
-    int current_conversation;
-    int user_id;
+    private Hashtable<Integer, JSONObject> users_conversations;
+    private Hashtable<Integer, ArrayList<JSONObject>> messages_in_users_conversation;
+    private Hashtable<Integer, ArrayList<JSONObject>> users_in_conversarion;
+    private ChatAccesors chat_accesor;
+    private int current_conversation;
+    private int user_id;
 
     public Chat(int user_id, int current_conv, ServerConnector server_connector) {
         current_conversation = current_conv;
@@ -94,6 +95,19 @@ public class Chat {
             conv.put(users_conversations.get(id_key).getString("name"), id_key);
         }
         return conv;
+    }
+
+    public ArrayList<JSONObject> get_users_in_current_conversation() {
+        if (users_in_conversarion.containsKey(current_conversation)) {
+            return users_in_conversarion.get(current_conversation);
+        }
+        ArrayList<JSONObject> users_array = new ArrayList<JSONObject>();
+        JSONArray users = chat_accesor.get_users_in_conversation(current_conversation).getJSONArray("value");
+        for (int i = 0; i < users.length(); i += 1) {
+            users_array.add(users.getJSONObject(i));
+        }
+        users_in_conversarion.put(current_conversation, users_array);
+        return users_array;
     }
 
 }
