@@ -12,7 +12,7 @@ public class Chat {
 
     private Hashtable<Integer, JSONObject> users_conversations;
     private Hashtable<Integer, ArrayList<JSONObject>> messages_in_users_conversation;
-    private Hashtable<Integer, ArrayList<JSONObject>> users_in_conversarion;
+    private Hashtable<Integer, Hashtable<Integer, JSONObject>> users_in_conversarion;
     private ChatAccesors chat_accesor;
     private int current_conversation;
     private int user_id;
@@ -97,17 +97,17 @@ public class Chat {
         return conv;
     }
 
-    public ArrayList<JSONObject> get_users_in_current_conversation() {
+    public Hashtable<Integer, JSONObject> get_users_in_current_conversation() {
         if (users_in_conversarion.containsKey(current_conversation)) {
             return users_in_conversarion.get(current_conversation);
         }
-        ArrayList<JSONObject> users_array = new ArrayList<JSONObject>();
+        Hashtable<Integer, JSONObject> users_in_conv = new Hashtable<Integer, JSONObject>();
         JSONArray users = chat_accesor.get_users_in_conversation(current_conversation).getJSONArray("value");
         for (int i = 0; i < users.length(); i += 1) {
-            users_array.add(users.getJSONObject(i));
+            users_in_conv.put(users.getJSONObject(i).getInt("user_id"), users.getJSONObject(i));
         }
-        users_in_conversarion.put(current_conversation, users_array);
-        return users_array;
+        users_in_conversarion.put(current_conversation, users_in_conv);
+        return users_in_conv;
     }
 
 }
