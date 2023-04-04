@@ -53,6 +53,12 @@ public class ChatAccesors {
         return response;
     }
 
+    public JSONObject get_users_in_conversation(int conversation_id) {
+        JSONObject request = RequestCreator.get_users_in_conversation(conversation_id);
+        JSONObject response = server_connector.send_request(request);
+        return response;
+    }
+
     private ServerConnector server_connector;
 
 }
