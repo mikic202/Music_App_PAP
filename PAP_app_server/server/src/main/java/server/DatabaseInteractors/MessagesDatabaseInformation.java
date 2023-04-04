@@ -1,4 +1,4 @@
-package DatabaseInteractors;
+package server.DatabaseInteractors;
 
 public enum MessagesDatabaseInformation {
     MESSAGES_TABLE("messages"),

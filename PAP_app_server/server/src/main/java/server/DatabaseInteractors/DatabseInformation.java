@@ -1,4 +1,4 @@
-package DatabaseInteractors;
+package server.DatabaseInteractors;
 
 public enum DatabseInformation {
     PASSWORD(""), URL("jdbc:mysql://localhost:3306/PAP_app"), USER("root"), USER_TABLE("users"),

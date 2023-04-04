@@ -1,4 +1,4 @@
-package server;
+package server.ClientHandlers;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -1,4 +1,4 @@
-package DatabaseInteractors;
+package server.DatabaseInteractors;
 
 public enum FileDatabsaeInformation {
     FILE_TABLE("files"),

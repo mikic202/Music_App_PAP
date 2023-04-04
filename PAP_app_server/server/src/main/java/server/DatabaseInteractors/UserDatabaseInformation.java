@@ -1,4 +1,4 @@
-package DatabaseInteractors;
+package server.DatabaseInteractors;
 
 public enum UserDatabaseInformation {
     USER_TABLE("users"),
