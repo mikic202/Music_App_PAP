@@ -137,6 +137,10 @@ public class Chat {
         return json_response;
     }
 
+    private JSONObject _get_users_in_conversation(JSONObject request){
+        return _convert_response_to_json(ConversationDataAccesor.get_users_in_conversation(request.getInt("conversation_id")), RequestTypes.GET_USERS_IN_CONVERSATION);
+    }
+
     private JSONObject _generate_response(RequestTypes req_type, JSONObject request) {
         JSONObject response = new JSONObject();
         switch (req_type) {
@@ -157,6 +161,9 @@ public class Chat {
                 break;
             case USER_INFO:
                 response = _check_users_info(request);
+                break;
+            case GET_USERS_IN_CONVERSATION:
+            response = _get_users_in_conversation(request);
                 break;
 
         }
