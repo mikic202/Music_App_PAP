@@ -28,6 +28,14 @@ public class Chat {
 
     }
 
+    public ArrayList<JSONObject> switch_conversations(int new_coveration) throws Exception {
+        if (!set_current_conversation(new_coveration)) {
+            throw new Exception("user can't acces given conversation");
+        }
+
+        return get_current_messages();
+    }
+
     public boolean set_current_conversation(int new_current_conv) {
         if (!users_conversations.containsKey(new_current_conv)) {
             return false;
