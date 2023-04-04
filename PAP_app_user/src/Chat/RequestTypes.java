@@ -2,7 +2,9 @@ package Chat;
 
 public enum RequestTypes {
     GET_MESSAGES("messages"), GET_USERS_CONVERSATIONS("user conversations"), SEND_MESSAGE("send message"),
-    CREATE_CONVERSATION("create_conversation"), ADD_USER_TO_CONVERSATION("add user to cconversation");
+    CREATE_CONVERSATION("create_conversation"), ADD_USER_TO_CONVERSATION("add user to cconversation"),
+    USER_INFO("user information");
+    ;
 
     private String _value;
 
