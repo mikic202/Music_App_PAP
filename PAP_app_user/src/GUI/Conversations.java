@@ -25,19 +25,19 @@ public class Conversations extends javax.swing.JFrame {
          * Creates new form Conversations
          */
         public void change_messages(String conversation_name) {
-                System.out.println(current_messages);
                 current_messages = chat.switch_conversations(conversation_name_to_id.get(conversation_name));
-                jTextArea1.setText(format_messages(current_messages));
+                set_conversation_text(current_messages);
 
         }
 
-        private String format_messages(ArrayList<JSONObject> messages) {
+        private void set_conversation_text(ArrayList<JSONObject> messages) {
                 String to_return = "";
                 for (JSONObject message : messages) {
-                        to_return += message.getString("send_date") + "\n";
+                        // to_return += message.getString("send_date") + "\n";
                         to_return += message.getString("text") + "\n\n";
                 }
-                return to_return;
+                System.out.println(to_return);
+                jTextArea1.setText(to_return);
         }
 
         public Conversations() {
@@ -51,6 +51,19 @@ public class Conversations extends javax.swing.JFrame {
                 current_messages = chat.get_current_messages();
                 initComponents();
                 setDefaultCloseOperation(this.DISPOSE_ON_CLOSE);
+        }
+
+        private void send_message() {
+                String message = this.jTextField1.getText();
+                if (!message.equals("")) {
+                        add_message_to_chat(chat.send_message(message));
+                }
+
+        }
+
+        private void add_message_to_chat(JSONObject message) {
+                current_messages.add(message);
+                set_conversation_text(current_messages);
         }
 
         /**
@@ -97,9 +110,9 @@ public class Conversations extends javax.swing.JFrame {
 
                 jTextArea1.setColumns(20);
                 jTextArea1.setRows(5);
-                jTextArea1.setText("Start talking:");
+                jTextArea1.setText("Choose conversation");
 
-                jTextField1.setText("jTextField1");
+                jTextField1.setText("");
 
                 jButton1.setText("Send");
                 jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -182,12 +195,7 @@ public class Conversations extends javax.swing.JFrame {
         }// </editor-fold>//GEN-END:initComponents
 
         private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton1ActionPerformed
-                String message = this.jTextField1.getText();
-                if (!message.equals("")) {
-                        this.jTextArea1.append("\n");
-                        this.jTextArea1.append(message);
-                        this.jTextField1.setText("");
-                }
+                send_message();
         }// GEN-LAST:event_jButton1ActionPerformed
 
         /**
