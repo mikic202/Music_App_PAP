@@ -8,7 +8,12 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.Scanner;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import server.Chat.Chat;
+import server.Chat.RequestTypes;
 
 public class ClientHandler implements Runnable {
 	List<Client> clients = new ArrayList<Client>();
@@ -55,7 +60,43 @@ public class ClientHandler implements Runnable {
 	}
 	
 	void handleClient(Client client) throws IOException {
-		client.write(("message: " + client.getMessage() + "\n").getBytes());
+		String message = client.getMessage();
+		System.out.println("\tRequest: " + message);
+		JSONObject messageJSON  = null;
+		String typeStr;
+		try {
+			messageJSON = new JSONObject(message);
+			typeStr = messageJSON.getString("type");
+		}
+		catch (JSONException e) {
+			System.out.println("Received request without type:");
+			System.out.println(message);
+			return;
+		}
+		RequestTypes type = null;
+		for(RequestTypes t : RequestTypes.values()) {
+			if(t.value().equals(typeStr)) {
+				type = t;
+			}
+		}
+		if(type == null) {
+			System.out.println("Received request of incorrect type: " + typeStr);
+			return;
+		}
+		JSONObject value = null;
+		try {
+			value = messageJSON.getJSONObject("value");
+		}
+		catch (JSONException e) {
+			System.out.println("Received request without value:");
+			System.out.println(message);
+			return;
+		}
+
+		String response = Chat.proces_requests(type, value).toString() + "\n";
+
+		System.out.print("\tResponse: " + response);
+		client.write(response.getBytes());
 	}
 }
 
