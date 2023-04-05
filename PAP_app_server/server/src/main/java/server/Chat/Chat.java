@@ -19,7 +19,16 @@ import server.DatabaseInteractors.UserDatabaseInformation;
 
 public class Chat {
     public static JSONObject proces_requests(RequestTypes req_type, JSONObject request) {
-        return _generate_response(req_type, request);
+        try {
+
+            return _generate_response(req_type, request);
+        } catch (Exception e) {
+            JSONObject json_response = new JSONObject();
+            json_response.put("type", req_type.value());
+            json_response.put("value", new JSONObject(String.format("{\"error\": %s}", e.toString())));
+            return json_response;
+
+        }
     }
 
     private static JSONObject _get_messeges_in_conversation(JSONObject request) {
@@ -120,7 +129,8 @@ public class Chat {
         return _convert_response_to_json(hash_response, RequestTypes.USER_INFO);
     }
 
-    private static JSONObject _convert_response_to_json(ArrayList<Hashtable<String, String>> response, RequestTypes req_type) {
+    private static JSONObject _convert_response_to_json(ArrayList<Hashtable<String, String>> response,
+            RequestTypes req_type) {
         JSONObject json_response = new JSONObject();
         json_response.put("type", req_type.value());
         JSONArray json_response_value = new JSONArray();
@@ -133,6 +143,18 @@ public class Chat {
             json_response_value.put(json_element);
         }
         json_response.put("value", json_response_value);
+        return json_response;
+    }
+
+    private static JSONObject _get_users_in_conversation(JSONObject request) {
+        ArrayList<Integer> users = ConversationDataAccesor.get_users_in_conversation(request.getInt("conversation_id"));
+        JSONObject json_response = new JSONObject();
+        json_response.put("type", RequestTypes.GET_USERS_IN_CONVERSATION.value());
+        JSONArray json_users = new JSONArray();
+        for (Integer user : users) {
+            json_users.put(user);
+        }
+        json_response.put("value", json_users);
         return json_response;
     }
 
@@ -156,6 +178,9 @@ public class Chat {
                 break;
             case USER_INFO:
                 response = _check_users_info(request);
+                break;
+            case GET_USERS_IN_CONVERSATION:
+                response = _get_users_in_conversation(request);
                 break;
 
         }

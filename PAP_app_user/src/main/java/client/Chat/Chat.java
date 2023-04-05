@@ -10,11 +10,12 @@ import client.ServerConnector.ServerConnector;
 
 public class Chat {
 
-    Hashtable<Integer, JSONObject> users_conversations;
-    Hashtable<Integer, ArrayList<JSONObject>> messages_in_users_conversation;
-    ChatAccesors chat_accesor;
-    int current_conversation;
-    int user_id;
+    private Hashtable<Integer, JSONObject> users_conversations;
+    private Hashtable<Integer, ArrayList<JSONObject>> messages_in_users_conversation;
+    private Hashtable<Integer, Hashtable<Integer, JSONObject>> users_in_conversarion;
+    private ChatAccesors chat_accesor;
+    private int current_conversation;
+    private int user_id;
 
     public Chat(int user_id, int current_conv, ServerConnector server_connector) {
         current_conversation = current_conv;
@@ -80,12 +81,35 @@ public class Chat {
         return chat_accesor.get_user_info(username).getJSONObject("value");
     }
 
-    public JSONObject create_conversation(String name, ArrayList<Integer> users_id) {
-        return chat_accesor.add_conversation(name, users_id).getJSONObject("value");
+    public JSONObject create_conversation(String name, ArrayList<String> usernames) {
+        JSONObject conversation_info = chat_accesor.add_conversation(name, usernames).getJSONObject("value");
+        users_conversations.put(conversation_info.getInt("conversation_id"), conversation_info);
+        return conversation_info;
     }
 
     public JSONObject add_users_to_current_conversation(ArrayList<Integer> users_id) {
         return chat_accesor.add_users_to_conversation(current_conversation, users_id).getJSONObject("value");
+    }
+
+    public Hashtable<String, Integer> get_conversations_names_to_ids() {
+        Hashtable<String, Integer> conv = new Hashtable<>();
+        for (int id_key : users_conversations.keySet()) {
+            conv.put(users_conversations.get(id_key).getString("name"), id_key);
+        }
+        return conv;
+    }
+
+    public Hashtable<Integer, JSONObject> get_users_in_current_conversation() {
+        if (users_in_conversarion.containsKey(current_conversation)) {
+            return users_in_conversarion.get(current_conversation);
+        }
+        Hashtable<Integer, JSONObject> users_in_conv = new Hashtable<Integer, JSONObject>();
+        JSONArray users = chat_accesor.get_users_in_conversation(current_conversation).getJSONArray("value");
+        for (int i = 0; i < users.length(); i += 1) {
+            users_in_conv.put(users.getJSONObject(i).getInt("user_id"), users.getJSONObject(i));
+        }
+        users_in_conversarion.put(current_conversation, users_in_conv);
+        return users_in_conv;
     }
 
 }

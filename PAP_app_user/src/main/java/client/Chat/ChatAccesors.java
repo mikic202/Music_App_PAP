@@ -16,7 +16,11 @@ public class ChatAccesors {
         return response;
     }
 
-    public JSONObject add_conversation(String name, ArrayList<Integer> users_ids) {
+    public JSONObject add_conversation(String name, ArrayList<String> usernames) {
+        ArrayList<Integer> users_ids = new ArrayList<>();
+        for (String user : usernames) {
+            users_ids.add(get_user_info(name).getJSONObject("value").getInt("user_id"));
+        }
         JSONObject procesed_request = RequestCreator.create_add_conversation_request(name, users_ids);
         JSONObject response = server_connector.send_request(procesed_request);
         return response;
@@ -49,6 +53,12 @@ public class ChatAccesors {
 
     public JSONObject get_user_info(String username) {
         JSONObject request = RequestCreator.create_get_user_information_request(username);
+        JSONObject response = server_connector.send_request(request);
+        return response;
+    }
+
+    public JSONObject get_users_in_conversation(int conversation_id) {
+        JSONObject request = RequestCreator.get_users_in_conversation(conversation_id);
         JSONObject response = server_connector.send_request(request);
         return response;
     }
