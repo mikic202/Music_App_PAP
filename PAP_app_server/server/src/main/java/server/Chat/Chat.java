@@ -19,7 +19,16 @@ import server.DatabaseInteractors.UserDatabaseInformation;
 
 public class Chat {
     public static JSONObject proces_requests(RequestTypes req_type, JSONObject request) {
-        return _generate_response(req_type, request);
+        try {
+
+            return _generate_response(req_type, request);
+        } catch (Exception e) {
+            JSONObject json_response = new JSONObject();
+            json_response.put("type", req_type.value());
+            json_response.put("value", new JSONObject(String.format("{\"error\": %s}", e.toString())));
+            return json_response;
+
+        }
     }
 
     private static JSONObject _get_messeges_in_conversation(JSONObject request) {
@@ -137,13 +146,19 @@ public class Chat {
         return json_response;
     }
 
-    private JSONObject _get_users_in_conversation(JSONObject request) {
-        return _convert_response_to_json(
-                ConversationDataAccesor.get_users_in_conversation(request.getInt("conversation_id")),
-                RequestTypes.GET_USERS_IN_CONVERSATION);
+    private static JSONObject _get_users_in_conversation(JSONObject request) {
+        ArrayList<Integer> users = ConversationDataAccesor.get_users_in_conversation(request.getInt("conversation_id"));
+        JSONObject json_response = new JSONObject();
+        json_response.put("type", RequestTypes.GET_USERS_IN_CONVERSATION.value());
+        JSONArray json_users = new JSONArray();
+        for (Integer user : users) {
+            json_users.put(user);
+        }
+        json_response.put("value", json_users);
+        return json_response;
     }
 
-    private JSONObject _generate_response(RequestTypes req_type, JSONObject request) {
+    private static JSONObject _generate_response(RequestTypes req_type, JSONObject request) {
         JSONObject response = new JSONObject();
         switch (req_type) {
             case GET_MESSAGES:
