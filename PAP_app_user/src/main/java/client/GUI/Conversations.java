@@ -27,7 +27,11 @@ public class Conversations extends javax.swing.JFrame {
      * Creates new form Conversations
      */
     public void change_messages(String conversation_name) {
-        current_messages = chat.switch_conversations(conversation_name_to_id.get(conversation_name));
+        try{
+            current_messages = chat.switch_conversations(conversation_name_to_id.get(conversation_name));
+        }catch(Exception e){
+            System.out.println(e);
+        }
         set_conversation_text(current_messages);
 
     }
