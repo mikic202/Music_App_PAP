@@ -17,7 +17,7 @@ import client.ServerConnector.ServerConnector;
  */
 public class MainScreen extends javax.swing.JFrame {
         private ServerConnector server_connector;
-        private Chat chat;
+        Chat chat;
         private int user_id;
         private Socket socket;
 
@@ -1483,7 +1483,7 @@ public class MainScreen extends javax.swing.JFrame {
         }// GEN-LAST:event_jButton4ActionPerformed
 
         private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton3ActionPerformed
-                CreateGroup createGroup = new CreateGroup();
+                CreateGroup createGroup = new CreateGroup(this);
                 createGroup.setVisible(true);
         }// GEN-LAST:event_jButton3ActionPerformed
 
