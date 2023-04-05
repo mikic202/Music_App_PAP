@@ -82,7 +82,9 @@ public class Chat {
     }
 
     public JSONObject create_conversation(String name, ArrayList<String> usernames) {
-        return chat_accesor.add_conversation(name, usernames).getJSONObject("value");
+        JSONObject conversation_info = chat_accesor.add_conversation(name, usernames).getJSONObject("value");
+        users_conversations.put(conversation_info.getInt("conversation_id"), conversation_info);
+        return conversation_info;
     }
 
     public JSONObject add_users_to_current_conversation(ArrayList<Integer> users_id) {
