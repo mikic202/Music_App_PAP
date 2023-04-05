@@ -4,8 +4,8 @@
   <artifactId>client</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <properties>
-     <maven.compiler.source>1.17</maven.compiler.source>
-     <maven.compiler.target>1.17</maven.compiler.target>
+     <maven.compiler.source>17</maven.compiler.source>
+     <maven.compiler.target>17</maven.compiler.target>
   </properties>
   <build>
   <plugins>
@@ -37,7 +37,6 @@
 	    <groupId>junit</groupId>
 	    <artifactId>junit</artifactId>
 	    <version>4.13.2</version>
-	    <scope>test</scope>
 	</dependency>
   	
   </dependencies>
