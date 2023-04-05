@@ -1,10 +1,10 @@
-package GUI.listeners;
+package client.GUI.listeners;
 
 // java Program to create a list and add itemListener to it
 // (program to select your birthday using lists) .
 import javax.swing.event.*;
 
-import GUI.Conversations;
+import client.GUI.Conversations;
 
 import java.awt.*;
 import javax.swing.*;

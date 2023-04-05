@@ -9,8 +9,8 @@ import java.util.Hashtable;
 
 import org.json.JSONObject;
 
-import Chat.Chat;
-import GUI.listeners.ChatListener;
+import client.Chat.Chat;
+import client.GUI.listeners.ChatListener;
 
 /**
  *
@@ -32,9 +32,11 @@ public class Conversations extends javax.swing.JFrame {
 
         private void set_conversation_text(ArrayList<JSONObject> messages) {
                 String to_return = "";
+                System.out.println(messages);
                 Hashtable<Integer, JSONObject> users_in_conv = chat.get_users_in_current_conversation();
                 for (JSONObject message : messages) {
-                        to_return += users_in_conv.get(message.getInt("user_id")) + "\n";
+                        System.out.println(message);
+                        to_return += users_in_conv.get(message.getInt("sender_id")).getString("username") + "\n";
                         to_return += message.getString("text") + "\n\n";
                         // to_return += message.getString("send_date") + "\n";
                 }

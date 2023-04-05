@@ -8,8 +8,8 @@ import java.net.Socket;
 
 import javax.swing.WindowConstants;
 
-import Chat.Chat;
-import ServerConnector.ServerConnector;
+import client.Chat.Chat;
+import client.ServerConnector.ServerConnector;
 
 /**
  *
