@@ -16,7 +16,11 @@ public class ChatAccesors {
         return response;
     }
 
-    public JSONObject add_conversation(String name, ArrayList<Integer> users_ids) {
+    public JSONObject add_conversation(String name, ArrayList<String> usernames) {
+        ArrayList<Integer> users_ids = new ArrayList<>();
+        for (String user : usernames) {
+            users_ids.add(get_user_info(name).getJSONObject("value").getInt("user_id"));
+        }
         JSONObject procesed_request = RequestCreator.create_add_conversation_request(name, users_ids);
         JSONObject response = server_connector.send_request(procesed_request);
         return response;
