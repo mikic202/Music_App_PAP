@@ -8,7 +8,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.Scanner;
 
 public class ClientHandler implements Runnable {
 	List<Client> clients = new ArrayList<Client>();
