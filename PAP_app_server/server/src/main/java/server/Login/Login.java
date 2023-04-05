@@ -15,6 +15,8 @@ public class Login {
 
     private JSONObject _get_existance(JSONObject request) {
         String wanted_email = request.getString("email");
+        String nickname = request.getString("nickname");
+        String id = request.getString("user_id");
         String written_password = request.getString("password");
         ArrayList<Hashtable<String, String>> response = new ArrayList<Hashtable<String, String>>();
         ArrayList<String> emails = new ArrayList<String>((UserDataAccesor.get_data_with_email(request.getString("email"))).keySet());
@@ -29,6 +31,9 @@ public class Login {
                         Hashtable<String, String> outcome = new Hashtable<String, String>();
                         Hashtable<String, String> username = new Hashtable<String, String>();
                         Hashtable<String, String> user_id = new Hashtable<String, String>();
+                        outcome.put("outcome", "true");
+                        username.put("username", nickname);
+                        user_id.put("user_id", id);
                         response.add(outcome);
                         response.add(username);
                         response.add(user_id);
@@ -36,7 +41,8 @@ public class Login {
                     }
                     else
                     {
-                        continue;
+                        Hashtable<String, String> outcome = new Hashtable<String, String>();
+                        outcome.put("outcome", "false");
                     }
                 }
             }
