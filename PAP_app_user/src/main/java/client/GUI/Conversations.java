@@ -12,6 +12,8 @@ import org.json.JSONObject;
 import client.Chat.Chat;
 import client.GUI.listeners.ChatListener;
 
+import net.miginfocom.swing.MigLayout;
+
 /**
  *
  * @author Adam
@@ -31,22 +33,26 @@ public class Conversations extends javax.swing.JFrame {
     }
 
     private void set_conversation_text(ArrayList<JSONObject> messages) {
-        String to_return = "";
-        System.out.println(messages);
+        jPanel1.removeAll();
         Hashtable<Integer, JSONObject> users_in_conv = chat.get_users_in_current_conversation();
         for (JSONObject message : messages) {
             System.out.println(message);
-            to_return += users_in_conv.get(message.getInt("sender_id")).getString("username") + "\n";
-            to_return += message.getString("text") + "\n\n";
-            // to_return += message.getString("send_date") + "\n";
+            // to_return +=
+            // users_in_conv.get(message.getInt("sender_id")).getString("username") + "\n";
+            // to_return += message.getString("text") + "\n\n";
+            // // to_return += message.getString("send_date") + "\n";
+            // String username =
+            // users_in_conv.get(message.getInt("sender_id")).getString("username");
+            LeftChatPanel leftChatPanel = new LeftChatPanel();
+            if (message.getInt("sender_id") == chat.user_id()) {
+                leftChatPanel.jTextArea1.setBackground(new java.awt.Color(0, 137, 255));
+            }
+            leftChatPanel.jTextArea1.setText(message.getString("text"));
+            this.jPanel1.add(leftChatPanel.jTextArea1, "wrap");
+            this.jPanel1.repaint();
+            this.jPanel1.revalidate();
+            this.jTextArea2.setText("");
         }
-        System.out.println(to_return);
-        jTextArea1.setText(to_return);
-    }
-
-    public Conversations() {
-        initComponents();
-        setDefaultCloseOperation(this.DISPOSE_ON_CLOSE);
     }
 
     public Conversations(Chat chat) {
@@ -55,14 +61,22 @@ public class Conversations extends javax.swing.JFrame {
         current_messages = chat.get_current_messages();
         initComponents();
         setDefaultCloseOperation(this.DISPOSE_ON_CLOSE);
+        this.jTextArea1.setEditable(false);
+        this.jTextArea1.setText("");
+        this.jTextArea1.setLineWrap(true);
+        this.jTextArea2.setColumns(45);
+        this.jTextArea2.setLineWrap(true);
+        this.jTextArea1.setWrapStyleWord(true);
+        this.jTextArea2.setWrapStyleWord(true);
+        this.jPanel1.setLayout(new MigLayout("fillx"));
     }
 
     private void send_message() {
-        String message = this.jTextField1.getText();
+        String message = this.jTextArea2.getText().trim();
         if (!message.equals("")) {
             add_message_to_chat(chat.send_message(message));
         }
-
+        System.out.println(current_messages);
     }
 
     private void add_message_to_chat(JSONObject message) {
@@ -83,7 +97,7 @@ public class Conversations extends javax.swing.JFrame {
         this.jTextArea2.setLineWrap(true);
         this.jTextArea1.setWrapStyleWord(true);
         this.jTextArea2.setWrapStyleWord(true);
-        this.jPanel1.setLayout();
+        this.jPanel1.setLayout(new MigLayout("fillx"));
     }
 
     /**
@@ -115,8 +129,14 @@ public class Conversations extends javax.swing.JFrame {
 
         jLabel2.setText("Chats:");
 
+        String[] conv_names = new String[conversation_name_to_id.keySet().size()];
+        int i = 0;
+        for (String name : conversation_name_to_id.keySet()) {
+            conv_names[i++] = name;
+        }
+
         jList1.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "a", "b", "c" };
+            String[] strings = conv_names;
 
             public int getSize() {
                 return strings.length;
@@ -126,6 +146,8 @@ public class Conversations extends javax.swing.JFrame {
                 return strings[i];
             }
         });
+
+        jList1.addListSelectionListener(new ChatListener(this));
         jScrollPane1.setViewportView(jList1);
 
         jButton1.setText("Send");
@@ -221,16 +243,7 @@ public class Conversations extends javax.swing.JFrame {
     }// </editor-fold>
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
-        LeftChatPanel leftChatPanel = new LeftChatPanel();
-        String message = this.jTextArea2.getText().trim();
-        if (!message.equals("")) {
-            leftChatPanel.jTextArea1.setText(message);
-            this.jPanel1.add(leftChatPanel.jTextArea1, "wrap");
-            this.jPanel1.repaint();
-            this.jPanel1.revalidate();
-            this.jTextArea2.setText("");
-
-        }
+        send_message();
     }
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {
