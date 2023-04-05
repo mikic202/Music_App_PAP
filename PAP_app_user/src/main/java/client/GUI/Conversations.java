@@ -4,8 +4,6 @@
  */
 package client.GUI;
 
-import net.miginfocom.swing.MigLayout;
-
 /**
  *
  * @author Adam
@@ -25,7 +23,7 @@ public class Conversations extends javax.swing.JFrame {
         this.jTextArea2.setLineWrap(true);
         this.jTextArea1.setWrapStyleWord(true);
         this.jTextArea2.setWrapStyleWord(true);
-        this.jPanel1.setLayout(new MigLayout("fillx"));
+        this.jPanel1.setLayout();
     }
 
     /**
