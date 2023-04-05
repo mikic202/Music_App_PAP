@@ -16,6 +16,7 @@ public class CreateGroup extends javax.swing.JFrame {
     public CreateGroup() {
         initComponents();
         setDefaultCloseOperation(this.DISPOSE_ON_CLOSE);
+        
     }
 
     /**

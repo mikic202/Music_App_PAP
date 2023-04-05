@@ -4,6 +4,8 @@
  */
 package client.GUI;
 
+import javax.swing.JLabel;
+
 import net.miginfocom.swing.MigLayout;
 
 /**
@@ -51,7 +53,6 @@ public class Conversations extends javax.swing.JFrame {
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
-        jTextArea1.setText("Start talking:");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -152,6 +153,12 @@ public class Conversations extends javax.swing.JFrame {
         if(!message.equals(""))
         {
             leftChatPanel.jTextArea1.setText(message);
+            JLabel username = new JLabel();
+            username.setText("Władek:");
+            JLabel time = new JLabel();
+            time.setText("17:30");
+            this.jPanel1.add(username);
+            this.jPanel1.add(time);
             this.jPanel1.add(leftChatPanel.jTextArea1, "wrap");
             this.jPanel1.repaint();
             this.jPanel1.revalidate();
