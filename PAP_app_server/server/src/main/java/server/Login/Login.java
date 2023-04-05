@@ -15,43 +15,34 @@ public class Login {
 
     private JSONObject _get_existance(JSONObject request) {
         String wanted_email = request.getString("email");
-        String nickname = request.getString("nickname");
-        String id = request.getString("user_id");
+        JSONObject result = new JSONObject();
+        result.put("type", LoginRequestTypes.SEND_LOGIN.value());
         String written_password = request.getString("password");
-        ArrayList<Hashtable<String, String>> response = new ArrayList<Hashtable<String, String>>();
-        ArrayList<String> emails = new ArrayList<String>((UserDataAccesor.get_data_with_email(request.getString("email"))).keySet());
-        ArrayList<String> passwords = new ArrayList<String>((UserDataAccesor.get_data_with_email(request.getString("password"))).keySet());
-        for (String email : emails) {
-            if (email.equals(wanted_email))
+        Hashtable<String, String> user_info = UserDataAccesor.get_data_with_email(wanted_email);
+        if (user_info.isEmpty())
+        {
+            JSONObject false_result = new JSONObject();
+            false_result.put("outcome", false);
+            result.put("value", false_result);
+        }
+        else
+        {
+            if (written_password.equals(user_info.get("password")))
             {
-                for (String password : passwords)
-                {
-                    if (password.equals(written_password))
-                    {
-                        Hashtable<String, String> outcome = new Hashtable<String, String>();
-                        Hashtable<String, String> username = new Hashtable<String, String>();
-                        Hashtable<String, String> user_id = new Hashtable<String, String>();
-                        outcome.put("outcome", "true");
-                        username.put("username", nickname);
-                        user_id.put("user_id", id);
-                        response.add(outcome);
-                        response.add(username);
-                        response.add(user_id);
-                        break;
-                    }
-                    else
-                    {
-                        Hashtable<String, String> outcome = new Hashtable<String, String>();
-                        outcome.put("outcome", "false");
-                    }
-                }
+                JSONObject true_result = new JSONObject();
+                true_result.put("outcome", true);
+                true_result.put("username", user_info.get("username"));
+                true_result.put("user_id", user_info.get("user_id"));
+                result.put("value", true_result);
             }
             else
             {
-                continue;
+                JSONObject true_result = new JSONObject();
+                true_result.put("outcome", true);
+                result.put("value", true_result);
             }
         }
-        return _convert_response_to_json(response, LoginRequestTypes.SEND_LOGIN);
+        return result;
     } 
 
     private JSONObject _convert_response_to_json(ArrayList<Hashtable<String, String>> response, LoginRequestTypes req_type) {
