@@ -8,6 +8,8 @@ import java.net.Socket;
 
 import javax.swing.WindowConstants;
 
+import org.json.JSONObject;
+
 import client.Chat.Chat;
 import client.ServerConnector.ServerConnector;
 
@@ -19,6 +21,7 @@ public class MainScreen extends javax.swing.JFrame {
         private ServerConnector server_connector;
         Chat chat;
         private int user_id;
+        private JSONObject user_info;
         private Socket socket;
 
         /**
@@ -37,17 +40,19 @@ public class MainScreen extends javax.swing.JFrame {
                 setDefaultCloseOperation(this.DISPOSE_ON_CLOSE);
         }
 
-        public MainScreen(Socket socket) {
-                int user_id = 1;
-                this.user_id = user_id;
+        public MainScreen(ServerConnector server_connector, JSONObject user_info) {
+                this.user_id = user_info.getInt("user_id");
+                this.user_info = user_info;
                 try {
-                        server_connector = new ServerConnector(socket);
+                        this.server_connector = server_connector;
                         chat = new Chat(this.user_id, -1, server_connector);
                 } catch (Exception e) {
                         System.out.println(e);
                 }
                 initComponents();
                 setDefaultCloseOperation(this.DISPOSE_ON_CLOSE);
+                System.out.println(this.user_id);
+                System.out.println(this.user_info);
         }
 
         /**
