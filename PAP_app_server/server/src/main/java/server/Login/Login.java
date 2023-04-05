@@ -15,44 +15,38 @@ public class Login {
 
     private JSONObject _get_existance(JSONObject request) {
         String wanted_email = request.getString("email");
+        String written_password = request.getString("password");
         ArrayList<Hashtable<String, String>> response = new ArrayList<Hashtable<String, String>>();
         ArrayList<String> emails = new ArrayList<String>((UserDataAccesor.get_data_with_email(request.getString("email"))).keySet());
-        String existance;
+        ArrayList<String> passwords = new ArrayList<String>((UserDataAccesor.get_data_with_email(request.getString("password"))).keySet());
         for (String email : emails) {
-            Hashtable<String, String> row = new Hashtable<String, String>();
             if (email.equals(wanted_email))
             {
-                existance = "true";
+                for (String password : passwords)
+                {
+                    if (password.equals(written_password))
+                    {
+                        Hashtable<String, String> outcome = new Hashtable<String, String>();
+                        Hashtable<String, String> username = new Hashtable<String, String>();
+                        Hashtable<String, String> user_id = new Hashtable<String, String>();
+                        response.add(outcome);
+                        response.add(username);
+                        response.add(user_id);
+                        break;
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
             }
             else
             {
-                existance = "false";
+                continue;
             }
-            row.put(email, existance);
-            response.add(row);
         }
-        return _convert_response_to_json(response, LoginRequestTypes.GET_EXISTANCE);
-    }
-
-    private JSONObject _get_email(JSONObject request) {
-        ArrayList<Hashtable<String, String>> response = new ArrayList<Hashtable<String, String>>();
-        ArrayList<String> emails = new ArrayList<String>((UserDataAccesor.get_data_with_email(request.getString("email"))).keySet());
-        for (String email : emails) {
-            response.add(UserDataAccesor.get_data_with_email(email));
-        }
-        return _convert_response_to_json(response, LoginRequestTypes.GET_EMAIL);
-    }
-
-    private JSONObject _get_nickname(JSONObject request) {
-        ArrayList<Hashtable<String, String>> response = new ArrayList<Hashtable<String, String>>();
-        ArrayList<String> names = new ArrayList<String>((UserDataAccesor.get_data_with_name(request.getString("nickname"))).keySet());
-        for (String name : names) {
-            response.add(UserDataAccesor.get_data_with_name(name));
-        }
-        return _convert_response_to_json(response, LoginRequestTypes.GET_EMAIL);
-    }
-
-    
+        return _convert_response_to_json(response, LoginRequestTypes.SEND_LOGIN);
+    } 
 
     private JSONObject _convert_response_to_json(ArrayList<Hashtable<String, String>> response, LoginRequestTypes req_type) {
         JSONObject json_response = new JSONObject();
@@ -73,14 +67,14 @@ public class Login {
     private JSONObject _generate_response(LoginRequestTypes req_type, JSONObject request) {
         JSONObject response = new JSONObject();
         switch (req_type) {
-            case GET_EXISTANCE:
+            case SEND_LOGIN:
                 response = _get_existance(request);
                 break;
-            case GET_EMAIL:
-                response = _get_email(request);
+            case SEND_REGISTER:
+                
                 break;
-            case GET_NICKNAME:
-                response = _get_nickname(request);
+            case SEND_CHANGE_PASSWORD:
+                
                 break;
         }
         return response;

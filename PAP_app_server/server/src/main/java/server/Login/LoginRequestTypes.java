@@ -1,7 +1,9 @@
 package server.Login;
 
 public enum LoginRequestTypes {
-    GET_EXISTANCE("existance"), GET_EMAIL("email"), GET_NICKNAME("nickname");
+    SEND_LOGIN("send login"),
+    SEND_REGISTER("send request"),
+    SEND_CHANGE_PASSWORD("send change password");
 
     private String _value;
 
