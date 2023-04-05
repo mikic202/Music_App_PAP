@@ -1,22 +1,21 @@
 package client.GUI.listeners;
 
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import client.GUI.LoginScreen;
 
-public class LoggingActionListener implements ListSelectionListener {
+public class LoggingActionListener implements ActionListener {
 
-    LoginScreen logingb_screen;
+    LoginScreen logging_screen;
 
-    public LoggingActionListener(LoginScreen logingb_screen) {
-        this.logingb_screen = logingb_screen;
+    public LoggingActionListener(LoginScreen logging_screen) {
+        this.logging_screen = logging_screen;
     }
 
     @Override
-    public void valueChanged(ListSelectionEvent arg0) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'valueChanged'");
+    public void actionPerformed(ActionEvent arg0) {
+        logging_screen.try_logging();
     }
 
 }
