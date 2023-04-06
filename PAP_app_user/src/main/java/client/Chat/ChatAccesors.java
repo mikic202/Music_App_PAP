@@ -69,6 +69,12 @@ public class ChatAccesors {
         return response;
     }
 
+    public JSONObject get_new_messages_in_converastion(int conversation, Integer latest_message) {
+        JSONObject request = RequestCreator.create_get_new_messages_in_conversation(conversation, latest_message);
+        JSONObject response = server_connector.send_request(request);
+        return response;
+    }
+
     private ServerConnector server_connector;
 
 }
