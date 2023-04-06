@@ -55,4 +55,10 @@ public class RequestCreator {
                                 String.format("{\"type\":\"%s\", \"value\":{\"conversation_id\":%s}}",
                                                 RequestTypes.GET_USERS_IN_CONVERSATION.value(), conversation_id));
         }
+
+        public static JSONObject create_get_new_messages_in_conversation(int conversation, Integer latest_message) {
+                return new JSONObject(
+                                String.format("{\"type\":\"%s\", \"value\":{\"conversation_id\":%s, \"latest_message\":%s}}",
+                                                RequestTypes.GET_LATEST_MESSAGE.value(), conversation, latest_message));
+        }
 }
