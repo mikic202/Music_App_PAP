@@ -1,6 +1,8 @@
 package client.Chat;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Hashtable;
 
 import org.json.JSONArray;
@@ -33,6 +35,7 @@ public class Chat {
         if (!set_current_conversation(new_coveration)) {
             throw new Exception("user can't acces given conversation");
         }
+        update_status();
 
         return get_current_messages();
     }
@@ -63,6 +66,7 @@ public class Chat {
     }
 
     private void convert_conversations_response_to_hashtable(JSONObject response) {
+        users_conversations.clear();
         JSONArray conversations = response.getJSONArray("value");
         for (int i = 0; i < conversations.length(); i += 1) {
             users_conversations.put(conversations.getJSONObject(i).getInt("ID"), response);
@@ -88,6 +92,7 @@ public class Chat {
     }
 
     public JSONObject add_users_to_conversation(String conversation_name, ArrayList<String> usernames) {
+        // TODO adding users to users in conversation hashtable
         for (Integer key : users_conversations.keySet()) {
             if (users_conversations.get(key).getString("name").equals(conversation_name)) {
                 return chat_accesor.add_users_to_conversation(key, usernames).getJSONObject("value");
@@ -119,6 +124,17 @@ public class Chat {
 
     public int user_id() {
         return user_id;
+    }
+
+    public void update_status() {
+        JSONObject conversations = chat_accesor.get_users_conversations(user_id);
+        convert_conversations_response_to_hashtable(conversations);
+        JSONObject new_messages_response = chat_accesor.get_new_messages_in_converastion(current_conversation,
+                Collections.max(messages_in_users_conversation.keySet()));
+        for (int i = 0; i < new_messages_response.getJSONArray("value").length(); i += 1) {
+            messages_in_users_conversation.get(current_conversation)
+                    .add(new_messages_response.getJSONArray("value").getJSONObject(i));
+        }
     }
 
 }
