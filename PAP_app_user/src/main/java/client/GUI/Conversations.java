@@ -7,6 +7,8 @@ package client.GUI;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
+import javax.swing.JLabel;
+
 import org.json.JSONObject;
 
 import client.Chat.Chat;
@@ -35,6 +37,7 @@ public class Conversations extends javax.swing.JFrame {
     private void set_conversation_text(ArrayList<JSONObject> messages) {
         jPanel1.removeAll();
         Hashtable<Integer, JSONObject> users_in_conv = chat.get_users_in_current_conversation();
+        System.out.println(users_in_conv);
         for (JSONObject message : messages) {
             System.out.println(message);
             // to_return +=
@@ -43,6 +46,13 @@ public class Conversations extends javax.swing.JFrame {
             // // to_return += message.getString("send_date") + "\n";
             // String username =
             // users_in_conv.get(message.getInt("sender_id")).getString("username");
+            JLabel username = new JLabel();
+            username.setText(users_in_conv.get(message.getInt("sender_id")).getString("username"));
+            JLabel time = new JLabel();
+            time.setText("17:30");
+            this.jPanel1
+                    .add(username);
+            this.jPanel1.add(time);
             LeftChatPanel leftChatPanel = new LeftChatPanel();
             if (message.getInt("sender_id") == chat.user_id()) {
                 leftChatPanel.jTextArea1.setBackground(new java.awt.Color(0, 137, 255));
@@ -178,7 +188,6 @@ public class Conversations extends javax.swing.JFrame {
         jPanel1Layout.setVerticalGroup(
                 jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGap(0, 287, Short.MAX_VALUE));
-
         jScrollPane3.setViewportView(jPanel1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
