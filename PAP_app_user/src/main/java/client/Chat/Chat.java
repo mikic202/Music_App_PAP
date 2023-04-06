@@ -87,8 +87,13 @@ public class Chat {
         return conversation_info;
     }
 
-    public JSONObject add_users_to_current_conversation(ArrayList<Integer> users_id) {
-        return chat_accesor.add_users_to_conversation(current_conversation, users_id).getJSONObject("value");
+    public JSONObject add_users_to_conversation(String conversation_name, ArrayList<String> usernames) {
+        for (Integer key : users_conversations.keySet()) {
+            if (users_conversations.get(key).getString("name").equals(conversation_name)) {
+                return chat_accesor.add_users_to_conversation(key, usernames).getJSONObject("value");
+            }
+        }
+        return new JSONObject("{\"outcome\":false}");
     }
 
     public Hashtable<String, Integer> get_conversations_names_to_ids() {
