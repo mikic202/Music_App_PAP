@@ -44,10 +44,12 @@ public class LoginScreen extends javax.swing.JFrame {
         }
 
         public void try_logging() {
-                JSONObject response = logging_accesor.send_user_login_data(jTextField1.getText(),
-                                jPasswordField1.getPassword());
-                if (response.getJSONObject("value").getBoolean("outcome")) {
-                        succesfull_logging(response.getJSONObject("value"));
+                if (!jTextField1.getText().equals("") && !String.valueOf(jPasswordField1.getPassword()).equals("")) {
+                        JSONObject response = logging_accesor.send_user_login_data(jTextField1.getText(),
+                                        jPasswordField1.getPassword());
+                        if (response.getJSONObject("value").getBoolean("outcome")) {
+                                succesfull_logging(response.getJSONObject("value"));
+                        }
                 }
         }
 
