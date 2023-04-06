@@ -95,7 +95,7 @@ public class LoginScreen extends javax.swing.JFrame {
                 jButton1.setMinimumSize(new java.awt.Dimension(73, 23));
                 jButton1.addActionListener(new LoggingActionListener(this));
 
-                jLabel1.setText("Username:");
+                jLabel1.setText("E-mail:");
 
                 jLabel2.setText("Password:");
 
