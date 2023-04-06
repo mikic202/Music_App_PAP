@@ -1,18 +1,20 @@
 package Music;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
-
-import java.io.BufferedInputStream;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-
-import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
+import java.io.DataInputStream;
+import java.io.File;
 
 import java.util.List;
+
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
 
 
 
@@ -23,19 +25,21 @@ class MusicStreamer extends Thread{
 
     private DatagramSocket socket;
     private boolean running;
-    private byte[] buffer = new byte[buffer_size];
+    private byte[] receiving_buffer = new byte[buffer_size];
     private int server_port;
 
-    private String path;
+    private String path = "/home/pap/music/file_example_WAV_10MG.wav";
 
     private int initiator;
 
     //user_id
-    private List<Integer> listeners;
+    private List<Integer> listeners = new ArrayList<Integer>();
     //user_id, ip
-    private Hashtable<Integer, InetAddress> ListenersIPs;
+    private Hashtable<Integer, InetAddress> ListenersIPs = new Hashtable<Integer, InetAddress>();
     //user_id, port
-    private Hashtable<Integer, Integer> ListenersPorts;
+    private Hashtable<Integer, Integer> ListenersPorts = new Hashtable<Integer, Integer>();
+
+    private AudioFormat format;
 
     // port to start streaming from it
     public MusicStreamer(int port, int initiator) {
@@ -58,32 +62,31 @@ class MusicStreamer extends Thread{
         running = false;
     }
 
-    public void runStream() {
-
-        running = true;
-
-        while (running) {
-            try
+    public void run() 
+    {
+        try
+        {
+            DatagramPacket packet = new DatagramPacket(receiving_buffer, receiving_buffer.length);
+            socket.receive(packet);
+            InetAddress address = packet.getAddress();
+            String addressString = address.toString();
+            int port = packet.getPort();
+            String received = new String(packet.getData(), 0, packet.getLength());
+            System.out.println("Client ip: " + addressString + "Client port: " + Integer.toString(port) + "Msg: " + received);
+            listeners.add(11);
+            ListenersIPs.put(11, address);
+            ListenersPorts.put(11, port);
+            if (!received.isEmpty()) 
             {
-                DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
-                socket.receive(packet);
-                InetAddress address = packet.getAddress();
-                String addressString = address.toString();
-                int port = packet.getPort();
-                String received = new String(packet.getData(), 0, packet.getLength());
-                System.out.println("Client ip: " + addressString + "Client port: " + Integer.toString(port) + "Msg: " + received);
-                if (!received.isEmpty()) 
-                {
-                    startStreaming(address, port);
-                    continue;
-                }
+                startStreaming(address, port);
             }
-            catch (Exception e) {
-                System.out.println(e);
-            }
-            socket.close();
         }
+        catch (Exception e) {
+            System.out.println(e);
+        }
+        socket.close();
     }
+    
 
     public boolean getRunningState()
     {
@@ -94,15 +97,24 @@ class MusicStreamer extends Thread{
     {
         try
         {
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            BufferedInputStream in = new BufferedInputStream(new FileInputStream(path));
-            int read;
-            while ((read = in.read(buffer)) > 0)
+
+            AudioInputStream stream = AudioSystem.getAudioInputStream(new File(path));
+            /*
+            format = stream.getFormat();
+            int length = (int)(stream.getFrameLength() * format.getFrameSize());
+            */
+
+            byte[] buffer;
+            DataInputStream in = new DataInputStream(stream);
+            int i = 0;
+            while ((in.read(buffer = new byte[buffer_size], 0, buffer.length)) > 0)
             {
-                out.write(buffer, 0, read);
-                sendPacketToListeners();
+                sendPacketToListeners(buffer);
+                sleep(25);
+                System.out.println(i);
+                i++;
             }
-            out.flush();
+            in.close();
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -115,7 +127,7 @@ class MusicStreamer extends Thread{
         return false;
     }
 
-    private void sendPacketToListeners()
+    private void sendPacketToListeners(byte[] buffer) throws Exception
     {
         DatagramPacket dgp;
 
