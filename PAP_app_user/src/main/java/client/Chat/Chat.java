@@ -111,6 +111,7 @@ public class Chat {
         users_in_conversarion.put(current_conversation, users_in_conv);
         return users_in_conv;
     }
+
     public int user_id() {
         return user_id;
     }
