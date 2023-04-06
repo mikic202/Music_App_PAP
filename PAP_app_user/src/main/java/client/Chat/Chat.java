@@ -112,4 +112,8 @@ public class Chat {
         return users_in_conv;
     }
 
+    public int user_id() {
+        return user_id;
+    }
+
 }
