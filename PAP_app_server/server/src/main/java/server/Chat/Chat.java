@@ -24,7 +24,7 @@ public class Chat {
         } catch (Exception e) {
             JSONObject json_response = new JSONObject();
             json_response.put("type", req_type.value());
-            JSONObject new_json = new JSONObject(String.format("{\"error\": \"%s\", \"outcome\":false}", e.toString()));
+            JSONObject new_json = new JSONObject(String.format("{\"error\": \"%s\"}", e.toString()));
             json_response.put("value",
                     new_json);
             return json_response;
@@ -53,8 +53,8 @@ public class Chat {
 
     private static JSONObject _send_message(JSONObject request) {
         Hashtable<String, String> data = new Hashtable<>();
-        data.put("sender", request.getString("sender_id"));
-        data.put("conversation", request.getString("conversation_id"));
+        data.put("sender", Integer.toString(request.getInt("sender_id")));
+        data.put("conversation", Integer.toString(request.getInt("conversation_id")));
         java.util.Date date = new java.util.Date();
         Timestamp timestamp = new Timestamp(date.getTime());
         data.put("send_date", timestamp.toString());
