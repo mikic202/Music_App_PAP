@@ -96,13 +96,15 @@ public class Chat {
         int number_of_users = request.getJSONArray("users").length();
         int conversation_id = request.getInt("conversation_id");
         ArrayList<Integer> users = new ArrayList<>();
-        for (int i = 0; i < request.getJSONArray("users").length(); i++) {
+        for (int i = 0; i < number_of_users; i++) {
             users.add(request.getJSONArray("users").getInt(i));
         }
         _add_users_to_conversation(users, conversation_id);
         Hashtable<String, String> previous_data = ConversationDataAccesor.get_data(conversation_id);
         previous_data.put(ConversationDatabsaeInformation.NUMBER_OF_USERS_COLUMN.value(),
-                previous_data.get(ConversationDatabsaeInformation.NUMBER_OF_USERS_COLUMN.value()) + number_of_users);
+                Integer.toString(Integer
+                        .parseInt(previous_data.get(ConversationDatabsaeInformation.NUMBER_OF_USERS_COLUMN.value()))
+                        + number_of_users));
         ConversationDataSetter.set_data(conversation_id, previous_data);
         Hashtable<String, String> outcome = new Hashtable<>();
         outcome.put("outcome", "true");
