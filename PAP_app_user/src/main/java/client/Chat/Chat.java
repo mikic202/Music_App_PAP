@@ -28,6 +28,7 @@ public class Chat {
         convert_conversations_response_to_hashtable(conversations);
         messages_in_users_conversation = new Hashtable<>();
         get_current_messages();
+        users_in_conversarion = new Hashtable<>();
 
     }
 
@@ -87,7 +88,7 @@ public class Chat {
 
     public JSONObject create_conversation(String name, ArrayList<String> usernames) {
         JSONObject conversation_info = chat_accesor.add_conversation(name, usernames).getJSONObject("value");
-        users_conversations.put(conversation_info.getInt("conversation_id"), conversation_info);
+        users_conversations.put(conversation_info.getInt("ID"), conversation_info);
         return conversation_info;
     }
 
@@ -116,7 +117,7 @@ public class Chat {
         Hashtable<Integer, JSONObject> users_in_conv = new Hashtable<Integer, JSONObject>();
         JSONArray users = chat_accesor.get_users_in_conversation(current_conversation).getJSONArray("value");
         for (int i = 0; i < users.length(); i += 1) {
-            users_in_conv.put(users.getJSONObject(i).getInt("user_id"), users.getJSONObject(i));
+            users_in_conv.put(users.getInt(i), get_user_information(users.getInt(i)));
         }
         users_in_conversarion.put(current_conversation, users_in_conv);
         return users_in_conv;
