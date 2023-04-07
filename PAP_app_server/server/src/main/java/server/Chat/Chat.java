@@ -20,12 +20,13 @@ import server.DatabaseInteractors.UserDatabaseInformation;
 public class Chat {
     public static JSONObject proces_requests(RequestTypes req_type, JSONObject request) {
         try {
-
             return _generate_response(req_type, request);
         } catch (Exception e) {
             JSONObject json_response = new JSONObject();
             json_response.put("type", req_type.value());
-            json_response.put("value", new JSONObject(String.format("{\"error\": %s}", e.toString())));
+            JSONObject new_json = new JSONObject(String.format("{\"error\": \"%s\", \"outcome\":false}", e.toString()));
+            json_response.put("value",
+                    new_json);
             return json_response;
 
         }
@@ -125,7 +126,7 @@ public class Chat {
             return _convert_response_to_json(hash_response, RequestTypes.USER_INFO);
         }
         Hashtable<String, String> hash_response = UserDataAccesor
-                .get_data(UserDatabaseInformation.USERNAME_COLUMN.value(), request.getString("user_id"));
+                .get_data(UserDatabaseInformation.ID_COLUMN.value(), request.getInt("user_id"));
         return _convert_response_to_json(hash_response, RequestTypes.USER_INFO);
     }
 
