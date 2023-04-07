@@ -24,7 +24,9 @@ public class Chat {
         } catch (Exception e) {
             JSONObject json_response = new JSONObject();
             json_response.put("type", req_type.value());
-            JSONObject new_json = new JSONObject(String.format("{\"error\": \"%s\"}", e.toString()));
+            JSONObject new_json = new JSONObject(
+                    String.format("{\"error\": \"%s\", \"outcome\":false}",
+                            "there is something incorrect with your request"));
             json_response.put("value",
                     new_json);
             return json_response;
