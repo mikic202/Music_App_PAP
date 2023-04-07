@@ -36,7 +36,7 @@ public class Chat {
         if (!set_current_conversation(new_coveration)) {
             throw new Exception("user can't acces given conversation");
         }
-        update_status();
+        // update_status();
 
         return get_current_messages();
     }
