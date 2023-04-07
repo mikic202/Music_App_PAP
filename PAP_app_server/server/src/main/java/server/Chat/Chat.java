@@ -97,8 +97,16 @@ public class Chat {
         int conversation_id = request.getInt("conversation_id");
         ArrayList<Integer> users = new ArrayList<>();
         for (int i = 0; i < number_of_users; i++) {
-            users.add(request.getJSONArray("users").getInt(i));
+            System.out.println(UserDataAccesor.get_user_conversations(request.getJSONArray("users").getInt(i)));
+            if (!UserDataAccesor.get_user_conversations(request.getJSONArray("users").getInt(i))
+                    .contains(conversation_id)) {
+                users.add(request.getJSONArray("users").getInt(i));
+            } else {
+                number_of_users -= 1;
+            }
+
         }
+        System.out.println(users);
         _add_users_to_conversation(users, conversation_id);
         Hashtable<String, String> previous_data = ConversationDataAccesor.get_data(conversation_id);
         previous_data.put(ConversationDatabsaeInformation.NUMBER_OF_USERS_COLUMN.value(),
