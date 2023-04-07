@@ -69,7 +69,7 @@ public class Chat {
         users_conversations.clear();
         JSONArray conversations = response.getJSONArray("value");
         for (int i = 0; i < conversations.length(); i += 1) {
-            users_conversations.put(conversations.getJSONObject(i).getInt("ID"), response);
+            users_conversations.put(conversations.getJSONObject(i).getInt("ID"), conversations.getJSONObject(i));
         }
     }
 
