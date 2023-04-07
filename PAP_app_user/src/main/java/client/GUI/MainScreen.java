@@ -28,11 +28,13 @@ public class MainScreen extends javax.swing.JFrame {
          * Creates new form MainScreen
          */
         public MainScreen() {
-                int user_id = 1;
+                int user_id = 6;
                 this.user_id = user_id;
                 try {
+                        socket = new Socket("localhost",
+                                        8000);
                         server_connector = new ServerConnector(socket);
-                        chat = new Chat(this.user_id, -1, server_connector);
+                        chat = new Chat(this.user_id, 1, server_connector);
                 } catch (Exception e) {
                         System.out.println(e);
                 }
@@ -649,7 +651,7 @@ public class MainScreen extends javax.swing.JFrame {
                         }
                 });
 
-                jButton4.setText("Join to group");
+                jButton4.setText("Add to group");
                 jButton4.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
                                 jButton4ActionPerformed(evt);
@@ -1433,7 +1435,7 @@ public class MainScreen extends javax.swing.JFrame {
         }// GEN-LAST:event_jButton15ActionPerformed
 
         private void jButton14ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton14ActionPerformed
-                AccountSettings accountSettings = new AccountSettings();
+                AccountSettings accountSettings = new AccountSettings(server_connector, user_info);
                 accountSettings.setVisible(true);
         }// GEN-LAST:event_jButton14ActionPerformed
 
@@ -1483,7 +1485,7 @@ public class MainScreen extends javax.swing.JFrame {
         }// GEN-LAST:event_jButton5ActionPerformed
 
         private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton4ActionPerformed
-                JoinToGroup jointToGroup = new JoinToGroup();
+                JoinToGroup jointToGroup = new JoinToGroup(chat);
                 jointToGroup.setVisible(true);
         }// GEN-LAST:event_jButton4ActionPerformed
 
