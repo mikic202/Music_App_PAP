@@ -9,11 +9,11 @@ import org.json.JSONObject;
 import server.DatabaseInteractors.UserDataAccesor;
 
 public class Login {
-    public JSONObject proces_requests(LoginRequestTypes req_type, JSONObject request) {
+    public static JSONObject proces_requests(LoginRequestTypes req_type, JSONObject request) {
         return _generate_response(req_type, request);
     }
 
-    private JSONObject _get_existance(JSONObject request) {
+    private static JSONObject _get_existance(JSONObject request) {
         String wanted_email = request.getString("email");
         JSONObject result = new JSONObject();
         result.put("type", LoginRequestTypes.SEND_LOGIN.value());
@@ -45,7 +45,7 @@ public class Login {
         return result;
     } 
 
-    private JSONObject _convert_response_to_json(ArrayList<Hashtable<String, String>> response, LoginRequestTypes req_type) {
+    private static JSONObject _convert_response_to_json(ArrayList<Hashtable<String, String>> response, LoginRequestTypes req_type) {
         JSONObject json_response = new JSONObject();
         json_response.put("type", req_type.value());
         JSONArray json_response_value = new JSONArray();
@@ -61,7 +61,7 @@ public class Login {
         return json_response;
     }
 
-    private JSONObject _generate_response(LoginRequestTypes req_type, JSONObject request) {
+    private static JSONObject _generate_response(LoginRequestTypes req_type, JSONObject request) {
         JSONObject response = new JSONObject();
         switch (req_type) {
             case SEND_LOGIN:
