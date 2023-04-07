@@ -29,9 +29,9 @@ public class Conversations extends javax.swing.JFrame {
      * Creates new form Conversations
      */
     public void change_messages(String conversation_name) {
-        try{
+        try {
             current_messages = chat.switch_conversations(conversation_name_to_id.get(conversation_name));
-        }catch(Exception e){
+        } catch (Exception e) {
             System.out.println(e);
         }
         set_conversation_text(current_messages);
@@ -40,10 +40,9 @@ public class Conversations extends javax.swing.JFrame {
 
     private void set_conversation_text(ArrayList<JSONObject> messages) {
         jPanel1.removeAll();
+        jPanel1.removeAll();
         Hashtable<Integer, JSONObject> users_in_conv = chat.get_users_in_current_conversation();
-        System.out.println(users_in_conv);
         for (JSONObject message : messages) {
-            System.out.println(message);
             // to_return +=
             // users_in_conv.get(message.getInt("sender_id")).getString("username") + "\n";
             // to_return += message.getString("text") + "\n\n";
@@ -51,14 +50,14 @@ public class Conversations extends javax.swing.JFrame {
             // String username =
             // users_in_conv.get(message.getInt("sender_id")).getString("username");
             JLabel username = new JLabel();
-            username.setText(users_in_conv.get(message.getInt("sender_id")).getString("username"));
+            username.setText(users_in_conv.get(message.getInt("sender")).getString("username"));
             JLabel time = new JLabel();
-            time.setText("17:30");
+            time.setText(message.getString("send_date"));
             this.jPanel1
                     .add(username);
             this.jPanel1.add(time);
             LeftChatPanel leftChatPanel = new LeftChatPanel();
-            if (message.getInt("sender_id") == chat.user_id()) {
+            if (message.getInt("sender") == chat.user_id()) {
                 leftChatPanel.jTextArea1.setBackground(new java.awt.Color(0, 137, 255));
             }
             leftChatPanel.jTextArea1.setText(message.getString("text"));
@@ -90,7 +89,6 @@ public class Conversations extends javax.swing.JFrame {
         if (!message.equals("")) {
             add_message_to_chat(chat.send_message(message));
         }
-        System.out.println(current_messages);
     }
 
     private void add_message_to_chat(JSONObject message) {

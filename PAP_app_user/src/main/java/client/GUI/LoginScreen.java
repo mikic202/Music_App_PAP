@@ -95,7 +95,7 @@ public class LoginScreen extends javax.swing.JFrame {
                 jButton1.setMinimumSize(new java.awt.Dimension(73, 23));
                 jButton1.addActionListener(new LoggingActionListener(this));
 
-                jLabel1.setText("Username:");
+                jLabel1.setText("E-mail:");
 
                 jLabel2.setText("Password:");
 
@@ -287,8 +287,8 @@ public class LoginScreen extends javax.swing.JFrame {
         }// </editor-fold>//GEN-END:initComponents
 
         private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton2ActionPerformed
-                RegisterScreen registerScreen = new RegisterScreen();
-                this.dispose();
+                RegisterScreen registerScreen = new RegisterScreen(server_connector, this);
+                this.setVisible(false);
                 registerScreen.setVisible(true);
         }// GEN-LAST:event_jButton2ActionPerformed
 
