@@ -14,4 +14,34 @@ public class AccountChangeRequestCreator {
                         String.format("{\"type\":\"%s\", \"value\":{\"avatar\":%BufferedImage}}",
                                         AccountChangeRequestTypes.SEND_AVATAR.value(), avatar));
     }
+
+    public static JSONObject create_send_email_request(String email) {
+        return new JSONObject(
+                        String.format("{\"type\":\"%s\", \"value\":{\"email\":%s}}",
+                                        AccountChangeRequestTypes.SEND_EMAIL.value(), email));
+    }
+
+    public static JSONObject create_send_nickname_request(String nickname) {
+        return new JSONObject(
+                        String.format("{\"type\":\"%s\", \"value\":{\"nickname\":%s}}",
+                                        AccountChangeRequestTypes.SEND_NICKNAME.value(),nickname));
+    }
+
+    public static JSONObject create_send_new_password_request(char[] new_password) {
+        return new JSONObject(
+                        String.format("{\"type\":\"%s\", \"value\":{\"new_password\":%s}}",
+                                        AccountChangeRequestTypes.SEND_NEW_PASSWORD.value(),new String(new_password)));
+    }
+
+    public static JSONObject create_send_password_request(char[] password) {
+        return new JSONObject(
+                        String.format("{\"type\":\"%s\", \"value\":{\"password\":%s}}",
+                                        AccountChangeRequestTypes.SEND_PASSWORD.value(), new String(password)));
+    }
+
+    public static JSONObject create_send_confirm_new_password_request(String confirm_new_password) {
+        return new JSONObject(
+                        String.format("{\"type\":\"%s\", \"value\":{\"confirm_new_password\":%s}}",
+                                        AccountChangeRequestTypes.SEND_CONFIRM_NEW_PASSWORD.value(),confirm_new_password));
+    }
 }
