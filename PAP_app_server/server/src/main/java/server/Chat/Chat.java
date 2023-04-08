@@ -135,10 +135,12 @@ public class Chat {
         if (request.getString("type").equals("username")) {
             Hashtable<String, String> hash_response = UserDataAccesor
                     .get_data(UserDatabaseInformation.USERNAME_COLUMN.value(), request.getString("username"));
+            hash_response.remove("password");
             return _convert_response_to_json(hash_response, RequestTypes.USER_INFO);
         }
         Hashtable<String, String> hash_response = UserDataAccesor
                 .get_data(UserDatabaseInformation.ID_COLUMN.value(), request.getInt("user_id"));
+        hash_response.remove("password");
         return _convert_response_to_json(hash_response, RequestTypes.USER_INFO);
     }
 
