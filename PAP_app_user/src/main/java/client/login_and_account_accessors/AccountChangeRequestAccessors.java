@@ -1,4 +1,5 @@
-package client.GUI;
+package client.login_and_account_accessors;
+
 import org.json.JSONObject;
 import java.awt.image.BufferedImage;
 
@@ -9,8 +10,10 @@ public class AccountChangeRequestAccessors {
         this.server_connector = server_connector;
     }
 
-    public JSONObject send_account_data(String email, String nickname, char[] old_password, char[] new_password, char[] confirm_new_password) {
-        JSONObject procesed_request = AccountChangeRequestCreator.create_send_account_request(email, nickname, old_password, new_password, confirm_new_password);
+    public JSONObject send_account_data(String email, String nickname, char[] old_password, char[] new_password,
+            char[] confirm_new_password) {
+        JSONObject procesed_request = AccountChangeRequestCreator.create_send_account_request(email, nickname,
+                old_password, new_password, confirm_new_password);
         JSONObject response = server_connector.send_request(procesed_request);
         return response;
     }

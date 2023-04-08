@@ -4,11 +4,17 @@
  */
 package client.GUI;
 
+import java.util.ArrayList;
+
+import client.Chat.Chat;
+
 /**
  *
  * @author Adam
  */
 public class JoinToGroup extends javax.swing.JFrame {
+
+    private Chat chat;
 
     /**
      * Creates new form JoinToGroup
@@ -16,6 +22,28 @@ public class JoinToGroup extends javax.swing.JFrame {
     public JoinToGroup() {
         initComponents();
         setDefaultCloseOperation(this.DISPOSE_ON_CLOSE);
+    }
+
+    public JoinToGroup(Chat chat) {
+        initComponents();
+        this.chat = chat;
+        setDefaultCloseOperation(this.DISPOSE_ON_CLOSE);
+    }
+
+    public void add_users() {
+        if (!jTextField2.getText().equals("") && !Users.getText().equals("")) {
+            chat.add_users_to_conversation(jTextField2.getText(), parse_users());
+            this.dispose();
+        }
+    }
+
+    private ArrayList<String> parse_users() {
+        ArrayList<String> usernames = new ArrayList<>();
+        String[] parsed_usernames = Users.getText().split(";");
+        for (String username : parsed_usernames) {
+            usernames.add(username);
+        }
+        return usernames;
     }
 
     /**
@@ -31,24 +59,24 @@ public class JoinToGroup extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jTextField2 = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jPasswordField1 = new javax.swing.JPasswordField();
+        Users = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel3.setText("Group Code:");
+        jLabel3.setText("Group Name:");
 
-        jTextField2.setText("jTextField1");
+        jTextField2.setText("");
 
-        jLabel2.setText("Group password:");
+        jLabel2.setText("Users");
 
-        jPasswordField1.setText("jPasswordField1");
+        Users.setText("");
 
         jLabel4.setFont(new java.awt.Font("Segoe UI Semilight", 3, 48)); // NOI18N
         jLabel4.setText("AppMusic");
 
-        jButton1.setText("Join");
+        jButton1.setText("Add");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -73,7 +101,7 @@ public class JoinToGroup extends javax.swing.JFrame {
                                                                         .addComponent(jLabel3)
                                                                         .addComponent(jLabel2))
                                                                 .addGap(0, 0, Short.MAX_VALUE))
-                                                        .addComponent(jPasswordField1)))
+                                                        .addComponent(Users)))
                                         .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING,
                                                 javax.swing.GroupLayout.DEFAULT_SIZE,
                                                 javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -93,7 +121,7 @@ public class JoinToGroup extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jLabel2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                .addComponent(Users, javax.swing.GroupLayout.PREFERRED_SIZE,
                                         javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel4)
@@ -106,7 +134,7 @@ public class JoinToGroup extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton1ActionPerformed
-        this.dispose();
+        add_users();
     }// GEN-LAST:event_jButton1ActionPerformed
 
     /**
@@ -157,7 +185,7 @@ public class JoinToGroup extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JPasswordField jPasswordField1;
+    private javax.swing.JTextField Users;
     private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
 }

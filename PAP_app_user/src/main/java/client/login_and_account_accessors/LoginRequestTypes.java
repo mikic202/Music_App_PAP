@@ -1,4 +1,4 @@
-package client.GUI;
+package client.login_and_account_accessors;
 
 public enum LoginRequestTypes {
     SEND_LOGIN("send login"),

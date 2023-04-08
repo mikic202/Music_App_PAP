@@ -1,4 +1,4 @@
-package client.GUI;
+package client.login_and_account_accessors;
 
 public enum AccountChangeRequestTypes {
     SEND_DATA("send data"),

@@ -5,9 +5,19 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import server.Chat.Chat;
+import server.Chat.RequestTypes;
+import server.Login.Login;
+import server.Login.LoginRequestTypes;
 
 public class ClientHandler implements Runnable {
 	List<Client> clients = new ArrayList<Client>();
@@ -30,6 +40,7 @@ public class ClientHandler implements Runnable {
 
 	public void run() {
 		while(true) {
+			Instant start = Instant.now();
 			synchronized (clients) {
 				ListIterator<Client> it = clients.listIterator();
 				//System.out.println("Processing clients.");
@@ -50,11 +61,67 @@ public class ClientHandler implements Runnable {
 					}
 				}
 			}
+			Instant finish = Instant.now();
+			long time = Duration.between(start, finish).toNanos();
+			if(time < 10000000) {
+				time = 10000000 - time;
+				try {
+					Thread.sleep(time / 1000000);
+				} catch (InterruptedException e) {
+				}
+			}
 		}
 	}
 	
 	void handleClient(Client client) throws IOException {
-		client.write(("message: " + client.getMessage() + "\n").getBytes());
+		String message = client.getMessage();
+		System.out.println("\tRequest: " + message);
+		JSONObject messageJSON  = null;
+		String typeStr;
+		try {
+			messageJSON = new JSONObject(message);
+			typeStr = messageJSON.getString("type");
+		}
+		catch (JSONException e) {
+			System.out.println("Received request without type:");
+			System.out.println(message);
+			return;
+		}
+		RequestTypes type = null;
+		for(RequestTypes t : RequestTypes.values()) {
+			if(t.value().equals(typeStr)) {
+				type = t;
+			}
+		}
+		LoginRequestTypes login_type = null;
+		for(LoginRequestTypes t : LoginRequestTypes.values()) {
+			if(t.value().equals(typeStr)) {
+				login_type = t;
+			}
+		}
+		if(type == null && login_type == null) {
+			System.out.println("Received request of incorrect type: " + typeStr);
+			return;
+		}
+		JSONObject value = null;
+		try {
+			value = messageJSON.getJSONObject("value");
+		}
+		catch (JSONException e) {
+			System.out.println("Received request without value:");
+			System.out.println(message);
+			return;
+		}
+		String response = "";
+		if(type != null) {
+			response = Chat.proces_requests(type, value).toString() + "\n";
+		}
+		else if(login_type != null) {
+			response = Login.proces_requests(login_type, value).toString() + "\n";
+		}
+
+		System.out.print("\tResponse: " + response);
+		client.write(response.getBytes());
 	}
 }
 
