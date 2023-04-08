@@ -26,9 +26,13 @@ public class Chat {
         JSONObject conversations = chat_accesor.get_users_conversations(user_id);
         users_conversations = new Hashtable<>();
         convert_conversations_response_to_hashtable(conversations);
+        if (current_conversation == -1) {
+            current_conversation = Collections.min(users_conversations.keySet());
+        }
         messages_in_users_conversation = new Hashtable<>();
         get_current_messages();
         users_in_conversarion = new Hashtable<>();
+        get_users_in_conversation(current_conv);
 
     }
 
@@ -96,6 +100,16 @@ public class Chat {
         // TODO adding users to users in conversation hashtable
         for (Integer key : users_conversations.keySet()) {
             if (users_conversations.get(key).getString("name").equals(conversation_name)) {
+                if (users_in_conversarion.get(key) == null) {
+                    get_users_in_conversation(key);
+                }
+                for (String username : usernames) {
+                    System.out.println("\n");
+                    System.out.println(users_in_conversarion.get(key));
+                    JSONObject user_info = chat_accesor.get_user_info(username).getJSONObject("value");
+                    users_in_conversarion.get(key).put(user_info.getInt("ID"), user_info);
+                    System.out.println(users_in_conversarion.get(key));
+                }
                 return chat_accesor.add_users_to_conversation(key, usernames).getJSONObject("value");
             }
         }
@@ -111,15 +125,19 @@ public class Chat {
     }
 
     public Hashtable<Integer, JSONObject> get_users_in_current_conversation() {
-        if (users_in_conversarion.containsKey(current_conversation)) {
-            return users_in_conversarion.get(current_conversation);
+        return get_users_in_conversation(current_conversation);
+    }
+
+    private Hashtable<Integer, JSONObject> get_users_in_conversation(int conversation) {
+        if (users_in_conversarion.containsKey(conversation)) {
+            return users_in_conversarion.get(conversation);
         }
         Hashtable<Integer, JSONObject> users_in_conv = new Hashtable<Integer, JSONObject>();
-        JSONArray users = chat_accesor.get_users_in_conversation(current_conversation).getJSONArray("value");
+        JSONArray users = chat_accesor.get_users_in_conversation(conversation).getJSONArray("value");
         for (int i = 0; i < users.length(); i += 1) {
             users_in_conv.put(users.getInt(i), get_user_information(users.getInt(i)));
         }
-        users_in_conversarion.put(current_conversation, users_in_conv);
+        users_in_conversarion.put(conversation, users_in_conv);
         return users_in_conv;
     }
 
@@ -130,11 +148,19 @@ public class Chat {
     public void update_status() {
         JSONObject conversations = chat_accesor.get_users_conversations(user_id);
         convert_conversations_response_to_hashtable(conversations);
+
+        int latest_msg = 1;
+        if (messages_in_users_conversation.get(current_conversation) != null
+                && messages_in_users_conversation.get(current_conversation).size() != 0) {
+            latest_msg = messages_in_users_conversation.get(current_conversation)
+                    .get(messages_in_users_conversation.get(current_conversation).size() - 1).getInt("ID");
+        }
         JSONObject new_messages_response = chat_accesor.get_new_messages_in_converastion(current_conversation,
-                Collections.max(messages_in_users_conversation.keySet()));
+                latest_msg);
         for (int i = 0; i < new_messages_response.getJSONArray("value").length(); i += 1) {
-            messages_in_users_conversation.get(current_conversation)
-                    .add(new_messages_response.getJSONArray("value").getJSONObject(i));
+            ArrayList<JSONObject> messages = messages_in_users_conversation.get(current_conversation);
+            messages.add(new_messages_response.getJSONArray("value").getJSONObject(i));
+            messages_in_users_conversation.replace(current_conversation, messages);
         }
     }
 

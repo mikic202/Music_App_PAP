@@ -96,13 +96,23 @@ public class Chat {
         int number_of_users = request.getJSONArray("users").length();
         int conversation_id = request.getInt("conversation_id");
         ArrayList<Integer> users = new ArrayList<>();
-        for (int i = 0; i < request.getJSONArray("users").length(); i++) {
-            users.add(request.getJSONArray("users").getInt(i));
+        for (int i = 0; i < number_of_users; i++) {
+            System.out.println(UserDataAccesor.get_user_conversations(request.getJSONArray("users").getInt(i)));
+            if (!UserDataAccesor.get_user_conversations(request.getJSONArray("users").getInt(i))
+                    .contains(conversation_id)) {
+                users.add(request.getJSONArray("users").getInt(i));
+            } else {
+                number_of_users -= 1;
+            }
+
         }
+        System.out.println(users);
         _add_users_to_conversation(users, conversation_id);
         Hashtable<String, String> previous_data = ConversationDataAccesor.get_data(conversation_id);
         previous_data.put(ConversationDatabsaeInformation.NUMBER_OF_USERS_COLUMN.value(),
-                previous_data.get(ConversationDatabsaeInformation.NUMBER_OF_USERS_COLUMN.value()) + number_of_users);
+                Integer.toString(Integer
+                        .parseInt(previous_data.get(ConversationDatabsaeInformation.NUMBER_OF_USERS_COLUMN.value()))
+                        + number_of_users));
         ConversationDataSetter.set_data(conversation_id, previous_data);
         Hashtable<String, String> outcome = new Hashtable<>();
         outcome.put("outcome", "true");
@@ -161,6 +171,13 @@ public class Chat {
         return json_response;
     }
 
+    private static JSONObject _get_new_messagess_in_conversation(JSONObject request) {
+        ArrayList<Hashtable<String, String>> messages = MessageDataAccesor
+                .get_messages_older_than_given(request.getInt("latest_message"), request.getInt("conversation_id"));
+        JSONObject json_response = new JSONObject();
+        return _convert_response_to_json(messages, RequestTypes.GET_LATEST_MESSAGE);
+    }
+
     private static JSONObject _generate_response(RequestTypes req_type, JSONObject request) {
         JSONObject response = new JSONObject();
         switch (req_type) {
@@ -184,6 +201,9 @@ public class Chat {
                 break;
             case GET_USERS_IN_CONVERSATION:
                 response = _get_users_in_conversation(request);
+                break;
+            case GET_LATEST_MESSAGE:
+                response = _get_new_messagess_in_conversation(request);
                 break;
 
         }
