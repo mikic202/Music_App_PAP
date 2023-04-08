@@ -38,6 +38,11 @@ public class UserDataAccesor implements DataAccesorInterface {
         return get_querry_result(query);
     }
 
+    public static Hashtable<String, String> get_data_with_name(String nickname) {
+        String query = String.format("Select * from %s where email='%s'", TABLENAME, nickname);
+        return get_querry_result(query);
+    }
+
     public static ArrayList<Integer> get_user_conversations(int id) {
         ArrayList<Integer> conversations = new ArrayList<Integer>();
 

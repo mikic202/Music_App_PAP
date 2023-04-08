@@ -4,6 +4,8 @@
  */
 package client.GUI;
 
+import net.miginfocom.swing.MigLayout;
+
 /**
  *
  * @author Adam

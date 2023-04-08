@@ -14,6 +14,8 @@ import org.json.JSONObject;
 
 import server.Chat.Chat;
 import server.Chat.RequestTypes;
+import server.Login.LoginRequestTypes;
+import server.Login.Login;
 
 public class ClientHandler implements Runnable {
 	List<Client> clients = new ArrayList<Client>();
@@ -79,7 +81,13 @@ public class ClientHandler implements Runnable {
 				type = t;
 			}
 		}
-		if(type == null) {
+		LoginRequestTypes login_type = null;
+		for(LoginRequestTypes t : LoginRequestTypes.values()) {
+			if(t.value().equals(typeStr)) {
+				login_type = t;
+			}
+		}
+		if(type == null && login_type == null) {
 			System.out.println("Received request of incorrect type: " + typeStr);
 			return;
 		}
@@ -92,8 +100,13 @@ public class ClientHandler implements Runnable {
 			System.out.println(message);
 			return;
 		}
-
-		String response = Chat.proces_requests(type, value).toString() + "\n";
+		String response = "";
+		if(type != null) {
+			response = Chat.proces_requests(type, value).toString() + "\n";
+		}
+		else if(login_type != null) {
+			response = Login.proces_requests(login_type, value).toString() + "\n";
+		}
 
 		System.out.print("\tResponse: " + response);
 		client.write(response.getBytes());

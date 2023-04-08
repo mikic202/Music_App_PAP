@@ -14,6 +14,8 @@ import org.json.JSONObject;
 import client.Chat.Chat;
 import client.GUI.listeners.ChatListener;
 
+import javax.swing.JLabel;
+
 import net.miginfocom.swing.MigLayout;
 
 /**
@@ -135,7 +137,6 @@ public class Conversations extends javax.swing.JFrame {
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
-        jTextArea1.setText("Start talking:");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
