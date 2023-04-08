@@ -6,8 +6,6 @@ package client.GUI;
 
 import java.net.Socket;
 
-import javax.swing.WindowConstants;
-
 import org.json.JSONObject;
 
 import client.Chat.Chat;
@@ -31,8 +29,7 @@ public class MainScreen extends javax.swing.JFrame {
                 int user_id = 6;
                 this.user_id = user_id;
                 try {
-                        socket = new Socket("localhost",
-                                        8000);
+                		socket = new Socket("144.91.114.89", 8000);
                         server_connector = new ServerConnector(socket);
                         chat = new Chat(this.user_id, 1, server_connector);
                 } catch (Exception e) {
@@ -1429,7 +1426,7 @@ public class MainScreen extends javax.swing.JFrame {
         }// GEN-LAST:event_jToggleButton4ActionPerformed
 
         private void jButton15ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton15ActionPerformed
-                LoginScreen loginScreen = new LoginScreen();
+                LoginScreen loginScreen = new LoginScreen(server_connector);
                 this.dispose();
                 loginScreen.setVisible(true);
         }// GEN-LAST:event_jButton15ActionPerformed

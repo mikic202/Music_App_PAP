@@ -297,8 +297,7 @@ public class RegisterScreen extends javax.swing.JFrame {
         private void RegisterButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_RegisterButtonActionPerformed
                 // TODO add your handling code here:
                 this.dispose();
-                LoginScreen loginScreen = new LoginScreen();
-                loginScreen.setVisible(true);
+                logging_screen.setVisible(true);
                 AccountRegistered accountRegistered = new AccountRegistered();
                 accountRegistered.setVisible(true);
         }// GEN-LAST:event_RegisterButtonActionPerformed
