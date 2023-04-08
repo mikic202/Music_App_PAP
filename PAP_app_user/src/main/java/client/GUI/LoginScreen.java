@@ -55,6 +55,7 @@ public class LoginScreen extends javax.swing.JFrame {
                         JSONObject response = logging_accesor.send_user_login_data(jTextField1.getText(),
                                         jPasswordField1.getPassword());
                         if (response.getJSONObject("value").getBoolean("outcome")) {
+                                response.getJSONObject("value").put("email", jTextField1.getText());
                                 succesfull_logging(response.getJSONObject("value"));
                         }
                 }
