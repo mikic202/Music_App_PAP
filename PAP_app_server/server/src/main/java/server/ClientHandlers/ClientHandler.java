@@ -5,6 +5,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
@@ -14,8 +16,8 @@ import org.json.JSONObject;
 
 import server.Chat.Chat;
 import server.Chat.RequestTypes;
-import server.Login.LoginRequestTypes;
 import server.Login.Login;
+import server.Login.LoginRequestTypes;
 
 public class ClientHandler implements Runnable {
 	List<Client> clients = new ArrayList<Client>();
@@ -38,6 +40,7 @@ public class ClientHandler implements Runnable {
 
 	public void run() {
 		while(true) {
+			Instant start = Instant.now();
 			synchronized (clients) {
 				ListIterator<Client> it = clients.listIterator();
 				//System.out.println("Processing clients.");
@@ -56,6 +59,15 @@ public class ClientHandler implements Runnable {
 						it.remove();
 						System.out.println("Client disconnected.");
 					}
+				}
+			}
+			Instant finish = Instant.now();
+			long time = Duration.between(start, finish).toNanos();
+			if(time < 10000000) {
+				time = 10000000 - time;
+				try {
+					Thread.sleep(time / 1000000);
+				} catch (InterruptedException e) {
 				}
 			}
 		}
