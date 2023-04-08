@@ -42,7 +42,7 @@ public class RegisterScreen extends javax.swing.JFrame {
                 JSONObject response = logging_accesor.send_user_register_data(Email.getText(), Username.getText(),
                                 FirstPassword.getPassword(),
                                 ConfirmPassword.getPassword());
-                if (response.getJSONObject("value").getBoolean("outcome")) {
+                if (response.getBoolean("outcome")) {
                         logging_screen.setVisible(true);
                         AccountRegistered accountRegistered = new AccountRegistered();
                         accountRegistered.setVisible(true);
