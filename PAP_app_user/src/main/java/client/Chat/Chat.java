@@ -26,7 +26,7 @@ public class Chat {
         JSONObject conversations = chat_accesor.get_users_conversations(user_id);
         users_conversations = new Hashtable<>();
         convert_conversations_response_to_hashtable(conversations);
-        if (current_conversation == -1) {
+        if (current_conversation == -1 && users_conversations.size() != 0) {
             current_conversation = Collections.min(users_conversations.keySet());
         }
         messages_in_users_conversation = new Hashtable<>();
@@ -146,6 +146,9 @@ public class Chat {
     }
 
     public void update_status() {
+        if (users_conversations.size() == 0) {
+            return;
+        }
         JSONObject conversations = chat_accesor.get_users_conversations(user_id);
         convert_conversations_response_to_hashtable(conversations);
 

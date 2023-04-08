@@ -26,12 +26,12 @@ public class MainScreen extends javax.swing.JFrame {
          * Creates new form MainScreen
          */
         public MainScreen() {
-                int user_id = 6;
+                int user_id = 1;
                 this.user_id = user_id;
                 try {
-                		socket = new Socket("144.91.114.89", 8000);
+                        socket = new Socket("localhost", 8000);
                         server_connector = new ServerConnector(socket);
-                        chat = new Chat(this.user_id, 1, server_connector);
+                        chat = new Chat(this.user_id, -1, server_connector);
                 } catch (Exception e) {
                         System.out.println(e);
                 }
@@ -44,14 +44,12 @@ public class MainScreen extends javax.swing.JFrame {
                 this.user_info = user_info;
                 try {
                         this.server_connector = server_connector;
-                        chat = new Chat(this.user_id, -1, server_connector);
+                        chat = new Chat(this.user_id, -1, this.server_connector);
                 } catch (Exception e) {
                         System.out.println(e);
                 }
                 initComponents();
                 setDefaultCloseOperation(this.DISPOSE_ON_CLOSE);
-                System.out.println(this.user_id);
-                System.out.println(this.user_info);
         }
 
         /**
@@ -1426,7 +1424,7 @@ public class MainScreen extends javax.swing.JFrame {
         }// GEN-LAST:event_jToggleButton4ActionPerformed
 
         private void jButton15ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton15ActionPerformed
-                LoginScreen loginScreen = new LoginScreen(server_connector);
+                LoginScreen loginScreen = new LoginScreen();
                 this.dispose();
                 loginScreen.setVisible(true);
         }// GEN-LAST:event_jButton15ActionPerformed
