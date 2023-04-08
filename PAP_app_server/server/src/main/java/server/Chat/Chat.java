@@ -171,6 +171,13 @@ public class Chat {
         return json_response;
     }
 
+    private static JSONObject _get_new_messagess_in_conversation(JSONObject request) {
+        ArrayList<Hashtable<String, String>> messages = MessageDataAccesor
+                .get_messages_older_than_given(request.getInt("latest_message"), request.getInt("conversation_id"));
+        JSONObject json_response = new JSONObject();
+        return _convert_response_to_json(messages, RequestTypes.GET_LATEST_MESSAGE);
+    }
+
     private static JSONObject _generate_response(RequestTypes req_type, JSONObject request) {
         JSONObject response = new JSONObject();
         switch (req_type) {
@@ -194,6 +201,9 @@ public class Chat {
                 break;
             case GET_USERS_IN_CONVERSATION:
                 response = _get_users_in_conversation(request);
+                break;
+            case GET_LATEST_MESSAGE:
+                response = _get_new_messagess_in_conversation(request);
                 break;
 
         }
