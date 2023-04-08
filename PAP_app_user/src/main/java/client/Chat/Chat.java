@@ -26,6 +26,9 @@ public class Chat {
         JSONObject conversations = chat_accesor.get_users_conversations(user_id);
         users_conversations = new Hashtable<>();
         convert_conversations_response_to_hashtable(conversations);
+        if (current_conversation == -1) {
+            current_conversation = Collections.min(users_conversations.keySet());
+        }
         messages_in_users_conversation = new Hashtable<>();
         get_current_messages();
         users_in_conversarion = new Hashtable<>();
@@ -145,11 +148,19 @@ public class Chat {
     public void update_status() {
         JSONObject conversations = chat_accesor.get_users_conversations(user_id);
         convert_conversations_response_to_hashtable(conversations);
+
+        int latest_msg = 1;
+        if (messages_in_users_conversation.get(current_conversation) != null
+                && messages_in_users_conversation.get(current_conversation).size() != 0) {
+            latest_msg = messages_in_users_conversation.get(current_conversation)
+                    .get(messages_in_users_conversation.get(current_conversation).size() - 1).getInt("ID");
+        }
         JSONObject new_messages_response = chat_accesor.get_new_messages_in_converastion(current_conversation,
-                Collections.max(messages_in_users_conversation.keySet()));
+                latest_msg);
         for (int i = 0; i < new_messages_response.getJSONArray("value").length(); i += 1) {
-            messages_in_users_conversation.get(current_conversation)
-                    .add(new_messages_response.getJSONArray("value").getJSONObject(i));
+            ArrayList<JSONObject> messages = messages_in_users_conversation.get(current_conversation);
+            messages.add(new_messages_response.getJSONArray("value").getJSONObject(i));
+            messages_in_users_conversation.replace(current_conversation, messages);
         }
     }
 

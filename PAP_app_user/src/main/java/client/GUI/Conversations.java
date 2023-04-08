@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 
 import javax.swing.JLabel;
+import javax.swing.Timer;
 
 import org.json.JSONObject;
 
@@ -24,6 +25,7 @@ public class Conversations extends javax.swing.JFrame {
     private Chat chat;
     private Hashtable<String, Integer> conversation_name_to_id;
     public ArrayList<JSONObject> current_messages;
+    Timer timer;
 
     /**
      * Creates new form Conversations
@@ -39,7 +41,6 @@ public class Conversations extends javax.swing.JFrame {
     }
 
     private void set_conversation_text(ArrayList<JSONObject> messages) {
-        jPanel1.removeAll();
         jPanel1.removeAll();
         Hashtable<Integer, JSONObject> users_in_conv = chat.get_users_in_current_conversation();
         for (JSONObject message : messages) {
@@ -64,7 +65,6 @@ public class Conversations extends javax.swing.JFrame {
             this.jPanel1.add(leftChatPanel.jTextArea1, "wrap");
             this.jPanel1.repaint();
             this.jPanel1.revalidate();
-            this.jTextArea2.setText("");
         }
     }
 
@@ -82,12 +82,23 @@ public class Conversations extends javax.swing.JFrame {
         this.jTextArea1.setWrapStyleWord(true);
         this.jTextArea2.setWrapStyleWord(true);
         this.jPanel1.setLayout(new MigLayout("fillx"));
+
+        java.awt.event.ActionListener updater = new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chat.update_status();
+                set_conversation_text(chat.get_current_messages());
+            }
+        };
+        timer = new Timer(1000, updater); // timer is ticking
+        timer.setRepeats(true); // by using this, we are asking to off timer once
+        timer.start();
     }
 
     private void send_message() {
         String message = this.jTextArea2.getText().trim();
         if (!message.equals("")) {
             add_message_to_chat(chat.send_message(message));
+            this.jTextArea2.setText("");
         }
     }
 
@@ -103,7 +114,7 @@ public class Conversations extends javax.swing.JFrame {
         initComponents();
         setDefaultCloseOperation(this.DISPOSE_ON_CLOSE);
         this.jTextArea1.setEditable(false);
-        this.jTextArea1.setText("");
+        this.jTextArea2.setText("sssssss");
         this.jTextArea1.setLineWrap(true);
         this.jTextArea2.setColumns(45);
         this.jTextArea2.setLineWrap(true);
