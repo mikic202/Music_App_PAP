@@ -24,20 +24,21 @@ public class AccountChangeRequestAccessors {
         return response;
     }
 
-    public JSONObject send_user_account_email_data(String email) {
-        JSONObject procesed_request = AccountChangeRequestCreator.create_send_email_request(email);
+    public JSONObject send_user_account_email_data(String email, int user_id) {
+        JSONObject procesed_request = AccountChangeRequestCreator.create_send_email_request(email, user_id);
         JSONObject response = server_connector.send_request(procesed_request);
         return response;
     }
 
-    public JSONObject send_user_account_nickaname_data(String nickname) {
-        JSONObject procesed_request = AccountChangeRequestCreator.create_send_nickname_request(nickname);
+    public JSONObject send_user_account_nickaname_data(String nickname, int user_id) {
+        JSONObject procesed_request = AccountChangeRequestCreator.create_send_nickname_request(nickname, user_id);
         JSONObject response = server_connector.send_request(procesed_request);
         return response;
     }
 
-    public JSONObject send_user_account_new_password_data(char[] new_password) {
-        JSONObject procesed_request = AccountChangeRequestCreator.create_send_new_password_request(new_password);
+    public JSONObject send_user_account_new_password_data(char[] new_password, char[] old_password, int user_id) {
+        JSONObject procesed_request = AccountChangeRequestCreator.create_send_new_password_request(new_password,
+                old_password, user_id);
         JSONObject response = server_connector.send_request(procesed_request);
         return response;
     }
@@ -49,9 +50,12 @@ public class AccountChangeRequestAccessors {
     }
 
     public JSONObject send_user_account_confirm_new_password_data(char[] confirm_new_password) {
-        JSONObject procesed_request = AccountChangeRequestCreator.create_send_confirm_new_password_request(confirm_new_password);
-        JSONObject response = server_connector.send_request(procesed_request);
-        return response;
+        // JSONObject procesed_request = AccountChangeRequestCreator
+        // .create_send_confirm_new_password_request(confirm_new_password);
+        // JSONObject response = server_connector.send_request(procesed_request);
+        // return response;
+        return new JSONObject();
     }
+
     private ServerConnector server_connector;
 }
