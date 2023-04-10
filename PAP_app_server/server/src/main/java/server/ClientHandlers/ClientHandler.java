@@ -5,6 +5,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
@@ -14,6 +16,8 @@ import org.json.JSONObject;
 
 import server.Chat.Chat;
 import server.Chat.RequestTypes;
+import server.Login.Login;
+import server.Login.LoginRequestTypes;
 
 public class ClientHandler implements Runnable {
 	List<Client> clients = new ArrayList<Client>();
@@ -36,6 +40,7 @@ public class ClientHandler implements Runnable {
 
 	public void run() {
 		while(true) {
+			Instant start = Instant.now();
 			synchronized (clients) {
 				ListIterator<Client> it = clients.listIterator();
 				//System.out.println("Processing clients.");
@@ -54,6 +59,15 @@ public class ClientHandler implements Runnable {
 						it.remove();
 						System.out.println("Client disconnected.");
 					}
+				}
+			}
+			Instant finish = Instant.now();
+			long time = Duration.between(start, finish).toNanos();
+			if(time < 10000000) {
+				time = 10000000 - time;
+				try {
+					Thread.sleep(time / 1000000);
+				} catch (InterruptedException e) {
 				}
 			}
 		}
@@ -79,7 +93,13 @@ public class ClientHandler implements Runnable {
 				type = t;
 			}
 		}
-		if(type == null) {
+		LoginRequestTypes login_type = null;
+		for(LoginRequestTypes t : LoginRequestTypes.values()) {
+			if(t.value().equals(typeStr)) {
+				login_type = t;
+			}
+		}
+		if(type == null && login_type == null) {
 			System.out.println("Received request of incorrect type: " + typeStr);
 			return;
 		}
@@ -92,8 +112,13 @@ public class ClientHandler implements Runnable {
 			System.out.println(message);
 			return;
 		}
-
-		String response = Chat.proces_requests(type, value).toString() + "\n";
+		String response = "";
+		if(type != null) {
+			response = Chat.proces_requests(type, value).toString() + "\n";
+		}
+		else if(login_type != null) {
+			response = Login.proces_requests(login_type, value).toString() + "\n";
+		}
 
 		System.out.print("\tResponse: " + response);
 		client.write(response.getBytes());

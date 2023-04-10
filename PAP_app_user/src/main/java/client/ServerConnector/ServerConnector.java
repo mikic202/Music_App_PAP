@@ -25,7 +25,7 @@ public class ServerConnector {
         }
     }
 
-    public JSONObject send_request(JSONObject request) {
+    public synchronized JSONObject send_request(JSONObject request) {
         String response = "";
         try {
             output.write((request.toString() + "\n").getBytes());

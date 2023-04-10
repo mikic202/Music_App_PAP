@@ -15,7 +15,7 @@ public class ConversationDataSetter implements DataSetterInterface {
 
             Statement stat = connection.createStatement();
             String request = String.format(
-                    "update %s set %s='%s', %s='%s', %s='%s', %s='%s' where %s=%s",
+                    "update %s set %s='%s', %s='%s' where %s=%s",
                     ConversationDatabsaeInformation.CONVERSATION_TABLE.value(),
                     ConversationDatabsaeInformation.NAME_COLUMN.value(),
                     data.get("name"), ConversationDatabsaeInformation.NUMBER_OF_USERS_COLUMN.value(),
