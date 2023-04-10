@@ -22,10 +22,9 @@ public final class MusicStreamsManager {
     // ports table with list of ports with statuses
     private Hashtable<Integer, Boolean> portsTable;
 
-    private MusicStreamsManager()
-    {
-        portsTable.put(4445, false);
-    }
+    private int nextPort = 60001;
+
+    private MusicStreamsManager(){}
 
 
     public static MusicStreamsManager getInstance() {
@@ -72,18 +71,39 @@ public final class MusicStreamsManager {
         }
     }
 
-    private boolean _joinStream(int chatId, InetAddress ipAddress)
+    //returns port that the stream will be streamed from
+    public int startStream(int chatId, int initiatorUserId)
     {
-        
+        Enumeration<Integer> e = portsTable.keys();
+        int freePort = 0;
+        while(e.hasMoreElements())
+        {
+            int key = e.nextElement();
+            if(portsTable.get(key) == false)
+            {
+                freePort = key;
+                portsTable.put(key, true); //mark port occupied
+                break;
+            }
+        }
+        if (freePort == 0)
+        {
+            freePort = nextPort;       //create new port if none is free or created
+            portsTable.put(nextPort, true); //mark port occupied
+            nextPort += 1;
+        }
+        streamerTable.put(chatId, new MusicStreamer(freePort, initiatorUserId));
+
+        return freePort;
     }
 
-    private boolean _startStream(int chatId, InetAddress ipAddress)
+    public int joinStream(int chatId, int userId, InetAddress ipAddress, int port)
     {
-
+        MusicStreamer bindedStreamer = streamerTable.get(chatId);
+        synchronized (bindedStreamer)
+        {
+            bindedStreamer.addListenerToRunningStream(userId, ipAddress, port);
+        }
     }
 
-    private boolean _handleUserJoined()
-    {
-
-    }
 }

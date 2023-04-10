@@ -1,4 +1,4 @@
-package Music;
+package server;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -21,12 +21,13 @@ import javax.sound.sampled.AudioSystem;
 // Broadcast publisher
 class MusicStreamer extends Thread{
 
-    private int buffer_size = 4096;
+    private int buffer_size = 1024;
 
     private DatagramSocket socket;
     private boolean running;
     private byte[] receiving_buffer = new byte[buffer_size];
     private int server_port;
+    private boolean adding = false;
 
     private String path = "/home/pap/music/file_example_WAV_10MG.wav";
 
@@ -40,6 +41,7 @@ class MusicStreamer extends Thread{
     private Hashtable<Integer, Integer> ListenersPorts = new Hashtable<Integer, Integer>();
 
     private AudioFormat format;
+    private int length;
 
     // port to start streaming from it
     public MusicStreamer(int port, int initiator) {
@@ -93,26 +95,36 @@ class MusicStreamer extends Thread{
         return running;
     }
 
+    public int getLength()
+    {
+        return length;
+    }
+
+
+    public AudioFormat getFormat()
+    {
+        return format;
+    }
+
     private void startStreaming(InetAddress address, int port)
     {
         try
         {
 
             AudioInputStream stream = AudioSystem.getAudioInputStream(new File(path));
-            /*
+            
             format = stream.getFormat();
-            int length = (int)(stream.getFrameLength() * format.getFrameSize());
-            */
+            length = (int)(stream.getFrameLength() * format.getFrameSize());
+            
 
             byte[] buffer;
             DataInputStream in = new DataInputStream(stream);
-            int i = 0;
+
+
             while ((in.read(buffer = new byte[buffer_size], 0, buffer.length)) > 0)
             {
                 sendPacketToListeners(buffer);
-                sleep(25);
-                System.out.println(i);
-                i++;
+                sleep(5);
             }
             in.close();
         }
@@ -127,22 +139,28 @@ class MusicStreamer extends Thread{
         return false;
     }
 
+    public void addListenerToRunningStream(int userId, InetAddress ipAddress, int port)
+    {
+        adding = true;
+        listeners.add(userId);
+        ListenersIPs.put(userId, ipAddress);
+        ListenersPorts.put(userId, port);
+        adding = false;
+    }
+
     private void sendPacketToListeners(byte[] buffer) throws Exception
     {
         DatagramPacket dgp;
-
+        while (adding)
+        {
+            sleep(5);
+        }
         for (int user : listeners)
         {
             dgp = new DatagramPacket (buffer, buffer.length, ListenersIPs.get(user), ListenersPorts.get(user));
             socket.send(dgp);
         }
-
     }
 
-    private void addListenerToRunningStream()
-    {
-        //todo
-    }
-    
 }
 
