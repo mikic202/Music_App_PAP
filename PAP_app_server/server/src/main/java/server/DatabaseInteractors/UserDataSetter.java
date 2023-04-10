@@ -32,6 +32,82 @@ public class UserDataSetter implements DataSetterInterface {
         }
     }
 
+    static public void set_email(int id, Hashtable<String, String> data) {
+        try {
+
+            Connection connection = DriverManager.getConnection(DatabseInformation.URL.value(),
+                    DatabseInformation.USER.value(), DatabseInformation.PASSWORD.value());
+
+            Statement stat = connection.createStatement();
+            String request = String.format(
+                    "update %s set %s='%s', %s='%s', %s='%s' where %s=%s",
+                    UserDatabaseInformation.USER_TABLE.value(), UserDatabaseInformation.EMAIL_COLUMN.value(), data.get("email"));
+
+            stat.executeUpdate(request);
+
+            connection.close();
+        } catch (Exception e) {
+            System.out.println(e);
+
+        } finally {
+
+        }
+    }
+
+    static public void set_password(int id, Hashtable<String, String> data, String new_password, String confirm_new_password) {
+        try {
+
+            Connection connection = DriverManager.getConnection(DatabseInformation.URL.value(),
+                    DatabseInformation.USER.value(), DatabseInformation.PASSWORD.value());
+
+            Statement stat = connection.createStatement();
+            if (new_password.equals(confirm_new_password))
+            {
+                String request = String.format(
+                    "update %s set %s='%s', %s='%s', %s='%s' where %s=%s",
+                    UserDatabaseInformation.USER_TABLE.value(), 
+                    UserDatabaseInformation.PASSWORD_COLUMN.value(),
+                    new_password);
+                    stat.executeUpdate(request);
+            }
+            
+
+
+
+            connection.close();
+        } catch (Exception e) {
+            System.out.println(e);
+
+        } finally {
+
+        }
+    }
+
+    static public void set_nickname(int id, Hashtable<String, String> data) {
+        try {
+
+            Connection connection = DriverManager.getConnection(DatabseInformation.URL.value(),
+                    DatabseInformation.USER.value(), DatabseInformation.PASSWORD.value());
+
+            Statement stat = connection.createStatement();
+            String request = String.format(
+                    "update %s set %s='%s', %s='%s', %s='%s' where %s=%s",
+                    UserDatabaseInformation.USER_TABLE.value(), UserDatabaseInformation.USERNAME_COLUMN.value(),
+                    data.get("username"));
+
+            stat.executeUpdate(request);
+
+            connection.close();
+        } catch (Exception e) {
+            System.out.println(e);
+
+        } finally {
+
+        }
+    }
+
+
+
     static public void add_data(Hashtable<String, String> data) {
 
         try {
