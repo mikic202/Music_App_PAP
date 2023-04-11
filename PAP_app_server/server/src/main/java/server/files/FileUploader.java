@@ -37,7 +37,7 @@ public class FileUploader implements Runnable {
 		synchronized (files) {
 			try {
 				files.put(uuid, new FileConnector(user_id, file_name, uuid));
-			} catch (FileNotFoundException e) {
+			} catch (IOException e) {
 				return false;
 			}
 			return true;
@@ -74,6 +74,7 @@ public class FileUploader implements Runnable {
 				}
 				String sha256 = HexFormat.of().formatHex(digest.digest());
 				String newPath = "files/" + sha256.substring(0, 1) + "/" + sha256.substring(0, 2) + "/" + sha256;
+				Files.createDirectories(Paths.get(newPath).getParent());
 				Files.move(Paths.get(oldPath), Paths.get(newPath), REPLACE_EXISTING);
 				Hashtable<String, String> fileInfo = new Hashtable<String, String>();
 				fileInfo.put("file_name", files.get(uuid).file_name);
@@ -190,10 +191,12 @@ class FileConnector {
 	public String file_name;
 	private FileOutputStream output;
 
-	public FileConnector(String user_id, String file_name, String uuid) throws FileNotFoundException {
+	public FileConnector(String user_id, String file_name, String uuid) throws IOException {
 		this.user_id = user_id;
 		this.file_name = file_name;
-		output = new FileOutputStream("files/upload/" + uuid);
+		String path = "files/upload/" + uuid;
+		Files.createDirectories(Paths.get(path).getParent());
+		output = new FileOutputStream(path);
 	}
 
 	public void write(byte[] data) throws IOException {
