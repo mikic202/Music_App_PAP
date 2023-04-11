@@ -18,10 +18,10 @@ public class FileDataSetter implements DataSetterInterface {
 
             Statement stat = connection.createStatement();
             String request = String.format(
-                    "insert into %s (%s, %s, %s) values ('%s', '%s', '%s')",
+                    "insert into %s (%s, %s, %s) values (%s, '%s', '%s')",
                     FileDatabsaeInformation.FILE_TABLE.value(), FileDatabsaeInformation.USER_COLUMN.value(),
                     FileDatabsaeInformation.NAME_COLUMN.value(), FileDatabsaeInformation.FILEPATH_COLUMN.value(),
-                    data.get("file_name"), data.get("user_id"), data.get("file_path"));
+                    data.get("user_id"), data.get("file_name"), data.get("file_path"));
 
             stat.executeUpdate(request);
 

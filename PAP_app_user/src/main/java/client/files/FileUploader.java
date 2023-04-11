@@ -24,6 +24,7 @@ public class FileUploader implements Runnable {
 		Socket socket = null;
 		try {
 			socket = new Socket("144.91.114.89", 8001);
+			socket.getOutputStream().write(uuid.getBytes());
 			input.transferTo(socket.getOutputStream());
 			accessors.finishUpload(uuid);
 		} catch (IOException e) {

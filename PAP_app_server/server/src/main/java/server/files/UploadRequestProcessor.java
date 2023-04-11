@@ -12,7 +12,7 @@ public class UploadRequestProcessor {
 	}
 
 	private static JSONObject start(JSONObject request) {
-		String user_id = request.getString("user_id");
+		String user_id = String.valueOf(request.getInt("user_id"));
 		String file_name = request.getString("file_name");
 		JSONObject result = new JSONObject();
 		result.put("type", UploadRequestTypes.START_UPLOAD.value());
