@@ -20,21 +20,23 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.HexFormat;
 import java.util.List;
 import java.util.ListIterator;
 
 import server.Main;
+import server.DatabaseInteractors.FileDataSetter;
 
 public class FileUploader implements Runnable {
 	private ArrayList<Socket> waitingSockets = new ArrayList<Socket>();
 	private HashMap<String, FileConnector> files = new HashMap<String, FileConnector>();
 	private List<UploadingSocket> uploadingSockets = new ArrayList<UploadingSocket>();
 
-	public boolean startUpload(String uuid, String username, String file_name) {
+	public boolean startUpload(String uuid, String user_id, String file_name) {
 		synchronized (files) {
 			try {
-				files.put(uuid, new FileConnector(username, file_name, uuid));
+				files.put(uuid, new FileConnector(user_id, file_name, uuid));
 			} catch (FileNotFoundException e) {
 				return false;
 			}
@@ -73,6 +75,11 @@ public class FileUploader implements Runnable {
 				String sha256 = HexFormat.of().formatHex(digest.digest());
 				String newPath = "files/" + sha256.substring(0, 1) + "/" + sha256.substring(0, 2) + "/" + sha256;
 				Files.move(Paths.get(oldPath), Paths.get(newPath), REPLACE_EXISTING);
+				Hashtable<String, String> fileInfo = new Hashtable<String, String>();
+				fileInfo.put("file_name", files.get(uuid).file_name);
+				fileInfo.put("user_id", files.get(uuid).user_id);
+				fileInfo.put("file_path", newPath);
+				FileDataSetter.add_data(fileInfo);
 			} catch (FileNotFoundException e) {
 				return false;
 			} catch (NoSuchAlgorithmException e) {
@@ -179,12 +186,12 @@ class UploadingSocket {
 }
 
 class FileConnector {
-	public String username;
+	public String user_id;
 	public String file_name;
 	private FileOutputStream output;
 
-	public FileConnector(String username, String file_name, String uuid) throws FileNotFoundException {
-		this.username = username;
+	public FileConnector(String user_id, String file_name, String uuid) throws FileNotFoundException {
+		this.user_id = user_id;
 		this.file_name = file_name;
 		output = new FileOutputStream("files/upload/" + uuid);
 	}
