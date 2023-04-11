@@ -5,14 +5,18 @@ import java.net.ServerSocket;
 import java.security.NoSuchAlgorithmException;
 
 import server.ClientHandlers.ClientHandler;
+import server.files.FileUploader;
 
 public class Main {
 	static ClientHandler handler = new ClientHandler();
+	public static FileUploader uploader = new FileUploader();
 	public static void main(String[] args) throws IOException, NoSuchAlgorithmException {
 		ServerSocket server = new ServerSocket(8000);
 		System.out.println("Server has started on 127.0.0.1:8000.\nWaiting for a connection…");
 		Thread clientHandlerThread = new Thread(handler);
 		clientHandlerThread.start();
+		Thread fileUploaderThread = new Thread(uploader);
+		fileUploaderThread.start();
 		try {
 			while(true) {
 				handler.addClient(server.accept());
