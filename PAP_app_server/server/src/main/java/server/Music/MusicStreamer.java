@@ -1,4 +1,4 @@
-package server;
+package server.Music;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -7,6 +7,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.SocketTimeoutException;
 import java.io.DataInputStream;
 import java.io.File;
 
@@ -24,12 +25,11 @@ class MusicStreamer extends Thread{
     private int buffer_size = 1024;
 
     private DatagramSocket socket;
-    private boolean running;
-    private byte[] receiving_buffer = new byte[buffer_size];
-    private int server_port;
-    private boolean adding = false;
+    private boolean running = false;
+    private boolean terminated = false;
 
-    private String path = "/home/pap/music/file_example_WAV_10MG.wav";
+    private int serverPort; //it is not used directly in the logic, it is just binded to this MusicPlayer
+    private boolean modifying = false;
 
     private int initiator;
 
@@ -40,18 +40,27 @@ class MusicStreamer extends Thread{
     //user_id, port
     private Hashtable<Integer, Integer> ListenersPorts = new Hashtable<Integer, Integer>();
 
+    private AudioInputStream stream;
     private AudioFormat format;
     private int length;
 
+    private InetAddress waitingIpAddress = null;
+    private int waitingPort = 0;
+
     // port to start streaming from it
-    public MusicStreamer(int port, int initiator) {
+    public MusicStreamer(int port, int initiator, String path) {
         try
         {
-            this.server_port = port;
+            this.serverPort = port;
             this.initiator = initiator;
             socket = new DatagramSocket(null);
             socket.bind(new InetSocketAddress(port));
             socket.setSendBufferSize(buffer_size);
+
+            this.stream = AudioSystem.getAudioInputStream(new File(path));
+            
+            this.format = stream.getFormat();
+            this.length = (int)(stream.getFrameLength() * format.getFrameSize());
         }
         catch (Exception e) 
         {
@@ -59,72 +68,131 @@ class MusicStreamer extends Thread{
         }
     }
 
-    public void terminateStream()
+    public synchronized int getPort()
     {
-        running = false;
+        return serverPort;
     }
 
-    public void run() 
+    public synchronized int getInitiator()
     {
-        try
+        return initiator;
+    }
+
+    public synchronized boolean pauseStream(int userId)
+    {
+        if(userId != initiator)
         {
-            DatagramPacket packet = new DatagramPacket(receiving_buffer, receiving_buffer.length);
-            socket.receive(packet);
-            InetAddress address = packet.getAddress();
-            String addressString = address.toString();
-            int port = packet.getPort();
-            String received = new String(packet.getData(), 0, packet.getLength());
-            System.out.println("Client ip: " + addressString + "Client port: " + Integer.toString(port) + "Msg: " + received);
-            listeners.add(11);
-            ListenersIPs.put(11, address);
-            ListenersPorts.put(11, port);
-            if (!received.isEmpty()) 
-            {
-                startStreaming(address, port);
-            }
+            return false;
         }
-        catch (Exception e) {
-            System.out.println(e);
+        running = false;
+        return true;
+    }
+
+    public synchronized boolean terminateStream(int userId)
+    {
+        if (userId != initiator)
+        {
+            return false;
         }
-        socket.close();
+        pauseStream(userId);
+        terminated = true;
+        return true;
+    }
+
+    public synchronized boolean resumeStream(int userId)
+    {
+        if (userId != initiator)
+        {
+            return false;
+        }
+        running = true;
+        return true;
+    }
+
+    public synchronized int addListenerToCreatedStream(int userId)
+    {
+        if(listeners.contains(userId))
+        {
+            return 0;
+        }
+
+        int rtn = 0;
+        if(initiateNewConnection(false))
+        {
+            modifying = true;
+            listeners.add(userId);
+            ListenersIPs.put(userId, waitingIpAddress);
+            ListenersPorts.put(userId, waitingPort);
+            waitingIpAddress = null;
+            waitingPort = 0;
+            modifying = false;
+            rtn = serverPort;
+        }
+
+        return rtn;
     }
     
+    public synchronized boolean removeListenerFromCreatedStream(int userId)
+    {
+        if(userId == initiator)
+        {
+            terminateStream(userId);
+            return true;
+        }
 
-    public boolean getRunningState()
+        modifying = true;
+        if(listeners.contains(userId) == false)
+        {
+            return false;
+        }
+        listeners.remove(userId);
+        ListenersIPs.remove(userId);
+        ListenersPorts.remove(userId);
+        modifying = false;
+        return true;
+    }
+
+    public synchronized boolean checkIfPaused()
     {
         return running;
     }
 
-    public int getLength()
+    public synchronized int getLength()
     {
         return length;
     }
 
-
-    public AudioFormat getFormat()
+    public synchronized AudioFormat getFormat()
     {
         return format;
+    }
+
+    public void run()
+    {
+        initiateNewConnection(true);
+        socket.close();
     }
 
     private void startStreaming(InetAddress address, int port)
     {
         try
-        {
-
-            AudioInputStream stream = AudioSystem.getAudioInputStream(new File(path));
-            
-            format = stream.getFormat();
-            length = (int)(stream.getFrameLength() * format.getFrameSize());
-            
-
+        {   
             byte[] buffer;
             DataInputStream in = new DataInputStream(stream);
-
 
             while ((in.read(buffer = new byte[buffer_size], 0, buffer.length)) > 0)
             {
                 sendPacketToListeners(buffer);
                 sleep(5);
+                while(running == false)
+                {
+                    sleep(100);
+                    if(terminated)
+                    {
+                        in.close();
+                        return;
+                    }
+                }
             }
             in.close();
         }
@@ -133,25 +201,10 @@ class MusicStreamer extends Thread{
         }
     }
 
-    public boolean stopStream(int user_id)
-    {
-        //todo
-        return false;
-    }
-
-    public void addListenerToRunningStream(int userId, InetAddress ipAddress, int port)
-    {
-        adding = true;
-        listeners.add(userId);
-        ListenersIPs.put(userId, ipAddress);
-        ListenersPorts.put(userId, port);
-        adding = false;
-    }
-
     private void sendPacketToListeners(byte[] buffer) throws Exception
     {
         DatagramPacket dgp;
-        while (adding)
+        while (modifying)
         {
             sleep(5);
         }
@@ -159,6 +212,48 @@ class MusicStreamer extends Thread{
         {
             dgp = new DatagramPacket (buffer, buffer.length, ListenersIPs.get(user), ListenersPorts.get(user));
             socket.send(dgp);
+        }
+    }
+
+    private boolean initiateNewConnection(boolean initiatorConnection)
+    {
+        try
+        {
+            byte[] messageBuffer = new byte[buffer_size];
+            DatagramPacket packet = new DatagramPacket(messageBuffer, messageBuffer.length);
+            socket.setSoTimeout(10000);
+            socket.receive(packet);
+            InetAddress address = packet.getAddress();
+            int port = packet.getPort();
+            String received = new String(packet.getData(), 0, packet.getLength());
+
+            String addressString = address.toString();
+            System.out.println("Client ip: " + addressString + "Client port: " + Integer.toString(port) + "Msg: " + received);
+
+            if (initiatorConnection)
+            {
+                running = true;
+                listeners.add(initiator);
+                ListenersIPs.put(initiator, address);
+                ListenersPorts.put(initiator, port);
+                if (!received.isEmpty())
+                {
+                    startStreaming(address, port);
+                }
+                return true;
+            }
+            waitingIpAddress = address;
+            waitingPort = port;
+            return true;
+        }
+        catch (SocketTimeoutException e)
+        {
+            System.out.println(e);
+            return false;
+        }
+        catch (Exception e) {
+            System.out.println(e);
+            return false;
         }
     }
 

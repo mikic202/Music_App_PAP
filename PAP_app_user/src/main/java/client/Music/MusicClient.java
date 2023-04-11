@@ -1,35 +1,54 @@
-package player;
+package client.Music;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 
 import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioInputStream;
 
 import java.io.PipedOutputStream;
 import java.net.SocketTimeoutException;
 
-public class MusicClient extends Thread{
+public class MusicClient extends Thread
+{
+    public static final String SERVER_ADDRESS = "144.91.114.89";
 
     private MusicPlayer player;
     private DatagramSocket socket;
-    private InetAddress address = InetAddress.getByName("144.91.114.89");
+    private InetAddress address = InetAddress.getByName(SERVER_ADDRESS);
+    private int serverUdpPort;
     private boolean receive;
+    boolean connectionEstablished = false;
 
     private PipedOutputStream pipedOutStream;
 
-    public MusicClient(AudioFormat fileFormat) throws Exception {
+    public MusicClient(AudioFormat fileFormat, int serverUdpPort) throws Exception {
         super("MusicClient");
         this.socket = new DatagramSocket();
         pipedOutStream = new PipedOutputStream();
         this.player = new MusicPlayer(pipedOutStream, fileFormat);
-/* 
-        String path = "C:\\Users\\jakub\\Desktop\\pap se\\server\\file_example_WAV_10MG.wav";
-        String javaPath = path.replace("\\", "/");
-        AudioInputStream in =  AudioSystem.getAudioInputStream(new File(javaPath));
-        format = in.getFormat();
-*/
+        this.serverUdpPort = serverUdpPort;
+    }
+
+    public void terminateReceiving()
+    {
+        receive = false;
+        player.terminatePlayer();
+    }
+
+    public void resumePlaying()
+    {
+        player.resumePlaying();
+    }
+
+    public void stopPlaying()
+    {
+        player.stopPlaying();
+    }
+
+    public boolean isPlaying()
+    {
+        return player.isPlaying();
     }
 
     public void run()
@@ -44,80 +63,69 @@ public class MusicClient extends Thread{
         }
     }
 
-    public void terminateStream()
+    private void sendMessage(String message)
     {
-        receive = false;
-        synchronized(player)
+        try
         {
-            player.terminatePlayer();
+            byte[] buf = new byte[1024];
+            buf = message.getBytes();
+            DatagramPacket packet = new DatagramPacket(buf, buf.length, address, serverUdpPort);
+            socket.send(packet);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
         }
     }
 
-    public void resumePlaying()
+    private void receivePackets()
     {
-        synchronized(player)
+        try
         {
-            player.resumePlaying();
-        }
-    }
-
-    public void stopPlaying()
-    {
-        synchronized(player)
-        {
-            player.stopPlaying();
-        }
-    }
-
-    public boolean isPlaying()
-    {
-        synchronized(player)
-        {
-            return player.isPlaying();
-        }
-    }
-
-
-    private void sendMessage(String message) throws Exception {
-        byte[] buf = new byte[1024];
-        buf = message.getBytes();
-        DatagramPacket packet = new DatagramPacket(buf, buf.length, address, 60001);
-        socket.send(packet);
-    }
-
-    private void receivePackets() throws Exception
-    {
-        sendMessage("hello");
-        socket.setSoTimeout(500);
-
-        boolean anyReceived = false;
-
-        while (receive)
-        {
-            try{
-                byte[] buf = new byte[1024];
-                DatagramPacket packet = new DatagramPacket(buf, buf.length);
-                socket.receive(packet);
-                anyReceived = true;
-
-                pipedOutStream.write(packet.getData());
-            }
-            catch (SocketTimeoutException e)
+            sendMessage("hello");
+            socket.setSoTimeout(500);
+            int terminationCount = 0;
+            while (receive)
             {
-                if(anyReceived)
+                try
                 {
-                    System.out.println("No more packets received");
-                    return;
-                }
-                System.out.println("timeout exception");
-                sendMessage("hello");
-                continue;
-            }
+                    byte[] buf = new byte[1024];
+                    DatagramPacket packet = new DatagramPacket(buf, buf.length);
+                    socket.receive(packet);
+                    connectionEstablished = true;
 
+                    pipedOutStream.write(packet.getData());
+                }
+                catch (SocketTimeoutException e)
+                {
+                    if (!connectionEstablished)
+                    {
+                        // retry sending introducing packet
+                        sendMessage("hello");
+                    }
+                    else
+                    {
+                        terminationCount += 1;
+                        if (terminationCount > 20)
+                        {
+                            terminateReceiving();
+                            socket.close();
+                        }
+                    }
+                    // if any packet has been received before, then it means that the stream is probably paused or terminated
+                    // @TODO it should be handled properly depending on the stream state (paused/terminated)
+                    // now it just pressumes that it is terminated if is waiting more that 20s
+                    continue;
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
         }
     }
 
-    private void startPlayer() throws Exception
+    private void startPlayer()
     {
         Thread thread = new Thread(player, "MusicPlayers");
         thread.start();
@@ -126,5 +134,4 @@ public class MusicClient extends Thread{
         receive = true;
         receivePackets();
     }
-
 }

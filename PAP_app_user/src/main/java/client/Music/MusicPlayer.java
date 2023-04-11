@@ -1,18 +1,16 @@
-package player;
+package client.Music;
 
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 
 import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.SourceDataLine;
 
-public class MusicPlayer implements Runnable{
-
+public class MusicPlayer implements Runnable
+{
     private int bufferSize;
-    private int sufficientBytesToPlay;
 
     private PipedInputStream pipedInputStream;
     private AudioFormat format;
@@ -76,22 +74,22 @@ public class MusicPlayer implements Runnable{
         }
     }
 
-    public void stopPlaying()
+    public synchronized void stopPlaying()
     {
         playing = false;
     }
 
-    public void resumePlaying()
+    public synchronized void resumePlaying()
     {
         playing = true;
     }
 
-    public boolean isPlaying()
+    public synchronized boolean isPlaying()
     {
         return playing;
     }
 
-    public void terminatePlayer()
+    public synchronized void terminatePlayer()
     {
         playing = false;
         terminated = true;
