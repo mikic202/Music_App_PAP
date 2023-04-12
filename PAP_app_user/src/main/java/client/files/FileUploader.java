@@ -5,8 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.Socket;
-
-import client.ServerConnector.ServerConnector;
+import java.nio.ByteBuffer;
 
 public class FileUploader implements Runnable {
 	private FileInputStream input;
@@ -25,7 +24,15 @@ public class FileUploader implements Runnable {
 		try {
 			socket = new Socket("144.91.114.89", 8001);
 			socket.getOutputStream().write(uuid.getBytes());
-			input.transferTo(socket.getOutputStream());
+			byte[] buffer = new byte[1024*1024];
+			int bytesRead = input.read(buffer);
+			ByteBuffer byteBuffer = ByteBuffer.allocate(4);
+			while (bytesRead != -1) {
+				socket.getOutputStream().write(byteBuffer.putInt(0, bytesRead).array());
+				socket.getOutputStream().write(buffer, 0, bytesRead);
+				socket.getInputStream().skip(2);
+				bytesRead = input.read(buffer);
+			}
 			accessors.finishUpload(uuid);
 		} catch (IOException e) {
 			e.printStackTrace();

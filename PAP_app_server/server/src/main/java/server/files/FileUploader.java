@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.DigestInputStream;
@@ -19,6 +20,7 @@ import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.HexFormat;
@@ -113,6 +115,7 @@ public class FileUploader implements Runnable {
 				try {
 					if (uploadingSocket.hasMessage()) {
 						files.get(uploadingSocket.uuid).write(uploadingSocket.getMessage());
+						uploadingSocket.write("OK".getBytes());
 					}
 				} catch (IOException exception) {
 					uploadingSocket.close();
@@ -157,6 +160,10 @@ class UploadingSocket {
 	public String uuid;
 	InputStream in;
 	OutputStream out;
+	byte[] buffer = new byte[1024*1024];
+	int buffSize = 0;
+	int messageSize = -1;
+	ByteBuffer byteBuffer = ByteBuffer.allocate(4);
 
 	public UploadingSocket(Socket socket, String uuid) throws IOException {
 		this.socket = socket;
@@ -166,11 +173,43 @@ class UploadingSocket {
 	}
 
 	public boolean hasMessage() throws IOException {
-		return in.available() > 0;
+		if(messageSize == buffSize) {
+			return true;
+		}
+		if(messageSize == -1) {
+			if(in.available() >= 4) {
+				byteBuffer.put(0, in.readNBytes(4));
+				messageSize = byteBuffer.getInt(0);
+			}
+			else {
+				return false;
+			}
+		}
+		if(in.available() > 0) {
+			int toRead = messageSize - buffSize;
+			int available = in.available();
+			if(toRead > available) {
+				toRead = available;
+			}
+			int bytesRead = in.read(buffer, buffSize, toRead);
+			if(bytesRead == -1) {
+				throw new IOException();
+			}
+			buffSize += bytesRead;
+			return buffSize == messageSize;
+		}
+		return false;
 	}
 
 	public byte[] getMessage() throws IOException {
-		return in.readNBytes(in.available());
+		int size = buffSize;
+		buffSize = 0;
+		messageSize = -1;
+		return Arrays.copyOf(buffer, size);
+	}
+	
+	public void write(byte[] data) throws IOException {
+		out.write(data);
 	}
 
 	public boolean isClosed() {

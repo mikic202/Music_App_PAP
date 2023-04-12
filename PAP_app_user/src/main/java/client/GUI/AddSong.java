@@ -92,7 +92,7 @@ public class AddSong extends javax.swing.JFrame {
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 File file = jFileChooser1.getSelectedFile();
-                String name = jTextField2.getText();
+                String name = jTextField1.getText();
                 String uuid = accessors.startUpload(user_id, name).getJSONObject("value").getString("uuid");
                 FileUploader uploader;
                 try {
