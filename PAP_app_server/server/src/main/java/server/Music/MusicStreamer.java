@@ -29,6 +29,7 @@ class MusicStreamer extends Thread{
     private boolean terminated = false;
 
     private int serverPort; //it is not used directly in the logic, it is just binded to this MusicPlayer
+    private int songId; //it is not used directly in the logic, it is just binded to this MusicPlayer
     private boolean modifying = false;
 
     private int initiator;
@@ -48,7 +49,7 @@ class MusicStreamer extends Thread{
     private int waitingPort = 0;
 
     // port to start streaming from it
-    public MusicStreamer(int port, int initiator, String path) {
+    public MusicStreamer(int port, int initiator, String path, int songId) {
         try
         {
             this.serverPort = port;
@@ -61,6 +62,7 @@ class MusicStreamer extends Thread{
             
             this.format = stream.getFormat();
             this.length = (int)(stream.getFrameLength() * format.getFrameSize());
+            this.songId = songId;
         }
         catch (Exception e) 
         {
@@ -165,6 +167,11 @@ class MusicStreamer extends Thread{
     public synchronized AudioFormat getFormat()
     {
         return format;
+    }
+
+    public synchronized int getPlayingSongId()
+    {
+        return songId;
     }
 
     public void run()

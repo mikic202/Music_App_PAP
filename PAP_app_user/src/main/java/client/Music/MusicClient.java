@@ -15,19 +15,28 @@ public class MusicClient extends Thread
 
     private MusicPlayer player;
     private DatagramSocket socket;
-    private InetAddress address = InetAddress.getByName(SERVER_ADDRESS);
+    private InetAddress address;
     private int serverUdpPort;
     private boolean receive;
     boolean connectionEstablished = false;
 
     private PipedOutputStream pipedOutStream;
 
-    public MusicClient(AudioFormat fileFormat, int serverUdpPort) throws Exception {
+    public MusicClient(AudioFormat fileFormat, int serverUdpPort)
+    {
         super("MusicClient");
-        this.socket = new DatagramSocket();
-        pipedOutStream = new PipedOutputStream();
-        this.player = new MusicPlayer(pipedOutStream, fileFormat);
-        this.serverUdpPort = serverUdpPort;
+        try
+        {
+            this.socket = new DatagramSocket();
+            pipedOutStream = new PipedOutputStream();
+            this.player = new MusicPlayer(pipedOutStream, fileFormat);
+            this.serverUdpPort = serverUdpPort;
+            InetAddress.getByName(SERVER_ADDRESS);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     public void terminateReceiving()
