@@ -40,6 +40,7 @@ public class CreateGroup extends javax.swing.JFrame {
                 for (String username : parsed_usernames) {
                         usernames.add(username);
                 }
+                usernames.add(main_screen.user_info.getString("username"));
                 return usernames;
         }
 

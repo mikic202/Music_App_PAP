@@ -26,7 +26,10 @@ public class ChatAccesors {
     private ArrayList<Integer> get_users_ids(ArrayList<String> usernames) {
         ArrayList<Integer> users_ids = new ArrayList<>();
         for (String user : usernames) {
-            users_ids.add(get_user_info(user).getJSONObject("value").getInt("ID"));
+            JSONObject user_info = get_user_info(user).getJSONObject("value");
+            if (user_info.has("ID")) {
+                users_ids.add(user_info.getInt("ID"));
+            }
         }
         return users_ids;
     }
