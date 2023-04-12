@@ -18,13 +18,13 @@ public final class MusicStreamsManager
     private static volatile MusicStreamsManager instance;
 
     // chat ID binded to Music Streamer
-    private Hashtable<Integer, MusicStreamer> streamerTable;
+    private Hashtable<Integer, MusicStreamer> streamerTable = new Hashtable<Integer, MusicStreamer>();
 
     // ports table with list of ports with statuses
-    private Hashtable<Integer, Boolean> portsTable;
+    private Hashtable<Integer, Boolean> portsTable = new Hashtable<Integer, Boolean>();
 
     // userId binded to chatId that it is listening
-    private Hashtable<Integer, Integer> userChatTable;
+    private Hashtable<Integer, Integer> userChatTable = new Hashtable<Integer, Integer>();
 
     private int nextPort = 60001;
 
@@ -55,9 +55,12 @@ public final class MusicStreamsManager
     public int startStream(int chatId, int initiatorUserId, int songId)
     {
         int freePort = 0;
-        if(streamerTable.contains(chatId))
+        if (streamerTable != null)
         {
-            return freePort;
+            if(streamerTable.contains(chatId))
+            {
+                return freePort;
+            }
         }
         Enumeration<Integer> e = portsTable.keys();
         while(e.hasMoreElements())

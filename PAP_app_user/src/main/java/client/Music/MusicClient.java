@@ -31,7 +31,8 @@ public class MusicClient extends Thread
             pipedOutStream = new PipedOutputStream();
             this.player = new MusicPlayer(pipedOutStream, fileFormat);
             this.serverUdpPort = serverUdpPort;
-            InetAddress.getByName(SERVER_ADDRESS);
+            System.out.println(serverUdpPort);
+            address = InetAddress.getByName(SERVER_ADDRESS);
         }
         catch (Exception e)
         {
