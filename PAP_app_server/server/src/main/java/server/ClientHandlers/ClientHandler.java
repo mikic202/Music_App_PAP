@@ -21,6 +21,9 @@ import server.Login.LoginRequestTypes;
 import server.files.UploadRequestProcessor;
 import server.files.UploadRequestTypes;
 
+import server.Music.MusicRequestHandler;
+import server.Music.MusicRequestTypes;
+
 public class ClientHandler implements Runnable {
 	List<Client> clients = new ArrayList<Client>();
 	boolean running = true;
@@ -107,7 +110,13 @@ public class ClientHandler implements Runnable {
 				upload_type = t;
 			}
 		}
-		if(type == null && login_type == null && upload_type == null) {
+		MusicRequestTypes music_type = null;
+		for(MusicRequestTypes t : MusicRequestTypes.values()) {
+			if(t.value().equals(typeStr)) {
+				music_type = t;
+			}
+		}
+		if(type == null && login_type == null && upload_type == null && music_type == null) {
 			System.out.println("Received request of incorrect type: " + typeStr);
 			return;
 		}
@@ -129,6 +138,9 @@ public class ClientHandler implements Runnable {
 		}
 		else if(upload_type != null) {
 			response = UploadRequestProcessor.proces_requests(upload_type, value).toString() + "\n";
+		}
+		else if(music_type != null) {
+			response = MusicRequestHandler.processRequests(music_type, value).toString() + "\n";
 		}
 
 		System.out.print("\tResponse: " + response);

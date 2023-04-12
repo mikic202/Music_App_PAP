@@ -63,6 +63,8 @@ class MusicStreamer extends Thread{
             this.format = stream.getFormat();
             this.length = (int)(stream.getFrameLength() * format.getFrameSize());
             this.songId = songId;
+
+            System.out.println(port);
         }
         catch (Exception e) 
         {

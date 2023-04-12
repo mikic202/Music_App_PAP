@@ -20,7 +20,7 @@ public class MusicManager
     String playingSongId;
     AudioFormat format = null;
 
-    private MusicManager(ServerConnector serverConnector, int userId)
+    public MusicManager(ServerConnector serverConnector, int userId)
     {
         this.musicAccessors = new MusicAccessors(serverConnector);
         this.userId = userId;
@@ -40,11 +40,13 @@ public class MusicManager
         int lengthInBytes = jsonFormat.getInt("length");
         String encodingStr = jsonFormat.getString("encoding");
         boolean signed = true;
-        if (encodingStr == "pcm_signed")
+        System.out.println(encodingStr);
+        if (encodingStr.equals("PCM_SIGNED"))
         {
+            System.out.print("pcm signed received");
             signed = true;
         }
-        else if (encodingStr == "pcm_unsigned")
+        else if (encodingStr.equals("PCM_UNSIGNED"))
         {
             signed = false;
         }

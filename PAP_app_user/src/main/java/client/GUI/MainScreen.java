@@ -9,6 +9,7 @@ import java.net.Socket;
 import org.json.JSONObject;
 
 import client.Chat.Chat;
+import client.Music.MusicManager;
 import client.ServerConnector.ServerConnector;
 import client.files.UploadAccessors;
 
@@ -23,6 +24,8 @@ public class MainScreen extends javax.swing.JFrame {
         JSONObject user_info;
         private Socket socket;
 
+        public static MusicManager musicManagerInstance;
+
         /**
          * Creates new form MainScreen
          */
@@ -33,6 +36,7 @@ public class MainScreen extends javax.swing.JFrame {
                         socket = new Socket("144.91.114.89", 8000);
                         server_connector = new ServerConnector(socket);
                         chat = new Chat(this.user_id, -1, server_connector);
+                        musicManagerInstance = new MusicManager(server_connector, this.user_id);
                 } catch (Exception e) {
                         System.out.println(e);
                 }
@@ -46,6 +50,7 @@ public class MainScreen extends javax.swing.JFrame {
                 try {
                         this.server_connector = server_connector;
                         chat = new Chat(this.user_id, -1, this.server_connector);
+                        musicManagerInstance = new MusicManager(this.server_connector, this.user_id);
                 } catch (Exception e) {
                         System.out.println(e);
                 }
