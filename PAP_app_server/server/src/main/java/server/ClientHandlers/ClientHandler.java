@@ -18,6 +18,8 @@ import server.Chat.Chat;
 import server.Chat.RequestTypes;
 import server.Login.Login;
 import server.Login.LoginRequestTypes;
+import server.Music.MusicRequestHandler;
+import server.Music.MusicRequestTypes;
 
 public class ClientHandler implements Runnable {
 	List<Client> clients = new ArrayList<Client>();
@@ -99,6 +101,12 @@ public class ClientHandler implements Runnable {
 				login_type = t;
 			}
 		}
+		MusicRequestTypes music_type = null;
+		for(MusicRequestTypes t : MusicRequestTypes.values()) {
+			if(t.value().equals(typeStr)) {
+				music_type = t;
+			}
+		}
 		if(type == null && login_type == null) {
 			System.out.println("Received request of incorrect type: " + typeStr);
 			return;
@@ -118,6 +126,10 @@ public class ClientHandler implements Runnable {
 		}
 		else if(login_type != null) {
 			response = Login.proces_requests(login_type, value).toString() + "\n";
+		}
+		else if(music_type != null)
+		{
+			response = MusicRequestHandler.processRequests(music_type, value).toString() + "\n";
 		}
 
 		System.out.print("\tResponse: " + response);
