@@ -37,11 +37,14 @@ public final class MusicStreamsManager
         // instances as a result.
 
         MusicStreamsManager result = instance;
-        if (result != null) {
+        if (result != null)
+        {
             return result;
         }
-        synchronized(MusicStreamsManager.class) {
-            if (instance == null) {
+        synchronized(MusicStreamsManager.class)
+        {
+            if (instance == null)
+            {
                 instance = new MusicStreamsManager();
             }
             return instance;
@@ -77,7 +80,7 @@ public final class MusicStreamsManager
         Hashtable<String, String> querryResult = FileDataAccesor.get_data(FileDatabsaeInformation.ID_COLUMN.value(), songId);
         String filePath = querryResult.get("file_path");
 
-        MusicStreamer createdStreamer = new MusicStreamer(freePort, initiatorUserId, filePath);
+        MusicStreamer createdStreamer = new MusicStreamer(freePort, initiatorUserId, filePath, songId);
         streamerTable.put(chatId, createdStreamer);
         userChatTable.put(initiatorUserId, chatId);
 
@@ -213,4 +216,13 @@ public final class MusicStreamsManager
         return stream.getLength();
     }
 
+    public int getPlayingSongId(int chatId)
+    {
+        MusicStreamer stream = streamerTable.get(chatId);
+        if (stream == null)
+        {
+            return 0;
+        }
+        return stream.getPlayingSongId();
+    }
 }
