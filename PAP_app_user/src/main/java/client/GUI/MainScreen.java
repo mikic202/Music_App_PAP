@@ -10,6 +10,7 @@ import org.json.JSONObject;
 
 import client.Chat.Chat;
 import client.ServerConnector.ServerConnector;
+import client.files.UploadAccessors;
 
 /**
  *
@@ -1466,7 +1467,7 @@ public class MainScreen extends javax.swing.JFrame {
         }// GEN-LAST:event_jButton8ActionPerformed
 
         private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton7ActionPerformed
-                AddSong addSong = new AddSong();
+                AddSong addSong = new AddSong(user_id, server_connector);
                 addSong.setVisible(true);
         }// GEN-LAST:event_jButton7ActionPerformed
 
