@@ -19,7 +19,7 @@ public class MainScreen extends javax.swing.JFrame {
         private ServerConnector server_connector;
         Chat chat;
         private int user_id;
-        private JSONObject user_info;
+        JSONObject user_info;
         private Socket socket;
 
         /**
@@ -29,7 +29,7 @@ public class MainScreen extends javax.swing.JFrame {
                 int user_id = 1;
                 this.user_id = user_id;
                 try {
-                        socket = new Socket("localhost", 8000);
+                        socket = new Socket("144.91.114.89", 8000);
                         server_connector = new ServerConnector(socket);
                         chat = new Chat(this.user_id, -1, server_connector);
                 } catch (Exception e) {
@@ -741,6 +741,7 @@ public class MainScreen extends javax.swing.JFrame {
                 jButton14.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
                                 jButton14ActionPerformed(evt);
+                                System.out.println(user_info);
                         }
                 });
 
