@@ -105,6 +105,7 @@ public class MusicClient extends Thread
                     connectionEstablished = true;
 
                     pipedOutStream.write(packet.getData());
+                    sendMessage(".");
                 }
                 catch (SocketTimeoutException e)
                 {
