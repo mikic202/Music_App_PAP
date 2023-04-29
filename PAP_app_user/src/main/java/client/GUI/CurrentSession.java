@@ -59,8 +59,20 @@ public class CurrentSession extends javax.swing.JFrame {
         });
 
         jButton2.setText("Start listen");
+        jButton2.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setText("Stop stream");
+        jButton3.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -110,8 +122,20 @@ public class CurrentSession extends javax.swing.JFrame {
     }// </editor-fold>                        
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
-
-    }                                        
+        boolean result = MainScreen.musicManagerInstance.startStream(1, 9);
+        System.out.println(result);
+    }  
+    
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {                         
+        MainScreen.musicManagerInstance.checkIfPlaying(1);                
+        boolean result = MainScreen.musicManagerInstance.joinPlayingStream(1);
+        System.out.println(result);
+    }   
+    
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        boolean result = MainScreen.musicManagerInstance.terminateStream();
+        System.out.println(result);
+    }     
 
     /**
      * @param args the command line arguments

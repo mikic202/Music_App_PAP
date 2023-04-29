@@ -33,7 +33,7 @@ public class LoginScreen extends javax.swing.JFrame {
                 // System.exit(-1);
                 // }
                 try {
-                        socket = new Socket("localhost", 8000);
+                        socket = new Socket("144.91.114.89", 8000);
                         this.server_connector = new ServerConnector(socket);
                 } catch (Exception e) {
                         System.out.println(e);

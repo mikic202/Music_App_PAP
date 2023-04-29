@@ -18,6 +18,11 @@ import server.Chat.Chat;
 import server.Chat.RequestTypes;
 import server.Login.Login;
 import server.Login.LoginRequestTypes;
+import server.files.UploadRequestProcessor;
+import server.files.UploadRequestTypes;
+
+import server.Music.MusicRequestHandler;
+import server.Music.MusicRequestTypes;
 
 public class ClientHandler implements Runnable {
 	List<Client> clients = new ArrayList<Client>();
@@ -97,7 +102,19 @@ public class ClientHandler implements Runnable {
 				login_type = t;
 			}
 		}
-		if (type == null && login_type == null) {
+		UploadRequestTypes upload_type = null;
+		for (UploadRequestTypes t : UploadRequestTypes.values()) {
+			if (t.value().equals(typeStr)) {
+				upload_type = t;
+			}
+		}
+		MusicRequestTypes music_type = null;
+		for (MusicRequestTypes t : MusicRequestTypes.values()) {
+			if (t.value().equals(typeStr)) {
+				music_type = t;
+			}
+		}
+		if (type == null && login_type == null && upload_type == null && music_type == null) {
 			System.out.println("Received request of incorrect type: " + typeStr);
 			return;
 		}
@@ -111,9 +128,13 @@ public class ClientHandler implements Runnable {
 		}
 		String response = "";
 		if (type != null) {
-			response = Chat.procesRequests(type, value).toString() + "\n";
+			response = Chat.proces_requests(type, value).toString() + "\n";
 		} else if (login_type != null) {
-			response = Login.procesRequests(login_type, value).toString() + "\n";
+			response = Login.proces_requests(login_type, value).toString() + "\n";
+		} else if (upload_type != null) {
+			response = UploadRequestProcessor.proces_requests(upload_type, value).toString() + "\n";
+		} else if (music_type != null) {
+			response = MusicRequestHandler.processRequests(music_type, value).toString() + "\n";
 		}
 
 		System.out.print("\tResponse: " + response);

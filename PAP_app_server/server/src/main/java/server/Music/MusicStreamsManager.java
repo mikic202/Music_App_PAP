@@ -17,13 +17,13 @@ public final class MusicStreamsManager {
     private static volatile MusicStreamsManager instance;
 
     // chat ID binded to Music Streamer
-    private Hashtable<Integer, MusicStreamer> streamerTable;
+    private Hashtable<Integer, MusicStreamer> streamerTable = new Hashtable<Integer, MusicStreamer>();
 
     // ports table with list of ports with statuses
-    private Hashtable<Integer, Boolean> portsTable;
+    private Hashtable<Integer, Boolean> portsTable = new Hashtable<Integer, Boolean>();
 
     // userId binded to chatId that it is listening
-    private Hashtable<Integer, Integer> userChatTable;
+    private Hashtable<Integer, Integer> userChatTable = new Hashtable<Integer, Integer>();
 
     private int nextPort = 60001;
 
@@ -52,8 +52,10 @@ public final class MusicStreamsManager {
     // returns port that the stream will be streamed from
     public int startStream(int chatId, int initiatorUserId, int songId) {
         int freePort = 0;
-        if (streamerTable.contains(chatId)) {
-            return freePort;
+        if (streamerTable != null) {
+            if (streamerTable.contains(chatId)) {
+                return freePort;
+            }
         }
         Enumeration<Integer> e = portsTable.keys();
         while (e.hasMoreElements()) {
@@ -74,7 +76,7 @@ public final class MusicStreamsManager {
                 songId);
         String filePath = querryResult.get("file_path");
 
-        MusicStreamer createdStreamer = new MusicStreamer(freePort, initiatorUserId, filePath);
+        MusicStreamer createdStreamer = new MusicStreamer(freePort, initiatorUserId, filePath, songId);
         streamerTable.put(chatId, createdStreamer);
         userChatTable.put(initiatorUserId, chatId);
 
@@ -186,4 +188,11 @@ public final class MusicStreamsManager {
         return stream.getLength();
     }
 
+    public int getPlayingSongId(int chatId) {
+        MusicStreamer stream = streamerTable.get(chatId);
+        if (stream == null) {
+            return 0;
+        }
+        return stream.getPlayingSongId();
+    }
 }

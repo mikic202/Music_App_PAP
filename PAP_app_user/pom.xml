@@ -22,7 +22,7 @@
 						<manifest>
 							<addClasspath>true</addClasspath>
 							<classpathPrefix>lib/</classpathPrefix>
-							<mainClass>client.GUI.MainScreen</mainClass>
+							<mainClass>client.GUI.LoginScreen</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
@@ -45,7 +45,7 @@
 						<manifest>
 							<addClasspath>true</addClasspath>
 							<classpathPrefix>lib/</classpathPrefix>
-							<mainClass>client.GUI.MainScreen</mainClass>
+							<mainClass>client.GUI.LoginScreen</mainClass>
 						</manifest>
 					</archive>
 				</configuration>

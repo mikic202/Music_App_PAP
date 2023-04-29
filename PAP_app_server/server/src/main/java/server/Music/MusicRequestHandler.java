@@ -16,12 +16,29 @@ public class MusicRequestHandler {
 
         MusicStreamsManager streamsManagerInstance = MusicStreamsManager.getInstance();
         int port = streamsManagerInstance.startStream(chatId, userId, songId);
-        // initiate udp connection for new streamer
 
         JSONObject valueResult = new JSONObject();
         JSONObject result = new JSONObject();
         result.put("type", MusicRequestTypes.START_STREAM.value());
         valueResult.put("port", port);
+
+        JSONObject formatParams = new JSONObject();
+        AudioFormat format = streamsManagerInstance.getFormat(chatId);
+        float sampleRate = format.getSampleRate();
+        int sampleSizeInBits = format.getSampleSizeInBits();
+        int channels = format.getChannels();
+        String encodingStr = format.getEncoding().toString(); // example "pcm_signed"
+        boolean bigEndian = format.isBigEndian();
+        int lengthInBytes = streamsManagerInstance.getLengthInBytes(chatId);
+        formatParams.put("sample_rate", sampleRate);
+        formatParams.put("sample_size", sampleSizeInBits);
+        formatParams.put("channels", channels);
+        formatParams.put("encoding", encodingStr);
+        formatParams.put("big_endian", bigEndian);
+        formatParams.put("length", lengthInBytes);
+
+        valueResult.put("format", formatParams);
+
         result.put("value", valueResult);
         return result;
     }
@@ -57,11 +74,12 @@ public class MusicRequestHandler {
 
         JSONObject formatParams = new JSONObject();
         AudioFormat format = streamsManagerInstance.getFormat(chatId);
+        int songId = streamsManagerInstance.getPlayingSongId(chatId);
 
         if (format == null) {
-            valueResult.put("format_available", 0);
+            valueResult.put("format_available", false);
         } else {
-            valueResult.put("format_available", 1);
+            valueResult.put("format_available", true);
 
             float sampleRate = format.getSampleRate();
             int sampleSizeInBits = format.getSampleSizeInBits();
@@ -75,6 +93,7 @@ public class MusicRequestHandler {
             formatParams.put("encoding", encodingStr);
             formatParams.put("big_endian", bigEndian);
             formatParams.put("length", lengthInBytes);
+            formatParams.put("song_id", songId);
             valueResult.put("format", formatParams);
         }
         result.put("value", valueResult);
