@@ -50,7 +50,7 @@ public class ConversationDataSetter implements DataSetterInterface {
                     data.get("name"), data.get("number_of_users"));
 
             stat.executeUpdate(request);
-            added_id = ConversationDataAccesor.get_latest_conversation();
+            added_id = ConversationDataAccesor.getLatestConversation();
 
             connection.close();
         } catch (Exception e) {

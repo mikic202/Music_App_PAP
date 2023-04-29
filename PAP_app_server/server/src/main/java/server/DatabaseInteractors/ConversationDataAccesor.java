@@ -17,14 +17,14 @@ public class ConversationDataAccesor implements DataAccesorInterface {
 
     public static Hashtable<String, String> getData(String column_name, String column_value) {
         String querry = String.format("Select * from %s where %s='%s'", TABLENAME, column_name, column_value);
-        return get_querry_result(querry);
+        return getQuerryResult(querry);
     }
 
     public static Hashtable<String, String> getData(String column_name, int column_value) {
         return getData(column_name, String.format("%d", column_value));
     }
 
-    public static ArrayList<Integer> get_users_in_conversation(int conversation_id) {
+    public static ArrayList<Integer> getUsersInConversation(int conversation_id) {
         ArrayList<Integer> users = new ArrayList<Integer>();
         ResultSet result = null;
 
@@ -55,7 +55,7 @@ public class ConversationDataAccesor implements DataAccesorInterface {
         return users;
     }
 
-    public static ArrayList<Integer> get_mesages_in_conversation(int conversation_id) {
+    public static ArrayList<Integer> getMessagesInConversation(int conversation_id) {
         ArrayList<Integer> messages = new ArrayList<Integer>();
         ResultSet result = null;
 
@@ -86,7 +86,7 @@ public class ConversationDataAccesor implements DataAccesorInterface {
         return messages;
     }
 
-    public static int get_latest_conversation() {
+    public static int getLatestConversation() {
         ResultSet result = null;
         int id = 0;
 
@@ -116,7 +116,7 @@ public class ConversationDataAccesor implements DataAccesorInterface {
         return id;
     }
 
-    protected static Hashtable<String, String> process_result_to_full_data(ResultSet result) {
+    protected static Hashtable<String, String> processResultToFullData(ResultSet result) {
         Hashtable<String, String> umessage_data = new Hashtable<String, String>();
 
         try {
@@ -132,7 +132,7 @@ public class ConversationDataAccesor implements DataAccesorInterface {
         return umessage_data;
     }
 
-    protected static Hashtable<String, String> get_querry_result(String querry) {
+    protected static Hashtable<String, String> getQuerryResult(String querry) {
         Hashtable<String, String> umessage_data = new Hashtable<String, String>();
 
         ResultSet result = null;
@@ -146,7 +146,7 @@ public class ConversationDataAccesor implements DataAccesorInterface {
             String request = String.format(querry);
 
             result = stat.executeQuery(request);
-            umessage_data = process_result_to_full_data(result);
+            umessage_data = processResultToFullData(result);
 
             connection.close();
         } catch (Exception e) {

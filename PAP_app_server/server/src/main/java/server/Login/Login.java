@@ -20,7 +20,7 @@ public class Login {
         JSONObject result = new JSONObject();
         result.put("type", LoginRequestTypes.SEND_LOGIN.value());
         String written_password = request.getString("password");
-        Hashtable<String, String> user_info = UserDataAccesor.getData_with_email(wanted_email);
+        Hashtable<String, String> user_info = UserDataAccesor.getDataWithEmail(wanted_email);
         if (user_info.isEmpty()) {
             JSONObject false_result = new JSONObject();
             false_result.put("outcome", false);
@@ -52,12 +52,12 @@ public class Login {
             result.put("outcome", false);
             return result;
         }
-        Hashtable<String, String> user_info = UserDataAccesor.getData_with_email(email);
+        Hashtable<String, String> user_info = UserDataAccesor.getDataWithEmail(email);
         if (!user_info.isEmpty()) {
             result.put("outcome", false);
             return result;
         }
-        user_info = UserDataAccesor.getData_with_name(nickname);
+        user_info = UserDataAccesor.getDataWithName(nickname);
         if (!user_info.isEmpty()) {
             result.put("outcome", false);
             return result;

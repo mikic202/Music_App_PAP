@@ -53,7 +53,7 @@ public class MessageDataSetter implements DataSetterInterface {
                     data.get("sender"), data.get("conversation"), data.get("send_date"), data.get("text"));
 
             stat.executeUpdate(request);
-            added_id = MessageDataAccesor.get_latest_message();
+            added_id = MessageDataAccesor.getLatestMessage();
 
             connection.close();
         } catch (Exception e) {

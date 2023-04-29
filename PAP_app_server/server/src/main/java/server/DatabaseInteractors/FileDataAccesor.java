@@ -18,14 +18,14 @@ public class FileDataAccesor implements DataAccesorInterface {
 
     public static Hashtable<String, String> getData(String column_name, String column_value) {
         String querry = String.format("Select * from %s where %s='%s'", TABLENAME, column_name, column_value);
-        return get_querry_result(querry);
+        return getQuerryResult(querry);
     }
 
     public static Hashtable<String, String> getData(String column_name, int column_value) {
         return getData(column_name, String.format("%d", column_value));
     }
 
-    public static ArrayList<Integer> get_user_files(int user_id) {
+    public static ArrayList<Integer> getUserFiles(int user_id) {
         ArrayList<Integer> files = new ArrayList<>();
         ResultSet result = null;
 
@@ -53,7 +53,7 @@ public class FileDataAccesor implements DataAccesorInterface {
         return files;
     }
 
-    private static Hashtable<String, String> process_result_to_full_data(ResultSet result) {
+    private static Hashtable<String, String> processResultToFullData(ResultSet result) {
         Hashtable<String, String> user_data = new Hashtable<String, String>();
 
         try {
@@ -70,7 +70,7 @@ public class FileDataAccesor implements DataAccesorInterface {
         return user_data;
     }
 
-    private static Hashtable<String, String> get_querry_result(String querry) {
+    private static Hashtable<String, String> getQuerryResult(String querry) {
         Hashtable<String, String> user_data = new Hashtable<String, String>();
 
         ResultSet result = null;
@@ -84,7 +84,7 @@ public class FileDataAccesor implements DataAccesorInterface {
             String request = String.format(querry);
 
             result = stat.executeQuery(request);
-            user_data = process_result_to_full_data(result);
+            user_data = processResultToFullData(result);
 
             connection.close();
         } catch (Exception e) {

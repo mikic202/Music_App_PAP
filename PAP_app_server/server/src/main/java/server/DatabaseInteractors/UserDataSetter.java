@@ -32,7 +32,7 @@ public class UserDataSetter implements DataSetterInterface {
         }
     }
 
-    static public void set_email(int id, Hashtable<String, String> data) {
+    static public void setEmail(int id, Hashtable<String, String> data) {
         try {
 
             Connection connection = DriverManager.getConnection(DatabseInformation.URL.value(),
@@ -55,7 +55,7 @@ public class UserDataSetter implements DataSetterInterface {
         }
     }
 
-    static public void set_password(int id, Hashtable<String, String> data, String new_password,
+    static public void setPassword(int id, Hashtable<String, String> data, String new_password,
             String confirm_new_password) {
         try {
 
@@ -81,7 +81,7 @@ public class UserDataSetter implements DataSetterInterface {
         }
     }
 
-    static public void set_nickname(int id, Hashtable<String, String> data) {
+    static public void setUsername(int id, Hashtable<String, String> data) {
         try {
 
             Connection connection = DriverManager.getConnection(DatabseInformation.URL.value(),
@@ -130,7 +130,7 @@ public class UserDataSetter implements DataSetterInterface {
 
     }
 
-    public static int add_user_to_conversation(int conversation_id, int user_id) {
+    public static int addUserToConversation(int conversation_id, int user_id) {
         int added_id = 0;
         try {
 
@@ -146,7 +146,7 @@ public class UserDataSetter implements DataSetterInterface {
                     conversation_id, user_id);
 
             stat.executeUpdate(request);
-            added_id = UserDataAccesor.get_latest_user();
+            added_id = UserDataAccesor.getLatestUser();
             connection.close();
         } catch (Exception e) {
             System.out.println(e);
