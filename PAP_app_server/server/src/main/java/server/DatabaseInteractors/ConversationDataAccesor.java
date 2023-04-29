@@ -11,17 +11,17 @@ import java.sql.ResultSet;
 public class ConversationDataAccesor implements DataAccesorInterface {
     final static String TABLENAME = ConversationDatabsaeInformation.CONVERSATION_TABLE.value();
 
-    public static Hashtable<String, String> get_data(int id) {
-        return get_data(ConversationDatabsaeInformation.ID_COLUMN.value(), id);
+    public static Hashtable<String, String> getData(int id) {
+        return getData(ConversationDatabsaeInformation.ID_COLUMN.value(), id);
     }
 
-    public static Hashtable<String, String> get_data(String column_name, String column_value) {
+    public static Hashtable<String, String> getData(String column_name, String column_value) {
         String querry = String.format("Select * from %s where %s='%s'", TABLENAME, column_name, column_value);
         return get_querry_result(querry);
     }
 
-    public static Hashtable<String, String> get_data(String column_name, int column_value) {
-        return get_data(column_name, String.format("%d", column_value));
+    public static Hashtable<String, String> getData(String column_name, int column_value) {
+        return getData(column_name, String.format("%d", column_value));
     }
 
     public static ArrayList<Integer> get_users_in_conversation(int conversation_id) {

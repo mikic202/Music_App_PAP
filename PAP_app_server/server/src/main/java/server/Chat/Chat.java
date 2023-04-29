@@ -39,7 +39,7 @@ public class Chat {
         ArrayList<Integer> messages = ConversationDataAccesor
                 .get_mesages_in_conversation(request.getInt("conversation_id"));
         for (Integer message_id : messages) {
-            response.add(MessageDataAccesor.get_data(message_id));
+            response.add(MessageDataAccesor.getData(message_id));
         }
         return _convert_response_to_json(response, RequestTypes.GET_MESSAGES);
     }
@@ -48,7 +48,7 @@ public class Chat {
         ArrayList<Hashtable<String, String>> response = new ArrayList<Hashtable<String, String>>();
         ArrayList<Integer> conversations = UserDataAccesor.get_user_conversations(request.getInt("user_id"));
         for (Integer conversation_id : conversations) {
-            response.add(ConversationDataAccesor.get_data(conversation_id));
+            response.add(ConversationDataAccesor.getData(conversation_id));
         }
         return _convert_response_to_json(response, RequestTypes.GET_USERS_CONVERSATIONS);
     }
@@ -62,8 +62,8 @@ public class Chat {
         data.put("send_date", timestamp.toString());
         data.put("text", request.getString("text"));
         ;
-        int added_msg = MessageDataSetter.add_data(data);
-        return _convert_response_to_json(MessageDataAccesor.get_data(added_msg), RequestTypes.GET_MESSAGES);
+        int added_msg = MessageDataSetter.addData(data);
+        return _convert_response_to_json(MessageDataAccesor.getData(added_msg), RequestTypes.GET_MESSAGES);
     }
 
     private static JSONObject _create_conversation(JSONObject request) {
@@ -75,7 +75,7 @@ public class Chat {
             users.add(request.getJSONArray("users").getInt(i));
         }
         _add_users_to_conversation(users, new_conversation);
-        return _convert_response_to_json(ConversationDataAccesor.get_data(new_conversation),
+        return _convert_response_to_json(ConversationDataAccesor.getData(new_conversation),
                 RequestTypes.CREATE_CONVERSATION);
     }
 
@@ -83,7 +83,7 @@ public class Chat {
         Hashtable<String, String> data = new Hashtable<>();
         data.put("name", name);
         data.put("number_of_users", Integer.toString(number_of_users));
-        return ConversationDataSetter.add_data(data);
+        return ConversationDataSetter.addData(data);
     }
 
     private static void _add_users_to_conversation(ArrayList<Integer> users, int conversation_id) {
@@ -108,12 +108,12 @@ public class Chat {
         }
         System.out.println(users);
         _add_users_to_conversation(users, conversation_id);
-        Hashtable<String, String> previous_data = ConversationDataAccesor.get_data(conversation_id);
+        Hashtable<String, String> previous_data = ConversationDataAccesor.getData(conversation_id);
         previous_data.put(ConversationDatabsaeInformation.NUMBER_OF_USERS_COLUMN.value(),
                 Integer.toString(Integer
                         .parseInt(previous_data.get(ConversationDatabsaeInformation.NUMBER_OF_USERS_COLUMN.value()))
                         + number_of_users));
-        ConversationDataSetter.set_data(conversation_id, previous_data);
+        ConversationDataSetter.setData(conversation_id, previous_data);
         Hashtable<String, String> outcome = new Hashtable<>();
         outcome.put("outcome", "true");
         return _convert_response_to_json(outcome, RequestTypes.ADD_USER_TO_CONVERSATION);
@@ -134,12 +134,12 @@ public class Chat {
     private static JSONObject _check_users_info(JSONObject request) {
         if (request.getString("type").equals("username")) {
             Hashtable<String, String> hash_response = UserDataAccesor
-                    .get_data(UserDatabaseInformation.USERNAME_COLUMN.value(), request.getString("username"));
+                    .getData(UserDatabaseInformation.USERNAME_COLUMN.value(), request.getString("username"));
             hash_response.remove("password");
             return _convert_response_to_json(hash_response, RequestTypes.USER_INFO);
         }
         Hashtable<String, String> hash_response = UserDataAccesor
-                .get_data(UserDatabaseInformation.ID_COLUMN.value(), request.getInt("user_id"));
+                .getData(UserDatabaseInformation.ID_COLUMN.value(), request.getInt("user_id"));
         hash_response.remove("password");
         return _convert_response_to_json(hash_response, RequestTypes.USER_INFO);
     }

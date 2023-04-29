@@ -20,7 +20,7 @@ public class Login {
         JSONObject result = new JSONObject();
         result.put("type", LoginRequestTypes.SEND_LOGIN.value());
         String written_password = request.getString("password");
-        Hashtable<String, String> user_info = UserDataAccesor.get_data_with_email(wanted_email);
+        Hashtable<String, String> user_info = UserDataAccesor.getData_with_email(wanted_email);
         if (user_info.isEmpty()) {
             JSONObject false_result = new JSONObject();
             false_result.put("outcome", false);
@@ -52,12 +52,12 @@ public class Login {
             result.put("outcome", false);
             return result;
         }
-        Hashtable<String, String> user_info = UserDataAccesor.get_data_with_email(email);
+        Hashtable<String, String> user_info = UserDataAccesor.getData_with_email(email);
         if (!user_info.isEmpty()) {
             result.put("outcome", false);
             return result;
         }
-        user_info = UserDataAccesor.get_data_with_name(nickname);
+        user_info = UserDataAccesor.getData_with_name(nickname);
         if (!user_info.isEmpty()) {
             result.put("outcome", false);
             return result;
@@ -66,7 +66,7 @@ public class Login {
         data.put("username", nickname);
         data.put("email", email);
         data.put("password", password);
-        UserDataSetter.add_data(data);
+        UserDataSetter.addData(data);
         result.put("outcome", true);
         return result;
 
@@ -80,7 +80,7 @@ public class Login {
             result.put("outcome", false);
             return result;
         }
-        Hashtable<String, String> user_info = UserDataAccesor.get_data(request.getInt("user_id"));
+        Hashtable<String, String> user_info = UserDataAccesor.getData(request.getInt("user_id"));
         if (user_info.isEmpty()) {
             result.put("outcome", false);
             JSONObject response = new JSONObject();
@@ -89,7 +89,7 @@ public class Login {
             return response;
         }
         user_info.put("password", new_password);
-        UserDataSetter.set_data(request.getInt("user_id"), user_info);
+        UserDataSetter.setData(request.getInt("user_id"), user_info);
         result.put("outcome", true);
         JSONObject response = new JSONObject();
         response.put("value", result);
@@ -101,7 +101,7 @@ public class Login {
         String username = request.getString("nickname");
         ;
         JSONObject result = new JSONObject();
-        Hashtable<String, String> user_info = UserDataAccesor.get_data(request.getInt("user_id"));
+        Hashtable<String, String> user_info = UserDataAccesor.getData(request.getInt("user_id"));
         if (user_info.isEmpty()) {
             result.put("outcome", false);
             JSONObject response = new JSONObject();
@@ -110,7 +110,7 @@ public class Login {
             return response;
         }
         user_info.put("username", username);
-        UserDataSetter.set_data(request.getInt("user_id"), user_info);
+        UserDataSetter.setData(request.getInt("user_id"), user_info);
         result.put("outcome", true);
         JSONObject response = new JSONObject();
         response.put("value", result);
@@ -122,7 +122,7 @@ public class Login {
         String email = request.getString("email");
         ;
         JSONObject result = new JSONObject();
-        Hashtable<String, String> user_info = UserDataAccesor.get_data(request.getInt("user_id"));
+        Hashtable<String, String> user_info = UserDataAccesor.getData(request.getInt("user_id"));
         if (user_info.isEmpty()) {
             result.put("outcome", false);
             JSONObject response = new JSONObject();
@@ -131,7 +131,7 @@ public class Login {
             return response;
         }
         user_info.put("email", email);
-        UserDataSetter.set_data(request.getInt("user_id"), user_info);
+        UserDataSetter.setData(request.getInt("user_id"), user_info);
         result.put("outcome", true);
         JSONObject response = new JSONObject();
         response.put("value", result);

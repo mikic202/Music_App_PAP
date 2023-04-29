@@ -12,33 +12,33 @@ public class UserDataAccesor implements DataAccesorInterface {
 
     final static String TABLENAME = DatabseInformation.USER_TABLE.value();
 
-    public static Hashtable<String, String> get_data(int user_id) {
+    public static Hashtable<String, String> getData(int user_id) {
 
         String query = String.format("Select * from %s where user_id='%d'", TABLENAME, user_id);
 
         return get_querry_result(query);
     }
 
-    public static Hashtable<String, String> get_data(String column_name, String column_value) {
+    public static Hashtable<String, String> getData(String column_name, String column_value) {
 
         String query = String.format("Select * from %s where %s='%s'", TABLENAME, column_name, column_value);
 
         return get_querry_result(query);
     }
 
-    public static Hashtable<String, String> get_data(String column_name, int column_value) {
+    public static Hashtable<String, String> getData(String column_name, int column_value) {
 
         String query = String.format("Select * from %s where %s='%d'", TABLENAME, column_name, column_value);
 
         return get_querry_result(query);
     }
 
-    public static Hashtable<String, String> get_data_with_email(String email) {
+    public static Hashtable<String, String> getData_with_email(String email) {
         String query = String.format("Select * from %s where email='%s'", TABLENAME, email);
         return get_querry_result(query);
     }
 
-    public static Hashtable<String, String> get_data_with_name(String nickname) {
+    public static Hashtable<String, String> getData_with_name(String nickname) {
         String query = String.format("Select * from %s where email='%s'", TABLENAME, nickname);
         return get_querry_result(query);
     }

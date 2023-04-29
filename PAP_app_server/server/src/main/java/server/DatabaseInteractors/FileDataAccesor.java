@@ -12,17 +12,17 @@ public class FileDataAccesor implements DataAccesorInterface {
 
     static final String TABLENAME = FileDatabsaeInformation.FILE_TABLE.value();
 
-    public static Hashtable<String, String> get_data(int id) {
-        return get_data(FileDatabsaeInformation.ID_COLUMN.value(), id);
+    public static Hashtable<String, String> getData(int id) {
+        return getData(FileDatabsaeInformation.ID_COLUMN.value(), id);
     }
 
-    public static Hashtable<String, String> get_data(String column_name, String column_value) {
+    public static Hashtable<String, String> getData(String column_name, String column_value) {
         String querry = String.format("Select * from %s where %s='%s'", TABLENAME, column_name, column_value);
         return get_querry_result(querry);
     }
 
-    public static Hashtable<String, String> get_data(String column_name, int column_value) {
-        return get_data(column_name, String.format("%d", column_value));
+    public static Hashtable<String, String> getData(String column_name, int column_value) {
+        return getData(column_name, String.format("%d", column_value));
     }
 
     public static ArrayList<Integer> get_user_files(int user_id) {

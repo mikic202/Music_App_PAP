@@ -7,7 +7,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 public class ConversationDataSetter implements DataSetterInterface {
-    static public void set_data(int id, Hashtable<String, String> data) {
+    static public void setData(int id, Hashtable<String, String> data) {
         try {
 
             Connection connection = DriverManager.getConnection(DatabseInformation.URL.value(),
@@ -34,7 +34,7 @@ public class ConversationDataSetter implements DataSetterInterface {
         }
     }
 
-    static public int add_data(Hashtable<String, String> data) {
+    static public int addData(Hashtable<String, String> data) {
         int added_id = 0;
         try {
 

@@ -12,21 +12,21 @@ public class MessageDataAccesor implements DataAccesorInterface {
 
     final static String TABLENAME = MessagesDatabaseInformation.MESSAGES_TABLE.value();
 
-    public static Hashtable<String, String> get_data(int message_id) {
+    public static Hashtable<String, String> getData(int message_id) {
         String querry = String.format("Select * from %s where %s='%s'",
                 TABLENAME, MessagesDatabaseInformation.ID_COLUMN.value(),
                 message_id);
         return get_querry_result(querry);
     }
 
-    public static Hashtable<String, String> get_data(String column_name, String column_value) {
+    public static Hashtable<String, String> getData(String column_name, String column_value) {
 
         String query = String.format("Select * from %s where %s='%s'", TABLENAME, column_name, column_value);
 
         return get_querry_result(query);
     }
 
-    public static Hashtable<String, String> get_data(String column_name, int column_value) {
+    public static Hashtable<String, String> getData(String column_name, int column_value) {
 
         String query = String.format("Select * from %s where %s='%d'", TABLENAME, column_name, column_value);
 
@@ -34,7 +34,7 @@ public class MessageDataAccesor implements DataAccesorInterface {
     }
 
     public static String get_message_text(int message_id) {
-        return get_data(message_id).get("text");
+        return getData(message_id).get("text");
     }
 
     public static int get_latest_message() {
