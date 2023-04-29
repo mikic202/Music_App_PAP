@@ -11,8 +11,8 @@ import server.DatabaseInteractors.UserDataSetter;
 import server.DatabaseInteractors.UserDatabaseInformation;
 
 public class Login {
-    public static JSONObject proces_requests(LoginRequestTypes req_type, JSONObject request) {
-        return _generate_response(req_type, request);
+    public static JSONObject procesRequests(LoginRequestTypes req_type, JSONObject request) {
+        return _generateResponse(req_type, request);
     }
 
     private static JSONObject _login(JSONObject request) {
@@ -72,7 +72,7 @@ public class Login {
 
     }
 
-    private static JSONObject _change_password(JSONObject request) {
+    private static JSONObject _changePassword(JSONObject request) {
         String old_password = request.getString("old_password");
         String new_password = request.getString("new_password");
         JSONObject result = new JSONObject();
@@ -97,7 +97,7 @@ public class Login {
         return response;
     }
 
-    private static JSONObject _change_username(JSONObject request) {
+    private static JSONObject _changeUsername(JSONObject request) {
         String username = request.getString("nickname");
         ;
         JSONObject result = new JSONObject();
@@ -118,7 +118,7 @@ public class Login {
         return response;
     }
 
-    private static JSONObject _change_email(JSONObject request) {
+    private static JSONObject _changeEmail(JSONObject request) {
         String email = request.getString("email");
         ;
         JSONObject result = new JSONObject();
@@ -139,7 +139,7 @@ public class Login {
         return response;
     }
 
-    private static JSONObject _generate_response(LoginRequestTypes req_type, JSONObject request) {
+    private static JSONObject _generateResponse(LoginRequestTypes req_type, JSONObject request) {
         JSONObject response = new JSONObject();
         switch (req_type) {
             case SEND_LOGIN:
@@ -149,13 +149,13 @@ public class Login {
                 response = _register(request);
                 break;
             case SEND_CHANGE_PASSWORD:
-                response = _change_password(request);
+                response = _changePassword(request);
                 break;
             case SEND_CHANGE_EMAIL:
-                response = _change_email(request);
+                response = _changeEmail(request);
                 break;
             case SEND_CHANGE_NICKNAME:
-                response = _change_username(request);
+                response = _changeUsername(request);
                 break;
         }
         return response;
