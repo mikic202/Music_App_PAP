@@ -27,9 +27,9 @@ public class CreateGroup extends javax.swing.JFrame {
                 setDefaultCloseOperation(this.DISPOSE_ON_CLOSE);
         }
 
-        private void add_conversation() {
+        private void addConversation() {
                 if (!jTextField1.getText().equals("")) {
-                        main_screen.chat.create_conversation(jTextField1.getText(), parse_users());
+                        main_screen.chat.createConversation(jTextField1.getText(), parse_users());
                         this.dispose();
                 }
         }
@@ -166,7 +166,7 @@ public class CreateGroup extends javax.swing.JFrame {
         }// </editor-fold>//GEN-END:initComponents
 
         private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
-                add_conversation();// GEN-FIRST:event_jButton1ActionPerformed
+                addConversation();// GEN-FIRST:event_jButton1ActionPerformed
         }// GEN-LAST:event_jButton1ActionPerformed
 
         /**

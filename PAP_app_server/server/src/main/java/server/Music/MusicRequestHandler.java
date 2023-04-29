@@ -5,13 +5,11 @@ import javax.sound.sampled.AudioFormat;
 
 public class MusicRequestHandler {
 
-    public static JSONObject processRequests(MusicRequestTypes reqType, JSONObject request)
-    {
-        return _generateResponse(reqType, request);
+    public static JSONObject processRequests(MusicRequestTypes reqType, JSONObject request) {
+        return procesRequests(reqType, request);
     }
 
-    private static JSONObject _startStream(JSONObject request)
-    {
+    private static JSONObject _startStream(JSONObject request) {
         int userId = request.getInt("user_id");
         int chatId = request.getInt("chat_id");
         int songId = request.getInt("song_id");
@@ -45,10 +43,9 @@ public class MusicRequestHandler {
         return result;
     }
 
-    private static JSONObject _terminateStream(JSONObject request)
-    {
+    private static JSONObject _terminateStream(JSONObject request) {
         int userId = request.getInt("user_id");
-        
+
         MusicStreamsManager streamsManagerInstance = MusicStreamsManager.getInstance();
         boolean rtnStopStream = streamsManagerInstance.terminateStream(userId);
 
@@ -61,8 +58,7 @@ public class MusicRequestHandler {
         return result;
     }
 
-    private static JSONObject _checkIfPlaying(JSONObject request)
-    {
+    private static JSONObject _checkIfPlaying(JSONObject request) {
         int chatId = request.getInt("chat_id");
 
         MusicStreamsManager streamsManagerInstance = MusicStreamsManager.getInstance();
@@ -80,12 +76,9 @@ public class MusicRequestHandler {
         AudioFormat format = streamsManagerInstance.getFormat(chatId);
         int songId = streamsManagerInstance.getPlayingSongId(chatId);
 
-        if (format == null)
-        {
+        if (format == null) {
             valueResult.put("format_available", false);
-        }
-        else
-        {
+        } else {
             valueResult.put("format_available", true);
 
             float sampleRate = format.getSampleRate();
@@ -108,8 +101,7 @@ public class MusicRequestHandler {
         return result;
     }
 
-    private static JSONObject _joinPlayingStream(JSONObject request) 
-    {
+    private static JSONObject _joinPlayingStream(JSONObject request) {
         int userId = request.getInt("user_id");
         int chatId = request.getInt("chat_id");
 
@@ -125,10 +117,9 @@ public class MusicRequestHandler {
         return result;
     }
 
-    private static JSONObject _pauseStream(JSONObject request)
-    {
+    private static JSONObject _pauseStream(JSONObject request) {
         int userId = request.getInt("user_id");
-        
+
         MusicStreamsManager streamsManagerInstance = MusicStreamsManager.getInstance();
         boolean rtnPauseStream = streamsManagerInstance.pauseStream(userId);
 
@@ -143,7 +134,7 @@ public class MusicRequestHandler {
 
     private static JSONObject _resumeStream(JSONObject request) {
         int userId = request.getInt("user_id");
-        
+
         MusicStreamsManager streamsManagerInstance = MusicStreamsManager.getInstance();
         boolean rtnResumeStream = streamsManagerInstance.resumeStream(userId);
 
@@ -156,7 +147,7 @@ public class MusicRequestHandler {
         return result;
     }
 
-    private static JSONObject _generateResponse(MusicRequestTypes reqType, JSONObject request) {
+    private static JSONObject procesRequests(MusicRequestTypes reqType, JSONObject request) {
         JSONObject response = new JSONObject();
         switch (reqType) {
             case START_STREAM:

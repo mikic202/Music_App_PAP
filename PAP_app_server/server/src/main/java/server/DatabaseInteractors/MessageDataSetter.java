@@ -6,7 +6,7 @@ import java.sql.DriverManager;
 import java.sql.Statement;
 
 public class MessageDataSetter implements DataSetterInterface {
-    static public void set_data(int id, Hashtable<String, String> data) {
+    static public void setData(int id, Hashtable<String, String> data) {
         try {
 
             Connection connection = DriverManager.getConnection(DatabseInformation.URL.value(),
@@ -35,7 +35,7 @@ public class MessageDataSetter implements DataSetterInterface {
         }
     }
 
-    static public int add_data(Hashtable<String, String> data) {
+    static public int addData(Hashtable<String, String> data) {
         int added_id = 0;
         try {
 
@@ -53,7 +53,7 @@ public class MessageDataSetter implements DataSetterInterface {
                     data.get("sender"), data.get("conversation"), data.get("send_date"), data.get("text"));
 
             stat.executeUpdate(request);
-            added_id = MessageDataAccesor.get_latest_message();
+            added_id = MessageDataAccesor.getLatestMessage();
 
             connection.close();
         } catch (Exception e) {

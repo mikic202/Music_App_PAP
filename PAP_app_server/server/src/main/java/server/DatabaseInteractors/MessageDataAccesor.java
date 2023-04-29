@@ -12,32 +12,32 @@ public class MessageDataAccesor implements DataAccesorInterface {
 
     final static String TABLENAME = MessagesDatabaseInformation.MESSAGES_TABLE.value();
 
-    public static Hashtable<String, String> get_data(int message_id) {
+    public static Hashtable<String, String> getData(int message_id) {
         String querry = String.format("Select * from %s where %s='%s'",
                 TABLENAME, MessagesDatabaseInformation.ID_COLUMN.value(),
                 message_id);
-        return get_querry_result(querry);
+        return getQuerryResult(querry);
     }
 
-    public static Hashtable<String, String> get_data(String column_name, String column_value) {
+    public static Hashtable<String, String> getData(String column_name, String column_value) {
 
         String query = String.format("Select * from %s where %s='%s'", TABLENAME, column_name, column_value);
 
-        return get_querry_result(query);
+        return getQuerryResult(query);
     }
 
-    public static Hashtable<String, String> get_data(String column_name, int column_value) {
+    public static Hashtable<String, String> getData(String column_name, int column_value) {
 
         String query = String.format("Select * from %s where %s='%d'", TABLENAME, column_name, column_value);
 
-        return get_querry_result(query);
+        return getQuerryResult(query);
     }
 
-    public static String get_message_text(int message_id) {
-        return get_data(message_id).get("text");
+    public static String getMessageText(int message_id) {
+        return getData(message_id).get("text");
     }
 
-    public static int get_latest_message() {
+    public static int getLatestMessage() {
         ResultSet result = null;
         int id = 0;
 
@@ -67,7 +67,7 @@ public class MessageDataAccesor implements DataAccesorInterface {
         return id;
     }
 
-    public static ArrayList<Hashtable<String, String>> get_messages_older_than_given(int latest_message,
+    public static ArrayList<Hashtable<String, String>> getMessagesOlderThanGiven(int latest_message,
             int conversation_id) {
         String querry = String.format("Select * from %s where %s='%d' AND %s>'%d' ", TABLENAME,
                 MessagesDatabaseInformation.CONVERSATION_COLUMN.value(), conversation_id,
@@ -107,7 +107,7 @@ public class MessageDataAccesor implements DataAccesorInterface {
         return messages_data;
     }
 
-    protected static Hashtable<String, String> process_result_to_full_data(ResultSet result) {
+    protected static Hashtable<String, String> processResultToFullData(ResultSet result) {
         Hashtable<String, String> umessage_data = new Hashtable<String, String>();
 
         try {
@@ -125,7 +125,7 @@ public class MessageDataAccesor implements DataAccesorInterface {
         return umessage_data;
     }
 
-    protected static Hashtable<String, String> get_querry_result(String querry) {
+    protected static Hashtable<String, String> getQuerryResult(String querry) {
         Hashtable<String, String> umessage_data = new Hashtable<String, String>();
 
         ResultSet result = null;
@@ -139,7 +139,7 @@ public class MessageDataAccesor implements DataAccesorInterface {
             String request = String.format(querry);
 
             result = stat.executeQuery(request);
-            umessage_data = process_result_to_full_data(result);
+            umessage_data = processResultToFullData(result);
 
             connection.close();
         } catch (Exception e) {

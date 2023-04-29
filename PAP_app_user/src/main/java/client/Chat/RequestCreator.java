@@ -5,60 +5,94 @@ import java.util.ArrayList;
 import org.json.JSONObject;
 
 public class RequestCreator {
-        public static JSONObject create_send_msg_request(int conversation_id, int sender_id, String text) {
-                return new JSONObject(
-                                String.format("{\"type\":\"%s\", \"value\":{\"sender_id\":%d, \"conversation_id\":%d, \"text\":%s}}",
-                                                RequestTypes.SEND_MESSAGE.value(), sender_id, conversation_id, text));
+        public static JSONObject createSendMsgRequest(int conversation_id, int sender_id, String text) {
+                var request = new JSONObject();
+                request.put("type", RequestTypes.SEND_MESSAGE.value());
+                var value = new JSONObject();
+                value.put("sender_id", sender_id);
+                value.put("conversation_id", conversation_id);
+                value.put("text", text);
+                request.put("value", value);
+                return request;
         }
 
-        public static JSONObject create_add_conversation_request(String name, ArrayList<Integer> users) {
-                return new JSONObject(
-                                String.format("{\"type\":\"%s\", \"value\":{\"name\":%s, \"users\":%s}}",
-                                                RequestTypes.CREATE_CONVERSATION.value(), name, users));
+        public static JSONObject createAddRonversationRequest(String name, ArrayList<Integer> users) {
+                var request = new JSONObject();
+                request.put("type", RequestTypes.CREATE_CONVERSATION.value());
+                var value = new JSONObject();
+                value.put("name", name);
+                value.put("users", users);
+                request.put("value", value);
+                return request;
         }
 
-        public static JSONObject create_get_messages_request(int conversation_id) {
-                return new JSONObject(
-                                String.format("{\"type\":\"%s\", \"value\":{\"conversation_id\":%s}}",
-                                                RequestTypes.GET_MESSAGES.value(), conversation_id));
+        public static JSONObject createGetMessagesRequest(int conversation_id) {
+                var request = new JSONObject();
+                request.put("type", RequestTypes.GET_MESSAGES.value());
+                var value = new JSONObject();
+                value.put("conversation_id", conversation_id);
+                request.put("value", value);
+                return request;
 
         }
 
-        public static JSONObject create_get_conversations_request(int user_id) {
-                return new JSONObject(
-                                String.format("{\"type\":\"%s\", \"value\":{\"user_id\":%s}}",
-                                                RequestTypes.GET_USERS_CONVERSATIONS.value(), user_id));
+        public static JSONObject createGetConversationsRequest(int user_id) {
+                var request = new JSONObject();
+                request.put("type", RequestTypes.GET_USERS_CONVERSATIONS.value());
+                var value = new JSONObject();
+                value.put("user_id", user_id);
+                request.put("value", value);
+                return request;
         }
 
-        public static JSONObject create_add_user_to_conversation_request(int conversation_id,
+        public static JSONObject createAddUserToConversationRequest(int conversation_id,
                         ArrayList<Integer> users_ids) {
-                return new JSONObject(
-                                String.format("{\"type\":\"%s\", \"value\":{\"conversation_id\":%s, \"users\":%s}}",
-                                                RequestTypes.ADD_USER_TO_CONVERSATION.value(), conversation_id,
-                                                users_ids));
+                var request = new JSONObject();
+                request.put("type", RequestTypes.ADD_USER_TO_CONVERSATION.value());
+                var value = new JSONObject();
+                value.put("conversation_id", conversation_id);
+                value.put("users", users_ids);
+                request.put("value", value);
+                return request;
         }
 
-        public static JSONObject create_get_user_information_request(int user_id) {
-                return new JSONObject(
-                                String.format("{\"type\":\"%s\", \"value\":{\"user_id\":%s, \"type\": user_id}}",
-                                                RequestTypes.USER_INFO.value(), user_id));
+        public static JSONObject createGetUserInformationRequest(int user_id) {
+                var request = new JSONObject();
+                request.put("type", RequestTypes.USER_INFO.value());
+                var value = new JSONObject();
+                value.put("user_id", user_id);
+                value.put("type", "user_id");
+                request.put("value", value);
+                return request;
         }
 
-        public static JSONObject create_get_user_information_request(String username) {
-                return new JSONObject(
-                                String.format("{\"type\":\"%s\", \"value\":{\"username\":%s, \"type\": username}}",
-                                                RequestTypes.USER_INFO.value(), username));
+        public static JSONObject createGetUserInformationRequest(String username) {
+                var request = new JSONObject();
+                request.put("type", RequestTypes.USER_INFO.value());
+                var value = new JSONObject();
+                value.put("username", username);
+                value.put("type", "username");
+                request.put("value", value);
+                return request;
+
         }
 
-        public static JSONObject get_users_in_conversation(int conversation_id) {
-                return new JSONObject(
-                                String.format("{\"type\":\"%s\", \"value\":{\"conversation_id\":%s}}",
-                                                RequestTypes.GET_USERS_IN_CONVERSATION.value(), conversation_id));
+        public static JSONObject getUsersInConversation(int conversation_id) {
+                var request = new JSONObject();
+                request.put("type", RequestTypes.GET_USERS_IN_CONVERSATION.value());
+                var value = new JSONObject();
+                value.put("conversation_id", conversation_id);
+                request.put("value", value);
+                return request;
         }
 
-        public static JSONObject create_get_new_messages_in_conversation(int conversation, Integer latest_message) {
-                return new JSONObject(
-                                String.format("{\"type\":\"%s\", \"value\":{\"conversation_id\":%s, \"latest_message\":%s}}",
-                                                RequestTypes.GET_LATEST_MESSAGE.value(), conversation, latest_message));
+        public static JSONObject createGetNewMessagesInConversation(int conversation_id, Integer latest_message) {
+                var request = new JSONObject();
+                request.put("type", RequestTypes.GET_LATEST_MESSAGE.value());
+                var value = new JSONObject();
+                value.put("latest_message", latest_message);
+                value.put("conversation_id", conversation_id);
+                request.put("value", value);
+                return request;
         }
 }

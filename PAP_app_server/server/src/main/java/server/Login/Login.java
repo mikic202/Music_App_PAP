@@ -11,8 +11,8 @@ import server.DatabaseInteractors.UserDataSetter;
 import server.DatabaseInteractors.UserDatabaseInformation;
 
 public class Login {
-    public static JSONObject proces_requests(LoginRequestTypes req_type, JSONObject request) {
-        return _generate_response(req_type, request);
+    public static JSONObject procesRequests(LoginRequestTypes req_type, JSONObject request) {
+        return _generateResponse(req_type, request);
     }
 
     private static JSONObject _login(JSONObject request) {
@@ -20,7 +20,7 @@ public class Login {
         JSONObject result = new JSONObject();
         result.put("type", LoginRequestTypes.SEND_LOGIN.value());
         String written_password = request.getString("password");
-        Hashtable<String, String> user_info = UserDataAccesor.get_data_with_email(wanted_email);
+        Hashtable<String, String> user_info = UserDataAccesor.getDataWithEmail(wanted_email);
         if (user_info.isEmpty()) {
             JSONObject false_result = new JSONObject();
             false_result.put("outcome", false);
@@ -52,12 +52,12 @@ public class Login {
             result.put("outcome", false);
             return result;
         }
-        Hashtable<String, String> user_info = UserDataAccesor.get_data_with_email(email);
+        Hashtable<String, String> user_info = UserDataAccesor.getDataWithEmail(email);
         if (!user_info.isEmpty()) {
             result.put("outcome", false);
             return result;
         }
-        user_info = UserDataAccesor.get_data_with_name(nickname);
+        user_info = UserDataAccesor.getDataWithName(nickname);
         if (!user_info.isEmpty()) {
             result.put("outcome", false);
             return result;
@@ -66,13 +66,13 @@ public class Login {
         data.put("username", nickname);
         data.put("email", email);
         data.put("password", password);
-        UserDataSetter.add_data(data);
+        UserDataSetter.addData(data);
         result.put("outcome", true);
         return result;
 
     }
 
-    private static JSONObject _change_password(JSONObject request) {
+    private static JSONObject _changePassword(JSONObject request) {
         String old_password = request.getString("old_password");
         String new_password = request.getString("new_password");
         JSONObject result = new JSONObject();
@@ -80,7 +80,7 @@ public class Login {
             result.put("outcome", false);
             return result;
         }
-        Hashtable<String, String> user_info = UserDataAccesor.get_data(request.getInt("user_id"));
+        Hashtable<String, String> user_info = UserDataAccesor.getData(request.getInt("user_id"));
         if (user_info.isEmpty()) {
             result.put("outcome", false);
             JSONObject response = new JSONObject();
@@ -89,7 +89,7 @@ public class Login {
             return response;
         }
         user_info.put("password", new_password);
-        UserDataSetter.set_data(request.getInt("user_id"), user_info);
+        UserDataSetter.setData(request.getInt("user_id"), user_info);
         result.put("outcome", true);
         JSONObject response = new JSONObject();
         response.put("value", result);
@@ -97,11 +97,11 @@ public class Login {
         return response;
     }
 
-    private static JSONObject _change_username(JSONObject request) {
+    private static JSONObject _changeUsername(JSONObject request) {
         String username = request.getString("nickname");
         ;
         JSONObject result = new JSONObject();
-        Hashtable<String, String> user_info = UserDataAccesor.get_data(request.getInt("user_id"));
+        Hashtable<String, String> user_info = UserDataAccesor.getData(request.getInt("user_id"));
         if (user_info.isEmpty()) {
             result.put("outcome", false);
             JSONObject response = new JSONObject();
@@ -110,7 +110,7 @@ public class Login {
             return response;
         }
         user_info.put("username", username);
-        UserDataSetter.set_data(request.getInt("user_id"), user_info);
+        UserDataSetter.setData(request.getInt("user_id"), user_info);
         result.put("outcome", true);
         JSONObject response = new JSONObject();
         response.put("value", result);
@@ -118,11 +118,11 @@ public class Login {
         return response;
     }
 
-    private static JSONObject _change_email(JSONObject request) {
+    private static JSONObject _changeEmail(JSONObject request) {
         String email = request.getString("email");
         ;
         JSONObject result = new JSONObject();
-        Hashtable<String, String> user_info = UserDataAccesor.get_data(request.getInt("user_id"));
+        Hashtable<String, String> user_info = UserDataAccesor.getData(request.getInt("user_id"));
         if (user_info.isEmpty()) {
             result.put("outcome", false);
             JSONObject response = new JSONObject();
@@ -131,7 +131,7 @@ public class Login {
             return response;
         }
         user_info.put("email", email);
-        UserDataSetter.set_data(request.getInt("user_id"), user_info);
+        UserDataSetter.setData(request.getInt("user_id"), user_info);
         result.put("outcome", true);
         JSONObject response = new JSONObject();
         response.put("value", result);
@@ -139,7 +139,7 @@ public class Login {
         return response;
     }
 
-    private static JSONObject _generate_response(LoginRequestTypes req_type, JSONObject request) {
+    private static JSONObject _generateResponse(LoginRequestTypes req_type, JSONObject request) {
         JSONObject response = new JSONObject();
         switch (req_type) {
             case SEND_LOGIN:
@@ -149,13 +149,13 @@ public class Login {
                 response = _register(request);
                 break;
             case SEND_CHANGE_PASSWORD:
-                response = _change_password(request);
+                response = _changePassword(request);
                 break;
             case SEND_CHANGE_EMAIL:
-                response = _change_email(request);
+                response = _changeEmail(request);
                 break;
             case SEND_CHANGE_NICKNAME:
-                response = _change_username(request);
+                response = _changeUsername(request);
                 break;
         }
         return response;

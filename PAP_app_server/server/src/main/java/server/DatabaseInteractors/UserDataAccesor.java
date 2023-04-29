@@ -12,38 +12,38 @@ public class UserDataAccesor implements DataAccesorInterface {
 
     final static String TABLENAME = DatabseInformation.USER_TABLE.value();
 
-    public static Hashtable<String, String> get_data(int user_id) {
+    public static Hashtable<String, String> getData(int user_id) {
 
         String query = String.format("Select * from %s where user_id='%d'", TABLENAME, user_id);
 
-        return get_querry_result(query);
+        return getQuerryResult(query);
     }
 
-    public static Hashtable<String, String> get_data(String column_name, String column_value) {
+    public static Hashtable<String, String> getData(String column_name, String column_value) {
 
         String query = String.format("Select * from %s where %s='%s'", TABLENAME, column_name, column_value);
 
-        return get_querry_result(query);
+        return getQuerryResult(query);
     }
 
-    public static Hashtable<String, String> get_data(String column_name, int column_value) {
+    public static Hashtable<String, String> getData(String column_name, int column_value) {
 
         String query = String.format("Select * from %s where %s='%d'", TABLENAME, column_name, column_value);
 
-        return get_querry_result(query);
+        return getQuerryResult(query);
     }
 
-    public static Hashtable<String, String> get_data_with_email(String email) {
+    public static Hashtable<String, String> getDataWithEmail(String email) {
         String query = String.format("Select * from %s where email='%s'", TABLENAME, email);
-        return get_querry_result(query);
+        return getQuerryResult(query);
     }
 
-    public static Hashtable<String, String> get_data_with_name(String nickname) {
+    public static Hashtable<String, String> getDataWithName(String nickname) {
         String query = String.format("Select * from %s where email='%s'", TABLENAME, nickname);
-        return get_querry_result(query);
+        return getQuerryResult(query);
     }
 
-    public static ArrayList<Integer> get_user_conversations(int id) {
+    public static ArrayList<Integer> getUserConversations(int id) {
         ArrayList<Integer> conversations = new ArrayList<Integer>();
 
         String querry = String.format("Select %s from %s where %s='%s'",
@@ -76,7 +76,7 @@ public class UserDataAccesor implements DataAccesorInterface {
         return conversations;
     }
 
-    public static int get_latest_user() {
+    public static int getLatestUser() {
         ResultSet result = null;
         int id = 0;
 
@@ -106,7 +106,7 @@ public class UserDataAccesor implements DataAccesorInterface {
         return id;
     }
 
-    private static Hashtable<String, String> process_result_to_full_data(ResultSet result) {
+    private static Hashtable<String, String> processResultToFullData(ResultSet result) {
         Hashtable<String, String> user_data = new Hashtable<String, String>();
 
         try {
@@ -123,7 +123,7 @@ public class UserDataAccesor implements DataAccesorInterface {
         return user_data;
     }
 
-    private static Hashtable<String, String> get_querry_result(String querry) {
+    private static Hashtable<String, String> getQuerryResult(String querry) {
         Hashtable<String, String> user_data = new Hashtable<String, String>();
 
         ResultSet result = null;
@@ -137,7 +137,7 @@ public class UserDataAccesor implements DataAccesorInterface {
             String request = String.format(querry);
 
             result = stat.executeQuery(request);
-            user_data = process_result_to_full_data(result);
+            user_data = processResultToFullData(result);
 
             connection.close();
         } catch (Exception e) {

@@ -32,7 +32,7 @@ public class JoinToGroup extends javax.swing.JFrame {
 
     public void add_users() {
         if (!jTextField2.getText().equals("") && !Users.getText().equals("")) {
-            chat.add_users_to_conversation(jTextField2.getText(), parse_users());
+            chat.addUsersToConversation(jTextField2.getText(), parse_users());
             this.dispose();
         }
     }

@@ -6,12 +6,12 @@ import java.sql.Statement;
 import java.util.Hashtable;
 
 public class FileDataSetter implements DataSetterInterface {
-    static public void set_data(int id, Hashtable<String, String> data) {
-    	
+    static public void setData(int id, Hashtable<String, String> data) {
+
     }
 
-    static public int add_data(Hashtable<String, String> data) {
-    	try {
+    static public int addData(Hashtable<String, String> data) {
+        try {
 
             Connection connection = DriverManager.getConnection(DatabseInformation.URL.value(),
                     DatabseInformation.USER.value(), DatabseInformation.PASSWORD.value());

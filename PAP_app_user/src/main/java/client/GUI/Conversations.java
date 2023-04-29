@@ -34,7 +34,7 @@ public class Conversations extends javax.swing.JFrame {
      */
     public void change_messages(String conversation_name) {
         try {
-            current_messages = chat.switch_conversations(conversation_name_to_id.get(conversation_name));
+            current_messages = chat.switchConversations(conversation_name_to_id.get(conversation_name));
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -44,7 +44,7 @@ public class Conversations extends javax.swing.JFrame {
 
     private void set_conversation_text(ArrayList<JSONObject> messages) {
         jPanel1.removeAll();
-        Hashtable<Integer, JSONObject> users_in_conv = chat.get_users_in_current_conversation();
+        Hashtable<Integer, JSONObject> users_in_conv = chat.getUsersInCurrentConversation();
         for (JSONObject message : messages) {
             // to_return +=
             // users_in_conv.get(message.getInt("sender_id")).getString("username") + "\n";
@@ -60,7 +60,7 @@ public class Conversations extends javax.swing.JFrame {
                     .add(username);
             this.jPanel1.add(time);
             LeftChatPanel leftChatPanel = new LeftChatPanel();
-            if (message.getInt("sender") == chat.user_id()) {
+            if (message.getInt("sender") == chat.userId()) {
                 leftChatPanel.jTextArea1.setBackground(new java.awt.Color(0, 137, 255));
             }
             leftChatPanel.jTextArea1.setText(message.getString("text"));
@@ -72,8 +72,8 @@ public class Conversations extends javax.swing.JFrame {
 
     public Conversations(Chat chat) {
         this.chat = chat;
-        conversation_name_to_id = this.chat.get_conversations_names_to_ids();
-        current_messages = chat.get_current_messages();
+        conversation_name_to_id = this.chat.getConversationsNamesToIds();
+        current_messages = chat.getCurrentMessages();
         initComponents();
         setDefaultCloseOperation(this.DISPOSE_ON_CLOSE);
         this.jTextArea1.setEditable(false);
@@ -87,8 +87,8 @@ public class Conversations extends javax.swing.JFrame {
 
         java.awt.event.ActionListener updater = new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                chat.update_status();
-                set_conversation_text(chat.get_current_messages());
+                chat.updateStatus();
+                set_conversation_text(chat.getCurrentMessages());
             }
         };
         timer = new Timer(1000, updater); // timer is ticking
@@ -96,10 +96,10 @@ public class Conversations extends javax.swing.JFrame {
         timer.start();
     }
 
-    private void send_message() {
+    private void sendMessage() {
         String message = this.jTextArea2.getText().trim();
         if (!message.equals("")) {
-            add_message_to_chat(chat.send_message(message));
+            add_message_to_chat(chat.sendMessage(message));
             this.jTextArea2.setText("");
         }
     }
@@ -266,7 +266,7 @@ public class Conversations extends javax.swing.JFrame {
     }// </editor-fold>
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
-        send_message();
+        sendMessage();
     }
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {
