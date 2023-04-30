@@ -128,11 +128,11 @@ public class ClientHandler implements Runnable {
 		}
 		String response = "";
 		if (type != null) {
-			response = Chat.proces_requests(type, value).toString() + "\n";
+			response = Chat.procesRequests(type, value).toString() + "\n";
 		} else if (login_type != null) {
-			response = Login.proces_requests(login_type, value).toString() + "\n";
+			response = Login.procesRequests(login_type, value).toString() + "\n";
 		} else if (upload_type != null) {
-			response = UploadRequestProcessor.proces_requests(upload_type, value).toString() + "\n";
+			response = UploadRequestProcessor.procesRequests(upload_type, value).toString() + "\n";
 		} else if (music_type != null) {
 			response = MusicRequestHandler.processRequests(music_type, value).toString() + "\n";
 		}
