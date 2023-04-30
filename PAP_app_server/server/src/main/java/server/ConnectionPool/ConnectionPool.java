@@ -27,10 +27,31 @@ public class ConnectionPool {
         System.out.println("Connection Pool Active");
     }
 
-    public static Connection getConnection() {
+    public static synchronized Connection getConnection() {
         Connection connection = availableConnections
                 .remove(availableConnections.size() - 1);
         usedConnections.add(connection);
         return connection;
+    }
+
+    public static synchronized boolean releaseConnection(Connection connection) {
+        availableConnections.add(connection);
+        return usedConnections.remove(connection);
+    }
+
+    public static int availableConnections() {
+        return availableConnections.size();
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        // TODO Auto-generated method stub
+        for (var con : availableConnections) {
+            con.close();
+        }
+        for (var con : usedConnections) {
+            con.close();
+        }
+        System.out.println("Closing connections");
     }
 }
