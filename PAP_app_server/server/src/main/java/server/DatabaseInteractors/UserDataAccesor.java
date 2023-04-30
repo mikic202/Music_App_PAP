@@ -3,9 +3,10 @@ package server.DatabaseInteractors;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
+import server.ConnectionPool.ConnectionPool;
+
 import java.sql.Statement;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 
 public class UserDataAccesor implements DataAccesorInterface {
@@ -51,10 +52,8 @@ public class UserDataAccesor implements DataAccesorInterface {
                 UserDatabaseInformation.USER_CONVERSATION_TABLE.value(), UserDatabaseInformation.ID_COLUMN.value(), id);
 
         ResultSet result;
+        Connection connection = ConnectionPool.getConnection();
         try {
-
-            Connection connection = DriverManager.getConnection(DatabseInformation.URL.value(),
-                    DatabseInformation.USER.value(), DatabseInformation.PASSWORD.value());
 
             Statement stat = connection.createStatement();
             String request = String.format(querry);
@@ -65,13 +64,13 @@ public class UserDataAccesor implements DataAccesorInterface {
                 conversations.add(result.getInt(1));
             }
 
-            connection.close();
         } catch (Exception e) {
             System.out.println(e);
 
         } finally {
 
         }
+        ConnectionPool.releaseConnection(connection);
 
         return conversations;
     }
@@ -84,10 +83,9 @@ public class UserDataAccesor implements DataAccesorInterface {
                 UserDatabaseInformation.ID_COLUMN.value(),
                 TABLENAME);
 
-        try {
+        Connection connection = ConnectionPool.getConnection();
 
-            Connection connection = DriverManager.getConnection(DatabseInformation.URL.value(),
-                    DatabseInformation.USER.value(), DatabseInformation.PASSWORD.value());
+        try {
 
             Statement stat = connection.createStatement();
             String request = String.format(querry);
@@ -96,13 +94,13 @@ public class UserDataAccesor implements DataAccesorInterface {
             while (result.next()) {
                 id = result.getInt(1);
             }
-            connection.close();
         } catch (Exception e) {
             System.out.println(e);
 
         } finally {
 
         }
+        ConnectionPool.releaseConnection(connection);
         return id;
     }
 
@@ -127,11 +125,8 @@ public class UserDataAccesor implements DataAccesorInterface {
         Hashtable<String, String> user_data = new Hashtable<String, String>();
 
         ResultSet result = null;
-
+        Connection connection = ConnectionPool.getConnection();
         try {
-
-            Connection connection = DriverManager.getConnection(DatabseInformation.URL.value(),
-                    DatabseInformation.USER.value(), DatabseInformation.PASSWORD.value());
 
             Statement stat = connection.createStatement();
             String request = String.format(querry);
@@ -139,13 +134,13 @@ public class UserDataAccesor implements DataAccesorInterface {
             result = stat.executeQuery(request);
             user_data = processResultToFullData(result);
 
-            connection.close();
         } catch (Exception e) {
             System.out.println(e);
 
         } finally {
 
         }
+        ConnectionPool.releaseConnection(connection);
         return user_data;
     }
 }
