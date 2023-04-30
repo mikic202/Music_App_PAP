@@ -42,4 +42,16 @@ public class ConnectionPool {
     public static int availableConnections() {
         return availableConnections.size();
     }
+
+    @Override
+    protected void finalize() throws Throwable {
+        // TODO Auto-generated method stub
+        for (var con : availableConnections) {
+            con.close();
+        }
+        for (var con : usedConnections) {
+            con.close();
+        }
+        System.out.println("Closing connections");
+    }
 }
