@@ -14,34 +14,29 @@ public class UserDataAccesor implements DataAccesorInterface {
     final static String TABLENAME = DatabseInformation.USER_TABLE.value();
 
     public static Hashtable<String, String> getData(int user_id) {
-
-        String query = String.format("Select * from %s where user_id='%d'", TABLENAME, user_id);
-
-        return getQuerryResult(query);
+        return getData(UserDatabaseInformation.ID_COLUMN.value(), user_id);
     }
 
     public static Hashtable<String, String> getData(String column_name, String column_value) {
 
-        String query = String.format("Select * from %s where %s='%s'", TABLENAME, column_name, column_value);
+        String prepared_statement = String.format("Select * from %s where %s=?", TABLENAME, column_name);
 
-        return getQuerryResult(query);
+        return getQuerryResult(prepared_statement, column_value);
     }
 
     public static Hashtable<String, String> getData(String column_name, int column_value) {
 
-        String query = String.format("Select * from %s where %s='%d'", TABLENAME, column_name, column_value);
+        String prepared_statement = String.format("Select * from %s where %s=?", TABLENAME, column_name);
 
-        return getQuerryResult(query);
+        return getQuerryResult(prepared_statement, column_value);
     }
 
     public static Hashtable<String, String> getDataWithEmail(String email) {
-        String query = String.format("Select * from %s where email='%s'", TABLENAME, email);
-        return getQuerryResult(query);
+        return getData(UserDatabaseInformation.EMAIL_COLUMN.value(), email);
     }
 
-    public static Hashtable<String, String> getDataWithName(String nickname) {
-        String query = String.format("Select * from %s where email='%s'", TABLENAME, nickname);
-        return getQuerryResult(query);
+    public static Hashtable<String, String> getDataWithName(String username) {
+        return getData(UserDatabaseInformation.USERNAME_COLUMN.value(), username);
     }
 
     public static ArrayList<Integer> getUserConversations(int id) {
@@ -121,24 +116,41 @@ public class UserDataAccesor implements DataAccesorInterface {
         return user_data;
     }
 
-    private static Hashtable<String, String> getQuerryResult(String querry) {
+    private static Hashtable<String, String> getQuerryResult(String prepared_statement, int value) {
         Hashtable<String, String> user_data = new Hashtable<String, String>();
 
         ResultSet result = null;
         Connection connection = ConnectionPool.getConnection();
         try {
-
-            Statement stat = connection.createStatement();
-            String request = String.format(querry);
-
-            result = stat.executeQuery(request);
+            var statement = connection.prepareStatement(prepared_statement);
+            connection.commit();
+            statement.setInt(1, value);
+            result = statement.executeQuery();
             user_data = processResultToFullData(result);
 
         } catch (Exception e) {
             System.out.println(e);
-
         } finally {
+        }
+        ConnectionPool.releaseConnection(connection);
+        return user_data;
+    }
 
+    private static Hashtable<String, String> getQuerryResult(String prepared_statement, String value) {
+        Hashtable<String, String> user_data = new Hashtable<String, String>();
+
+        ResultSet result = null;
+        Connection connection = ConnectionPool.getConnection();
+        try {
+            var statement = connection.prepareStatement(prepared_statement);
+            // connection.commit();
+            statement.setString(1, value);
+            result = statement.executeQuery();
+            user_data = processResultToFullData(result);
+
+        } catch (Exception e) {
+            System.out.println(e);
+        } finally {
         }
         ConnectionPool.releaseConnection(connection);
         return user_data;
