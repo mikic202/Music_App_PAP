@@ -139,7 +139,7 @@ public class UserDataAccesor implements DataAccesorInterface {
         Connection connection = ConnectionPool.getConnection();
         try {
             var statement = connection.prepareStatement(preparedStatement);
-            // connection.commit();
+            connection.commit();
             statement.setString(1, value);
             result = statement.executeQuery();
             userData = processResultToFullData(result);
