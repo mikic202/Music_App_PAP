@@ -5,7 +5,6 @@ import java.util.Hashtable;
 
 import server.ConnectionPool.ConnectionPool;
 
-import java.sql.Statement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 
@@ -13,22 +12,22 @@ public class UserDataAccesor implements DataAccesorInterface {
 
     final static String TABLENAME = DatabseInformation.USER_TABLE.value();
 
-    public static Hashtable<String, String> getData(int user_id) {
-        return getData(UserDatabaseInformation.ID_COLUMN.value(), user_id);
+    public static Hashtable<String, String> getData(int userId) {
+        return getData(UserDatabaseInformation.ID_COLUMN.value(), userId);
     }
 
-    public static Hashtable<String, String> getData(String column_name, String column_value) {
+    public static Hashtable<String, String> getData(String columnName, String columnValue) {
 
-        String prepared_statement = String.format("Select * from %s where %s=?", TABLENAME, column_name);
+        String preparedStatement = String.format("Select * from %s where %s=?", TABLENAME, columnName);
 
-        return getQuerryResult(prepared_statement, column_value);
+        return getQuerryResult(preparedStatement, columnValue);
     }
 
-    public static Hashtable<String, String> getData(String column_name, int column_value) {
+    public static Hashtable<String, String> getData(String columnName, int columnValue) {
 
-        String prepared_statement = String.format("Select * from %s where %s=?", TABLENAME, column_name);
+        String preparedStatement = String.format("Select * from %s where %s=?", TABLENAME, columnName);
 
-        return getQuerryResult(prepared_statement, column_value);
+        return getQuerryResult(preparedStatement, columnValue);
     }
 
     public static Hashtable<String, String> getDataWithEmail(String email) {
@@ -42,18 +41,17 @@ public class UserDataAccesor implements DataAccesorInterface {
     public static ArrayList<Integer> getUserConversations(int id) {
         ArrayList<Integer> conversations = new ArrayList<Integer>();
 
-        String querry = String.format("Select %s from %s where %s='%s'",
+        String preparedStatement = String.format("Select %s from %s where %s=?",
                 UserDatabaseInformation.CONVERSATION_ID_COLUMN.value(),
-                UserDatabaseInformation.USER_CONVERSATION_TABLE.value(), UserDatabaseInformation.ID_COLUMN.value(), id);
+                UserDatabaseInformation.USER_CONVERSATION_TABLE.value(), UserDatabaseInformation.ID_COLUMN.value());
 
         ResultSet result;
         Connection connection = ConnectionPool.getConnection();
         try {
 
-            Statement stat = connection.createStatement();
-            String request = String.format(querry);
-
-            result = stat.executeQuery(request);
+            var statement = connection.prepareStatement(preparedStatement);
+            statement.setInt(1, id);
+            result = statement.executeQuery();
 
             while (result.next()) {
                 conversations.add(result.getInt(1));
@@ -74,7 +72,7 @@ public class UserDataAccesor implements DataAccesorInterface {
         ResultSet result = null;
         int id = 0;
 
-        String querry = String.format("Select MAX(%s) from %s",
+        String preparedStatement = String.format("Select MAX(%s) from %s",
                 UserDatabaseInformation.ID_COLUMN.value(),
                 TABLENAME);
 
@@ -82,10 +80,8 @@ public class UserDataAccesor implements DataAccesorInterface {
 
         try {
 
-            Statement stat = connection.createStatement();
-            String request = String.format(querry);
-
-            result = stat.executeQuery(request);
+            var statement = connection.prepareStatement(preparedStatement);
+            result = statement.executeQuery();
             while (result.next()) {
                 id = result.getInt(1);
             }
@@ -100,59 +96,59 @@ public class UserDataAccesor implements DataAccesorInterface {
     }
 
     private static Hashtable<String, String> processResultToFullData(ResultSet result) {
-        Hashtable<String, String> user_data = new Hashtable<String, String>();
+        Hashtable<String, String> userData = new Hashtable<String, String>();
 
         try {
             while (result.next()) {
-                user_data.put("ID", result.getString(1));
-                user_data.put("username", result.getString(2));
-                user_data.put("email", result.getString(3));
-                user_data.put("password", result.getString(4));
+                userData.put("ID", result.getString(1));
+                userData.put("username", result.getString(2));
+                userData.put("email", result.getString(3));
+                userData.put("password", result.getString(4));
             }
         } catch (Exception e) {
             System.out.println(e);
         }
 
-        return user_data;
+        return userData;
     }
 
-    private static Hashtable<String, String> getQuerryResult(String prepared_statement, int value) {
-        Hashtable<String, String> user_data = new Hashtable<String, String>();
+    private static Hashtable<String, String> getQuerryResult(String preparedStatement, int value) {
+        Hashtable<String, String> userData = new Hashtable<String, String>();
 
         ResultSet result = null;
         Connection connection = ConnectionPool.getConnection();
         try {
-            var statement = connection.prepareStatement(prepared_statement);
+            var statement = connection.prepareStatement(preparedStatement);
             connection.commit();
             statement.setInt(1, value);
             result = statement.executeQuery();
-            user_data = processResultToFullData(result);
+            userData = processResultToFullData(result);
 
         } catch (Exception e) {
             System.out.println(e);
         } finally {
         }
         ConnectionPool.releaseConnection(connection);
-        return user_data;
+        return userData;
     }
 
-    private static Hashtable<String, String> getQuerryResult(String prepared_statement, String value) {
-        Hashtable<String, String> user_data = new Hashtable<String, String>();
+    private static Hashtable<String, String> getQuerryResult(String preparedStatement, String value) {
+        Hashtable<String, String> userData = new Hashtable<String, String>();
 
         ResultSet result = null;
         Connection connection = ConnectionPool.getConnection();
         try {
-            var statement = connection.prepareStatement(prepared_statement);
+            var statement = connection.prepareStatement(preparedStatement);
             // connection.commit();
             statement.setString(1, value);
             result = statement.executeQuery();
-            user_data = processResultToFullData(result);
+            userData = processResultToFullData(result);
 
         } catch (Exception e) {
             System.out.println(e);
         } finally {
         }
         ConnectionPool.releaseConnection(connection);
-        return user_data;
+        return userData;
     }
 }
