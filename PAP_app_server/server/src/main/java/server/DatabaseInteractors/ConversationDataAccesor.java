@@ -5,9 +5,7 @@ import java.util.Hashtable;
 
 import server.ConnectionPool.ConnectionPool;
 
-import java.sql.Statement;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 
 public class ConversationDataAccesor implements DataAccesorInterface {
