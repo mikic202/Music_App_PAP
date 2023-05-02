@@ -17,6 +17,7 @@ public class ConnectionPool {
             for (int i = 0; i < MAX_POOL_SIZE; i++) {
                 availableConnections.add(DriverManager.getConnection(DatabseInformation.URL.value(),
                         DatabseInformation.USER.value(), DatabseInformation.PASSWORD.value()));
+                availableConnections.get(i).setAutoCommit(false);
             }
         } catch (SQLException e) {
             System.out.println(e);
