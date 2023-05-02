@@ -39,7 +39,7 @@ public class RegisterScreen extends javax.swing.JFrame {
                         return;
                 }
 
-                JSONObject response = logging_accesor.send_user_register_data(Email.getText(), Username.getText(),
+                JSONObject response = logging_accesor.sendUserRegisterData(Email.getText(), Username.getText(),
                                 FirstPassword.getPassword(),
                                 ConfirmPassword.getPassword());
                 if (response.getBoolean("outcome")) {

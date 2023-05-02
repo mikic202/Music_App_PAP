@@ -1,11 +1,9 @@
 package client.login_and_account_accessors;
 
-import java.util.HashMap;
-
 import org.json.JSONObject;
 
 public class LoginRequestCreator {
-	public static JSONObject create_send_login_request(String email, char[] password) {
+	public static JSONObject createSendLoginRequest(String email, char[] password) {
 		var value = new JSONObject();
 		value.put("email", email);
 		value.put("password", new String(password));
@@ -15,7 +13,7 @@ public class LoginRequestCreator {
 		return data;
 	}
 
-	public static JSONObject create_send_registration_request(String email, String nickname, char[] password,
+	public static JSONObject createSendRegistrationRequest(String email, String nickname, char[] password,
 			char[] confirm_password) {
 		var value = new JSONObject();
 		value.put("email", email);
@@ -28,7 +26,7 @@ public class LoginRequestCreator {
 		return data;
 	}
 
-	public static JSONObject create_change_password_request(String nickname, char[] old_password,
+	public static JSONObject createChangePasswordRequest(String nickname, char[] old_password,
 			char[] confirm_old_password, char[] new_password, char[] confirm_new_password) {
 		var value = new JSONObject();
 		value.put("nickname", nickname);
