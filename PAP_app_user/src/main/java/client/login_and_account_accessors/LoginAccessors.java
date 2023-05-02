@@ -30,6 +30,12 @@ public class LoginAccessors {
         return response;
     }
 
+    public JSONObject sendRetrievePassword(String email) {
+        JSONObject procesed_request = LoginRequestCreator.createRetrievePassword(email);
+        JSONObject response = server_connector.send_request(procesed_request);
+        return response;
+    }
+
     private ServerConnector server_connector;
 
 }
