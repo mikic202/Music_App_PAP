@@ -2,10 +2,12 @@ package server.Login;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Properties;
 import java.util.Set;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import server.DatabaseInteractors.UserDataAccesor;
 import server.DatabaseInteractors.UserDataSetter;
 import server.DatabaseInteractors.UserDatabaseInformation;
@@ -120,7 +122,6 @@ public class Login {
 
     private static JSONObject _changeEmail(JSONObject request) {
         String email = request.getString("email");
-        ;
         JSONObject result = new JSONObject();
         Hashtable<String, String> user_info = UserDataAccesor.getData(request.getInt("user_id"));
         if (user_info.isEmpty()) {
@@ -137,6 +138,51 @@ public class Login {
         response.put("value", result);
         response.put("type", LoginRequestTypes.SEND_CHANGE_EMAIL.value());
         return response;
+    }
+
+    private static JSONObject _retrievePassword(JSONObject request) {
+        JSONObject result = new JSONObject();
+        Hashtable<String, String> user_info = UserDataAccesor.getData(request.getInt("user_id"));
+        if (user_info.isEmpty()) {
+            result.put("outcome", false);
+            JSONObject response = new JSONObject();
+            response.put("value", result);
+            response.put("type", LoginRequestTypes.SEND_CHANGE_PASSWORD.value());
+            return response;
+        }
+        String email = request.getString("email");
+        String message = "Please DO NOT responde to this email\nNew Password: ";
+        String newPassword = _generateRandomString();
+        message += newPassword;
+        message += "\n Please reset the Password after logging in";
+        user_info.put("password", newPassword);
+        UserDataSetter.setData(request.getInt("user_id"), user_info);
+        _sendMessage(email, message);
+        result.put("outcome", true);
+        JSONObject response = new JSONObject();
+        response.put("value", result);
+        response.put("type", LoginRequestTypes.SEND_CHANGE_PASSWORD.value());
+        return response;
+    }
+
+    private static void _sendMessage(String email, String message) {
+        // TODO add sending email
+
+    }
+
+    private static String _generateRandomString() {
+        int charAmount = (int) (Math.random() * (20 - 10 + 1) + 10);
+        String alphabet = "abcdefghijklmnoprstuwxyz";
+        String randomString = "";
+        for (int i = 0; i < charAmount; i++) {
+            int nextChar = (int) (Math.random() * (alphabet.length()));
+            char newChar = alphabet.charAt(nextChar);
+            if (Math.random() > 0.5) {
+                newChar = Character.toUpperCase(newChar);
+            }
+            randomString += newChar;
+        }
+        return randomString;
     }
 
     private static JSONObject _generateResponse(LoginRequestTypes req_type, JSONObject request) {
@@ -156,6 +202,9 @@ public class Login {
                 break;
             case SEND_CHANGE_NICKNAME:
                 response = _changeUsername(request);
+                break;
+            case RETRIEVE_PASSWORD:
+                response = _retrievePassword(request);
                 break;
         }
         return response;
