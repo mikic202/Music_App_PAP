@@ -34,7 +34,7 @@ public class AccountSettings extends javax.swing.JFrame {
         }
 
         private void change_username() {
-                JSONObject response = account_accesor.send_user_account_nickaname_data(jTextField2.getText(),
+                JSONObject response = account_accesor.sendUserAccountNickanameData(jTextField2.getText(),
                                 user_info.getInt("user_id"));
                 if (response.getJSONObject("value").getBoolean("outcome")) {
                         user_info.put("username", jTextField2.getText());
@@ -44,7 +44,7 @@ public class AccountSettings extends javax.swing.JFrame {
         }
 
         protected void change_email() {
-                JSONObject response = account_accesor.send_user_account_email_data(jTextField1.getText(),
+                JSONObject response = account_accesor.sendUserAccountEmailData(jTextField1.getText(),
                                 user_info.getInt("user_id"));
                 if (response.getJSONObject("value").getBoolean("outcome")) {
                         user_info.put("email", jTextField1.getText());
@@ -57,7 +57,7 @@ public class AccountSettings extends javax.swing.JFrame {
                 if (String.valueOf(jPasswordField2.getPassword())
                                 .equals(String.valueOf(jPasswordField3.getPassword()))) {
                         JSONObject response = account_accesor
-                                        .send_user_account_new_password_data(jPasswordField2.getPassword(),
+                                        .sendUserAccountNewPasswordData(jPasswordField2.getPassword(),
                                                         jPasswordField1.getPassword(), user_info.getInt("user_id"));
 
                 } else {
