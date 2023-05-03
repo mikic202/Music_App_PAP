@@ -23,35 +23,36 @@ Aplikacja Desktopowa do wspólnego odtwarzania muzyki.
 Jest tu spora liczba funkcjonalności którą chcielibyśmy zaimplementować. Trudno nam określić ile dana funkcjonalność zajmie do zaimplementowania i czy uda nam się wszystkie z tej listy zaimplementować
 <h4>Konto</h4>
 
-- tworzenie konta
-- logowanie się z dowolnego komputer
-- zmiana hasła
-- dodawanie awatara
-- odzyskiwanie hasła
-- zmiana nazwy
-- zmiana kolorystyki aplikacji (przechowywane na danym urządzeniu)(np tryb jasny/ciemny)
+- tworzenie konta[DONE]
+- logowanie się z dowolnego komputer[DONE]
+- zmiana hasła[DONE]
+- dodawanie awatara[TODO]
+- odzyskiwanie hasła[DONE/sortof]
+- zmiana nazwy[DONE]
+- zmiana kolorystyki aplikacji (przechowywane na danym urządzeniu)(np tryb jasny/ciemny)[TODO]
 <h4>Interakcja</h4>
 
 - dodawanie znajomych/obserwowanie osób
-- wysyłanie wiadomości tekstowych
-- tworzenie grup
-- dodawanie osób do grup
-- kody do grup (jak na teamsach)
+- wysyłanie wiadomości tekstowych[DONE]
+- tworzenie grup[DONE]
+- dodawanie osób do grup[DONE]
+- kody do grup (jak na teamsach)[TODO]
 - słuchanie muzyki dodanej przez innych użytkowników
 - możliwość sprawdzenia ilu użytkowników odtworzyło daną muzykę
 - historia przesłuchanej muzyki (100)
 
-- zsynchronizowane odtwarzanie muzyki
-- wspólne tworzenie i modyfikowaniem muzyki (można rozbić na więcej funkcjonalności)
+- zsynchronizowane odtwarzanie muzyki[INPROGRES]
+- wspólne tworzenie i modyfikowaniem muzyki (można rozbić na więcej funkcjonalności)[TODO]
 
-- wgrywanie muzyki
-- usuwanie muzyki na stałe
+- wgrywanie muzyki[DONE]
+- usuwanie muzyki na stałe[TODO]
 - różne poziomy dostępu do muzyki dla innych użytkownikóa (jak filmy na youtube)
-- przechowywanie muzyki
+- przechowywanie muzyki[DONE]
 - głosowanie nad następnym filmem/muzyką
 - odtwarzanie ze spotifya(na zasadzie przeglądarki)
 - odtwarzanie z youtuba (jak wyżej)
-- sortowanie muzyki na typy
+- sortowanie muzyki na typy[TODO]
+- przegladanie dodanej muzyki[TODO]
 <h4>Admin</h4>
 
 - konto admina
