@@ -10,8 +10,8 @@ public class ChatAccesors {
         this.server_connector = server_connector;
     }
 
-    public JSONObject sendMessage(int conversation_id, int sender_id, String text) {
-        JSONObject procesed_request = RequestCreator.createSendMsgRequest(conversation_id, sender_id, text);
+    public JSONObject sendMessage(int conversationId, int sender_id, String text) {
+        JSONObject procesed_request = RequestCreator.createSendMsgRequest(conversationId, sender_id, text);
         JSONObject response = server_connector.send_request(procesed_request);
         return response;
     }
@@ -34,8 +34,8 @@ public class ChatAccesors {
         return users_ids;
     }
 
-    public JSONObject getMessagesInConversation(int conversation_id) {
-        JSONObject procesed_request = RequestCreator.createGetMessagesRequest(conversation_id);
+    public JSONObject getMessagesInConversation(int conversationId) {
+        JSONObject procesed_request = RequestCreator.createGetMessagesRequest(conversationId);
         JSONObject response = server_connector.send_request(procesed_request);
         return response;
     }
@@ -46,9 +46,9 @@ public class ChatAccesors {
         return response;
     }
 
-    public JSONObject addUsersToConversation(int conversation_id, ArrayList<String> usernames) {
+    public JSONObject addUsersToConversation(int conversationId, ArrayList<String> usernames) {
         ArrayList<Integer> users_ids = getUsersIds(usernames);
-        JSONObject procesed_request = RequestCreator.createAddUserToConversationRequest(conversation_id,
+        JSONObject procesed_request = RequestCreator.createAddUserToConversationRequest(conversationId,
                 users_ids);
         JSONObject response = server_connector.send_request(procesed_request);
         return response;
@@ -66,14 +66,20 @@ public class ChatAccesors {
         return response;
     }
 
-    public JSONObject getUsersInConversation(int conversation_id) {
-        JSONObject request = RequestCreator.getUsersInConversation(conversation_id);
+    public JSONObject getUsersInConversation(int conversationId) {
+        JSONObject request = RequestCreator.getUsersInConversation(conversationId);
         JSONObject response = server_connector.send_request(request);
         return response;
     }
 
     public JSONObject getNewMessagesInConverastion(int conversation, Integer latest_message) {
         JSONObject request = RequestCreator.createGetNewMessagesInConversation(conversation, latest_message);
+        JSONObject response = server_connector.send_request(request);
+        return response;
+    }
+
+    public JSONObject sendImage(int conversationId, int senderId, byte[] image, String format) {
+        JSONObject request = RequestCreator.createSendImageRequest(conversationId, senderId, image, format);
         JSONObject response = server_connector.send_request(request);
         return response;
     }

@@ -88,6 +88,7 @@ public class MessageDataAccesor implements DataAccesorInterface {
                 msg_data.put("conversation", result.getString(3));
                 msg_data.put("send_date", result.getString(4));
                 msg_data.put("text", result.getString(5));
+                msg_data.put("is_image", result.getString(6));
                 messages_data.add(msg_data);
             }
 
@@ -111,6 +112,7 @@ public class MessageDataAccesor implements DataAccesorInterface {
                 umessage_data.put("conversation", result.getString(3));
                 umessage_data.put("send_date", result.getString(4));
                 umessage_data.put("text", result.getString(5));
+                umessage_data.put("is_image", result.getString(6));
             }
         } catch (Exception e) {
             System.out.println(e);
