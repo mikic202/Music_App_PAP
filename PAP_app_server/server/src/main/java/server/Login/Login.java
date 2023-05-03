@@ -12,6 +12,13 @@ import server.DatabaseInteractors.UserDataAccesor;
 import server.DatabaseInteractors.UserDataSetter;
 import server.DatabaseInteractors.UserDatabaseInformation;
 
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+
 public class Login {
     public static JSONObject procesRequests(LoginRequestTypes req_type, JSONObject request) {
         return _generateResponse(req_type, request);
@@ -165,8 +172,29 @@ public class Login {
         return response;
     }
 
-    private static void _sendMessage(String email, String message) {
+    private static void _sendMessage(String email, String messageToSend) {
         // TODO add sending email
+        Properties properties = System.getProperties();
+        properties.setProperty("mail.smtp.host", "localhost");
+        Session session = Session.getDefaultInstance(properties);
+        try {
+            MimeMessage message = new MimeMessage(session);
+
+            message.setFrom(new InternetAddress("retrieve_password@gmail.com"));
+
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
+
+            message.setSubject("New Password");
+
+            // Now set the actual message
+            message.setText(messageToSend);
+
+            // Send message
+            Transport.send(message);
+            System.out.println("Sent message successfully....");
+        } catch (MessagingException mex) {
+            mex.printStackTrace();
+        }
 
     }
 
