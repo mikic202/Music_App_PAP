@@ -3,9 +3,9 @@ package server.DatabaseInteractors;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
-import java.sql.Statement;
+import server.ConnectionPool.ConnectionPool;
+
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 
 public class ConversationDataAccesor implements DataAccesorInterface {
@@ -16,42 +16,39 @@ public class ConversationDataAccesor implements DataAccesorInterface {
     }
 
     public static Hashtable<String, String> getData(String column_name, String column_value) {
-        String querry = String.format("Select * from %s where %s='%s'", TABLENAME, column_name, column_value);
-        return getQuerryResult(querry);
+        String preparedStatement = String.format("Select * from %s where %s=?", TABLENAME, column_name);
+        return getQuerryResult(preparedStatement, column_value);
     }
 
     public static Hashtable<String, String> getData(String column_name, int column_value) {
-        return getData(column_name, String.format("%d", column_value));
+        String preparedStatement = String.format("Select * from %s where %s=?", TABLENAME, column_name);
+        return getQuerryResult(preparedStatement, column_value);
     }
 
     public static ArrayList<Integer> getUsersInConversation(int conversation_id) {
         ArrayList<Integer> users = new ArrayList<Integer>();
         ResultSet result = null;
 
-        String querry = String.format("Select %s from %s where %s = '%s'",
+        String preparedStatement = String.format("Select %s from %s where %s = ?",
                 ConversationDatabsaeInformation.USER_COLUMN.value(),
                 UserDatabaseInformation.USER_CONVERSATION_TABLE.value(),
-                UserDatabaseInformation.CONVERSATION_ID_COLUMN.value(), conversation_id);
-
+                UserDatabaseInformation.CONVERSATION_ID_COLUMN.value());
+        Connection connection = ConnectionPool.getConnection();
         try {
 
-            Connection connection = DriverManager.getConnection(DatabseInformation.URL.value(),
-                    DatabseInformation.USER.value(), DatabseInformation.PASSWORD.value());
-
-            Statement stat = connection.createStatement();
-            String request = String.format(querry);
-
-            result = stat.executeQuery(request);
+            var statement = connection.prepareStatement(preparedStatement);
+            statement.setInt(1, conversation_id);
+            result = statement.executeQuery();
             while (result.next()) {
                 users.add(result.getInt(1));
             }
-            connection.close();
         } catch (Exception e) {
             System.out.println(e);
 
         } finally {
 
         }
+        ConnectionPool.releaseConnection(connection);
         return users;
     }
 
@@ -59,30 +56,26 @@ public class ConversationDataAccesor implements DataAccesorInterface {
         ArrayList<Integer> messages = new ArrayList<Integer>();
         ResultSet result = null;
 
-        String querry = String.format("Select %s from %s where %s = '%s'",
+        String preparedStatement = String.format("Select %s from %s where %s = ?",
                 MessagesDatabaseInformation.ID_COLUMN.value(),
                 MessagesDatabaseInformation.MESSAGES_TABLE.value(),
-                MessagesDatabaseInformation.CONVERSATION_COLUMN.value(), conversation_id);
-
+                MessagesDatabaseInformation.CONVERSATION_COLUMN.value());
+        Connection connection = ConnectionPool.getConnection();
         try {
 
-            Connection connection = DriverManager.getConnection(DatabseInformation.URL.value(),
-                    DatabseInformation.USER.value(), DatabseInformation.PASSWORD.value());
-
-            Statement stat = connection.createStatement();
-            String request = String.format(querry);
-
-            result = stat.executeQuery(request);
+            var statement = connection.prepareStatement(preparedStatement);
+            statement.setInt(1, conversation_id);
+            result = statement.executeQuery();
             while (result.next()) {
                 messages.add(result.getInt(1));
             }
-            connection.close();
         } catch (Exception e) {
             System.out.println(e);
 
         } finally {
 
         }
+        ConnectionPool.releaseConnection(connection);
         return messages;
     }
 
@@ -90,29 +83,23 @@ public class ConversationDataAccesor implements DataAccesorInterface {
         ResultSet result = null;
         int id = 0;
 
-        String querry = String.format("Select MAX(%s) from %s",
+        String preparedStatement = String.format("Select MAX(%s) from %s",
                 ConversationDatabsaeInformation.ID_COLUMN.value(),
                 TABLENAME);
-
+        Connection connection = ConnectionPool.getConnection();
         try {
-
-            Connection connection = DriverManager.getConnection(DatabseInformation.URL.value(),
-                    DatabseInformation.USER.value(), DatabseInformation.PASSWORD.value());
-
-            Statement stat = connection.createStatement();
-            String request = String.format(querry);
-
-            result = stat.executeQuery(request);
+            var statement = connection.prepareStatement(preparedStatement);
+            result = statement.executeQuery();
             while (result.next()) {
                 id = result.getInt(1);
             }
-            connection.close();
         } catch (Exception e) {
             System.out.println(e);
 
         } finally {
 
         }
+        ConnectionPool.releaseConnection(connection);
         return id;
     }
 
@@ -132,29 +119,43 @@ public class ConversationDataAccesor implements DataAccesorInterface {
         return umessage_data;
     }
 
-    protected static Hashtable<String, String> getQuerryResult(String querry) {
-        Hashtable<String, String> umessage_data = new Hashtable<String, String>();
+    private static Hashtable<String, String> getQuerryResult(String preparedStatement, int value) {
+        Hashtable<String, String> userData = new Hashtable<String, String>();
 
         ResultSet result = null;
-
+        Connection connection = ConnectionPool.getConnection();
         try {
+            var statement = connection.prepareStatement(preparedStatement);
+            connection.commit();
+            statement.setInt(1, value);
+            result = statement.executeQuery();
+            userData = processResultToFullData(result);
 
-            Connection connection = DriverManager.getConnection(DatabseInformation.URL.value(),
-                    DatabseInformation.USER.value(), DatabseInformation.PASSWORD.value());
-
-            Statement stat = connection.createStatement();
-            String request = String.format(querry);
-
-            result = stat.executeQuery(request);
-            umessage_data = processResultToFullData(result);
-
-            connection.close();
         } catch (Exception e) {
             System.out.println(e);
-
         } finally {
-
         }
-        return umessage_data;
+        ConnectionPool.releaseConnection(connection);
+        return userData;
+    }
+
+    private static Hashtable<String, String> getQuerryResult(String preparedStatement, String value) {
+        Hashtable<String, String> userData = new Hashtable<String, String>();
+
+        ResultSet result = null;
+        Connection connection = ConnectionPool.getConnection();
+        try {
+            var statement = connection.prepareStatement(preparedStatement);
+            connection.commit();
+            statement.setString(1, value);
+            result = statement.executeQuery();
+            userData = processResultToFullData(result);
+
+        } catch (Exception e) {
+            System.out.println(e);
+        } finally {
+        }
+        ConnectionPool.releaseConnection(connection);
+        return userData;
     }
 }
