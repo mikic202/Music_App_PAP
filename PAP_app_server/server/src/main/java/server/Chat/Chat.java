@@ -54,6 +54,11 @@ public class Chat {
     }
 
     private static JSONObject _sendMessage(JSONObject request) {
+        int added_msg = _putMessageInDatabase(request);
+        return _convertResponseToJson(MessageDataAccesor.getData(added_msg), RequestTypes.GET_MESSAGES);
+    }
+
+    public static int _putMessageInDatabase(JSONObject request) {
         Hashtable<String, String> data = new Hashtable<>();
         data.put("sender", Integer.toString(request.getInt("sender_id")));
         data.put("conversation", Integer.toString(request.getInt("conversation_id")));
@@ -61,9 +66,7 @@ public class Chat {
         Timestamp timestamp = new Timestamp(date.getTime());
         data.put("send_date", timestamp.toString());
         data.put("text", request.getString("text"));
-        ;
-        int added_msg = MessageDataSetter.addData(data);
-        return _convertResponseToJson(MessageDataAccesor.getData(added_msg), RequestTypes.GET_MESSAGES);
+        return MessageDataSetter.addData(data);
     }
 
     private static JSONObject _createConversation(JSONObject request) {
@@ -180,6 +183,14 @@ public class Chat {
         return _convertResponseToJson(messages, RequestTypes.getLatestMessage);
     }
 
+    private static JSONObject _processSendImage(JSONObject request) {
+        // TODO add new field to sent back message and test it
+        request.put("text", (request.getJSONArray("image")).toString());
+        int newMessage = _putMessageInDatabase(request);
+        MessageDataSetter.setIsImage(newMessage);
+        return _convertResponseToJson(MessageDataAccesor.getData(newMessage), RequestTypes.SEND_IMAGE);
+    }
+
     private static JSONObject _generateResponse(RequestTypes req_type, JSONObject request) {
         JSONObject response = new JSONObject();
         switch (req_type) {
@@ -195,17 +206,20 @@ public class Chat {
             case CREATE_CONVERSATION:
                 response = _createConversation(request);
                 break;
-            case addUserToConversation:
+            case ADD_USER_TO_CONVERSATION:
                 response = _processAddUsersToConversation(request);
                 break;
             case USER_INFO:
                 response = _checkUsersInfo(request);
                 break;
-            case getUsersInConversation:
+            case GET_USERS_IN_CONVERSATION:
                 response = _getUsersInConversation(request);
                 break;
-            case getLatestMessage:
+            case GET_LATEST_MESSAGE:
                 response = _getNewMessagessInConversation(request);
+                break;
+            case SEND_IMAGE:
+                response = _processSendImage(request);
                 break;
 
         }

@@ -73,4 +73,29 @@ public class MessageDataSetter implements DataSetterInterface {
         return added_id;
     }
 
+    static public void setIsImage(int messageId) {
+        Connection connection = ConnectionPool.getConnection();
+        String preparedStatement = String.format(
+                "update %s set %s=? where %s=?",
+                MessagesDatabaseInformation.MESSAGES_TABLE.value(),
+                MessagesDatabaseInformation.IS_IMAGE_COLUMN.value(),
+                MessagesDatabaseInformation.ID_COLUMN.value());
+        try {
+
+            var statement = connection.prepareStatement(preparedStatement);
+            statement.setInt(2, messageId);
+            statement.executeUpdate();
+            connection.commit();
+
+        } catch (
+
+        Exception e) {
+            System.out.println(e);
+
+        } finally {
+
+        }
+        ConnectionPool.releaseConnection(connection);
+    }
+
 }
