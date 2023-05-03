@@ -95,4 +95,16 @@ public class RequestCreator {
                 request.put("value", value);
                 return request;
         }
+
+        public static JSONObject createSendImageRequest(int conversationId, int senderId, byte[] image, String format) {
+                JSONObject value = new JSONObject();
+                value.put("conversation_id", conversationId);
+                value.put("user_id", senderId);
+                value.put("image", image);
+                value.put("format", format);
+                JSONObject request = new JSONObject();
+                request.put("value", value);
+                request.put("type", RequestTypes.SEND_IMAGE.value());
+                return request;
+        }
 }
