@@ -99,7 +99,7 @@ public class RequestCreator {
         public static JSONObject createSendImageRequest(int conversationId, int senderId, byte[] image, String format) {
                 JSONObject value = new JSONObject();
                 value.put("conversation_id", conversationId);
-                value.put("user_id", senderId);
+                value.put("sender_id", senderId);
                 value.put("image", image);
                 value.put("format", format);
                 JSONObject request = new JSONObject();

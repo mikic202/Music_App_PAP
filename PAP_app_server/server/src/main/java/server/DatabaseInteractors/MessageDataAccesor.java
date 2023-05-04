@@ -34,19 +34,21 @@ public class MessageDataAccesor implements DataAccesorInterface {
         return getData(message_id).get("text");
     }
 
-    public static int getLatestMessage() {
+    public static int getLatestMessage(int conversationId) {
         ResultSet result = null;
         int id = 0;
 
-        String preparedStatement = String.format("Select MAX(%s) from %s",
-                ConversationDatabsaeInformation.ID_COLUMN.value(),
-                TABLENAME);
+        String preparedStatement = String.format("Select MAX(%s) from %s where %s=?",
+                MessagesDatabaseInformation.ID_COLUMN.value(),
+                TABLENAME,
+                MessagesDatabaseInformation.SENDER_COLUMN.value());
 
         Connection connection = ConnectionPool.getConnection();
 
         try {
 
             var statement = connection.prepareStatement(preparedStatement);
+            statement.setInt(1, conversationId);
             result = statement.executeQuery();
             while (result.next()) {
                 id = result.getInt(1);
