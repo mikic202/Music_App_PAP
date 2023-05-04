@@ -119,7 +119,7 @@ public class Chat {
         ConversationDataSetter.setData(conversation_id, previous_data);
         Hashtable<String, String> outcome = new Hashtable<>();
         outcome.put("outcome", "true");
-        return _convertResponseToJson(outcome, RequestTypes.addUserToConversation);
+        return _convertResponseToJson(outcome, RequestTypes.ADD_USER_TO_CONVERSATION);
     }
 
     private static JSONObject _convertResponseToJson(Hashtable<String, String> response, RequestTypes req_type) {
@@ -167,7 +167,7 @@ public class Chat {
     private static JSONObject _getUsersInConversation(JSONObject request) {
         ArrayList<Integer> users = ConversationDataAccesor.getUsersInConversation(request.getInt("conversation_id"));
         JSONObject json_response = new JSONObject();
-        json_response.put("type", RequestTypes.getUsersInConversation.value());
+        json_response.put("type", RequestTypes.GET_USERS_CONVERSATIONS.value());
         JSONArray json_users = new JSONArray();
         for (Integer user : users) {
             json_users.put(user);
@@ -180,13 +180,14 @@ public class Chat {
         ArrayList<Hashtable<String, String>> messages = MessageDataAccesor
                 .getMessagesOlderThanGiven(request.getInt("latest_message"), request.getInt("conversation_id"));
         JSONObject json_response = new JSONObject();
-        return _convertResponseToJson(messages, RequestTypes.getLatestMessage);
+        return _convertResponseToJson(messages, RequestTypes.GET_LATEST_MESSAGE);
     }
 
     private static JSONObject _processSendImage(JSONObject request) {
         // TODO add new field to sent back message and test it
         request.put("text", (request.getJSONArray("image")).toString());
         int newMessage = _putMessageInDatabase(request);
+
         MessageDataSetter.setIsImage(newMessage);
         return _convertResponseToJson(MessageDataAccesor.getData(newMessage), RequestTypes.SEND_IMAGE);
     }

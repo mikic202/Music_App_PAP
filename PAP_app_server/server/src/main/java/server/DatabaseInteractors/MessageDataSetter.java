@@ -61,7 +61,7 @@ public class MessageDataSetter implements DataSetterInterface {
             statement.setString(4, data.get("text"));
             statement.executeUpdate();
             connection.commit();
-            added_id = MessageDataAccesor.getLatestMessage();
+            added_id = MessageDataAccesor.getLatestMessage(Integer.parseInt(data.get("conversation")));
 
         } catch (Exception e) {
             System.out.println(e);
@@ -83,6 +83,7 @@ public class MessageDataSetter implements DataSetterInterface {
         try {
 
             var statement = connection.prepareStatement(preparedStatement);
+            statement.setBoolean(1, true);
             statement.setInt(2, messageId);
             statement.executeUpdate();
             connection.commit();
