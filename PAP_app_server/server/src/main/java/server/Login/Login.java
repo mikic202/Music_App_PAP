@@ -14,6 +14,7 @@ import server.DatabaseInteractors.UserDatabaseInformation;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
@@ -172,24 +173,38 @@ public class Login {
         return response;
     }
 
-    private static void _sendMessage(String email, String messageToSend) {
-        // TODO add sending email
+    public static void _sendMessage(String email, String messageToSend) {
+        String from = "123.pap.app.verif.123@gmail.com";
+
+        String host = "smtp.gmail.com";
+
         Properties properties = System.getProperties();
-        properties.setProperty("mail.smtp.host", "localhost");
-        Session session = Session.getDefaultInstance(properties);
+
+        properties.put("mail.smtp.host", host);
+        properties.put("mail.smtp.port", "465");
+        properties.put("mail.smtp.ssl.enable", "true");
+        properties.put("mail.smtp.auth", "true");
+
+        Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
+
+            protected PasswordAuthentication getPasswordAuthentication() {
+
+                return new PasswordAuthentication(from, "wvdhgxvuqyhgccxe");
+            }
+        });
+        session.setDebug(true);
         try {
             MimeMessage message = new MimeMessage(session);
 
-            message.setFrom(new InternetAddress("retrieve_password@gmail.com"));
+            message.setFrom(new InternetAddress(from));
 
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
 
-            message.setSubject("New Password");
+            message.setSubject("Password retrieving");
 
-            // Now set the actual message
             message.setText(messageToSend);
 
-            // Send message
+            System.out.println("sending...");
             Transport.send(message);
             System.out.println("Sent message successfully....");
         } catch (MessagingException mex) {
