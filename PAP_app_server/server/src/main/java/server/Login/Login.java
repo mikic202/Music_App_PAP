@@ -158,14 +158,17 @@ public class Login {
             response.put("type", LoginRequestTypes.SEND_CHANGE_PASSWORD.value());
             return response;
         }
-        String email = request.getString("email");
-        String message = "Please DO NOT responde to this email\nNew Password: ";
+        final String email = request.getString("email");
         String newPassword = _generateRandomString();
-        message += newPassword;
-        message += "\n Please reset the Password after logging in";
+        final String message = "Please DO NOT responde to this email\nNew Password: " + newPassword
+                + "\n Please reset the Password after logging in";
         user_info.put("password", newPassword);
         UserDataSetter.setData(request.getInt("user_id"), user_info);
-        _sendMessage(email, message);
+        new Thread(new Runnable() {
+            public void run() {
+                _sendMessage(email, message);
+            }
+        });
         result.put("outcome", true);
         JSONObject response = new JSONObject();
         response.put("value", result);
@@ -195,15 +198,10 @@ public class Login {
         session.setDebug(true);
         try {
             MimeMessage message = new MimeMessage(session);
-
             message.setFrom(new InternetAddress(from));
-
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
-
             message.setSubject("Password retrieving");
-
             message.setText(messageToSend);
-
             System.out.println("sending...");
             Transport.send(message);
             System.out.println("Sent message successfully....");
