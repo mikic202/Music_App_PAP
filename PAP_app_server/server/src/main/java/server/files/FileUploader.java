@@ -64,11 +64,11 @@ public class FileUploader implements Runnable {
 				BufferedInputStream bufferedInput = new BufferedInputStream(input);
 				DigestInputStream digestInput = new DigestInputStream(bufferedInput, digest);
 				try {
-					while(digestInput.read() != -1);
+					while (digestInput.read() != -1)
+						;
 				} catch (IOException e) {
 					e.printStackTrace();
-				}
-				finally {
+				} finally {
 					try {
 						bufferedInput.close();
 					} catch (IOException e) {
@@ -82,7 +82,7 @@ public class FileUploader implements Runnable {
 				fileInfo.put("file_name", files.get(uuid).file_name);
 				fileInfo.put("user_id", files.get(uuid).user_id);
 				fileInfo.put("file_path", newPath);
-				FileDataSetter.add_data(fileInfo);
+				FileDataSetter.addData(fileInfo);
 			} catch (FileNotFoundException e) {
 				return false;
 			} catch (NoSuchAlgorithmException e) {
@@ -127,12 +127,12 @@ public class FileUploader implements Runnable {
 			}
 			synchronized (waitingSockets) {
 				ListIterator<Socket> itWaiting = Main.uploader.waitingSockets.listIterator();
-				while(itWaiting.hasNext()) {
+				while (itWaiting.hasNext()) {
 					Socket waitingSocket = itWaiting.next();
 					try {
-						if(waitingSocket.getInputStream().available() >= 36) {
+						if (waitingSocket.getInputStream().available() >= 36) {
 							String uuid = new String(waitingSocket.getInputStream().readNBytes(36));
-							if(files.containsKey(uuid)) {
+							if (files.containsKey(uuid)) {
 								uploadingSockets.add(new UploadingSocket(waitingSocket, uuid));
 							}
 							itWaiting.remove();
@@ -160,7 +160,7 @@ class UploadingSocket {
 	public String uuid;
 	InputStream in;
 	OutputStream out;
-	byte[] buffer = new byte[1024*1024];
+	byte[] buffer = new byte[1024 * 1024];
 	int buffSize = 0;
 	int messageSize = -1;
 	ByteBuffer byteBuffer = ByteBuffer.allocate(4);
@@ -173,26 +173,25 @@ class UploadingSocket {
 	}
 
 	public boolean hasMessage() throws IOException {
-		if(messageSize == buffSize) {
+		if (messageSize == buffSize) {
 			return true;
 		}
-		if(messageSize == -1) {
-			if(in.available() >= 4) {
+		if (messageSize == -1) {
+			if (in.available() >= 4) {
 				byteBuffer.put(0, in.readNBytes(4));
 				messageSize = byteBuffer.getInt(0);
-			}
-			else {
+			} else {
 				return false;
 			}
 		}
-		if(in.available() > 0) {
+		if (in.available() > 0) {
 			int toRead = messageSize - buffSize;
 			int available = in.available();
-			if(toRead > available) {
+			if (toRead > available) {
 				toRead = available;
 			}
 			int bytesRead = in.read(buffer, buffSize, toRead);
-			if(bytesRead == -1) {
+			if (bytesRead == -1) {
 				throw new IOException();
 			}
 			buffSize += bytesRead;
@@ -207,7 +206,7 @@ class UploadingSocket {
 		messageSize = -1;
 		return Arrays.copyOf(buffer, size);
 	}
-	
+
 	public void write(byte[] data) throws IOException {
 		out.write(data);
 	}

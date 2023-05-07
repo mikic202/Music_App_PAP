@@ -2,17 +2,27 @@ package server.Login;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Properties;
 import java.util.Set;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import server.DatabaseInteractors.UserDataAccesor;
 import server.DatabaseInteractors.UserDataSetter;
 import server.DatabaseInteractors.UserDatabaseInformation;
 
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+
 public class Login {
-    public static JSONObject proces_requests(LoginRequestTypes req_type, JSONObject request) {
-        return _generate_response(req_type, request);
+    public static JSONObject procesRequests(LoginRequestTypes req_type, JSONObject request) {
+        return _generateResponse(req_type, request);
     }
 
     private static JSONObject _login(JSONObject request) {
@@ -20,7 +30,7 @@ public class Login {
         JSONObject result = new JSONObject();
         result.put("type", LoginRequestTypes.SEND_LOGIN.value());
         String written_password = request.getString("password");
-        Hashtable<String, String> user_info = UserDataAccesor.get_data_with_email(wanted_email);
+        Hashtable<String, String> user_info = UserDataAccesor.getDataWithEmail(wanted_email);
         if (user_info.isEmpty()) {
             JSONObject false_result = new JSONObject();
             false_result.put("outcome", false);
@@ -52,12 +62,12 @@ public class Login {
             result.put("outcome", false);
             return result;
         }
-        Hashtable<String, String> user_info = UserDataAccesor.get_data_with_email(email);
+        Hashtable<String, String> user_info = UserDataAccesor.getDataWithEmail(email);
         if (!user_info.isEmpty()) {
             result.put("outcome", false);
             return result;
         }
-        user_info = UserDataAccesor.get_data_with_name(nickname);
+        user_info = UserDataAccesor.getDataWithName(nickname);
         if (!user_info.isEmpty()) {
             result.put("outcome", false);
             return result;
@@ -66,13 +76,13 @@ public class Login {
         data.put("username", nickname);
         data.put("email", email);
         data.put("password", password);
-        UserDataSetter.add_data(data);
+        UserDataSetter.addData(data);
         result.put("outcome", true);
         return result;
 
     }
 
-    private static JSONObject _change_password(JSONObject request) {
+    private static JSONObject _changePassword(JSONObject request) {
         String old_password = request.getString("old_password");
         String new_password = request.getString("new_password");
         JSONObject result = new JSONObject();
@@ -80,7 +90,7 @@ public class Login {
             result.put("outcome", false);
             return result;
         }
-        Hashtable<String, String> user_info = UserDataAccesor.get_data(request.getInt("user_id"));
+        Hashtable<String, String> user_info = UserDataAccesor.getData(request.getInt("user_id"));
         if (user_info.isEmpty()) {
             result.put("outcome", false);
             JSONObject response = new JSONObject();
@@ -89,7 +99,7 @@ public class Login {
             return response;
         }
         user_info.put("password", new_password);
-        UserDataSetter.set_data(request.getInt("user_id"), user_info);
+        UserDataSetter.setData(request.getInt("user_id"), user_info);
         result.put("outcome", true);
         JSONObject response = new JSONObject();
         response.put("value", result);
@@ -97,11 +107,11 @@ public class Login {
         return response;
     }
 
-    private static JSONObject _change_username(JSONObject request) {
+    private static JSONObject _changeUsername(JSONObject request) {
         String username = request.getString("nickname");
         ;
         JSONObject result = new JSONObject();
-        Hashtable<String, String> user_info = UserDataAccesor.get_data(request.getInt("user_id"));
+        Hashtable<String, String> user_info = UserDataAccesor.getData(request.getInt("user_id"));
         if (user_info.isEmpty()) {
             result.put("outcome", false);
             JSONObject response = new JSONObject();
@@ -110,7 +120,7 @@ public class Login {
             return response;
         }
         user_info.put("username", username);
-        UserDataSetter.set_data(request.getInt("user_id"), user_info);
+        UserDataSetter.setData(request.getInt("user_id"), user_info);
         result.put("outcome", true);
         JSONObject response = new JSONObject();
         response.put("value", result);
@@ -118,11 +128,10 @@ public class Login {
         return response;
     }
 
-    private static JSONObject _change_email(JSONObject request) {
+    private static JSONObject _changeEmail(JSONObject request) {
         String email = request.getString("email");
-        ;
         JSONObject result = new JSONObject();
-        Hashtable<String, String> user_info = UserDataAccesor.get_data(request.getInt("user_id"));
+        Hashtable<String, String> user_info = UserDataAccesor.getData(request.getInt("user_id"));
         if (user_info.isEmpty()) {
             result.put("outcome", false);
             JSONObject response = new JSONObject();
@@ -131,7 +140,7 @@ public class Login {
             return response;
         }
         user_info.put("email", email);
-        UserDataSetter.set_data(request.getInt("user_id"), user_info);
+        UserDataSetter.setData(request.getInt("user_id"), user_info);
         result.put("outcome", true);
         JSONObject response = new JSONObject();
         response.put("value", result);
@@ -139,7 +148,87 @@ public class Login {
         return response;
     }
 
-    private static JSONObject _generate_response(LoginRequestTypes req_type, JSONObject request) {
+    private static JSONObject _retrievePassword(JSONObject request) {
+        JSONObject result = new JSONObject();
+        Hashtable<String, String> user_info = UserDataAccesor.getData(request.getInt("user_id"));
+        if (user_info.isEmpty()) {
+            result.put("outcome", false);
+            JSONObject response = new JSONObject();
+            response.put("value", result);
+            response.put("type", LoginRequestTypes.SEND_CHANGE_PASSWORD.value());
+            return response;
+        }
+        String email = request.getString("email");
+        String message = "Please DO NOT responde to this email\nNew Password: ";
+        String newPassword = _generateRandomString();
+        message += newPassword;
+        message += "\n Please reset the Password after logging in";
+        user_info.put("password", newPassword);
+        UserDataSetter.setData(request.getInt("user_id"), user_info);
+        _sendMessage(email, message);
+        result.put("outcome", true);
+        JSONObject response = new JSONObject();
+        response.put("value", result);
+        response.put("type", LoginRequestTypes.SEND_CHANGE_PASSWORD.value());
+        return response;
+    }
+
+    public static void _sendMessage(String email, String messageToSend) {
+        String from = "123.pap.app.verif.123@gmail.com";
+
+        String host = "smtp.gmail.com";
+
+        Properties properties = System.getProperties();
+
+        properties.put("mail.smtp.host", host);
+        properties.put("mail.smtp.port", "465");
+        properties.put("mail.smtp.ssl.enable", "true");
+        properties.put("mail.smtp.auth", "true");
+
+        Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
+
+            protected PasswordAuthentication getPasswordAuthentication() {
+
+                return new PasswordAuthentication(from, "wvdhgxvuqyhgccxe");
+            }
+        });
+        session.setDebug(true);
+        try {
+            MimeMessage message = new MimeMessage(session);
+
+            message.setFrom(new InternetAddress(from));
+
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
+
+            message.setSubject("Password retrieving");
+
+            message.setText(messageToSend);
+
+            System.out.println("sending...");
+            Transport.send(message);
+            System.out.println("Sent message successfully....");
+        } catch (MessagingException mex) {
+            mex.printStackTrace();
+        }
+
+    }
+
+    private static String _generateRandomString() {
+        int charAmount = (int) (Math.random() * (20 - 10 + 1) + 10);
+        String alphabet = "abcdefghijklmnoprstuwxyz";
+        String randomString = "";
+        for (int i = 0; i < charAmount; i++) {
+            int nextChar = (int) (Math.random() * (alphabet.length()));
+            char newChar = alphabet.charAt(nextChar);
+            if (Math.random() > 0.5) {
+                newChar = Character.toUpperCase(newChar);
+            }
+            randomString += newChar;
+        }
+        return randomString;
+    }
+
+    private static JSONObject _generateResponse(LoginRequestTypes req_type, JSONObject request) {
         JSONObject response = new JSONObject();
         switch (req_type) {
             case SEND_LOGIN:
@@ -149,13 +238,16 @@ public class Login {
                 response = _register(request);
                 break;
             case SEND_CHANGE_PASSWORD:
-                response = _change_password(request);
+                response = _changePassword(request);
                 break;
             case SEND_CHANGE_EMAIL:
-                response = _change_email(request);
+                response = _changeEmail(request);
                 break;
             case SEND_CHANGE_NICKNAME:
-                response = _change_username(request);
+                response = _changeUsername(request);
+                break;
+            case RETRIEVE_PASSWORD:
+                response = _retrievePassword(request);
                 break;
         }
         return response;

@@ -3,47 +3,47 @@ package server.DatabaseInteractors;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
-import java.sql.Statement;
+import server.ConnectionPool.ConnectionPool;
+
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 
 public class FileDataAccesor implements DataAccesorInterface {
 
     static final String TABLENAME = FileDatabsaeInformation.FILE_TABLE.value();
 
-    public static Hashtable<String, String> get_data(int id) {
-        return get_data(FileDatabsaeInformation.ID_COLUMN.value(), id);
+    public static Hashtable<String, String> getData(int id) {
+        return getData(FileDatabsaeInformation.ID_COLUMN.value(), id);
     }
 
-    public static Hashtable<String, String> get_data(String column_name, String column_value) {
-        String querry = String.format("Select * from %s where %s='%s'", TABLENAME, column_name, column_value);
-        return get_querry_result(querry);
+    public static Hashtable<String, String> getData(String column_name, String column_value) {
+        String preparedStatements = String.format("Select * from %s where %s=?", TABLENAME, column_name);
+        return getQuerryResult(preparedStatements, column_value);
     }
 
-    public static Hashtable<String, String> get_data(String column_name, int column_value) {
-        return get_data(column_name, String.format("%d", column_value));
+    public static Hashtable<String, String> getData(String column_name, int column_value) {
+        String preparedStatements = String.format("Select * from %s where %s=?", TABLENAME, column_name);
+        return getQuerryResult(preparedStatements, column_value);
     }
 
-    public static ArrayList<Integer> get_user_files(int user_id) {
+    public static ArrayList<Integer> getUserFiles(int user_id) {
         ArrayList<Integer> files = new ArrayList<>();
         ResultSet result = null;
+        Connection connection = ConnectionPool.getConnection();
 
-        String querry = String.format("Select %s from %s where %s='%s'", FileDatabsaeInformation.ID_COLUMN.value(),
-                TABLENAME, FileDatabsaeInformation.USER_COLUMN.value(), user_id);
+        String preparedStatement = String.format("Select %s from %s where %s=?",
+                FileDatabsaeInformation.ID_COLUMN.value(),
+                TABLENAME, FileDatabsaeInformation.USER_COLUMN.value());
+
         try {
 
-            Connection connection = DriverManager.getConnection(DatabseInformation.URL.value(),
-                    DatabseInformation.USER.value(), DatabseInformation.PASSWORD.value());
-
-            Statement stat = connection.createStatement();
-            String request = String.format(querry);
-
-            result = stat.executeQuery(request);
+            var statement = connection.prepareStatement(preparedStatement);
+            connection.commit();
+            statement.setInt(1, user_id);
+            result = statement.executeQuery();
             while (result.next()) {
                 files.add(result.getInt(1));
             }
-            connection.close();
         } catch (Exception e) {
             System.out.println(e);
 
@@ -53,7 +53,7 @@ public class FileDataAccesor implements DataAccesorInterface {
         return files;
     }
 
-    private static Hashtable<String, String> process_result_to_full_data(ResultSet result) {
+    private static Hashtable<String, String> processResultToFullData(ResultSet result) {
         Hashtable<String, String> user_data = new Hashtable<String, String>();
 
         try {
@@ -70,29 +70,43 @@ public class FileDataAccesor implements DataAccesorInterface {
         return user_data;
     }
 
-    private static Hashtable<String, String> get_querry_result(String querry) {
-        Hashtable<String, String> user_data = new Hashtable<String, String>();
+    private static Hashtable<String, String> getQuerryResult(String preparedStatement, int value) {
+        Hashtable<String, String> fileData = new Hashtable<String, String>();
 
         ResultSet result = null;
-
+        Connection connection = ConnectionPool.getConnection();
         try {
+            var statement = connection.prepareStatement(preparedStatement);
+            connection.commit();
+            statement.setInt(1, value);
+            result = statement.executeQuery();
+            fileData = processResultToFullData(result);
 
-            Connection connection = DriverManager.getConnection(DatabseInformation.URL.value(),
-                    DatabseInformation.USER.value(), DatabseInformation.PASSWORD.value());
-
-            Statement stat = connection.createStatement();
-            String request = String.format(querry);
-
-            result = stat.executeQuery(request);
-            user_data = process_result_to_full_data(result);
-
-            connection.close();
         } catch (Exception e) {
             System.out.println(e);
-
         } finally {
-
         }
-        return user_data;
+        ConnectionPool.releaseConnection(connection);
+        return fileData;
+    }
+
+    private static Hashtable<String, String> getQuerryResult(String preparedStatement, String value) {
+        Hashtable<String, String> fileData = new Hashtable<String, String>();
+
+        ResultSet result = null;
+        Connection connection = ConnectionPool.getConnection();
+        try {
+            var statement = connection.prepareStatement(preparedStatement);
+            connection.commit();
+            statement.setString(1, value);
+            result = statement.executeQuery();
+            fileData = processResultToFullData(result);
+
+        } catch (Exception e) {
+            System.out.println(e);
+        } finally {
+        }
+        ConnectionPool.releaseConnection(connection);
+        return fileData;
     }
 }

@@ -1,37 +1,36 @@
 package server.DatabaseInteractors;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.Statement;
 import java.util.Hashtable;
 
+import server.ConnectionPool.ConnectionPool;
+
 public class FileDataSetter implements DataSetterInterface {
-    static public void set_data(int id, Hashtable<String, String> data) {
-    	
+    static public void setData(int id, Hashtable<String, String> data) {
+
     }
 
-    static public int add_data(Hashtable<String, String> data) {
-    	try {
+    static public int addData(Hashtable<String, String> data) {
+        String preparedStatement = String.format(
+                "insert into %s (%s, %s, %s) values (?, ?, ?)",
+                FileDatabsaeInformation.FILE_TABLE.value(), FileDatabsaeInformation.USER_COLUMN.value(),
+                FileDatabsaeInformation.NAME_COLUMN.value(), FileDatabsaeInformation.FILEPATH_COLUMN.value());
+        Connection connection = ConnectionPool.getConnection();
+        try {
 
-            Connection connection = DriverManager.getConnection(DatabseInformation.URL.value(),
-                    DatabseInformation.USER.value(), DatabseInformation.PASSWORD.value());
-
-            Statement stat = connection.createStatement();
-            String request = String.format(
-                    "insert into %s (%s, %s, %s) values (%s, '%s', '%s')",
-                    FileDatabsaeInformation.FILE_TABLE.value(), FileDatabsaeInformation.USER_COLUMN.value(),
-                    FileDatabsaeInformation.NAME_COLUMN.value(), FileDatabsaeInformation.FILEPATH_COLUMN.value(),
-                    data.get("user_id"), data.get("file_name"), data.get("file_path"));
-
-            stat.executeUpdate(request);
-
-            connection.close();
+            var statement = connection.prepareStatement(preparedStatement);
+            statement.setString(1, data.get("user_id"));
+            statement.setString(2, data.get("file_name"));
+            statement.setString(3, data.get("file_path"));
+            statement.executeUpdate();
+            connection.commit();
         } catch (Exception e) {
             System.out.println(e);
 
         } finally {
 
         }
+        ConnectionPool.releaseConnection(connection);
         return 0;
     }
 

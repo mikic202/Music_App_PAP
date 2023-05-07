@@ -1,68 +1,102 @@
 package server.DatabaseInteractors;
 
 import java.util.Hashtable;
+
+import server.ConnectionPool.ConnectionPool;
+
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.Statement;
 
 public class MessageDataSetter implements DataSetterInterface {
-    static public void set_data(int id, Hashtable<String, String> data) {
+    static final String TABLENAME = MessagesDatabaseInformation.MESSAGES_TABLE.value();
+
+    static public void setData(int id, Hashtable<String, String> data) {
+        Connection connection = ConnectionPool.getConnection();
+        String preparedStatement = String.format(
+                "update %s set %s=?, %s=?, %s=?, %s=? where %s=?",
+                MessagesDatabaseInformation.MESSAGES_TABLE.value(),
+                MessagesDatabaseInformation.SENDER_COLUMN.value(),
+                MessagesDatabaseInformation.CONVERSATION_COLUMN.value(),
+
+                MessagesDatabaseInformation.DATE_COLUMN.value(),
+                MessagesDatabaseInformation.MESSAGE_COLUMN.value(),
+                MessagesDatabaseInformation.ID_COLUMN.value());
         try {
 
-            Connection connection = DriverManager.getConnection(DatabseInformation.URL.value(),
-                    DatabseInformation.USER.value(), DatabseInformation.PASSWORD.value());
+            var statement = connection.prepareStatement(preparedStatement);
+            statement.setString(1, data.get("sender"));
+            statement.setString(2, data.get("conversation"));
+            statement.setString(3, data.get("send_date"));
+            statement.setString(4, data.get("text"));
+            statement.setString(5, data.get("ID"));
+            statement.executeUpdate();
+            connection.commit();
 
-            Statement stat = connection.createStatement();
-            String request = String.format(
-                    "update %s set %s='%s', %s='%s', %s='%s', %s='%s' where %s=%s",
-                    MessagesDatabaseInformation.MESSAGES_TABLE.value(),
-                    MessagesDatabaseInformation.SENDER_COLUMN.value(),
-                    data.get("sender"), MessagesDatabaseInformation.CONVERSATION_COLUMN.value(),
-                    data.get("conversation"),
-                    MessagesDatabaseInformation.DATE_COLUMN.value(),
-                    data.get("send_date"), MessagesDatabaseInformation.MESSAGE_COLUMN.value(),
-                    data.get("text"), MessagesDatabaseInformation.ID_COLUMN.value(),
-                    data.get("ID"));
+        } catch (
 
-            stat.executeUpdate(request);
-
-            connection.close();
-        } catch (Exception e) {
+        Exception e) {
             System.out.println(e);
 
         } finally {
 
         }
+        ConnectionPool.releaseConnection(connection);
     }
 
-    static public int add_data(Hashtable<String, String> data) {
+    static public int addData(Hashtable<String, String> data) {
         int added_id = 0;
+        String preparedStatement = String.format(
+                "insert into %s (%s, %s, %s, %s) values (?, ?, ?, ?)",
+                MessagesDatabaseInformation.MESSAGES_TABLE.value(),
+                MessagesDatabaseInformation.SENDER_COLUMN.value(),
+                MessagesDatabaseInformation.CONVERSATION_COLUMN.value(),
+                MessagesDatabaseInformation.DATE_COLUMN.value(),
+                MessagesDatabaseInformation.MESSAGE_COLUMN.value());
+        Connection connection = ConnectionPool.getConnection();
         try {
 
-            Connection connection = DriverManager.getConnection(DatabseInformation.URL.value(),
-                    DatabseInformation.USER.value(), DatabseInformation.PASSWORD.value());
+            var statement = connection.prepareStatement(preparedStatement);
+            statement.setString(1, data.get("sender"));
+            statement.setString(2, data.get("conversation"));
+            statement.setString(3, data.get("send_date"));
+            statement.setString(4, data.get("text"));
+            statement.executeUpdate();
+            connection.commit();
+            added_id = MessageDataAccesor.getLatestMessage(Integer.parseInt(data.get("conversation")));
 
-            Statement stat = connection.createStatement();
-            String request = String.format(
-                    "insert into %s (%s, %s, %s, %s) values ('%s', '%s', '%s', '%s')",
-                    MessagesDatabaseInformation.MESSAGES_TABLE.value(),
-                    MessagesDatabaseInformation.SENDER_COLUMN.value(),
-                    MessagesDatabaseInformation.CONVERSATION_COLUMN.value(),
-                    MessagesDatabaseInformation.DATE_COLUMN.value(),
-                    MessagesDatabaseInformation.MESSAGE_COLUMN.value(),
-                    data.get("sender"), data.get("conversation"), data.get("send_date"), data.get("text"));
-
-            stat.executeUpdate(request);
-            added_id = MessageDataAccesor.get_latest_message();
-
-            connection.close();
         } catch (Exception e) {
             System.out.println(e);
 
         } finally {
 
         }
+        ConnectionPool.releaseConnection(connection);
         return added_id;
+    }
+
+    static public void setIsImage(int messageId) {
+        Connection connection = ConnectionPool.getConnection();
+        String preparedStatement = String.format(
+                "update %s set %s=? where %s=?",
+                MessagesDatabaseInformation.MESSAGES_TABLE.value(),
+                MessagesDatabaseInformation.IS_IMAGE_COLUMN.value(),
+                MessagesDatabaseInformation.ID_COLUMN.value());
+        try {
+
+            var statement = connection.prepareStatement(preparedStatement);
+            statement.setBoolean(1, true);
+            statement.setInt(2, messageId);
+            statement.executeUpdate();
+            connection.commit();
+
+        } catch (
+
+        Exception e) {
+            System.out.println(e);
+
+        } finally {
+
+        }
+        ConnectionPool.releaseConnection(connection);
     }
 
 }

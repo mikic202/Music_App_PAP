@@ -18,9 +18,9 @@ import server.DatabaseInteractors.UserDataSetter;
 import server.DatabaseInteractors.UserDatabaseInformation;
 
 public class Chat {
-    public static JSONObject proces_requests(RequestTypes req_type, JSONObject request) {
+    public static JSONObject procesRequests(RequestTypes req_type, JSONObject request) {
         try {
-            return _generate_response(req_type, request);
+            return _generateResponse(req_type, request);
         } catch (Exception e) {
             JSONObject json_response = new JSONObject();
             json_response.put("type", req_type.value());
@@ -34,26 +34,31 @@ public class Chat {
         }
     }
 
-    private static JSONObject _get_messeges_in_conversation(JSONObject request) {
+    private static JSONObject _getMessegesInConversation(JSONObject request) {
         ArrayList<Hashtable<String, String>> response = new ArrayList<Hashtable<String, String>>();
         ArrayList<Integer> messages = ConversationDataAccesor
-                .get_mesages_in_conversation(request.getInt("conversation_id"));
+                .getMessagesInConversation(request.getInt("conversation_id"));
         for (Integer message_id : messages) {
-            response.add(MessageDataAccesor.get_data(message_id));
+            response.add(MessageDataAccesor.getData(message_id));
         }
-        return _convert_response_to_json(response, RequestTypes.GET_MESSAGES);
+        return _convertResponseToJson(response, RequestTypes.GET_MESSAGES);
     }
 
-    private static JSONObject _get_users_conversations(JSONObject request) {
+    private static JSONObject _getUsersConversations(JSONObject request) {
         ArrayList<Hashtable<String, String>> response = new ArrayList<Hashtable<String, String>>();
-        ArrayList<Integer> conversations = UserDataAccesor.get_user_conversations(request.getInt("user_id"));
+        ArrayList<Integer> conversations = UserDataAccesor.getUserConversations(request.getInt("user_id"));
         for (Integer conversation_id : conversations) {
-            response.add(ConversationDataAccesor.get_data(conversation_id));
+            response.add(ConversationDataAccesor.getData(conversation_id));
         }
-        return _convert_response_to_json(response, RequestTypes.GET_USERS_CONVERSATIONS);
+        return _convertResponseToJson(response, RequestTypes.GET_USERS_CONVERSATIONS);
     }
 
-    private static JSONObject _send_message(JSONObject request) {
+    private static JSONObject _sendMessage(JSONObject request) {
+        int added_msg = _putMessageInDatabase(request);
+        return _convertResponseToJson(MessageDataAccesor.getData(added_msg), RequestTypes.GET_MESSAGES);
+    }
+
+    public static int _putMessageInDatabase(JSONObject request) {
         Hashtable<String, String> data = new Hashtable<>();
         data.put("sender", Integer.toString(request.getInt("sender_id")));
         data.put("conversation", Integer.toString(request.getInt("conversation_id")));
@@ -61,44 +66,42 @@ public class Chat {
         Timestamp timestamp = new Timestamp(date.getTime());
         data.put("send_date", timestamp.toString());
         data.put("text", request.getString("text"));
-        ;
-        int added_msg = MessageDataSetter.add_data(data);
-        return _convert_response_to_json(MessageDataAccesor.get_data(added_msg), RequestTypes.GET_MESSAGES);
+        return MessageDataSetter.addData(data);
     }
 
-    private static JSONObject _create_conversation(JSONObject request) {
+    private static JSONObject _createConversation(JSONObject request) {
         String name = request.getString("name");
         int number_of_users = request.getJSONArray("users").length();
-        int new_conversation = _add_conversation(name, number_of_users);
+        int new_conversation = _addConversation(name, number_of_users);
         ArrayList<Integer> users = new ArrayList<>();
         for (int i = 0; i < request.getJSONArray("users").length(); i++) {
             users.add(request.getJSONArray("users").getInt(i));
         }
-        _add_users_to_conversation(users, new_conversation);
-        return _convert_response_to_json(ConversationDataAccesor.get_data(new_conversation),
+        _addUsersToConversation(users, new_conversation);
+        return _convertResponseToJson(ConversationDataAccesor.getData(new_conversation),
                 RequestTypes.CREATE_CONVERSATION);
     }
 
-    private static int _add_conversation(String name, int number_of_users) {
+    private static int _addConversation(String name, int number_of_users) {
         Hashtable<String, String> data = new Hashtable<>();
         data.put("name", name);
         data.put("number_of_users", Integer.toString(number_of_users));
-        return ConversationDataSetter.add_data(data);
+        return ConversationDataSetter.addData(data);
     }
 
-    private static void _add_users_to_conversation(ArrayList<Integer> users, int conversation_id) {
+    private static void _addUsersToConversation(ArrayList<Integer> users, int conversation_id) {
         for (int user : users) {
-            UserDataSetter.add_user_to_conversation(conversation_id, user);
+            UserDataSetter.addUserToConversation(conversation_id, user);
         }
     }
 
-    private static JSONObject _process_add_users_to_conversation(JSONObject request) {
+    private static JSONObject _processAddUsersToConversation(JSONObject request) {
         int number_of_users = request.getJSONArray("users").length();
         int conversation_id = request.getInt("conversation_id");
         ArrayList<Integer> users = new ArrayList<>();
         for (int i = 0; i < number_of_users; i++) {
-            System.out.println(UserDataAccesor.get_user_conversations(request.getJSONArray("users").getInt(i)));
-            if (!UserDataAccesor.get_user_conversations(request.getJSONArray("users").getInt(i))
+            System.out.println(UserDataAccesor.getUserConversations(request.getJSONArray("users").getInt(i)));
+            if (!UserDataAccesor.getUserConversations(request.getJSONArray("users").getInt(i))
                     .contains(conversation_id)) {
                 users.add(request.getJSONArray("users").getInt(i));
             } else {
@@ -107,19 +110,19 @@ public class Chat {
 
         }
         System.out.println(users);
-        _add_users_to_conversation(users, conversation_id);
-        Hashtable<String, String> previous_data = ConversationDataAccesor.get_data(conversation_id);
+        _addUsersToConversation(users, conversation_id);
+        Hashtable<String, String> previous_data = ConversationDataAccesor.getData(conversation_id);
         previous_data.put(ConversationDatabsaeInformation.NUMBER_OF_USERS_COLUMN.value(),
                 Integer.toString(Integer
                         .parseInt(previous_data.get(ConversationDatabsaeInformation.NUMBER_OF_USERS_COLUMN.value()))
                         + number_of_users));
-        ConversationDataSetter.set_data(conversation_id, previous_data);
+        ConversationDataSetter.setData(conversation_id, previous_data);
         Hashtable<String, String> outcome = new Hashtable<>();
         outcome.put("outcome", "true");
-        return _convert_response_to_json(outcome, RequestTypes.ADD_USER_TO_CONVERSATION);
+        return _convertResponseToJson(outcome, RequestTypes.ADD_USER_TO_CONVERSATION);
     }
 
-    private static JSONObject _convert_response_to_json(Hashtable<String, String> response, RequestTypes req_type) {
+    private static JSONObject _convertResponseToJson(Hashtable<String, String> response, RequestTypes req_type) {
         JSONObject json_response = new JSONObject();
         json_response.put("type", req_type.value());
         JSONObject json_response_value = new JSONObject();
@@ -131,20 +134,20 @@ public class Chat {
         return json_response;
     }
 
-    private static JSONObject _check_users_info(JSONObject request) {
+    private static JSONObject _checkUsersInfo(JSONObject request) {
         if (request.getString("type").equals("username")) {
             Hashtable<String, String> hash_response = UserDataAccesor
-                    .get_data(UserDatabaseInformation.USERNAME_COLUMN.value(), request.getString("username"));
+                    .getData(UserDatabaseInformation.USERNAME_COLUMN.value(), request.getString("username"));
             hash_response.remove("password");
-            return _convert_response_to_json(hash_response, RequestTypes.USER_INFO);
+            return _convertResponseToJson(hash_response, RequestTypes.USER_INFO);
         }
         Hashtable<String, String> hash_response = UserDataAccesor
-                .get_data(UserDatabaseInformation.ID_COLUMN.value(), request.getInt("user_id"));
+                .getData(UserDatabaseInformation.ID_COLUMN.value(), request.getInt("user_id"));
         hash_response.remove("password");
-        return _convert_response_to_json(hash_response, RequestTypes.USER_INFO);
+        return _convertResponseToJson(hash_response, RequestTypes.USER_INFO);
     }
 
-    private static JSONObject _convert_response_to_json(ArrayList<Hashtable<String, String>> response,
+    private static JSONObject _convertResponseToJson(ArrayList<Hashtable<String, String>> response,
             RequestTypes req_type) {
         JSONObject json_response = new JSONObject();
         json_response.put("type", req_type.value());
@@ -161,10 +164,10 @@ public class Chat {
         return json_response;
     }
 
-    private static JSONObject _get_users_in_conversation(JSONObject request) {
-        ArrayList<Integer> users = ConversationDataAccesor.get_users_in_conversation(request.getInt("conversation_id"));
+    private static JSONObject _getUsersInConversation(JSONObject request) {
+        ArrayList<Integer> users = ConversationDataAccesor.getUsersInConversation(request.getInt("conversation_id"));
         JSONObject json_response = new JSONObject();
-        json_response.put("type", RequestTypes.GET_USERS_IN_CONVERSATION.value());
+        json_response.put("type", RequestTypes.GET_USERS_CONVERSATIONS.value());
         JSONArray json_users = new JSONArray();
         for (Integer user : users) {
             json_users.put(user);
@@ -173,39 +176,51 @@ public class Chat {
         return json_response;
     }
 
-    private static JSONObject _get_new_messagess_in_conversation(JSONObject request) {
+    private static JSONObject _getNewMessagessInConversation(JSONObject request) {
         ArrayList<Hashtable<String, String>> messages = MessageDataAccesor
-                .get_messages_older_than_given(request.getInt("latest_message"), request.getInt("conversation_id"));
+                .getMessagesOlderThanGiven(request.getInt("latest_message"), request.getInt("conversation_id"));
         JSONObject json_response = new JSONObject();
-        return _convert_response_to_json(messages, RequestTypes.GET_LATEST_MESSAGE);
+        return _convertResponseToJson(messages, RequestTypes.GET_LATEST_MESSAGE);
     }
 
-    private static JSONObject _generate_response(RequestTypes req_type, JSONObject request) {
+    private static JSONObject _processSendImage(JSONObject request) {
+        // TODO add new field to sent back message and test it
+        request.put("text", (request.getJSONArray("image")).toString());
+        int newMessage = _putMessageInDatabase(request);
+
+        MessageDataSetter.setIsImage(newMessage);
+        return _convertResponseToJson(MessageDataAccesor.getData(newMessage), RequestTypes.SEND_IMAGE);
+    }
+
+    private static JSONObject _generateResponse(RequestTypes req_type, JSONObject request) {
         JSONObject response = new JSONObject();
         switch (req_type) {
             case GET_MESSAGES:
-                response = _get_messeges_in_conversation(request);
+                response = _getMessegesInConversation(request);
                 break;
             case GET_USERS_CONVERSATIONS:
-                response = _get_users_conversations(request);
+                response = _getUsersConversations(request);
                 break;
             case SEND_MESSAGE:
-                response = _send_message(request);
+                response = _sendMessage(request);
                 break;
             case CREATE_CONVERSATION:
-                response = _create_conversation(request);
+                response = _createConversation(request);
                 break;
             case ADD_USER_TO_CONVERSATION:
-                response = _process_add_users_to_conversation(request);
+                response = _processAddUsersToConversation(request);
                 break;
             case USER_INFO:
-                response = _check_users_info(request);
+                response = _checkUsersInfo(request);
                 break;
             case GET_USERS_IN_CONVERSATION:
-                response = _get_users_in_conversation(request);
+                response = _getUsersInConversation(request);
                 break;
             case GET_LATEST_MESSAGE:
-                response = _get_new_messagess_in_conversation(request);
+                response = _getNewMessagessInConversation(request);
+                break;
+            case SEND_IMAGE:
+                response = _processSendImage(request);
                 break;
 
         }

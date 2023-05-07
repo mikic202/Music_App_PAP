@@ -5,7 +5,8 @@ public enum LoginRequestTypes {
     SEND_REGISTER("send request"),
     SEND_CHANGE_PASSWORD("send change password"),
     SEND_CHANGE_EMAIL("send email"),
-    SEND_CHANGE_NICKNAME("send nickname");
+    SEND_CHANGE_NICKNAME("send nickname"),
+    RETRIEVE_PASSWORD("retrieve password");
 
     private String _value;
 

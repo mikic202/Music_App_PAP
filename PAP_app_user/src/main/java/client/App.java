@@ -18,6 +18,6 @@ public class App {
         ArrayList<String> users = new ArrayList<>();
         users.add("mikic");
         users.add("someone");
-        System.out.println(chat.get_current_messages());
+        System.out.println(chat.getCurrentMessages());
     }
 }
