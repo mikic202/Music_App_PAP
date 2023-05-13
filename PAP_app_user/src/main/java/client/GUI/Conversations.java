@@ -49,18 +49,18 @@ public class Conversations extends javax.swing.JFrame {
             // to_return +=
             // users_in_conv.get(message.getInt("sender_id")).getString("username") + "\n";
             // to_return += message.getString("text") + "\n\n";
-            // // to_return += message.getString("send_date") + "\n";
+            // // to_return += message.getString("creation_date") + "\n";
             // String username =
             // users_in_conv.get(message.getInt("sender_id")).getString("username");
             JLabel username = new JLabel();
-            username.setText(users_in_conv.get(message.getInt("sender")).getString("username"));
+            username.setText(users_in_conv.get(message.getInt("sender_id")).getString("username"));
             JLabel time = new JLabel();
-            time.setText(message.getString("send_date"));
+            time.setText(message.getString("creation_date"));
             this.jPanel1
                     .add(username);
             this.jPanel1.add(time);
             LeftChatPanel leftChatPanel = new LeftChatPanel();
-            if (message.getInt("sender") == chat.userId()) {
+            if (message.getInt("sender_id") == chat.userId()) {
                 leftChatPanel.jTextArea1.setBackground(new java.awt.Color(0, 137, 255));
             }
             leftChatPanel.jTextArea1.setText(message.getString("text"));

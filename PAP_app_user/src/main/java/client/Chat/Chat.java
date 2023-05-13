@@ -161,7 +161,7 @@ public class Chat {
         if (messages_in_users_conversation.get(current_conversation) != null
                 && messages_in_users_conversation.get(current_conversation).size() != 0) {
             latest_msg = messages_in_users_conversation.get(current_conversation)
-                    .get(messages_in_users_conversation.get(current_conversation).size() - 1).getInt("ID");
+                    .get(messages_in_users_conversation.get(current_conversation).size() - 1).getInt("message_id");
         }
         JSONObject new_messages_response = chatAccesor.getNewMessagesInConverastion(current_conversation,
                 latest_msg);
