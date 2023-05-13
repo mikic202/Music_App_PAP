@@ -24,11 +24,9 @@ public class Chat {
         } catch (Exception e) {
             JSONObject json_response = new JSONObject();
             json_response.put("type", req_type.value());
-            JSONObject new_json = new JSONObject(
-                    String.format("{\"error\": \"%s\", \"outcome\":false}",
-                            "there is something incorrect with your request"));
-            json_response.put("value",
-                    new_json);
+            JSONObject new_json = new JSONObject(String.format("{ \"outcome\":false}"));
+            new_json.put("error", e);
+            json_response.put("value", new_json);
             return json_response;
 
         }
@@ -47,6 +45,7 @@ public class Chat {
     private static JSONObject _getUsersConversations(JSONObject request) {
         ArrayList<Hashtable<String, String>> response = new ArrayList<Hashtable<String, String>>();
         ArrayList<Integer> conversations = UserDataAccesor.getUserConversations(request.getInt("user_id"));
+        System.out.println(conversations);
         for (Integer conversation_id : conversations) {
             response.add(ConversationDataAccesor.getData(conversation_id));
         }

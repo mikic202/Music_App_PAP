@@ -79,7 +79,8 @@ public class Chat {
         users_conversations.clear();
         JSONArray conversations = response.getJSONArray("value");
         for (int i = 0; i < conversations.length(); i += 1) {
-            users_conversations.put(conversations.getJSONObject(i).getInt("ID"), conversations.getJSONObject(i));
+            users_conversations.put(conversations.getJSONObject(i).getInt("conversation_id"),
+                    conversations.getJSONObject(i));
         }
     }
 
@@ -97,12 +98,11 @@ public class Chat {
 
     public JSONObject createConversation(String name, ArrayList<String> usernames) {
         JSONObject conversation_info = chatAccesor.addConversation(name, usernames).getJSONObject("value");
-        users_conversations.put(conversation_info.getInt("ID"), conversation_info);
+        users_conversations.put(conversation_info.getInt("conversation_id"), conversation_info);
         return conversation_info;
     }
 
     public JSONObject addUsersToConversation(String conversation_name, ArrayList<String> usernames) {
-        // TODO adding users to users in conversation hashtable
         for (Integer key : users_conversations.keySet()) {
             if (users_conversations.get(key).getString("name").equals(conversation_name)) {
                 if (users_in_conversarion.get(key) == null) {
