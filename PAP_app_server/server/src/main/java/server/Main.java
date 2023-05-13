@@ -17,7 +17,7 @@ public class Main {
 		System.out.println("Server has started on 127.0.0.1:8000.\nWaiting for a connection…");
 		Thread clientHandlerThread = new Thread(handler);
 		clientHandlerThread.start();
-		ConnectionPool connection = new ConnectionPool();
+		System.out.println("Connections active: " + Integer.toString(ConnectionPool.availableConnections()));
 		Thread fileUploaderThread = new Thread(uploader);
 		fileUploaderThread.start();
 		try {
@@ -30,5 +30,6 @@ public class Main {
 			System.out.println("Server stopped.");
 			server.close();
 		}
+		// UserDataAccesor.getData(1);
 	}
 }
