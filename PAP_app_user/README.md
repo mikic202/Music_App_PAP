@@ -32,7 +32,7 @@ Jest tu spora liczba funkcjonalności którą chcielibyśmy zaimplementować. Tr
 - zmiana kolorystyki aplikacji (przechowywane na danym urządzeniu)(np tryb jasny/ciemny)[TODO]
 <h4>Interakcja</h4>
 
-- dodawanie znajomych/obserwowanie osób
+- dodawanie znajomych/obserwowanie osób [CANCELED]
 - wysyłanie wiadomości tekstowych[DONE]
 - tworzenie grup[DONE]
 - dodawanie osób do grup[DONE]
@@ -49,8 +49,8 @@ Jest tu spora liczba funkcjonalności którą chcielibyśmy zaimplementować. Tr
 - różne poziomy dostępu do muzyki dla innych użytkownikóa (jak filmy na youtube)
 - przechowywanie muzyki[DONE]
 - głosowanie nad następnym filmem/muzyką
-- odtwarzanie ze spotifya(na zasadzie przeglądarki)
-- odtwarzanie z youtuba (jak wyżej)
+- odtwarzanie ze spotifya(na zasadzie przeglądarki)[CANCELED]
+- odtwarzanie z youtuba (jak wyżej)[CANCELED]
 - sortowanie muzyki na typy[TODO]
 - przegladanie dodanej muzyki[TODO]
 <h4>Admin</h4>
