@@ -8,6 +8,7 @@ import java.util.Set;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import server.Main;
 import server.DatabaseInteractors.ConversationDataAccesor;
 import server.DatabaseInteractors.ConversationDataSetter;
 import server.DatabaseInteractors.ConversationDatabsaeInformation;
@@ -55,7 +56,9 @@ public class Chat {
 
     private static JSONObject _sendMessage(JSONObject request) {
         int added_msg = _putMessageInDatabase(request);
-        return _convertResponseToJson(MessageDataAccesor.getData(added_msg), RequestTypes.GET_MESSAGES);
+        Hashtable<String, String> data = MessageDataAccesor.getData(added_msg);
+        Main.updater.sendMessage(added_msg, data.get("conversation_id"));
+        return _convertResponseToJson(data, RequestTypes.GET_MESSAGES);
     }
 
     public static int _putMessageInDatabase(JSONObject request) {

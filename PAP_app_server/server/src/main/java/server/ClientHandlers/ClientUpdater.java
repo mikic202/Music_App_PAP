@@ -19,6 +19,7 @@ import com.sun.tools.javac.Main;
 import server.Chat.Chat;
 import server.Chat.RequestTypes;
 import server.DatabaseInteractors.MessageDataAccesor;
+import server.DatabaseInteractors.UserDataAccesor;
 import server.Login.Login;
 import server.Login.LoginRequestTypes;
 import server.Music.MusicRequestHandler;
@@ -99,16 +100,20 @@ public class ClientUpdater implements Runnable {
 					if(client.userID == null) {
 						client.close();
 					}
-					else if(client.userID.equals(conversationID)) {
-						Hashtable<String, String> message = MessageDataAccesor.getData(messageID);
-						Set<String> keys = message.keySet();
-			            JSONObject messageJSON = new JSONObject();
-			            for (String key : keys) {
-			            	messageJSON.put(key, message.get(key));
-			            }
-			            JSONObject data = new JSONObject();
-			            data.put("value", messageJSON);
-			            client.write((data.toString() + "\n").getBytes());
+					else {
+						ArrayList<Integer> conversations = UserDataAccesor.getUserConversations(Integer.valueOf(client.userID));
+
+						if(conversations.contains(Integer.valueOf(conversationID).intValue())) {
+							Hashtable<String, String> message = MessageDataAccesor.getData(messageID);
+							Set<String> keys = message.keySet();
+				            JSONObject messageJSON = new JSONObject();
+				            for (String key : keys) {
+				            	messageJSON.put(key, message.get(key));
+				            }
+				            JSONObject data = new JSONObject();
+				            data.put("value", messageJSON);
+				            client.write((data.toString() + "\n").getBytes());
+						}
 					}
 				} catch (IOException exception) {
 					client.close();
