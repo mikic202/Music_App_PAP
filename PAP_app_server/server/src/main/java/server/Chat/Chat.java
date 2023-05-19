@@ -22,12 +22,12 @@ public class Chat {
         try {
             return _generateResponse(req_type, request);
         } catch (Exception e) {
-            JSONObject json_response = new JSONObject();
-            json_response.put("type", req_type.value());
+            JSONObject jsonResponse = new JSONObject();
+            jsonResponse.put("type", req_type.value());
             JSONObject new_json = new JSONObject(String.format("{ \"outcome\":false}"));
             new_json.put("error", e);
-            json_response.put("value", new_json);
-            return json_response;
+            jsonResponse.put("value", new_json);
+            return jsonResponse;
 
         }
     }
@@ -122,15 +122,15 @@ public class Chat {
     }
 
     private static JSONObject _convertResponseToJson(Hashtable<String, String> response, RequestTypes req_type) {
-        JSONObject json_response = new JSONObject();
-        json_response.put("type", req_type.value());
+        JSONObject jsonResponse = new JSONObject();
+        jsonResponse.put("type", req_type.value());
         JSONObject json_response_value = new JSONObject();
         Set<String> keys = response.keySet();
         for (String key : keys) {
             json_response_value.put(key, response.get(key));
         }
-        json_response.put("value", json_response_value);
-        return json_response;
+        jsonResponse.put("value", json_response_value);
+        return jsonResponse;
     }
 
     private static JSONObject _checkUsersInfo(JSONObject request) {
@@ -148,8 +148,8 @@ public class Chat {
 
     private static JSONObject _convertResponseToJson(ArrayList<Hashtable<String, String>> response,
             RequestTypes req_type) {
-        JSONObject json_response = new JSONObject();
-        json_response.put("type", req_type.value());
+        JSONObject jsonResponse = new JSONObject();
+        jsonResponse.put("type", req_type.value());
         JSONArray json_response_value = new JSONArray();
         for (Hashtable<String, String> element : response) {
             Set<String> keys = element.keySet();
@@ -159,26 +159,25 @@ public class Chat {
             }
             json_response_value.put(json_element);
         }
-        json_response.put("value", json_response_value);
-        return json_response;
+        jsonResponse.put("value", json_response_value);
+        return jsonResponse;
     }
 
     private static JSONObject _getUsersInConversation(JSONObject request) {
         ArrayList<Integer> users = ConversationDataAccesor.getUsersInConversation(request.getInt("conversation_id"));
-        JSONObject json_response = new JSONObject();
-        json_response.put("type", RequestTypes.GET_USERS_CONVERSATIONS.value());
+        JSONObject jsonResponse = new JSONObject();
+        jsonResponse.put("type", RequestTypes.GET_USERS_CONVERSATIONS.value());
         JSONArray json_users = new JSONArray();
         for (Integer user : users) {
             json_users.put(user);
         }
-        json_response.put("value", json_users);
-        return json_response;
+        jsonResponse.put("value", json_users);
+        return jsonResponse;
     }
 
     private static JSONObject _getNewMessagessInConversation(JSONObject request) {
         ArrayList<Hashtable<String, String>> messages = MessageDataAccesor
                 .getMessagesOlderThanGiven(request.getInt("latest_message"), request.getInt("conversation_id"));
-        JSONObject json_response = new JSONObject();
         return _convertResponseToJson(messages, RequestTypes.GET_LATEST_MESSAGE);
     }
 
@@ -189,6 +188,34 @@ public class Chat {
 
         MessageDataSetter.setIsImage(newMessage);
         return _convertResponseToJson(MessageDataAccesor.getData(newMessage), RequestTypes.SEND_IMAGE);
+    }
+
+    private static String _generateConversationCode(int conversationId) {
+        final String[][] KEYS = { { "o", "c", "v", "d", "t", "&", "z", "h", "f", "l" },
+                { "K", "z", "A", "#", "b", "i", "P", "n", "x", "c" },
+                { "*", "G", "$", "f", "a", "v", "y", "h", "m", "o" },
+                { "!", "b", "s", "?", "j", "@", "i", "z", "t", "q" } };
+
+        var index = (int) (Math.random() * KEYS.length);
+
+        String[] chosenKeytable = KEYS[index];
+        int convertableId = conversationId;
+        String conversationCode = Integer.toString(index);
+        do {
+            conversationCode += chosenKeytable[convertableId % 10];
+            convertableId = convertableId / 10;
+        } while (convertableId > 0);
+        return conversationCode;
+    }
+
+    private static JSONObject _processGetConversationCode(JSONObject request) {
+        String code = _generateConversationCode(request.getInt("conversation_id"));
+        JSONObject response = new JSONObject();
+        JSONObject responseValue = new JSONObject();
+        responseValue.put("conversation code", code);
+        response.put("value", responseValue);
+        response.put("type", RequestTypes.GET_CONVERSATION_CODE.value());
+        return response;
     }
 
     private static JSONObject _generateResponse(RequestTypes req_type, JSONObject request) {
@@ -220,6 +247,9 @@ public class Chat {
                 break;
             case SEND_IMAGE:
                 response = _processSendImage(request);
+                break;
+            case GET_CONVERSATION_CODE:
+                response = _processGetConversationCode(request);
                 break;
 
         }
