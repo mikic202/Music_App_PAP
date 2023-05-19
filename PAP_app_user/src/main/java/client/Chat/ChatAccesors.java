@@ -10,8 +10,8 @@ public class ChatAccesors {
         this.server_connector = server_connector;
     }
 
-    public JSONObject sendMessage(int conversationId, int sender_id, String text) {
-        JSONObject procesed_request = RequestCreator.createSendMsgRequest(conversationId, sender_id, text);
+    public JSONObject sendMessage(int conversationId, int senderId, String text) {
+        JSONObject procesed_request = RequestCreator.createSendMsgRequest(conversationId, senderId, text);
         JSONObject response = server_connector.send_request(procesed_request);
         return response;
     }
@@ -86,6 +86,12 @@ public class ChatAccesors {
 
     public JSONObject getConversationCode(int conversationId) {
         JSONObject request = RequestCreator.createGetConversationCodeRequest(conversationId);
+        JSONObject response = server_connector.send_request(request);
+        return response;
+    }
+
+    public JSONObject joinConversationUsingCode(String code, int userId) {
+        JSONObject request = RequestCreator.createJoinConversationUsingCodeRequest(code, userId);
         JSONObject response = server_connector.send_request(request);
         return response;
     }

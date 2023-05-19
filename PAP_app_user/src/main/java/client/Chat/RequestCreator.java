@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import org.json.JSONObject;
 
 public class RequestCreator {
-        public static JSONObject createSendMsgRequest(int conversationId, int sender_id, String text) {
+        public static JSONObject createSendMsgRequest(int conversationId, int senderId, String text) {
                 var request = new JSONObject();
                 request.put("type", RequestTypes.SEND_MESSAGE.value());
                 var value = new JSONObject();
-                value.put("sender_id", sender_id);
+                value.put("sender_id", senderId);
                 value.put("conversation_id", conversationId);
                 value.put("text", text);
                 request.put("value", value);
@@ -115,6 +115,16 @@ public class RequestCreator {
                 JSONObject request = new JSONObject();
                 request.put("value", value);
                 request.put("type", RequestTypes.GET_CONVERSATION_CODE.value());
+                return request;
+        }
+
+        public static JSONObject createJoinConversationUsingCodeRequest(String code, int userId) {
+                JSONObject value = new JSONObject();
+                value.put("conversation_code", code);
+                value.put("user_id", userId);
+                JSONObject request = new JSONObject();
+                request.put("value", value);
+                request.put("type", RequestTypes.JOIN_CONVERSATION_WITH_CODE.value());
                 return request;
         }
 }
