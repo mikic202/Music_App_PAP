@@ -40,8 +40,8 @@ public class ChatAccesors {
         return response;
     }
 
-    public JSONObject getUsersConversations(int user_id) {
-        JSONObject procesed_request = RequestCreator.createGetConversationsRequest(user_id);
+    public JSONObject getUsersConversations(int userId) {
+        JSONObject procesed_request = RequestCreator.createGetConversationsRequest(userId);
         JSONObject response = server_connector.send_request(procesed_request);
         return response;
     }
@@ -54,8 +54,8 @@ public class ChatAccesors {
         return response;
     }
 
-    public JSONObject getUserInfo(int user_id) {
-        JSONObject request = RequestCreator.createGetUserInformationRequest(user_id);
+    public JSONObject getUserInfo(int userId) {
+        JSONObject request = RequestCreator.createGetUserInformationRequest(userId);
         JSONObject response = server_connector.send_request(request);
         return response;
     }
@@ -72,14 +72,20 @@ public class ChatAccesors {
         return response;
     }
 
-    public JSONObject getNewMessagesInConverastion(int conversation, Integer latest_message) {
-        JSONObject request = RequestCreator.createGetNewMessagesInConversation(conversation, latest_message);
+    public JSONObject getNewMessagesInConverastion(int conversation, int latestMessage) {
+        JSONObject request = RequestCreator.createGetNewMessagesInConversation(conversation, latestMessage);
         JSONObject response = server_connector.send_request(request);
         return response;
     }
 
     public JSONObject sendImage(int conversationId, int senderId, byte[] image, String format) {
         JSONObject request = RequestCreator.createSendImageRequest(conversationId, senderId, image, format);
+        JSONObject response = server_connector.send_request(request);
+        return response;
+    }
+
+    public JSONObject getConversationCode(int conversationId) {
+        JSONObject request = RequestCreator.createGetConversationCodeRequest(conversationId);
         JSONObject response = server_connector.send_request(request);
         return response;
     }

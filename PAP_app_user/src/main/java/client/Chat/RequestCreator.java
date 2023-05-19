@@ -5,12 +5,12 @@ import java.util.ArrayList;
 import org.json.JSONObject;
 
 public class RequestCreator {
-        public static JSONObject createSendMsgRequest(int conversation_id, int sender_id, String text) {
+        public static JSONObject createSendMsgRequest(int conversationId, int sender_id, String text) {
                 var request = new JSONObject();
                 request.put("type", RequestTypes.SEND_MESSAGE.value());
                 var value = new JSONObject();
                 value.put("sender_id", sender_id);
-                value.put("conversation_id", conversation_id);
+                value.put("conversation_id", conversationId);
                 value.put("text", text);
                 request.put("value", value);
                 return request;
@@ -26,41 +26,41 @@ public class RequestCreator {
                 return request;
         }
 
-        public static JSONObject createGetMessagesRequest(int conversation_id) {
+        public static JSONObject createGetMessagesRequest(int conversationId) {
                 var request = new JSONObject();
                 request.put("type", RequestTypes.GET_MESSAGES.value());
                 var value = new JSONObject();
-                value.put("conversation_id", conversation_id);
+                value.put("conversation_id", conversationId);
                 request.put("value", value);
                 return request;
 
         }
 
-        public static JSONObject createGetConversationsRequest(int user_id) {
+        public static JSONObject createGetConversationsRequest(int userId) {
                 var request = new JSONObject();
                 request.put("type", RequestTypes.GET_USERS_CONVERSATIONS.value());
                 var value = new JSONObject();
-                value.put("user_id", user_id);
+                value.put("user_id", userId);
                 request.put("value", value);
                 return request;
         }
 
-        public static JSONObject createAddUserToConversationRequest(int conversation_id,
+        public static JSONObject createAddUserToConversationRequest(int conversationId,
                         ArrayList<Integer> users_ids) {
                 var request = new JSONObject();
                 request.put("type", RequestTypes.ADD_USER_TO_CONVERSATION.value());
                 var value = new JSONObject();
-                value.put("conversation_id", conversation_id);
+                value.put("conversation_id", conversationId);
                 value.put("users", users_ids);
                 request.put("value", value);
                 return request;
         }
 
-        public static JSONObject createGetUserInformationRequest(int user_id) {
+        public static JSONObject createGetUserInformationRequest(int userId) {
                 var request = new JSONObject();
                 request.put("type", RequestTypes.USER_INFO.value());
                 var value = new JSONObject();
-                value.put("user_id", user_id);
+                value.put("user_id", userId);
                 value.put("type", "user_id");
                 request.put("value", value);
                 return request;
@@ -77,21 +77,21 @@ public class RequestCreator {
 
         }
 
-        public static JSONObject getUsersInConversation(int conversation_id) {
+        public static JSONObject getUsersInConversation(int conversationId) {
                 var request = new JSONObject();
                 request.put("type", RequestTypes.GET_USERS_IN_CONVERSATION.value());
                 var value = new JSONObject();
-                value.put("conversation_id", conversation_id);
+                value.put("conversation_id", conversationId);
                 request.put("value", value);
                 return request;
         }
 
-        public static JSONObject createGetNewMessagesInConversation(int conversation_id, Integer latest_message) {
+        public static JSONObject createGetNewMessagesInConversation(int conversationId, int latestMessage) {
                 var request = new JSONObject();
                 request.put("type", RequestTypes.GET_LATEST_MESSAGE.value());
                 var value = new JSONObject();
-                value.put("latest_message", latest_message);
-                value.put("conversation_id", conversation_id);
+                value.put("latest_message", latestMessage);
+                value.put("conversation_id", conversationId);
                 request.put("value", value);
                 return request;
         }
@@ -105,6 +105,16 @@ public class RequestCreator {
                 JSONObject request = new JSONObject();
                 request.put("value", value);
                 request.put("type", RequestTypes.SEND_IMAGE.value());
+                return request;
+        }
+
+        public static JSONObject createGetConversationCodeRequest(int conversationId) {
+
+                JSONObject value = new JSONObject();
+                value.put("conversation_id", conversationId);
+                JSONObject request = new JSONObject();
+                request.put("value", value);
+                request.put("type", RequestTypes.GET_CONVERSATION_CODE.value());
                 return request;
         }
 }

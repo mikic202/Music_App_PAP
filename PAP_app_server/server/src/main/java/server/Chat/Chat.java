@@ -191,7 +191,7 @@ public class Chat {
     }
 
     private static String _generateConversationCode(int conversationId) {
-        final String[][] KEYS = { { "o", "c", "v", "d", "t", "&", "z", "h", "f", "l" },
+        final String[][] KEYS = { { "o", "c", "v", "d", "t", "&", "z", "v", "f", "l" },
                 { "K", "z", "A", "#", "b", "i", "P", "n", "x", "c" },
                 { "*", "G", "$", "f", "a", "v", "y", "h", "m", "o" },
                 { "!", "b", "s", "?", "j", "@", "i", "z", "t", "q" } };

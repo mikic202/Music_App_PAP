@@ -180,7 +180,7 @@ public class Chat {
             format = path.substring(dotIndex + 1);
         }
         try {
-            BufferedImage bimage = ImageIO.read(new File("space.png"));
+            BufferedImage bimage = ImageIO.read(new File(path));
             ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
             ImageIO.write(bimage, format, byteStream);
             data = byteStream.toByteArray();
@@ -188,6 +188,11 @@ public class Chat {
             System.out.println(e);
         }
         return chatAccesor.sendImage(current_conversation, user_id, data, format);
+    }
+
+    public String getConversationCode() {
+        JSONObject response = chatAccesor.getConversationCode(current_conversation);
+        return response.getJSONObject("value").getString("conversation code");
     }
 
 }
