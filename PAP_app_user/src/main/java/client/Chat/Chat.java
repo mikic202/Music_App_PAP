@@ -22,13 +22,13 @@ public class Chat {
     private Hashtable<Integer, Hashtable<Integer, JSONObject>> users_in_conversarion;
     private ChatAccesors chatAccesor;
     private int current_conversation;
-    private int user_id;
+    private int userId;
 
-    public Chat(int user_id, int current_conv, ServerConnector server_connector) {
+    public Chat(int userId, int current_conv, ServerConnector server_connector) {
         current_conversation = current_conv;
-        this.user_id = user_id;
+        this.userId = userId;
         chatAccesor = new ChatAccesors(server_connector);
-        JSONObject conversations = chatAccesor.getUsersConversations(user_id);
+        JSONObject conversations = chatAccesor.getUsersConversations(userId);
         users_conversations = new Hashtable<>();
         convert_conversations_response_to_hashtable(conversations);
         if (current_conversation == -1 && users_conversations.size() != 0) {
@@ -72,14 +72,15 @@ public class Chat {
     }
 
     public JSONObject sendMessage(String text) {
-        return chatAccesor.sendMessage(current_conversation, user_id, text).getJSONObject("value");
+        return chatAccesor.sendMessage(current_conversation, userId, text).getJSONObject("value");
     }
 
     private void convert_conversations_response_to_hashtable(JSONObject response) {
         users_conversations.clear();
         JSONArray conversations = response.getJSONArray("value");
         for (int i = 0; i < conversations.length(); i += 1) {
-            users_conversations.put(conversations.getJSONObject(i).getInt("ID"), conversations.getJSONObject(i));
+            users_conversations.put(conversations.getJSONObject(i).getInt("conversation_id"),
+                    conversations.getJSONObject(i));
         }
     }
 
@@ -97,12 +98,11 @@ public class Chat {
 
     public JSONObject createConversation(String name, ArrayList<String> usernames) {
         JSONObject conversation_info = chatAccesor.addConversation(name, usernames).getJSONObject("value");
-        users_conversations.put(conversation_info.getInt("ID"), conversation_info);
+        users_conversations.put(conversation_info.getInt("conversation_id"), conversation_info);
         return conversation_info;
     }
 
     public JSONObject addUsersToConversation(String conversation_name, ArrayList<String> usernames) {
-        // TODO adding users to users in conversation hashtable
         for (Integer key : users_conversations.keySet()) {
             if (users_conversations.get(key).getString("name").equals(conversation_name)) {
                 if (users_in_conversarion.get(key) == null) {
@@ -147,21 +147,21 @@ public class Chat {
     }
 
     public int userId() {
-        return user_id;
+        return userId;
     }
 
     public void updateStatus() {
         if (users_conversations.size() == 0) {
             return;
         }
-        JSONObject conversations = chatAccesor.getUsersConversations(user_id);
+        JSONObject conversations = chatAccesor.getUsersConversations(userId);
         convert_conversations_response_to_hashtable(conversations);
 
         int latest_msg = 1;
         if (messages_in_users_conversation.get(current_conversation) != null
                 && messages_in_users_conversation.get(current_conversation).size() != 0) {
             latest_msg = messages_in_users_conversation.get(current_conversation)
-                    .get(messages_in_users_conversation.get(current_conversation).size() - 1).getInt("ID");
+                    .get(messages_in_users_conversation.get(current_conversation).size() - 1).getInt("message_id");
         }
         JSONObject new_messages_response = chatAccesor.getNewMessagesInConverastion(current_conversation,
                 latest_msg);
@@ -180,14 +180,29 @@ public class Chat {
             format = path.substring(dotIndex + 1);
         }
         try {
-            BufferedImage bimage = ImageIO.read(new File("space.png"));
+            BufferedImage bimage = ImageIO.read(new File(path));
             ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
             ImageIO.write(bimage, format, byteStream);
             data = byteStream.toByteArray();
         } catch (Exception e) {
             System.out.println(e);
         }
-        return chatAccesor.sendImage(current_conversation, user_id, data, format);
+        return chatAccesor.sendImage(current_conversation, userId, data, format);
+    }
+
+    public String getConversationCode() {
+        JSONObject response = chatAccesor.getConversationCode(current_conversation);
+        return response.getJSONObject("value").getString("conversation code");
+    }
+
+    public boolean joinConversationUsingCode(String code) {
+        JSONObject response = chatAccesor.joinConversationUsingCode(code, userId);
+        boolean outcome = response.getJSONObject("value").getBoolean("outcome");
+        if (outcome) {
+            JSONObject conversations = chatAccesor.getUsersConversations(userId);
+            convert_conversations_response_to_hashtable(conversations);
+        }
+        return outcome;
     }
 
 }
