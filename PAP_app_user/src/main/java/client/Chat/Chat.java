@@ -23,10 +23,12 @@ public class Chat {
     private ChatAccesors chatAccesor;
     private int current_conversation;
     private int userId;
+    private JSONObject userInfo;
 
-    public Chat(int userId, int current_conv, ServerConnector server_connector) {
+    public Chat(JSONObject userInfo, int current_conv, ServerConnector server_connector) {
         current_conversation = current_conv;
-        this.userId = userId;
+        this.userInfo = userInfo;
+        this.userId = userInfo.getInt("user_id");
         chatAccesor = new ChatAccesors(server_connector);
         JSONObject conversations = chatAccesor.getUsersConversations(userId);
         users_conversations = new Hashtable<>();
@@ -39,6 +41,10 @@ public class Chat {
         users_in_conversarion = new Hashtable<>();
         getUsersInConversation(current_conv);
 
+    }
+
+    public JSONObject getCurrentUserInfo() {
+        return userInfo;
     }
 
     public ArrayList<JSONObject> switchConversations(int new_coveration) throws Exception {
