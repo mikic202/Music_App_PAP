@@ -27,30 +27,28 @@ Jest tu spora liczba funkcjonalności którą chcielibyśmy zaimplementować. Tr
 - logowanie się z dowolnego komputer[DONE]
 - zmiana hasła[DONE]
 - dodawanie awatara[TODO]
-- odzyskiwanie hasła[DONE/sortof]
+- odzyskiwanie hasła[DONE]
 - zmiana nazwy[DONE]
-- zmiana kolorystyki aplikacji (przechowywane na danym urządzeniu)(np tryb jasny/ciemny)[TODO]
+- zmiana kolorystyki aplikacji (przechowywane na danym urządzeniu)(np tryb jasny/ciemny)[DONE]
 <h4>Interakcja</h4>
 
-- dodawanie znajomych/obserwowanie osób
 - wysyłanie wiadomości tekstowych[DONE]
 - tworzenie grup[DONE]
 - dodawanie osób do grup[DONE]
 - kody do grup (jak na teamsach)[TODO]
-- słuchanie muzyki dodanej przez innych użytkowników
-- możliwość sprawdzenia ilu użytkowników odtworzyło daną muzykę
-- historia przesłuchanej muzyki (100)
+- zmienianie nazwy grupy[TODO]
+- słuchanie muzyki dodanej przez innych użytkowników(wyszukiwanie po nazwie użytkownika)[TODO]
+- możliwość sprawdzenia ilu użytkowników odtworzyło daną muzykę[TODO]
+- historia przesłuchanej muzyki (100)[TODO]
 
 - zsynchronizowane odtwarzanie muzyki[INPROGRES]
 - wspólne tworzenie i modyfikowaniem muzyki (można rozbić na więcej funkcjonalności)[TODO]
 
 - wgrywanie muzyki[DONE]
 - usuwanie muzyki na stałe[TODO]
-- różne poziomy dostępu do muzyki dla innych użytkownikóa (jak filmy na youtube)
+- różne poziomy dostępu do muzyki dla innych użytkownikóa (jak filmy na youtube) [TODO]
 - przechowywanie muzyki[DONE]
 - głosowanie nad następnym filmem/muzyką
-- odtwarzanie ze spotifya(na zasadzie przeglądarki)
-- odtwarzanie z youtuba (jak wyżej)
 - sortowanie muzyki na typy[TODO]
 - przegladanie dodanej muzyki[TODO]
 <h4>Admin</h4>
