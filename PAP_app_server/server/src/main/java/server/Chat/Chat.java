@@ -18,6 +18,9 @@ import server.DatabaseInteractors.UserDataSetter;
 import server.DatabaseInteractors.UserDatabaseInformation;
 
 public class Chat {
+
+    static final String[] CONVERSATION_CODE_KEYS = { "ocvdt&zvfl", "KzA#biPnxc", "*G$favyhmo", "!bs?j@iztq" };
+
     public static JSONObject procesRequests(RequestTypes reqType, JSONObject request) {
         try {
             return _generateResponse(reqType, request);
@@ -194,18 +197,14 @@ public class Chat {
     }
 
     private static String _generateConversationCode(int conversationId) {
-        final String[][] KEYS = { { "o", "c", "v", "d", "t", "&", "z", "v", "f", "l" },
-                { "K", "z", "A", "#", "b", "i", "P", "n", "x", "c" },
-                { "*", "G", "$", "f", "a", "v", "y", "h", "m", "o" },
-                { "!", "b", "s", "?", "j", "@", "i", "z", "t", "q" } };
 
-        var index = (int) (Math.random() * KEYS.length);
+        var index = (int) (Math.random() * CONVERSATION_CODE_KEYS.length);
 
-        String[] chosenKeytable = KEYS[index];
+        String chosenKeytable = CONVERSATION_CODE_KEYS[index];
         int convertableId = conversationId;
         String conversationCode = Integer.toString(index);
         do {
-            conversationCode += chosenKeytable[convertableId % 10];
+            conversationCode += chosenKeytable.charAt(convertableId % 10);
             convertableId = convertableId / 10;
         } while (convertableId > 0);
         return conversationCode;
@@ -240,8 +239,7 @@ public class Chat {
     }
 
     private static int _decodeConversationCode(String code) {
-        final String[] KEYS = { "ocvdt&zvfl", "KzA#biPnxc", "*G$favyhmo", "!bs?j@iztq" };
-        String chosenKeytable = KEYS[Character.getNumericValue(code.charAt(0))];
+        String chosenKeytable = CONVERSATION_CODE_KEYS[Character.getNumericValue(code.charAt(0))];
         String conversationCode = new String();
 
         for (int i = 1; i < code.length(); i++) {
