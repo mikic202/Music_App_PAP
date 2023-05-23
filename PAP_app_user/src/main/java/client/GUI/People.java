@@ -8,6 +8,7 @@ import com.mycompany.newgui.MainScreenCode;
 
 import client.Chat.Chat;
 import client.GUI.guiListeners.SendMessageListener;
+import client.GUI.guiListeners.SwitchConversationListener;
 import client.ServerConnector.ServerConnector;
 
 import java.awt.Color;
@@ -212,7 +213,7 @@ public class People extends javax.swing.JPanel {
                                                 .addGap(0, 0, Short.MAX_VALUE));
 
                 jList4.setModel(new javax.swing.AbstractListModel<String>() {
-                        String[] strings = { "a", "b", "c" };
+                        String[] strings = { "first_conversation", "some_name", "c" };
 
                         public int getSize() {
                                 return strings.length;
@@ -222,6 +223,7 @@ public class People extends javax.swing.JPanel {
                                 return strings[i];
                         }
                 });
+                jList4.addListSelectionListener(new SwitchConversationListener(chat, jPanel1));
                 jScrollPane5.setViewportView(jList4);
 
                 jButton8.setText("Go to");
