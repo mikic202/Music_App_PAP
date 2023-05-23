@@ -18,7 +18,7 @@ import java.awt.image.BufferedImage;
 public class Chat {
 
     private Hashtable<Integer, JSONObject> users_conversations;
-    private Hashtable<Integer, ArrayList<JSONObject>> messages_in_users_conversation;
+    private Hashtable<Integer, ArrayList<JSONObject>> messagesInUsersConversation;
     private Hashtable<Integer, Hashtable<Integer, JSONObject>> users_in_conversarion;
     private ChatAccesors chatAccesor;
     private int current_conversation;
@@ -32,11 +32,11 @@ public class Chat {
         chatAccesor = new ChatAccesors(server_connector);
         JSONObject conversations = chatAccesor.getUsersConversations(userId);
         users_conversations = new Hashtable<>();
-        convert_conversations_response_to_hashtable(conversations);
+        convert_conversationsResponseToHashtable(conversations);
         if (current_conversation == -1 && users_conversations.size() != 0) {
             current_conversation = Collections.min(users_conversations.keySet());
         }
-        messages_in_users_conversation = new Hashtable<>();
+        messagesInUsersConversation = new Hashtable<>();
         getCurrentMessages();
         users_in_conversarion = new Hashtable<>();
         getUsersInConversation(current_conv);
@@ -65,23 +65,25 @@ public class Chat {
     }
 
     public ArrayList<JSONObject> getCurrentMessages() {
-        if (messages_in_users_conversation.containsKey(current_conversation)) {
-            return messages_in_users_conversation.get(current_conversation);
+        if (messagesInUsersConversation.containsKey(current_conversation)) {
+            return messagesInUsersConversation.get(current_conversation);
         }
         ArrayList<JSONObject> new_messages = new ArrayList<>();
         JSONObject response = chatAccesor.getMessagesInConversation(current_conversation);
         for (int i = 0; i < response.getJSONArray("value").length(); i += 1) {
             new_messages.add(response.getJSONArray("value").getJSONObject(i));
         }
-        messages_in_users_conversation.put(current_conversation, new_messages);
+        messagesInUsersConversation.put(current_conversation, new_messages);
         return new_messages;
     }
 
     public JSONObject sendMessage(String text) {
-        return chatAccesor.sendMessage(current_conversation, userId, text).getJSONObject("value");
+        JSONObject newMessage = chatAccesor.sendMessage(current_conversation, userId, text).getJSONObject("value");
+        messagesInUsersConversation.get(current_conversation).add(newMessage);
+        return newMessage;
     }
 
-    private void convert_conversations_response_to_hashtable(JSONObject response) {
+    private void convert_conversationsResponseToHashtable(JSONObject response) {
         users_conversations.clear();
         JSONArray conversations = response.getJSONArray("value");
         for (int i = 0; i < conversations.length(); i += 1) {
@@ -161,20 +163,20 @@ public class Chat {
             return;
         }
         JSONObject conversations = chatAccesor.getUsersConversations(userId);
-        convert_conversations_response_to_hashtable(conversations);
+        convert_conversationsResponseToHashtable(conversations);
 
         int latest_msg = 1;
-        if (messages_in_users_conversation.get(current_conversation) != null
-                && messages_in_users_conversation.get(current_conversation).size() != 0) {
-            latest_msg = messages_in_users_conversation.get(current_conversation)
-                    .get(messages_in_users_conversation.get(current_conversation).size() - 1).getInt("message_id");
+        if (messagesInUsersConversation.get(current_conversation) != null
+                && messagesInUsersConversation.get(current_conversation).size() != 0) {
+            latest_msg = messagesInUsersConversation.get(current_conversation)
+                    .get(messagesInUsersConversation.get(current_conversation).size() - 1).getInt("message_id");
         }
         JSONObject new_messages_response = chatAccesor.getNewMessagesInConverastion(current_conversation,
                 latest_msg);
         for (int i = 0; i < new_messages_response.getJSONArray("value").length(); i += 1) {
-            ArrayList<JSONObject> messages = messages_in_users_conversation.get(current_conversation);
+            ArrayList<JSONObject> messages = messagesInUsersConversation.get(current_conversation);
             messages.add(new_messages_response.getJSONArray("value").getJSONObject(i));
-            messages_in_users_conversation.replace(current_conversation, messages);
+            messagesInUsersConversation.replace(current_conversation, messages);
         }
     }
 
@@ -206,7 +208,7 @@ public class Chat {
         boolean outcome = response.getJSONObject("value").getBoolean("outcome");
         if (outcome) {
             JSONObject conversations = chatAccesor.getUsersConversations(userId);
-            convert_conversations_response_to_hashtable(conversations);
+            convert_conversationsResponseToHashtable(conversations);
         }
         return outcome;
     }

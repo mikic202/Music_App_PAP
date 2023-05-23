@@ -7,6 +7,8 @@ import java.awt.event.ActionListener;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
+import org.json.JSONObject;
+
 import client.Chat.Chat;
 import client.GUI.LeftChatPanel;
 
@@ -25,26 +27,29 @@ public class SendMessageListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent event) {
-        new Thread(new SendMessageGuiUpdater()).run();
         if (messageBox.getText().trim().equals("")) {
             return;
         }
+        new Thread(new SendMessageGuiUpdater()).run();
     }
 
     class SendMessageGuiUpdater implements Runnable {
 
         @Override
         public void run() {
-            String message = messageBox.getText().trim();
-            LeftChatPanel messagePanel = new LeftChatPanel();
-            messagePanel.jTextArea1.setForeground(Color.black);
-            messagePanel.jTextArea1.setText(message);
-            messagesArea.add(messagePanel.jTextArea1, "wrap");
-            messagesArea.repaint();
-            messagesArea.revalidate();
+            addMessageToMessageArea(chat.sendMessage(messageBox.getText().trim()));
             messageBox.setText("");
         }
 
+    }
+
+    private void addMessageToMessageArea(JSONObject message) {
+        LeftChatPanel messagePanel = new LeftChatPanel();
+        messagePanel.jTextArea1.setForeground(Color.black);
+        messagePanel.jTextArea1.setText(message.getString("text"));
+        messagesArea.add(messagePanel.jTextArea1, "wrap");
+        messagesArea.repaint();
+        messagesArea.revalidate();
     }
 
     Chat chat;
