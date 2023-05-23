@@ -41,7 +41,7 @@ public class MessageDataAccesor implements DataAccesorInterface {
         String preparedStatement = String.format("Select MAX(%s) from %s where %s=?",
                 MessagesDatabaseInformation.ID_COLUMN.value(),
                 TABLENAME,
-                MessagesDatabaseInformation.SENDER_COLUMN.value());
+                MessagesDatabaseInformation.CONVERSATION_COLUMN.value());
 
         Connection connection = ConnectionPool.getConnection();
 
