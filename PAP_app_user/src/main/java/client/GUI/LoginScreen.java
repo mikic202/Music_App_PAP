@@ -6,6 +6,8 @@ package client.GUI;
 
 import com.formdev.flatlaf.FlatDarkLaf;
 
+import client.GUI.guiListeners.LoggingListener;
+
 public class LoginScreen extends javax.swing.JFrame {
 
         boolean dark = true;
@@ -65,11 +67,7 @@ public class LoginScreen extends javax.swing.JFrame {
                 LoginButton.setLabel("Log in");
                 LoginButton.setMaximumSize(new java.awt.Dimension(73, 23));
                 LoginButton.setMinimumSize(new java.awt.Dimension(73, 23));
-                LoginButton.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                LoginButtonActionPerformed(evt);
-                        }
-                });
+                LoginButton.addActionListener(new LoggingListener(this, EmailField1, PasswordField));
 
                 InvalidLogin.setText("Inavild email or password!");
 

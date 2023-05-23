@@ -24,11 +24,11 @@ public class Chat {
     private int userId;
     private JSONObject userInfo;
 
-    public Chat(JSONObject userInfo, int current_conv, ServerConnector server_connector) {
-        currentConversation = current_conv;
+    public Chat(JSONObject userInfo, int currentConv, ServerConnector serverConnector) {
+        currentConversation = currentConv;
         this.userInfo = userInfo;
         this.userId = userInfo.getInt("user_id");
-        chatAccesor = new ChatAccesors(server_connector);
+        chatAccesor = new ChatAccesors(serverConnector);
         JSONObject conversations = chatAccesor.getUsersConversations(userId);
         usersConversations = new Hashtable<>();
         convert_conversationsResponseToHashtable(conversations);
@@ -38,7 +38,7 @@ public class Chat {
         messagesInUsersConversation = new Hashtable<>();
         getCurrentMessages();
         usersInConversarion = new Hashtable<>();
-        getUsersInConversation(current_conv);
+        getUsersInConversation(currentConversation);
 
     }
 
@@ -64,11 +64,11 @@ public class Chat {
         return getCurrentMessages();
     }
 
-    public boolean setCurrentConversation(int new_current_conv) {
-        if (!usersConversations.containsKey(new_current_conv)) {
+    public boolean setCurrentConversation(int new_currentConv) {
+        if (!usersConversations.containsKey(new_currentConv)) {
             return false;
         }
-        currentConversation = new_current_conv;
+        currentConversation = new_currentConv;
         return true;
     }
 
