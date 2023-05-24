@@ -76,7 +76,7 @@ public class MainScreen extends javax.swing.JFrame {
                 FlatDarkLaf.setup();
                 initComponents();
                 this.PeopleButton.setIcon(new ImageIcon(
-                                "C:\\Users\\Adam\\Documents\\NetBeansProjects\\NewGUI\\src\\main\\java\\com\\mycompany\\newgui\\PeoplePAP.png"));
+                                "PeoplePAP.png"));
                 this.MusicButton.setIcon(new ImageIcon(
                                 "C:\\Users\\Adam\\Documents\\NetBeansProjects\\NewGUI\\src\\main\\java\\com\\mycompany\\newgui\\MusicPAP.png"));
                 this.AccountButton.setIcon(new ImageIcon(

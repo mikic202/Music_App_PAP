@@ -36,7 +36,7 @@ public class LeftChatPanel extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jTextArea1.setBackground(new java.awt.Color(51, 255, 51));
-        jTextArea1.setColumns(25);
+        jTextArea1.setColumns(50);
         jTextArea1.setLineWrap(true);
         jTextArea1.setRows(5);
         jTextArea1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
