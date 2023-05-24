@@ -30,6 +30,12 @@ public class LoginScreen extends javax.swing.JFrame {
                 initComponents();
         }
 
+        public LoginScreen(ServerConnector serverConnector) {
+                this.serverConnector = serverConnector;
+                FlatDarkLaf.setup();
+                initComponents();
+        }
+
         /**
          * This method is called from within the constructor to initialize the form.
          * WARNING: Do NOT modify this code. The content of this method is always
@@ -280,21 +286,11 @@ public class LoginScreen extends javax.swing.JFrame {
         }// </editor-fold>//GEN-END:initComponents
 
         private void RegisterButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_RegisterButtonActionPerformed
-                // TODO add your handling code here:
-        }// GEN-LAST:event_RegisterButtonActionPerformed
-
-        private void RecoverButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_RecoverButtonActionPerformed
-                // TODO add your handling code here:
-        }// GEN-LAST:event_RecoverButtonActionPerformed
-
-        private void LoginButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_LoginButtonActionPerformed
-                String writtenEmail = EmailField1.getText();
-                char[] writtenPassword = PasswordField.getPassword();
-                /*
-                 * tu sprawdzamy czy serwer zwrócił true(jeśli są w bazie), false(jeśli nie)
-                 */
+                RegisterScreen registerScreen = new RegisterScreen(serverConnector);
+                registerScreen.setVisible(true);
+                this.setVisible(false);
                 this.dispose();
-        }// GEN-LAST:event_LoginButtonActionPerformed
+        }// GEN-LAST:event_RegisterButtonActionPerformed
 
         private void PasswordFieldActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_PasswordFieldActionPerformed
                 // TODO add your handling code here:

@@ -73,6 +73,7 @@ public class MainScreen extends javax.swing.JFrame {
         }
 
         public MainScreen(ServerConnector serverConnector, JSONObject userInfo) {
+                chat = new Chat(userInfo, -1, serverConnector);
                 FlatDarkLaf.setup();
                 initComponents();
                 this.PeopleButton.setIcon(new ImageIcon(
@@ -87,7 +88,6 @@ public class MainScreen extends javax.swing.JFrame {
                 // Math.round(duration);
                 // jLabel21.setText(String.valueOf(duration));
                 // this.MainScreenCode.setLayout(new FlowLayout());
-                chat = new Chat(userInfo, -1, serverConnector);
         }
 
         /**
