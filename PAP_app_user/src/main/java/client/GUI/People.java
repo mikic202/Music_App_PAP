@@ -29,16 +29,8 @@ public class People extends javax.swing.JPanel {
         /**
          * Creates new form People
          */
-        public People() {
-                JSONObject userInfo = new JSONObject();
-                userInfo.put("user_id", 1);
-                try {
-                        ServerConnector connector = new ServerConnector(new Socket("localhost",
-                                        8000));
-                        chat = new Chat(userInfo, 1, connector);
-                } catch (Exception e) {
-                        System.out.println(e);
-                }
+        public People(Chat chat) {
+                this.chat = chat;
                 initComponents();
                 this.jTextArea1.setEditable(false);
                 this.jTextArea2.setText("sssssss");

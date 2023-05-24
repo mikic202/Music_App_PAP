@@ -7,6 +7,7 @@ package client.GUI;
 import com.formdev.flatlaf.FlatDarkLaf;
 
 import client.GUI.guiListeners.LoggingListener;
+import client.GUI.guiListeners.RetrievePasswordListener;
 
 public class LoginScreen extends javax.swing.JFrame {
 
@@ -80,11 +81,7 @@ public class LoginScreen extends javax.swing.JFrame {
                 RecoverButton.setText("Recover password");
                 RecoverButton.setMaximumSize(new java.awt.Dimension(73, 23));
                 RecoverButton.setMinimumSize(new java.awt.Dimension(73, 23));
-                RecoverButton.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                RecoverButtonActionPerformed(evt);
-                        }
-                });
+                RecoverButton.addActionListener(new RetrievePasswordListener(ForgotPass, EmailField1));
 
                 RegisterButton.setLabel("Register");
                 RegisterButton.setMaximumSize(new java.awt.Dimension(73, 23));
