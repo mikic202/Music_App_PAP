@@ -30,7 +30,7 @@ public class SendMessageListener implements ActionListener {
         if (messageBox.getText().trim().equals("")) {
             return;
         }
-        new Thread(new SendMessageGuiUpdater()).run();
+        new Thread(new SendMessageGuiUpdater()).start();
     }
 
     class SendMessageGuiUpdater implements Runnable {

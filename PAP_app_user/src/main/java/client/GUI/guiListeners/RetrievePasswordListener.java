@@ -30,7 +30,7 @@ public class RetrievePasswordListener implements ActionListener {
     public void actionPerformed(ActionEvent event) {
         // if (!emailField.getText().equals("") &&
         // !String.valueOf(passwordField.getPassword()).equals("")) {
-        new Thread(new LoggingGuiUpdater()).run();
+        new Thread(new LoggingGuiUpdater()).start();
         // }
     }
 

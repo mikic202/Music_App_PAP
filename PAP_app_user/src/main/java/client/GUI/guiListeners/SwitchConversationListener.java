@@ -30,7 +30,7 @@ public class SwitchConversationListener implements ListSelectionListener {
 
         if (!event.getValueIsAdjusting()) {
             currentConversationName = ((JList) event.getSource()).getSelectedValue().toString();
-            new Thread(new ConversationMessagesUpdater()).run();
+            new Thread(new ConversationMessagesUpdater()).start();
 
         }
 
