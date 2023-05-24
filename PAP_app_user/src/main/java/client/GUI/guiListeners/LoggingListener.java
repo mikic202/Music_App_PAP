@@ -2,7 +2,6 @@ package client.GUI.guiListeners;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.net.Socket;
 
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -16,16 +15,12 @@ import client.login_and_account_accessors.LoginAccessors;
 
 public class LoggingListener implements ActionListener {
 
-    public LoggingListener(LoginScreen loggingScreen, JTextField emailField, JPasswordField passwordField) {
+    public LoggingListener(LoginScreen loggingScreen, JTextField emailField, JPasswordField passwordField,
+            ServerConnector serverConnector) {
         this.loggingScreen = loggingScreen;
         this.emailField = emailField;
         this.passwordField = passwordField;
-        try {
-            serverConnector = new ServerConnector(new Socket("localhost",
-                    8000));
-        } catch (Exception e) {
-            System.out.println(e);
-        }
+        this.serverConnector = serverConnector;
         loggingAccessors = new LoginAccessors(serverConnector);
     }
 

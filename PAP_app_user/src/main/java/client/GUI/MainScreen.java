@@ -1231,7 +1231,7 @@ public class MainScreen extends javax.swing.JFrame {
         }// GEN-LAST:event_jToggleButton4ActionPerformed
 
         private void PeopleButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_PeopleButtonActionPerformed
-                People people = new People();
+                People people = new People(chat);
                 this.setContentPane(people);
                 this.invalidate();
                 this.validate();

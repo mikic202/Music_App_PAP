@@ -4,17 +4,28 @@
  */
 package client.GUI;
 
+import java.net.Socket;
+
 import com.formdev.flatlaf.FlatDarkLaf;
 
 import client.GUI.guiListeners.LoggingListener;
 import client.GUI.guiListeners.RetrievePasswordListener;
+import client.ServerConnector.ServerConnector;
 
 public class LoginScreen extends javax.swing.JFrame {
 
         boolean dark = true;
         boolean light = false;
 
+        ServerConnector serverConnector;
+
         public LoginScreen() {
+                try {
+                        serverConnector = new ServerConnector(new Socket("localhost",
+                                        8000));
+                } catch (Exception e) {
+                        System.out.println(e);
+                }
                 FlatDarkLaf.setup();
                 initComponents();
         }
@@ -68,7 +79,7 @@ public class LoginScreen extends javax.swing.JFrame {
                 LoginButton.setLabel("Log in");
                 LoginButton.setMaximumSize(new java.awt.Dimension(73, 23));
                 LoginButton.setMinimumSize(new java.awt.Dimension(73, 23));
-                LoginButton.addActionListener(new LoggingListener(this, EmailField1, PasswordField));
+                LoginButton.addActionListener(new LoggingListener(this, EmailField1, PasswordField, serverConnector));
 
                 InvalidLogin.setText("Inavild email or password!");
 
@@ -81,7 +92,7 @@ public class LoginScreen extends javax.swing.JFrame {
                 RecoverButton.setText("Recover password");
                 RecoverButton.setMaximumSize(new java.awt.Dimension(73, 23));
                 RecoverButton.setMinimumSize(new java.awt.Dimension(73, 23));
-                RecoverButton.addActionListener(new RetrievePasswordListener(ForgotPass, EmailField1));
+                RecoverButton.addActionListener(new RetrievePasswordListener(ForgotPass, EmailField1, serverConnector));
 
                 RegisterButton.setLabel("Register");
                 RegisterButton.setMaximumSize(new java.awt.Dimension(73, 23));
