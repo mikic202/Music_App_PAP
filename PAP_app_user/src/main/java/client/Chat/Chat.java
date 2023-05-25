@@ -73,12 +73,8 @@ public class Chat {
     }
 
     public boolean setCurrentConversation(String conversationName) {
-        for (var converationId : usersConversations.keySet()) {
-            if (usersConversations.get(converationId).getString("name").equals(conversationName)) {
-                return setCurrentConversation(converationId);
-            }
-        }
-        return false;
+        int conversationId = getConversationsNamesToIds().get(conversationName);
+        return setCurrentConversation(conversationId);
     }
 
     public ArrayList<JSONObject> getCurrentMessages() {

@@ -40,6 +40,8 @@ public class People extends javax.swing.JPanel {
                 this.jTextArea1.setWrapStyleWord(true);
                 this.jTextArea2.setWrapStyleWord(true);
                 this.jPanel1.setLayout(new MigLayout("fillx"));
+                // jList4;
+
         }
 
         private Chat chat;
@@ -204,8 +206,16 @@ public class People extends javax.swing.JPanel {
                                 jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                 .addGap(0, 0, Short.MAX_VALUE));
 
+                var convNamesSet = chat.getConversationsNamesToIds().keySet();
+
+                String[] convNames = new String[convNamesSet.size()];
+                int i = 0;
+                for (String name : convNamesSet) {
+                        convNames[i++] = name;
+                }
+
                 jList4.setModel(new javax.swing.AbstractListModel<String>() {
-                        String[] strings = { "first_conversation", "some_name", "c" };
+                        String[] strings = convNames;
 
                         public int getSize() {
                                 return strings.length;
