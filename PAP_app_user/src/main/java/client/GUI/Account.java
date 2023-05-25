@@ -10,6 +10,10 @@ import java.io.File;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
+import client.Chat.Chat;
+import client.GUI.guiListeners.changeEmailListener;
+import client.ServerConnector.ServerConnector;
+
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
@@ -23,7 +27,13 @@ public class Account extends javax.swing.JPanel {
         /**
          * Creates new form Account
          */
-        public Account() {
+
+        private Chat chat;
+        private ServerConnector serverConnector;
+
+        public Account(ServerConnector serverConnector, Chat chat) {
+                this.serverConnector = serverConnector;
+                this.chat = chat;
                 initComponents();
                 try {
                         Image defaultImage = ImageIO.read(new File("src\\main\\java\\client\\GUI\\deaudlt.png"));
@@ -101,11 +111,8 @@ public class Account extends javax.swing.JPanel {
                 nickChange.setText("jTextField1");
 
                 emailChangeAccept.setText("Accept");
-                emailChangeAccept.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                emailChangeAcceptActionPerformed(evt);
-                        }
-                });
+                emailChangeAccept.addActionListener(
+                                new changeEmailListener(emailChange, serverConnector, chat, email));
 
                 nickChangeAccept.setText("Accept");
 

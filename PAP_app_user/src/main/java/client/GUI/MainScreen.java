@@ -18,6 +18,7 @@ import javax.swing.SwingUtilities;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.sound.sampled.FloatControl;
@@ -33,6 +34,7 @@ public class MainScreen extends javax.swing.JFrame {
         File musicFile;
         AudioInputStream audioStream;
         Clip clip;
+        ServerConnector serverConnector;
 
         private Chat chat;
 
@@ -56,24 +58,28 @@ public class MainScreen extends javax.swing.JFrame {
         }
 
         public MainScreen() {
+                JSONObject userInfo = new JSONObject();
+                userInfo.put("user_id", 1);
+                try {
+                        serverConnector = new ServerConnector(new Socket("localhost",
+                                        8000));
+                        chat = new Chat(userInfo, -1, serverConnector);
+                } catch (Exception e) {
+                        System.out.println(e);
+                }
                 FlatDarkLaf.setup();
                 initComponents();
                 this.PeopleButton.setIcon(new ImageIcon(
-                                "C:\\Users\\Adam\\Documents\\NetBeansProjects\\NewGUI\\src\\main\\java\\com\\mycompany\\newgui\\PeoplePAP.png"));
+                                "PeoplePAP.png"));
                 this.MusicButton.setIcon(new ImageIcon(
                                 "C:\\Users\\Adam\\Documents\\NetBeansProjects\\NewGUI\\src\\main\\java\\com\\mycompany\\newgui\\MusicPAP.png"));
                 this.AccountButton.setIcon(new ImageIcon(
                                 "C:\\Users\\Adam\\Documents\\NetBeansProjects\\NewGUI\\src\\main\\java\\com\\mycompany\\newgui\\AccountSettingsPAP.png"));
-                // AudioFormat format = audioStream.getFormat();
-                // long frames = audioStream.getFrameLength();
-                // duration = (frames+0.0) / format.getFrameRate();
-                // Math.round(duration);
-                // jLabel21.setText(String.valueOf(duration));
-                // this.MainScreenCode.setLayout(new FlowLayout());
         }
 
         public MainScreen(ServerConnector serverConnector, JSONObject userInfo) {
                 chat = new Chat(userInfo, -1, serverConnector);
+                this.serverConnector = serverConnector;
                 FlatDarkLaf.setup();
                 initComponents();
                 this.PeopleButton.setIcon(new ImageIcon(
@@ -1257,7 +1263,7 @@ public class MainScreen extends javax.swing.JFrame {
         }// GEN-LAST:event_jRadioButton1ActionPerformed
 
         private void AccountButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_AccountButtonActionPerformed
-                Account account = new Account();
+                Account account = new Account(serverConnector, chat);
                 this.setContentPane(account);
                 this.invalidate();
                 this.validate();
