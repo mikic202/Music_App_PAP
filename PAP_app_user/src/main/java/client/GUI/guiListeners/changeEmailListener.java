@@ -13,9 +13,9 @@ import client.Chat.Chat;
 import client.ServerConnector.ServerConnector;
 import client.login_and_account_accessors.AccountChangeRequestAccessors;
 
-public class changeEmailListener implements ActionListener {
+public class ChangeEmailListener implements ActionListener {
 
-    public changeEmailListener(JTextField newEmailField,
+    public ChangeEmailListener(JTextField newEmailField,
             ServerConnector serverConnector, Chat chat, JLabel emailLabel) {
         this.newEmailField = newEmailField;
         this.serverConnector = serverConnector;
