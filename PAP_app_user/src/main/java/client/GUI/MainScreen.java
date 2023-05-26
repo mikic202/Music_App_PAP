@@ -62,7 +62,7 @@ public class MainScreen extends javax.swing.JFrame {
                 JSONObject userInfo = new JSONObject();
                 userInfo.put("user_id", 1);
                 try {
-                        serverConnector = new ServerConnector(new Socket("localhost",
+                        serverConnector = new ServerConnector(new Socket("144.91.114.89",
                                         8000));
                 } catch (Exception e) {
                         System.out.println(e);
