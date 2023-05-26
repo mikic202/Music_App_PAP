@@ -4,20 +4,19 @@
  */
 package client.GUI;
 
+import javax.swing.JLabel;
+
 /**
  *
  * @author Adam
  */
-public class LeftChatPanel extends javax.swing.JFrame {
+public class ImageChatPanel extends javax.swing.JFrame {
 
     /**
      * Creates new form LeftChatPanel
      */
-    public LeftChatPanel() {
+    public ImageChatPanel() {
         initComponents();
-        this.jTextArea1.setEditable(false);
-        this.jTextArea1.setLineWrap(true);
-        this.jTextArea1.setWrapStyleWord(true);
     }
 
     /**
@@ -31,14 +30,11 @@ public class LeftChatPanel extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        jTextArea1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jTextArea1.setBackground(new java.awt.Color(51, 255, 51));
-        jTextArea1.setColumns(50);
-        jTextArea1.setLineWrap(true);
-        jTextArea1.setRows(5);
         jTextArea1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jScrollPane1.setViewportView(jTextArea1);
 
@@ -82,16 +78,16 @@ public class LeftChatPanel extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(LeftChatPanel.class.getName()).log(java.util.logging.Level.SEVERE, null,
+            java.util.logging.Logger.getLogger(ImageChatPanel.class.getName()).log(java.util.logging.Level.SEVERE, null,
                     ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(LeftChatPanel.class.getName()).log(java.util.logging.Level.SEVERE, null,
+            java.util.logging.Logger.getLogger(ImageChatPanel.class.getName()).log(java.util.logging.Level.SEVERE, null,
                     ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(LeftChatPanel.class.getName()).log(java.util.logging.Level.SEVERE, null,
+            java.util.logging.Logger.getLogger(ImageChatPanel.class.getName()).log(java.util.logging.Level.SEVERE, null,
                     ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(LeftChatPanel.class.getName()).log(java.util.logging.Level.SEVERE, null,
+            java.util.logging.Logger.getLogger(ImageChatPanel.class.getName()).log(java.util.logging.Level.SEVERE, null,
                     ex);
         }
         // </editor-fold>
@@ -100,13 +96,13 @@ public class LeftChatPanel extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new LeftChatPanel().setVisible(true);
+                new ImageChatPanel().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;
-    public javax.swing.JTextArea jTextArea1;
+    public javax.swing.JLabel jTextArea1;
     // End of variables declaration//GEN-END:variables
 }

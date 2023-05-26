@@ -41,7 +41,7 @@ public class MessageDataAccesor implements DataAccesorInterface {
         String preparedStatement = String.format("Select MAX(%s) from %s where %s=?",
                 MessagesDatabaseInformation.ID_COLUMN.value(),
                 TABLENAME,
-                MessagesDatabaseInformation.SENDER_COLUMN.value());
+                MessagesDatabaseInformation.CONVERSATION_COLUMN.value());
 
         Connection connection = ConnectionPool.getConnection();
 
@@ -53,6 +53,7 @@ public class MessageDataAccesor implements DataAccesorInterface {
             while (result.next()) {
                 id = result.getInt(1);
             }
+            connection.commit();
         } catch (Exception e) {
             System.out.println(e);
 
@@ -93,6 +94,7 @@ public class MessageDataAccesor implements DataAccesorInterface {
                 msg_data.put(MessagesDatabaseInformation.IS_IMAGE_COLUMN.value(), result.getString(6));
                 messages_data.add(msg_data);
             }
+            connection.commit();
 
             ConnectionPool.releaseConnection(connection);
         } catch (Exception e) {
@@ -134,6 +136,7 @@ public class MessageDataAccesor implements DataAccesorInterface {
             statement.setString(1, value);
             result = statement.executeQuery();
             messagesData = processResultToFullData(result);
+            connection.commit();
 
         } catch (Exception e) {
             System.out.println(e);
@@ -154,6 +157,7 @@ public class MessageDataAccesor implements DataAccesorInterface {
             statement.setInt(1, value);
             result = statement.executeQuery();
             messagesData = processResultToFullData(result);
+            connection.commit();
 
         } catch (Exception e) {
             System.out.println(e);

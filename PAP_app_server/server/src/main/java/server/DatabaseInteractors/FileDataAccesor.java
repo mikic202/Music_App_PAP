@@ -81,7 +81,7 @@ public class FileDataAccesor implements DataAccesorInterface {
             statement.setInt(1, value);
             result = statement.executeQuery();
             fileData = processResultToFullData(result);
-
+            connection.commit();
         } catch (Exception e) {
             System.out.println(e);
         } finally {
@@ -101,7 +101,7 @@ public class FileDataAccesor implements DataAccesorInterface {
             statement.setString(1, value);
             result = statement.executeQuery();
             fileData = processResultToFullData(result);
-
+            connection.commit();
         } catch (Exception e) {
             System.out.println(e);
         } finally {

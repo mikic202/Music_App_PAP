@@ -42,6 +42,7 @@ public class ConversationDataAccesor implements DataAccesorInterface {
             while (result.next()) {
                 users.add(result.getInt(1));
             }
+            connection.commit();
         } catch (Exception e) {
             System.out.println(e);
 
@@ -69,6 +70,7 @@ public class ConversationDataAccesor implements DataAccesorInterface {
             while (result.next()) {
                 messages.add(result.getInt(1));
             }
+            connection.commit();
         } catch (Exception e) {
             System.out.println(e);
 
@@ -93,6 +95,7 @@ public class ConversationDataAccesor implements DataAccesorInterface {
             while (result.next()) {
                 id = result.getInt(1);
             }
+            connection.commit();
         } catch (Exception e) {
             System.out.println(e);
 
@@ -130,7 +133,7 @@ public class ConversationDataAccesor implements DataAccesorInterface {
             statement.setInt(1, value);
             result = statement.executeQuery();
             userData = processResultToFullData(result);
-
+            connection.commit();
         } catch (Exception e) {
             System.out.println(e);
         } finally {
@@ -150,7 +153,7 @@ public class ConversationDataAccesor implements DataAccesorInterface {
             statement.setString(1, value);
             result = statement.executeQuery();
             userData = processResultToFullData(result);
-
+            connection.commit();
         } catch (Exception e) {
             System.out.println(e);
         } finally {

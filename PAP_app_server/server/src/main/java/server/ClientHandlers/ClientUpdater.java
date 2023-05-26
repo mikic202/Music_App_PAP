@@ -46,13 +46,13 @@ public class ClientUpdater implements Runnable {
 	public void stop() {
 		running = false;
 	}
-	
+
 	public void run() {
 		ClientUpdaterAcceptor acceptor = new ClientUpdaterAcceptor(this);
 		Thread acceptorThread = new Thread(acceptor);
 		acceptorThread.run();
 		try {
-			ServerSocket server = new ServerSocket(8001);
+			ServerSocket server = new ServerSocket(8005);
 			while (true) {
 				Instant start = Instant.now();
 				synchronized (clients) {
@@ -97,22 +97,22 @@ public class ClientUpdater implements Runnable {
 				// System.out.println("Processing client.");
 				Client client = it.next();
 				try {
-					if(client.userID == null) {
+					if (client.userID == null) {
 						client.close();
-					}
-					else {
-						ArrayList<Integer> conversations = UserDataAccesor.getUserConversations(Integer.valueOf(client.userID));
+					} else {
+						ArrayList<Integer> conversations = UserDataAccesor
+								.getUserConversations(Integer.valueOf(client.userID));
 
-						if(conversations.contains(Integer.valueOf(conversationID).intValue())) {
+						if (conversations.contains(Integer.valueOf(conversationID).intValue())) {
 							Hashtable<String, String> message = MessageDataAccesor.getData(messageID);
 							Set<String> keys = message.keySet();
-				            JSONObject messageJSON = new JSONObject();
-				            for (String key : keys) {
-				            	messageJSON.put(key, message.get(key));
-				            }
-				            JSONObject data = new JSONObject();
-				            data.put("value", messageJSON);
-				            client.write((data.toString() + "\n").getBytes());
+							JSONObject messageJSON = new JSONObject();
+							for (String key : keys) {
+								messageJSON.put(key, message.get(key));
+							}
+							JSONObject data = new JSONObject();
+							data.put("value", messageJSON);
+							client.write((data.toString() + "\n").getBytes());
 						}
 					}
 				} catch (IOException exception) {
@@ -139,7 +139,7 @@ public class ClientUpdater implements Runnable {
 			System.out.println(message);
 			return;
 		}
-		if(!LoginRequestTypes.SEND_LOGIN.value().equals(typeStr)) {
+		if (!LoginRequestTypes.SEND_LOGIN.value().equals(typeStr)) {
 			System.out.println("Received request of incorrect type: " + typeStr);
 			return;
 		}
@@ -155,10 +155,9 @@ public class ClientUpdater implements Runnable {
 		String response = responseJSON.toString() + "\n";
 		System.out.print("\tResponse: " + response);
 		client.write(response.getBytes());
-		if(responseJSON.getJSONObject("value").getBoolean("outcome")) {
+		if (responseJSON.getJSONObject("value").getBoolean("outcome")) {
 			client.userID = responseJSON.getJSONObject("value").getString("user_id");
-		}
-		else {
+		} else {
 			client.close();
 		}
 	}
@@ -166,14 +165,14 @@ public class ClientUpdater implements Runnable {
 
 class ClientUpdaterAcceptor implements Runnable {
 	ClientUpdater updater = null;
-	
+
 	public ClientUpdaterAcceptor(ClientUpdater updater) {
 		this.updater = updater;
 	}
-	
+
 	public void run() {
 		try {
-			ServerSocket server = new ServerSocket(8001);
+			ServerSocket server = new ServerSocket(8005);
 			while (true) {
 				updater.addClient(server.accept());
 			}

@@ -91,7 +91,7 @@ public class Login {
             return result;
         }
         Hashtable<String, String> user_info = UserDataAccesor.getData(request.getInt("user_id"));
-        if (user_info.isEmpty()) {
+        if (user_info.isEmpty() || !user_info.get("password").equals(old_password)) {
             result.put("outcome", false);
             JSONObject response = new JSONObject();
             response.put("value", result);
@@ -150,7 +150,7 @@ public class Login {
 
     private static JSONObject _retrievePassword(JSONObject request) {
         JSONObject result = new JSONObject();
-        Hashtable<String, String> user_info = UserDataAccesor.getData(request.getInt("user_id"));
+        Hashtable<String, String> user_info = UserDataAccesor.getDataWithEmail(request.getString("email"));
         if (user_info.isEmpty()) {
             result.put("outcome", false);
             JSONObject response = new JSONObject();
@@ -163,12 +163,13 @@ public class Login {
         final String message = "Please DO NOT responde to this email\nNew Password: " + newPassword
                 + "\n Please reset the Password after logging in";
         user_info.put("password", newPassword);
-        UserDataSetter.setData(request.getInt("user_id"), user_info);
+        System.out.println(user_info);
+        UserDataSetter.setData(Integer.parseInt(user_info.get("ID")), user_info);
         new Thread(new Runnable() {
             public void run() {
                 _sendMessage(email, message);
             }
-        });
+        }).start();
         result.put("outcome", true);
         JSONObject response = new JSONObject();
         response.put("value", result);
@@ -192,7 +193,7 @@ public class Login {
 
             protected PasswordAuthentication getPasswordAuthentication() {
 
-                return new PasswordAuthentication(from, "wvdhgxvuqyhgccxe");
+                return new PasswordAuthentication(from, "cxlawlqoefcyfuhr");
             }
         });
         session.setDebug(true);

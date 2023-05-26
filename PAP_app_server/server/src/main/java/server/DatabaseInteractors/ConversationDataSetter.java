@@ -24,7 +24,7 @@ public class ConversationDataSetter implements DataSetterInterface {
             connection.commit();
 
             statement.executeUpdate();
-
+            connection.commit();
         } catch (Exception e) {
             System.out.println(e);
 
@@ -49,6 +49,7 @@ public class ConversationDataSetter implements DataSetterInterface {
             connection.commit();
             statement.executeUpdate();
             added_id = ConversationDataAccesor.getLatestConversation();
+            connection.commit();
         } catch (Exception e) {
             System.out.println(e);
 

@@ -25,10 +25,20 @@ public class ServerConnector {
         }
     }
 
-    public synchronized JSONObject send_request(JSONObject request) {
+    public synchronized JSONObject sendRequest(JSONObject request) {
         String response = "";
         try {
             output.write((request.toString() + "\n").getBytes());
+            response = input.readLine();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return new JSONObject(response);
+    }
+
+    public synchronized JSONObject waitForData() {
+        String response = "";
+        try {
             response = input.readLine();
         } catch (Exception e) {
             System.out.println(e);
