@@ -63,10 +63,10 @@ public class MainScreen extends javax.swing.JFrame {
                 try {
                         serverConnector = new ServerConnector(new Socket("localhost",
                                         8000));
-                        chat = new Chat(userInfo, -1, serverConnector);
                 } catch (Exception e) {
                         System.out.println(e);
                 }
+                chat = new Chat(userInfo, -1, serverConnector);
                 FlatDarkLaf.setup();
                 initComponents();
                 this.PeopleButton.setIcon(new ImageIcon(
