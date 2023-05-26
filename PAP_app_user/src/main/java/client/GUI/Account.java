@@ -11,7 +11,9 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 import client.Chat.Chat;
-import client.GUI.guiListeners.changeEmailListener;
+import client.GUI.guiListeners.ChangeEmailListener;
+import client.GUI.guiListeners.ChangePasswordListener;
+import client.GUI.guiListeners.ChangeUsernameListener;
 import client.ServerConnector.ServerConnector;
 
 import java.awt.Image;
@@ -76,14 +78,14 @@ public class Account extends javax.swing.JPanel {
                 confirmPasswordLabel = new javax.swing.JLabel();
                 confirmPassword = new javax.swing.JPasswordField();
                 passwordAccept = new javax.swing.JButton();
-                avatarLabel = new javax.swing.JLabel();
+                avatarLable = new javax.swing.JLabel();
                 avatar = new javax.swing.JLabel();
                 jEditorPane1 = new javax.swing.JEditorPane();
                 peopleButton = new javax.swing.JButton();
                 msuicButton = new javax.swing.JButton();
                 accountButton = new javax.swing.JButton();
                 mainScreenButton = new javax.swing.JButton();
-                changeAvatarLabel = new javax.swing.JLabel();
+                passwordChangeOutcome = new javax.swing.JLabel();
 
                 jMenu1.setText("File");
                 jMenuBar1.add(jMenu1);
@@ -100,7 +102,7 @@ public class Account extends javax.swing.JPanel {
 
                 emailChangeLabel.setText("Change e-mail:");
 
-                emailChange.setText("jTextField1");
+                emailChange.setText("");
 
                 nickLabel.setText("Nick:");
 
@@ -108,31 +110,34 @@ public class Account extends javax.swing.JPanel {
 
                 nickChangeLabel.setText("Change nick:");
 
-                nickChange.setText("jTextField1");
+                nickChange.setText("");
 
                 emailChangeAccept.setText("Accept");
                 emailChangeAccept.addActionListener(
-                                new changeEmailListener(emailChange, serverConnector, chat, email));
+                                new ChangeEmailListener(emailChange, serverConnector, chat, email));
 
                 nickChangeAccept.setText("Accept");
+                nickChangeAccept.addActionListener(new ChangeUsernameListener(nickChange, serverConnector, chat, nick));
 
                 passwordLabel.setText("Password:");
 
                 oldPasswordLabel.setText("Old password:");
 
-                oldPassword.setText("jPasswordField1");
+                oldPassword.setText("");
 
                 newPasswordLabel.setText("New password:");
 
-                newPassword.setText("jPasswordField1");
+                newPassword.setText("");
 
                 confirmPasswordLabel.setText("Confirm password:");
 
-                confirmPassword.setText("jPasswordField1");
+                confirmPassword.setText("");
 
                 passwordAccept.setText("Accept");
+                passwordAccept.addActionListener(new ChangePasswordListener(oldPassword, newPassword, confirmPassword,
+                                serverConnector, chat, passwordChangeOutcome));
 
-                avatarLabel.setText("Avatar:");
+                avatarLable.setText("Avatar:");
 
                 peopleButton.setText("jButton1");
                 peopleButton.addActionListener(new java.awt.event.ActionListener() {
@@ -161,8 +166,6 @@ public class Account extends javax.swing.JPanel {
                                 mainScreenButtonActionPerformed(evt);
                         }
                 });
-
-                changeAvatarLabel.setText("Change avatar:");
 
                 javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
                 this.setLayout(layout);
@@ -263,7 +266,7 @@ public class Account extends javax.swing.JPanel {
                                                                                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE)))
                                                                                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
                                                                                                 layout.createSequentialGroup()
-                                                                                                                .addComponent(changeAvatarLabel,
+                                                                                                                .addComponent(passwordChangeOutcome,
                                                                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE,
                                                                                                                                 159,
                                                                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -282,7 +285,7 @@ public class Account extends javax.swing.JPanel {
                                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE,
                                                                                                 336,
                                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                                .addComponent(avatarLabel,
+                                                                                .addComponent(avatarLable,
                                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE,
                                                                                                 159,
                                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -374,10 +377,10 @@ public class Account extends javax.swing.JPanel {
                                                                                                                                                                 javax.swing.GroupLayout.DEFAULT_SIZE,
                                                                                                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE))
                                                                                                                                 .addGap(18, 18, 18)
-                                                                                                                                .addComponent(changeAvatarLabel))
+                                                                                                                                .addComponent(passwordChangeOutcome))
                                                                                                                 .addGroup(layout.createSequentialGroup()
                                                                                                                                 .addGap(17, 17, 17)
-                                                                                                                                .addComponent(avatarLabel)
+                                                                                                                                .addComponent(avatarLable)
                                                                                                                                 .addPreferredGap(
                                                                                                                                                 javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                                                                                                 .addComponent(avatar,
@@ -462,8 +465,8 @@ public class Account extends javax.swing.JPanel {
         // Variables declaration - do not modify
         private javax.swing.JButton accountButton;
         private javax.swing.JLabel avatar;
-        private javax.swing.JLabel avatarLabel;
-        private javax.swing.JLabel changeAvatarLabel;
+        private javax.swing.JLabel avatarLable;
+        private javax.swing.JLabel passwordChangeOutcome;
         private javax.swing.JPasswordField confirmPassword;
         private javax.swing.JLabel confirmPasswordLabel;
         private javax.swing.JLabel email;

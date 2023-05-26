@@ -91,7 +91,7 @@ public class Login {
             return result;
         }
         Hashtable<String, String> user_info = UserDataAccesor.getData(request.getInt("user_id"));
-        if (user_info.isEmpty()) {
+        if (user_info.isEmpty() || !user_info.get("password").equals(old_password)) {
             result.put("outcome", false);
             JSONObject response = new JSONObject();
             response.put("value", result);
