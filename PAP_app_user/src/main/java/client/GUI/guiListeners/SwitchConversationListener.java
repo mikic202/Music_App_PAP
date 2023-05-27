@@ -79,10 +79,10 @@ public class SwitchConversationListener implements ListSelectionListener {
     void addTextMessage(JSONObject message) {
         LeftChatPanel chatPanel = new LeftChatPanel();
         if (message.getInt("sender_id") == chat.userId()) {
-            chatPanel.jTextArea1.setBackground(new java.awt.Color(0, 137, 255));
+            chatPanel.chatText.setBackground(new java.awt.Color(0, 137, 255));
         }
-        chatPanel.jTextArea1.setText(message.getString("text"));
-        this.messagesArea.add(chatPanel.jTextArea1, "wrap");
+        chatPanel.chatText.setText(message.getString("text"));
+        this.messagesArea.add(chatPanel.chatText, "wrap");
         this.messagesArea.repaint();
         this.messagesArea.revalidate();
     }

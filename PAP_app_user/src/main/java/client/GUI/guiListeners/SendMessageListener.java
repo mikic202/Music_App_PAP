@@ -45,9 +45,9 @@ public class SendMessageListener implements ActionListener {
 
     private void addMessageToMessageArea(JSONObject message) {
         LeftChatPanel messagePanel = new LeftChatPanel();
-        messagePanel.jTextArea1.setForeground(Color.black);
-        messagePanel.jTextArea1.setText(message.getString("text"));
-        messagesArea.add(messagePanel.jTextArea1, "wrap");
+        messagePanel.chatText.setForeground(Color.black);
+        messagePanel.chatText.setText(message.getString("text"));
+        messagesArea.add(messagePanel.chatText, "wrap");
         messagesArea.repaint();
         messagesArea.revalidate();
     }

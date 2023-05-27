@@ -2,7 +2,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-
 package client.GUI;
 
 import com.formdev.flatlaf.FlatDarkLaf;
@@ -26,16 +25,16 @@ import javax.sound.sampled.FloatControl;
 
 public class MainScreen extends javax.swing.JFrame {
 
-        /**
-         * Creates new form MainScreen
-         */
         boolean dark = true;
         boolean light = false;
         MusicChooser musicChooser;
         File musicFile;
         AudioInputStream audioStream;
         Clip clip;
-        ServerConnector serverConnector;
+        People people;
+        Music music;
+        Account account;
+        private ServerConnector serverConnector;
 
         private Chat chat;
 
@@ -62,7 +61,7 @@ public class MainScreen extends javax.swing.JFrame {
                 JSONObject userInfo = new JSONObject();
                 userInfo.put("user_id", 1);
                 try {
-                        serverConnector = new ServerConnector(new Socket("144.91.114.89",
+                        serverConnector = new ServerConnector(new Socket("localhost",
                                         8000));
                 } catch (Exception e) {
                         System.out.println(e);
@@ -71,20 +70,7 @@ public class MainScreen extends javax.swing.JFrame {
                 FlatDarkLaf.setup();
                 initComponents();
                 this.peopleButton.setIcon(new ImageIcon(
-                                "PeoplePAP.png"));
-                this.musicButton.setIcon(new ImageIcon(
-                                "C:\\Users\\Adam\\Documents\\NetBeansProjects\\NewGUI\\src\\main\\java\\com\\mycompany\\newgui\\MusicPAP.png"));
-                this.accountButton.setIcon(new ImageIcon(
-                                "C:\\Users\\Adam\\Documents\\NetBeansProjects\\NewGUI\\src\\main\\java\\com\\mycompany\\newgui\\AccountSettingsPAP.png"));
-        }
-
-        public MainScreen(ServerConnector serverConnector, JSONObject userInfo) {
-                chat = new Chat(userInfo, -1, serverConnector);
-                this.serverConnector = serverConnector;
-                FlatDarkLaf.setup();
-                initComponents();
-                this.peopleButton.setIcon(new ImageIcon(
-                                "PeoplePAP.png"));
+                                "C:\\Users\\Adam\\Documents\\NetBeansProjects\\NewGUI\\src\\main\\java\\com\\mycompany\\newgui\\PeoplePAP.png"));
                 this.musicButton.setIcon(new ImageIcon(
                                 "C:\\Users\\Adam\\Documents\\NetBeansProjects\\NewGUI\\src\\main\\java\\com\\mycompany\\newgui\\MusicPAP.png"));
                 this.accountButton.setIcon(new ImageIcon(
@@ -95,6 +81,31 @@ public class MainScreen extends javax.swing.JFrame {
                 // Math.round(duration);
                 // jLabel21.setText(String.valueOf(duration));
                 // this.MainScreenCode.setLayout(new FlowLayout());
+                people = new People(this, chat);
+                music = new Music(this);
+                account = new Account(this, serverConnector, chat);
+        }
+
+        public MainScreen(ServerConnector serverConnector, JSONObject userInfo) {
+                chat = new Chat(userInfo, -1, serverConnector);
+                this.serverConnector = serverConnector;
+                FlatDarkLaf.setup();
+                initComponents();
+                this.peopleButton.setIcon(new ImageIcon(
+                                "C:\\Users\\Adam\\Documents\\NetBeansProjects\\NewGUI\\src\\main\\java\\com\\mycompany\\newgui\\PeoplePAP.png"));
+                this.musicButton.setIcon(new ImageIcon(
+                                "C:\\Users\\Adam\\Documents\\NetBeansProjects\\NewGUI\\src\\main\\java\\com\\mycompany\\newgui\\MusicPAP.png"));
+                this.accountButton.setIcon(new ImageIcon(
+                                "C:\\Users\\Adam\\Documents\\NetBeansProjects\\NewGUI\\src\\main\\java\\com\\mycompany\\newgui\\AccountSettingsPAP.png"));
+                // AudioFormat format = audioStream.getFormat();
+                // long frames = audioStream.getFrameLength();
+                // duration = (frames+0.0) / format.getFrameRate();
+                // Math.round(duration);
+                // jLabel21.setText(String.valueOf(duration));
+                // this.MainScreenCode.setLayout(new FlowLayout());
+                people = new People(this, chat);
+                music = new Music(this);
+                account = new Account(this, serverConnector, chat);
         }
 
         /**
@@ -372,6 +383,7 @@ public class MainScreen extends javax.swing.JFrame {
 
                 gainLabel.setText("Gain");
 
+                peopleButton.setIcon(new javax.swing.ImageIcon("C:\\Users\\Adam\\Desktop\\PeoplePAP.png")); // NOI18N
                 peopleButton.setText("jButton1");
                 peopleButton.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -379,6 +391,7 @@ public class MainScreen extends javax.swing.JFrame {
                         }
                 });
 
+                musicButton.setIcon(new javax.swing.ImageIcon("C:\\Users\\Adam\\Desktop\\MusicPAP.png")); // NOI18N
                 musicButton.setText("jButton1");
                 musicButton.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -393,6 +406,7 @@ public class MainScreen extends javax.swing.JFrame {
                         }
                 });
 
+                accountButton.setIcon(new javax.swing.ImageIcon("C:\\Users\\Adam\\Desktop\\AccountSettingsPAP.png")); // NOI18N
                 accountButton.setText("jButton1");
                 accountButton.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1111,7 +1125,7 @@ public class MainScreen extends javax.swing.JFrame {
                 });
                 menu.add(chooseMusic);
 
-                changeAvatar.setText("Change avatar");
+                changeAvatar.setText("");
                 changeAvatar.addMenuKeyListener(new javax.swing.event.MenuKeyListener() {
                         public void menuKeyPressed(javax.swing.event.MenuKeyEvent evt) {
                                 changeAvatarMenuKeyPressed(evt);
@@ -1164,10 +1178,18 @@ public class MainScreen extends javax.swing.JFrame {
         }
 
         private void peopleButtonActionPerformed(java.awt.event.ActionEvent evt) {
-                People people = new People(chat);
+                if (dark == false & light == true) {
+                        people.dark = false;
+                        people.light = true;
+                        people.Theme();
+                } else {
+                        people.dark = true;
+                        people.light = false;
+                        people.Theme();
+                }
                 this.setContentPane(people);
-                this.invalidate();
-                this.validate();
+                this.repaint();
+                this.revalidate();
         }
 
         private void playButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -1190,10 +1212,18 @@ public class MainScreen extends javax.swing.JFrame {
         }
 
         private void accountButtonActionPerformed(java.awt.event.ActionEvent evt) {
-                Account account = new Account(serverConnector, chat);
+                if (dark == false & light == true) {
+                        account.dark = false;
+                        account.light = true;
+                        account.Theme();
+                } else {
+                        account.dark = true;
+                        account.light = false;
+                        account.Theme();
+                }
                 this.setContentPane(account);
-                this.invalidate();
-                this.validate();
+                this.repaint();
+                this.revalidate();
         }
 
         private void loadButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -1205,10 +1235,18 @@ public class MainScreen extends javax.swing.JFrame {
         }
 
         private void musicButtonActionPerformed(java.awt.event.ActionEvent evt) {
-                Music music = new Music();
+                if (dark == false & light == true) {
+                        music.dark = false;
+                        music.light = true;
+                        music.Theme();
+                } else {
+                        music.dark = true;
+                        music.light = false;
+                        music.Theme();
+                }
                 this.setContentPane(music);
-                this.invalidate();
-                this.validate();
+                this.repaint();
+                this.revalidate();
         }
 
         private void pauseLabelActionPerformed(java.awt.event.ActionEvent evt) {
@@ -1317,16 +1355,16 @@ public class MainScreen extends javax.swing.JFrame {
         private javax.swing.JButton loadButton;
         private javax.swing.JLabel logoLabel;
         private javax.swing.JToggleButton loopButton;
-        private javax.swing.JPanel mainScreen;
+        public javax.swing.JPanel mainScreen;
         private javax.swing.JButton mainScreenButton;
-        private javax.swing.JMenuBar menu;
+        public javax.swing.JMenuBar menu;
         private javax.swing.JButton musicButton;
         private javax.swing.JEditorPane musicPicture;
         private javax.swing.JScrollPane musicPictureContainer;
         private javax.swing.JLabel nicknameAndDateLabel;
         private javax.swing.JToggleButton panningButton;
         private javax.swing.JButton pauseLabel;
-        private javax.swing.JButton peopleButton;
+        public javax.swing.JButton peopleButton;
         private javax.swing.JButton playButton;
         private javax.swing.JScrollPane previousListens;
         private javax.swing.JLabel previousListensLabel;
@@ -1338,7 +1376,7 @@ public class MainScreen extends javax.swing.JFrame {
         private javax.swing.JScrollPane reverbListContainer;
         private javax.swing.JLabel rightLabel;
         private javax.swing.JSlider rightSlider;
-        private javax.swing.JRadioButton themeButton;
+        public javax.swing.JRadioButton themeButton;
         private javax.swing.JLabel timeSlashLabel;
         private javax.swing.JSlider timeSongSlider;
         private javax.swing.JLabel totalTimeLabel;
