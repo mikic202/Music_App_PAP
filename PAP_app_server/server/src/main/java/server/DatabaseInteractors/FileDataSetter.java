@@ -34,4 +34,27 @@ public class FileDataSetter implements DataSetterInterface {
         return 0;
     }
 
+    static public int addMusicUserListened(int userId, int musicFileId) {
+        String preparedStatement = String.format(
+                "insert into %s (%s, %s) values (?, ?)",
+                FileDatabsaeInformation.USER_FILE_RELATION_TABLE.value(), FileDatabsaeInformation.USER_COLUMN.value(),
+                FileDatabsaeInformation.ID_COLUMN.value());
+        Connection connection = ConnectionPool.getConnection();
+        try {
+
+            var statement = connection.prepareStatement(preparedStatement);
+            statement.setInt(1, userId);
+            statement.setInt(2, musicFileId);
+            statement.executeUpdate();
+            connection.commit();
+        } catch (Exception e) {
+            System.out.println(e);
+
+        } finally {
+
+        }
+        ConnectionPool.releaseConnection(connection);
+        return 0;
+    }
+
 }
