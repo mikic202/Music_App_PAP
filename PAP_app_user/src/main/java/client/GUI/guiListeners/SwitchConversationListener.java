@@ -52,17 +52,32 @@ public class SwitchConversationListener implements ListSelectionListener {
         // TODO add new timestamp and username
         ImageChatPanel chatPanel = new ImageChatPanel();
         if (message.getInt("sender_id") == chat.userId()) {
-            chatPanel.jTextArea1.setBackground(new java.awt.Color(0, 137, 255));
+            chatPanel.chatText.setBackground(new java.awt.Color(0, 137, 255));
         }
-        String imageString = message.getString("text");
-        chatPanel.jTextArea1.setIcon((new ImageIcon(convertStringArrayToImageBytes(imageString))));
-        this.messagesArea.add(chatPanel.jTextArea1, "wrap");
+        String textImageString = message.getString("text");
+        chatPanel.chatText.setIcon((new ImageIcon(convertStringArrayToImageBytes(textImageString))));
+        // TODO scale images
+        chatPanel.dateLabel.setText(message.getString("creation_date"));
+        var userInfo = chat.getUserInformation(message.getInt("sender_id"));
+        if (!userInfo.getString("profile_picture").equals("0")) {
+            String imageString = userInfo.getString("profile_picture");
+            chatPanel.avatarChat.setIcon((new ImageIcon(convertStringArrayToImageBytes(imageString))));
+        }
+        chatPanel.nicknameLabel.setText(userInfo.getString("username"));
+        this.messagesArea.add(chatPanel.chatBlock, "wrap");
         this.messagesArea.repaint();
         this.messagesArea.revalidate();
     }
 
     void addTextMessage(JSONObject message) {
         LeftChatPanel chatPanel = new LeftChatPanel();
+        // leftChatPanel.chatText.setText(message);
+        // leftChatPanel.chatText.setForeground(Color.black);
+        // // this.chatPanel.add(leftChatPanel.avatarChat);
+        // this.chatPanel.add(leftChatPanel.chatBlock, "wrap");
+        // this.chatPanel.repaint();
+        // this.chatPanel.revalidate();
+        // this.textArea.setText("");
         if (message.getInt("sender_id") == chat.userId()) {
             chatPanel.chatText.setBackground(new java.awt.Color(0, 137, 255));
         }
@@ -74,7 +89,7 @@ public class SwitchConversationListener implements ListSelectionListener {
             chatPanel.avatarChat.setIcon((new ImageIcon(convertStringArrayToImageBytes(imageString))));
         }
         chatPanel.nicknameLabel.setText(userInfo.getString("username"));
-        this.messagesArea.add(chatPanel.chatText, "wrap");
+        this.messagesArea.add(chatPanel.chatBlock, "wrap");
         this.messagesArea.repaint();
         this.messagesArea.revalidate();
     }
