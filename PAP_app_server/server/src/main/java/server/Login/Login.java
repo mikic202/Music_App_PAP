@@ -41,6 +41,7 @@ public class Login {
                 true_result.put("outcome", true);
                 true_result.put("username", user_info.get("username"));
                 true_result.put("user_id", user_info.get("ID"));
+                true_result.put("profile_picture", user_info.get("profile_picture"));
                 result.put("value", true_result);
             } else {
                 JSONObject false_result = new JSONObject();

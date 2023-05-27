@@ -10,11 +10,11 @@ import client.login_and_account_accessors.LoginAccessors;
 
 public class ChatWorker extends SwingWorker<Boolean, Void> {
 
-    ChatWorker(Chat chat, char[] userPassword) {
+    public ChatWorker(Chat chat, char[] userPassword) {
         this.chat = chat;
         try {
-            serverConnector = new ServerConnector(new Socket("144.91.114.89",
-                    8001));
+            serverConnector = new ServerConnector(new Socket("localhost",
+                    8005));
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -24,11 +24,14 @@ public class ChatWorker extends SwingWorker<Boolean, Void> {
 
     @Override
     protected Boolean doInBackground() throws Exception {
-        while (!isCancelled()) {
+        while (true) {
             var data = serverConnector.waitForData();
             chat.updateStatus();
+            System.out.println("status updated");
+            if (data.getString("text").equals("")) {
+                return false;
+            }
         }
-        return false;
     }
 
     boolean initConnection(char[] userPassword) {

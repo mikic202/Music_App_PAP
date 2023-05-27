@@ -39,9 +39,9 @@ public class LoggingListener implements ActionListener {
                     passwordField.getPassword());
             if (response.getJSONObject("value").getBoolean("outcome")) {
                 response.getJSONObject("value").put("email", emailField.getText());
+                logIn(response.getJSONObject("value"), passwordField.getPassword());
                 emailField.setText("");
                 passwordField.setText("");
-                logIn(response.getJSONObject("value"));
             } else {
                 emailField.setText("");
                 passwordField.setText("");
@@ -51,10 +51,10 @@ public class LoggingListener implements ActionListener {
 
     }
 
-    void logIn(JSONObject userInfo) {
+    void logIn(JSONObject userInfo, char[] userPassword) {
         userInfo.remove("outcome");
         loggingScreen.dispose();
-        MainScreen mainScreen = new MainScreen(serverConnector, userInfo);
+        MainScreen mainScreen = new MainScreen(serverConnector, userInfo, userPassword);
         mainScreen.setVisible(true);
 
     }

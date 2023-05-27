@@ -4,17 +4,33 @@
  */
 package client.GUI;
 
+import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatLightLaf;
+import javax.swing.SwingUtilities;
+
 /**
  *
  * @author Adam
  */
 public class Music extends javax.swing.JPanel {
 
-        /**
-         * Creates new form Music
-         */
-        public Music() {
+        MainScreen mainScreenWindow;
+        boolean light = false;
+        boolean dark = true;
+
+        public Music(MainScreen mainScreenParam) {
+                mainScreenWindow = mainScreenParam;
                 initComponents();
+        }
+
+        public void Theme() {
+                if (light == true & dark == false) {
+                        FlatLightLaf.setup();
+                        SwingUtilities.updateComponentTreeUI(this);
+                } else if (light == false & dark == true) {
+                        FlatDarkLaf.setup();
+                        SwingUtilities.updateComponentTreeUI(this);
+                }
         }
 
         /**
@@ -316,6 +332,7 @@ public class Music extends javax.swing.JPanel {
 
                 lastPlayed.setText("jLabel16");
 
+                musicButton.setIcon(new javax.swing.ImageIcon("C:\\Users\\Adam\\Desktop\\MusicPAP.png")); // NOI18N
                 musicButton.setText("jButton1");
                 musicButton.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -323,6 +340,7 @@ public class Music extends javax.swing.JPanel {
                         }
                 });
 
+                accountButton.setIcon(new javax.swing.ImageIcon("C:\\Users\\Adam\\Desktop\\AccountSettingsPAP.png")); // NOI18N
                 accountButton.setText("jButton1");
                 accountButton.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -337,6 +355,7 @@ public class Music extends javax.swing.JPanel {
                         }
                 });
 
+                peopleButton.setIcon(new javax.swing.ImageIcon("C:\\Users\\Adam\\Desktop\\PeoplePAP.png")); // NOI18N
                 peopleButton.setText("jButton1");
                 peopleButton.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -938,15 +957,22 @@ public class Music extends javax.swing.JPanel {
         }
 
         private void accountButtonActionPerformed(java.awt.event.ActionEvent evt) {
-                // TODO add your handling code here:
+                mainScreenWindow.setContentPane(mainScreenWindow.account);
+                mainScreenWindow.repaint();
+                mainScreenWindow.revalidate();
         }
 
         private void mainScreenButtonActionPerformed(java.awt.event.ActionEvent evt) {
-                // TODO add your handling code here:
+                mainScreenWindow.setContentPane(mainScreenWindow.mainScreen);
+                mainScreenWindow.setVisible(true);
+                mainScreenWindow.repaint();
+                mainScreenWindow.revalidate();
         }
 
         private void peopleButtonActionPerformed(java.awt.event.ActionEvent evt) {
-                // TODO add your handling code here:
+                mainScreenWindow.setContentPane(mainScreenWindow.people);
+                mainScreenWindow.repaint();
+                mainScreenWindow.revalidate();
         }
 
         // Variables declaration - do not modify

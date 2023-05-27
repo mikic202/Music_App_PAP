@@ -26,7 +26,7 @@ public class FileDataAccesor implements DataAccesorInterface {
         return getQuerryResult(preparedStatements, column_value);
     }
 
-    public static ArrayList<Integer> getUserFiles(int user_id) {
+    public static ArrayList<Integer> getUserFiles(int userId) {
         ArrayList<Integer> files = new ArrayList<>();
         ResultSet result = null;
         Connection connection = ConnectionPool.getConnection();
@@ -39,7 +39,34 @@ public class FileDataAccesor implements DataAccesorInterface {
 
             var statement = connection.prepareStatement(preparedStatement);
             connection.commit();
-            statement.setInt(1, user_id);
+            statement.setInt(1, userId);
+            result = statement.executeQuery();
+            while (result.next()) {
+                files.add(result.getInt(1));
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+
+        } finally {
+
+        }
+        return files;
+    }
+
+    public static ArrayList<Integer> getMusicUserLitened(int userId) {
+        ArrayList<Integer> files = new ArrayList<>();
+        ResultSet result = null;
+        Connection connection = ConnectionPool.getConnection();
+
+        String preparedStatement = String.format("Select %s from %s where %s=?",
+                FileDatabsaeInformation.ID_COLUMN.value(),
+                FileDatabsaeInformation.USER_FILE_RELATION_TABLE.value(), FileDatabsaeInformation.USER_COLUMN.value());
+
+        try {
+
+            var statement = connection.prepareStatement(preparedStatement);
+            connection.commit();
+            statement.setInt(1, userId);
             result = statement.executeQuery();
             while (result.next()) {
                 files.add(result.getInt(1));
