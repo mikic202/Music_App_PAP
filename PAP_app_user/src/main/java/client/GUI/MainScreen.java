@@ -60,6 +60,7 @@ public class MainScreen extends javax.swing.JFrame {
         public MainScreen() {
                 JSONObject userInfo = new JSONObject();
                 userInfo.put("user_id", 1);
+                userInfo.put("username", "test_user");
                 try {
                         serverConnector = new ServerConnector(new Socket("localhost",
                                         8000));

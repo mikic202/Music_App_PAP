@@ -11,7 +11,6 @@ import client.Chat.Chat;
 import client.GUI.guiListeners.SendMessageListener;
 import client.GUI.guiListeners.SwitchConversationListener;
 
-import java.awt.Color;
 import javax.swing.SwingUtilities;
 import net.miginfocom.swing.MigLayout;
 

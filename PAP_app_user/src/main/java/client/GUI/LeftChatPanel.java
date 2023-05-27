@@ -4,10 +4,8 @@
  */
 package client.GUI;
 
-/**
- *
- * @author Adam
- */
+import java.awt.Color;
+
 public class LeftChatPanel extends javax.swing.JFrame {
 
     /**
@@ -18,6 +16,7 @@ public class LeftChatPanel extends javax.swing.JFrame {
         this.chatText.setEditable(false);
         this.chatText.setLineWrap(true);
         this.chatText.setWrapStyleWord(true);
+        this.chatText.setForeground(Color.black);
     }
 
     /**
@@ -146,7 +145,7 @@ public class LeftChatPanel extends javax.swing.JFrame {
     public javax.swing.JPanel chatBlock;
     private javax.swing.JScrollPane chatPanel;
     public javax.swing.JTextArea chatText;
-    private javax.swing.JLabel dateLabel;
-    private javax.swing.JLabel nicknameLabel;
+    public javax.swing.JLabel dateLabel;
+    public javax.swing.JLabel nicknameLabel;
     // End of variables declaration
 }

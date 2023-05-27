@@ -19,6 +19,7 @@ public class Chat {
     private Hashtable<Integer, JSONObject> usersConversations;
     private Hashtable<Integer, ArrayList<JSONObject>> messagesInUsersConversation;
     private Hashtable<Integer, Hashtable<Integer, JSONObject>> usersInConversarion;
+    private Hashtable<Integer, JSONObject> usersEncountered;
     private ChatAccesors chatAccesor;
     private int currentConversation;
     private int userId;
@@ -28,10 +29,12 @@ public class Chat {
         currentConversation = currentConv;
         this.userInfo = userInfo;
         this.userId = userInfo.getInt("user_id");
+        usersEncountered = new Hashtable<>();
+        usersEncountered.put(this.userId, this.userInfo);
         chatAccesor = new ChatAccesors(serverConnector);
         JSONObject conversations = chatAccesor.getUsersConversations(userId);
         usersConversations = new Hashtable<>();
-        convert_conversationsResponseToHashtable(conversations);
+        convertConversationsResponseToHashtable(conversations);
         if (currentConversation == -1 && usersConversations.size() != 0) {
             currentConversation = Collections.min(usersConversations.keySet());
         }
@@ -96,7 +99,7 @@ public class Chat {
         return newMessage;
     }
 
-    private void convert_conversationsResponseToHashtable(JSONObject response) {
+    private void convertConversationsResponseToHashtable(JSONObject response) {
         usersConversations.clear();
         JSONArray conversations = response.getJSONArray("value");
         for (int i = 0; i < conversations.length(); i += 1) {
@@ -110,7 +113,12 @@ public class Chat {
     }
 
     public JSONObject getUserInformation(int id) {
-        return chatAccesor.getUserInfo(id).getJSONObject("value");
+        if (usersEncountered.keySet().contains(id)) {
+            return usersEncountered.get(id);
+        }
+        var newUser = chatAccesor.getUserInfo(id).getJSONObject("value");
+        usersEncountered.put(newUser.getInt("ID"), newUser);
+        return newUser;
     }
 
     public JSONObject getUserInformation(String username) {
@@ -176,7 +184,7 @@ public class Chat {
             return;
         }
         JSONObject conversations = chatAccesor.getUsersConversations(userId);
-        convert_conversationsResponseToHashtable(conversations);
+        convertConversationsResponseToHashtable(conversations);
 
         int latest_msg = 1;
         if (messagesInUsersConversation.get(currentConversation) != null
@@ -221,7 +229,7 @@ public class Chat {
         boolean outcome = response.getJSONObject("value").getBoolean("outcome");
         if (outcome) {
             JSONObject conversations = chatAccesor.getUsersConversations(userId);
-            convert_conversationsResponseToHashtable(conversations);
+            convertConversationsResponseToHashtable(conversations);
         }
         return outcome;
     }

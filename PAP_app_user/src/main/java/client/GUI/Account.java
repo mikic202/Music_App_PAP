@@ -20,10 +20,6 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
 
-/**
- *
- * @author Adam
- */
 public class Account extends javax.swing.JPanel {
 
         MainScreen mainScreenWindow;
