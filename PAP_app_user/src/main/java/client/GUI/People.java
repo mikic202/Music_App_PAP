@@ -10,6 +10,7 @@ import com.formdev.flatlaf.FlatLightLaf;
 import client.Chat.Chat;
 import client.GUI.guiListeners.SendMessageListener;
 import client.GUI.guiListeners.SwitchConversationListener;
+import client.GUI.guiWorkers.ChatWorker;
 
 import javax.swing.SwingUtilities;
 import net.miginfocom.swing.MigLayout;
@@ -20,9 +21,10 @@ public class People extends javax.swing.JPanel {
         boolean dark = true;
         MainScreen mainScreenWindow;
 
+        private ChatWorker chatWorker;
         private Chat chat;
 
-        public People(MainScreen mainScreenParam, Chat chat) {
+        public People(MainScreen mainScreenParam, Chat chat, char[] userPassword) {
                 this.chat = chat;
                 mainScreenWindow = mainScreenParam;
                 initComponents();
@@ -34,6 +36,9 @@ public class People extends javax.swing.JPanel {
                 this.membersList.setWrapStyleWord(true);
                 this.textArea.setWrapStyleWord(true);
                 this.chatPanel.setLayout(new MigLayout("fillx"));
+
+                chatWorker = new ChatWorker(chat, userPassword);
+                chatWorker.execute();
         }
 
         public void Theme() {

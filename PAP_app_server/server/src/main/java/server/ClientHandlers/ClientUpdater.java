@@ -39,7 +39,13 @@ public class ClientUpdater implements Runnable {
 	public void addClient(Socket client) throws IOException {
 		synchronized (clients) {
 			waitingClients.add(new Client(client));
-			System.out.println("Added client.");
+			JSONObject response = new JSONObject();
+			JSONObject value = new JSONObject();
+			value.put("outcome", true);
+			response.put("value", value);
+			var out = client.getOutputStream();
+			out.write((response.toString() + "\n").getBytes());
+			System.out.println("Added client to the updater.");
 		}
 	}
 

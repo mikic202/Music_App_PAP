@@ -61,6 +61,8 @@ public class MainScreen extends javax.swing.JFrame {
                 JSONObject userInfo = new JSONObject();
                 userInfo.put("user_id", 1);
                 userInfo.put("username", "test_user");
+                userInfo.put("email", "mikolaj.chomanski@gmail.com");
+                userInfo.put("profile_picture", "0");
                 try {
                         serverConnector = new ServerConnector(new Socket("localhost",
                                         8000));
@@ -82,12 +84,13 @@ public class MainScreen extends javax.swing.JFrame {
                 // Math.round(duration);
                 // jLabel21.setText(String.valueOf(duration));
                 // this.MainScreenCode.setLayout(new FlowLayout());
-                people = new People(this, chat);
+                char[] userPassword = { '1', '2', '3', '4', '5', '6', '7' };
+                people = new People(this, chat, userPassword);
                 music = new Music(this);
                 account = new Account(this, serverConnector, chat);
         }
 
-        public MainScreen(ServerConnector serverConnector, JSONObject userInfo) {
+        public MainScreen(ServerConnector serverConnector, JSONObject userInfo, char[] userPassword) {
                 chat = new Chat(userInfo, -1, serverConnector);
                 this.serverConnector = serverConnector;
                 FlatDarkLaf.setup();
@@ -104,7 +107,7 @@ public class MainScreen extends javax.swing.JFrame {
                 // Math.round(duration);
                 // jLabel21.setText(String.valueOf(duration));
                 // this.MainScreenCode.setLayout(new FlowLayout());
-                people = new People(this, chat);
+                people = new People(this, chat, userPassword);
                 music = new Music(this);
                 account = new Account(this, serverConnector, chat);
         }

@@ -69,11 +69,10 @@ public class SwitchConversationListener implements ListSelectionListener {
         chatPanel.chatText.setText(message.getString("text"));
         chatPanel.dateLabel.setText(message.getString("creation_date"));
         var userInfo = chat.getUserInformation(message.getInt("sender_id"));
-        // if (!userInfo.getString("profile_picture").equals("")) {
-        // String imageString = userInfo.getString("profile_picture");
-        // chatPanel.avatarChat.setIcon((new
-        // ImageIcon(convertStringArrayToImageBytes(imageString))));
-        // }
+        if (!userInfo.getString("profile_picture").equals("0")) {
+            String imageString = userInfo.getString("profile_picture");
+            chatPanel.avatarChat.setIcon((new ImageIcon(convertStringArrayToImageBytes(imageString))));
+        }
         chatPanel.nicknameLabel.setText(userInfo.getString("username"));
         this.messagesArea.add(chatPanel.chatText, "wrap");
         this.messagesArea.repaint();
