@@ -191,7 +191,6 @@ public class Chat {
     }
 
     private static JSONObject _processSendImage(JSONObject request) {
-        // TODO add new field to sent back message and test it
         request.put("text", (request.getJSONArray("image")).toString());
         int newMessage = _putMessageInDatabase(request);
 
