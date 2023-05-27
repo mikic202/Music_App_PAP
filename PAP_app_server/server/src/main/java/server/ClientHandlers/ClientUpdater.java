@@ -54,44 +54,41 @@ public class ClientUpdater implements Runnable {
 	}
 
 	public void run() {
+		System.out.println("Client updater starting...");
 		ClientUpdaterAcceptor acceptor = new ClientUpdaterAcceptor(this);
 		Thread acceptorThread = new Thread(acceptor);
-		acceptorThread.run();
-		try {
-			ServerSocket server = new ServerSocket(8005);
-			while (true) {
-				Instant start = Instant.now();
-				synchronized (clients) {
-					ListIterator<Client> it = waitingClients.listIterator();
-					// System.out.println("Processing clients.");
-					while (it.hasNext()) {
-						// System.out.println("Processing client.");
-						Client client = it.next();
-						try {
-							if (client.hasMessage()) {
-								handleClient(client);
-							}
-						} catch (IOException exception) {
-							client.close();
-						}
-						if (client.isClosed()) {
-							it.remove();
-							System.out.println("Client disconnected.");
-						}
-					}
-				}
-				Instant finish = Instant.now();
-				long time = Duration.between(start, finish).toNanos();
-				if (time < 10000000) {
-					time = 10000000 - time;
+		acceptorThread.start();
+		System.out.println("Client updater started.");
+		while (running) {
+			Instant start = Instant.now();
+			synchronized (clients) {
+				ListIterator<Client> it = waitingClients.listIterator();
+				// System.out.println("Processing clients.");
+				while (it.hasNext()) {
+					// System.out.println("Processing client.");
+					Client client = it.next();
 					try {
-						Thread.sleep(time / 1000000);
-					} catch (InterruptedException e) {
+						if (client.hasMessage()) {
+							handleClient(client);
+						}
+					} catch (IOException exception) {
+						client.close();
+					}
+					if (client.isClosed()) {
+						it.remove();
+						System.out.println("Client disconnected.");
 					}
 				}
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
+			Instant finish = Instant.now();
+			long time = Duration.between(start, finish).toNanos();
+			if (time < 10000000) {
+				time = 10000000 - time;
+				try {
+					Thread.sleep(time / 1000000);
+				} catch (InterruptedException e) {
+				}
+			}
 		}
 	}
 
@@ -179,7 +176,7 @@ class ClientUpdaterAcceptor implements Runnable {
 	public void run() {
 		try {
 			ServerSocket server = new ServerSocket(8005);
-			while (true) {
+			while (updater.running) {
 				updater.addClient(server.accept());
 			}
 		} catch (IOException e) {
