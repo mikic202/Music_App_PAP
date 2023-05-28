@@ -60,7 +60,7 @@ public class MainScreen extends javax.swing.JFrame {
         public MainScreen() {
                 JSONObject userInfo = new JSONObject();
                 userInfo.put("user_id", 1);
-                userInfo.put("username", "test_user");
+                userInfo.put("username", "mikic202");
                 userInfo.put("email", "mikolaj.chomanski@gmail.com");
                 userInfo.put("profile_picture", "0");
                 try {

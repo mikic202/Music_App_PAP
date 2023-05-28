@@ -6,8 +6,13 @@ package client.GUI;
 
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
+import java.awt.Color;
+import javax.swing.SwingUtilities;
+import net.miginfocom.swing.MigLayout;
 
 import client.Chat.Chat;
+import client.GUI.guiListeners.AddUsersListener;
+import client.GUI.guiListeners.CreateGroupListener;
 import client.GUI.guiListeners.SendMessageListener;
 import client.GUI.guiListeners.SwitchConversationListener;
 import client.GUI.guiWorkers.ChatWorker;
@@ -64,7 +69,6 @@ public class People extends javax.swing.JPanel {
                 createGroupLabel = new javax.swing.JLabel();
                 groupNameLabel = new javax.swing.JLabel();
                 groupName = new javax.swing.JTextField();
-                groupCodeLabel = new javax.swing.JLabel();
                 membersLabel = new javax.swing.JLabel();
                 membersContainer = new javax.swing.JScrollPane();
                 membersList = new javax.swing.JTextArea();
@@ -81,7 +85,6 @@ public class People extends javax.swing.JPanel {
                 sendButton = new javax.swing.JButton();
                 addPersonToGroupLabel = new javax.swing.JLabel();
                 createButton = new javax.swing.JButton();
-                groupCode = new javax.swing.JTextField();
                 peopleButton = new javax.swing.JButton();
                 musicButton = new javax.swing.JButton();
                 accountButton = new javax.swing.JButton();
@@ -90,7 +93,7 @@ public class People extends javax.swing.JPanel {
                 chatPanel = new javax.swing.JPanel();
                 photoButton = new javax.swing.JButton();
                 peopleContainer = new javax.swing.JScrollPane();
-                peopleList = new javax.swing.JList<>();
+                peopleToAddList = new javax.swing.JTextArea();
                 addButton = new javax.swing.JButton();
                 removePersonFromGroupLabel = new javax.swing.JLabel();
                 peopleListRemove = new javax.swing.JList<>();
@@ -101,6 +104,9 @@ public class People extends javax.swing.JPanel {
                 membersInConvLabel = new javax.swing.JLabel();
                 membersInConContainer = new javax.swing.JScrollPane();
                 membersInConvList = new javax.swing.JList<>();
+                sendPhotoButton = new javax.swing.JButton();
+                chosenFileLabel = new javax.swing.JLabel();
+                pathFileLabel = new javax.swing.JLabel();
 
                 setPreferredSize(new java.awt.Dimension(1280, 712));
 
@@ -114,9 +120,7 @@ public class People extends javax.swing.JPanel {
 
                 groupName.setText("jTextField1");
 
-                groupCodeLabel.setText("Group code:");
-
-                membersLabel.setText("Members (example: friend1,friend2,friend3...):");
+                membersLabel.setText("Members (example: friend1;friend2;friend3...):");
 
                 membersList.setColumns(20);
                 membersList.setRows(5);
@@ -149,7 +153,6 @@ public class People extends javax.swing.JPanel {
                 for (String name : convNamesSet) {
                         convNames[i++] = name;
                 }
-
                 chatsList.setModel(new javax.swing.AbstractListModel<String>() {
 
                         public int getSize() {
@@ -162,7 +165,6 @@ public class People extends javax.swing.JPanel {
                 });
 
                 chatsList.addListSelectionListener(new SwitchConversationListener(chat, chatPanel));
-
                 chatsContainer.setViewportView(chatsList);
 
                 textArea.setColumns(20);
@@ -176,15 +178,8 @@ public class People extends javax.swing.JPanel {
                 addPersonToGroupLabel.setText("Add person to current group:");
 
                 createButton.setText("Create");
-                createButton.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                createButtonActionPerformed(evt);
-                        }
-                });
+                createButton.addActionListener(new CreateGroupListener(chat, groupName, membersList, chatsList));
 
-                groupCode.setText("jTextField1");
-
-                peopleButton.setIcon(new javax.swing.ImageIcon("C:\\Users\\Adam\\Desktop\\PeoplePAP.png")); // NOI18N
                 peopleButton.setText("jButton1");
                 peopleButton.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -192,7 +187,6 @@ public class People extends javax.swing.JPanel {
                         }
                 });
 
-                musicButton.setIcon(new javax.swing.ImageIcon("C:\\Users\\Adam\\Desktop\\MusicPAP.png")); // NOI18N
                 musicButton.setText("jButton1");
                 musicButton.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -200,7 +194,6 @@ public class People extends javax.swing.JPanel {
                         }
                 });
 
-                accountButton.setIcon(new javax.swing.ImageIcon("C:\\Users\\Adam\\Desktop\\AccountSettingsPAP.png")); // NOI18N
                 accountButton.setText("jButton1");
                 accountButton.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -233,25 +226,10 @@ public class People extends javax.swing.JPanel {
                         }
                 });
 
-                peopleList.setModel(new javax.swing.AbstractListModel<String>() {
-                        String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-
-                        public int getSize() {
-                                return strings.length;
-                        }
-
-                        public String getElementAt(int i) {
-                                return strings[i];
-                        }
-                });
-                peopleContainer.setViewportView(peopleList);
+                peopleContainer.setViewportView(peopleToAddList);
 
                 addButton.setText("Add");
-                addButton.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                addButtonActionPerformed(evt);
-                        }
-                });
+                addButton.addActionListener(new AddUsersListener(chat, peopleToAddList));
 
                 removePersonFromGroupLabel.setFont(new java.awt.Font("Segoe UI Black", 0, 14)); // NOI18N
                 removePersonFromGroupLabel.setText("Remove person from current group:");
@@ -303,6 +281,17 @@ public class People extends javax.swing.JPanel {
                 });
                 membersInConContainer.setViewportView(membersInConvList);
 
+                sendPhotoButton.setText("Send photo");
+                sendPhotoButton.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                sendPhotoButtonActionPerformed(evt);
+                        }
+                });
+
+                chosenFileLabel.setText("Chosen file:");
+
+                pathFileLabel.setText("(path)");
+
                 javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
                 this.setLayout(layout);
                 layout.setHorizontalGroup(
@@ -317,65 +306,35 @@ public class People extends javax.swing.JPanel {
                                                                                                 Short.MAX_VALUE)
                                                                                 .addGroup(layout.createSequentialGroup()
                                                                                                 .addGroup(layout.createParallelGroup(
+                                                                                                                javax.swing.GroupLayout.Alignment.TRAILING,
+                                                                                                                false)
+                                                                                                                .addComponent(groupNameLabel,
+                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                                                                Short.MAX_VALUE))
+                                                                                                .addPreferredGap(
+                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                                                .addGroup(layout.createParallelGroup(
                                                                                                                 javax.swing.GroupLayout.Alignment.LEADING)
-                                                                                                                .addGroup(layout.createSequentialGroup()
-                                                                                                                                .addComponent(groupCodeLabel2)
-                                                                                                                                .addPreferredGap(
-                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                                                                                .addComponent(groupCode2)
-                                                                                                                                .addGap(4, 4, 4))
-                                                                                                                .addGroup(layout.createSequentialGroup()
-                                                                                                                                .addGroup(layout.createParallelGroup(
-                                                                                                                                                javax.swing.GroupLayout.Alignment.TRAILING,
-                                                                                                                                                false)
-                                                                                                                                                .addComponent(groupCodeLabel,
-                                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                                                                Short.MAX_VALUE)
-                                                                                                                                                .addComponent(groupNameLabel,
-                                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                                                                Short.MAX_VALUE))
-                                                                                                                                .addPreferredGap(
-                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                                                                                .addGroup(layout.createParallelGroup(
-                                                                                                                                                javax.swing.GroupLayout.Alignment.LEADING)
-                                                                                                                                                .addComponent(groupCode)
-                                                                                                                                                .addComponent(groupName))
-                                                                                                                                .addGap(2, 2, 2))
-                                                                                                                .addGroup(layout.createSequentialGroup()
-                                                                                                                                .addGroup(layout.createParallelGroup(
-                                                                                                                                                javax.swing.GroupLayout.Alignment.TRAILING)
-                                                                                                                                                .addComponent(membersContainer,
-                                                                                                                                                                javax.swing.GroupLayout.Alignment.LEADING)
-                                                                                                                                                .addComponent(createButton,
-                                                                                                                                                                javax.swing.GroupLayout.Alignment.LEADING,
-                                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                                                                Short.MAX_VALUE))
-                                                                                                                                .addGap(4, 4, 4))
-                                                                                                                .addGroup(layout.createSequentialGroup()
-                                                                                                                                .addComponent(addPersonToGroupLabel,
-                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                                                Short.MAX_VALUE)
-                                                                                                                                .addGap(189, 189,
-                                                                                                                                                189))
-                                                                                                                .addComponent(joinToGroupLabel,
-                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                                397,
-                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                                                                .addComponent(membersLabel,
-                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                                399,
-                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                                                                .addGroup(layout.createSequentialGroup()
-                                                                                                                                .addComponent(joinButton,
-                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                                                Short.MAX_VALUE)
-                                                                                                                                .addGap(4, 4, 4)))
-                                                                                                .addGap(6, 6, 6))
+                                                                                                                .addComponent(groupName))
+                                                                                                .addGap(8, 8, 8))
+                                                                                .addGroup(layout.createSequentialGroup()
+                                                                                                .addGroup(layout.createParallelGroup(
+                                                                                                                javax.swing.GroupLayout.Alignment.TRAILING)
+                                                                                                                .addComponent(membersContainer,
+                                                                                                                                javax.swing.GroupLayout.Alignment.LEADING)
+                                                                                                                .addComponent(createButton,
+                                                                                                                                javax.swing.GroupLayout.Alignment.LEADING,
+                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                                                                Short.MAX_VALUE))
+                                                                                                .addGap(10, 10, 10))
+                                                                                .addGroup(layout.createSequentialGroup()
+                                                                                                .addComponent(addPersonToGroupLabel,
+                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                                                Short.MAX_VALUE)
+                                                                                                .addGap(195, 195, 195))
                                                                                 .addGroup(layout.createSequentialGroup()
                                                                                                 .addGroup(layout.createParallelGroup(
                                                                                                                 javax.swing.GroupLayout.Alignment.LEADING)
@@ -432,7 +391,38 @@ public class People extends javax.swing.JPanel {
                                                                                                                                                                                                 Short.MAX_VALUE))))
                                                                                                                                 .addGap(7, 7, 7)))
                                                                                                 .addPreferredGap(
-                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                                                                                .addGroup(layout.createSequentialGroup()
+                                                                                                .addGroup(layout.createParallelGroup(
+                                                                                                                javax.swing.GroupLayout.Alignment.TRAILING)
+                                                                                                                .addComponent(joinButton,
+                                                                                                                                javax.swing.GroupLayout.Alignment.LEADING,
+                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                                                                Short.MAX_VALUE)
+                                                                                                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING,
+                                                                                                                                layout.createSequentialGroup()
+                                                                                                                                                .addComponent(membersLabel,
+                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                                                                                                                399,
+                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                                                                                                .addGap(0, 0, Short.MAX_VALUE))
+                                                                                                                .addGroup(layout.createSequentialGroup()
+                                                                                                                                .addComponent(groupCodeLabel2)
+                                                                                                                                .addPreferredGap(
+                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                                                                                .addComponent(groupCode2)))
+                                                                                                .addPreferredGap(
+                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                                                                                .addGroup(layout.createSequentialGroup()
+                                                                                                .addComponent(joinToGroupLabel,
+                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                                                                397,
+                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                                                .addPreferredGap(
+                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED,
+                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                                                Short.MAX_VALUE)))
                                                                 .addGroup(layout.createParallelGroup(
                                                                                 javax.swing.GroupLayout.Alignment.LEADING)
                                                                                 .addComponent(chatsLabel,
@@ -473,6 +463,8 @@ public class People extends javax.swing.JPanel {
                                                                                                                                                 653,
                                                                                                                                                 Short.MAX_VALUE)
                                                                                                                                 .addGroup(layout.createSequentialGroup()
+                                                                                                                                                .addPreferredGap(
+                                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                                                                                                                 .addComponent(textContainer)
                                                                                                                                                 .addPreferredGap(
                                                                                                                                                                 javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -482,7 +474,18 @@ public class People extends javax.swing.JPanel {
                                                                                                                                                 .addComponent(sendButton,
                                                                                                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE,
                                                                                                                                                                 62,
-                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                                                                                .addGroup(layout.createSequentialGroup()
+                                                                                                                                                .addComponent(chosenFileLabel)
+                                                                                                                                                .addPreferredGap(
+                                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                                                                                                .addComponent(pathFileLabel,
+                                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                                                                                                Short.MAX_VALUE)
+                                                                                                                                                .addGap(45, 45, 45)
+                                                                                                                                                .addComponent(sendPhotoButton)
+                                                                                                                                                .addGap(25, 25, 25)))
                                                                                                                 .addPreferredGap(
                                                                                                                                 javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                                                                 .addGroup(layout.createParallelGroup(
@@ -512,191 +515,214 @@ public class People extends javax.swing.JPanel {
                                                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout
                                                                 .createSequentialGroup()
                                                                 .addGroup(layout.createParallelGroup(
+                                                                                javax.swing.GroupLayout.Alignment.LEADING)
+                                                                                .addGroup(layout.createSequentialGroup()
+                                                                                                .addComponent(logo)
+                                                                                                .addPreferredGap(
+                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                                                .addComponent(addPersonToGroupLabel,
+                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                                                Short.MAX_VALUE))
+                                                                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
+                                                                                                layout.createSequentialGroup()
+                                                                                                                .addContainerGap()
+                                                                                                                .addGroup(layout.createParallelGroup(
+                                                                                                                                javax.swing.GroupLayout.Alignment.BASELINE)
+                                                                                                                                .addComponent(chatsLabel)
+                                                                                                                                .addComponent(userOrGroupNameLabel))))
+                                                                .addPreferredGap(
+                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                .addGroup(layout.createParallelGroup(
                                                                                 javax.swing.GroupLayout.Alignment.TRAILING)
                                                                                 .addGroup(layout.createSequentialGroup()
                                                                                                 .addGroup(layout.createParallelGroup(
                                                                                                                 javax.swing.GroupLayout.Alignment.LEADING)
                                                                                                                 .addGroup(layout.createSequentialGroup()
-                                                                                                                                .addComponent(logo)
+                                                                                                                                .addComponent(peopleContainer,
+                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                                                                                25,
+                                                                                                                                                Short.MAX_VALUE)
                                                                                                                                 .addPreferredGap(
                                                                                                                                                 javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                                                                                .addComponent(addPersonToGroupLabel,
-                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                                                Short.MAX_VALUE))
-                                                                                                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
-                                                                                                                                layout.createSequentialGroup()
-                                                                                                                                                .addContainerGap()
-                                                                                                                                                .addGroup(layout.createParallelGroup(
-                                                                                                                                                                javax.swing.GroupLayout.Alignment.BASELINE)
-                                                                                                                                                                .addComponent(chatsLabel)
-                                                                                                                                                                .addComponent(userOrGroupNameLabel))))
+                                                                                                                                .addGroup(layout.createParallelGroup(
+                                                                                                                                                javax.swing.GroupLayout.Alignment.LEADING)
+                                                                                                                                                .addGroup(layout.createSequentialGroup()
+                                                                                                                                                                .addComponent(addButton,
+                                                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                                                                                                                31,
+                                                                                                                                                                                Short.MAX_VALUE)
+                                                                                                                                                                .addGap(18, 18, 18))
+                                                                                                                                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
+                                                                                                                                                                layout.createSequentialGroup()
+                                                                                                                                                                                .addGap(16, 16, 16)
+                                                                                                                                                                                .addComponent(removePersonFromGroupLabel,
+                                                                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                                                                                                                                Short.MAX_VALUE)
+                                                                                                                                                                                .addPreferredGap(
+                                                                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                                                                                                                                .addComponent(peopleListRemove,
+                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                                                                                                29,
+                                                                                                                                                Short.MAX_VALUE)
+                                                                                                                                .addPreferredGap(
+                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                                                                                .addGroup(layout.createParallelGroup(
+                                                                                                                                                javax.swing.GroupLayout.Alignment.LEADING)
+                                                                                                                                                .addGroup(layout.createSequentialGroup()
+                                                                                                                                                                .addComponent(removeButton,
+                                                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                                                                                                                32,
+                                                                                                                                                                                Short.MAX_VALUE)
+                                                                                                                                                                .addGap(63, 63, 63))
+                                                                                                                                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
+                                                                                                                                                                layout.createSequentialGroup()
+                                                                                                                                                                                .addGap(21, 21, 21)
+                                                                                                                                                                                .addComponent(changeChatNameLabel,
+                                                                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                                                                                                                                Short.MAX_VALUE)
+                                                                                                                                                                                .addPreferredGap(
+                                                                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                                                                                                                                .addGroup(layout.createParallelGroup(
+                                                                                                                                                                                                javax.swing.GroupLayout.Alignment.BASELINE)
+                                                                                                                                                                                                .addComponent(changeChatName,
+                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                                                                                                                                                .addComponent(changeButton))
+                                                                                                                                                                                .addGap(17, 17, 17)))
+                                                                                                                                .addComponent(createGroupLabel)
+                                                                                                                                .addPreferredGap(
+                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                                                                                .addGroup(layout.createParallelGroup(
+                                                                                                                                                javax.swing.GroupLayout.Alignment.BASELINE)
+                                                                                                                                                .addComponent(groupNameLabel)
+                                                                                                                                                .addComponent(groupName,
+                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                                                                                .addPreferredGap(
+                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                                                                                .addGroup(layout.createParallelGroup(
+                                                                                                                                                javax.swing.GroupLayout.Alignment.LEADING)))
+                                                                                                                .addComponent(chatsContainer))
+                                                                                                .addPreferredGap(
+                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                                                .addGroup(layout.createParallelGroup(
+                                                                                                                javax.swing.GroupLayout.Alignment.BASELINE)
+                                                                                                                .addComponent(membersLabel)
+                                                                                                                .addComponent(membersInConvLabel))
                                                                                                 .addPreferredGap(
                                                                                                                 javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                                                                 .addGroup(layout.createParallelGroup(
                                                                                                                 javax.swing.GroupLayout.Alignment.LEADING)
                                                                                                                 .addGroup(layout.createSequentialGroup()
-                                                                                                                                .addComponent(chatContainer,
-                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                                                0,
+                                                                                                                                .addComponent(membersContainer,
+                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                                                                                152,
                                                                                                                                                 Short.MAX_VALUE)
-                                                                                                                                .addGap(29, 29, 29))
-                                                                                                                .addGroup(layout.createSequentialGroup()
-                                                                                                                                .addGroup(layout.createParallelGroup(
-                                                                                                                                                javax.swing.GroupLayout.Alignment.LEADING)
-                                                                                                                                                .addGroup(layout.createSequentialGroup()
-                                                                                                                                                                .addComponent(peopleContainer,
-                                                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                                                                                58,
-                                                                                                                                                                                Short.MAX_VALUE)
-                                                                                                                                                                .addPreferredGap(
-                                                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                                                                                                                .addGroup(layout.createParallelGroup(
-                                                                                                                                                                                javax.swing.GroupLayout.Alignment.LEADING)
-                                                                                                                                                                                .addGroup(layout.createSequentialGroup()
-                                                                                                                                                                                                .addComponent(addButton,
-                                                                                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                                                                                                                Short.MAX_VALUE)
-                                                                                                                                                                                                .addGap(18, 18, 18))
-                                                                                                                                                                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
-                                                                                                                                                                                                layout.createSequentialGroup()
-                                                                                                                                                                                                                .addGap(16, 16, 16)
-                                                                                                                                                                                                                .addComponent(removePersonFromGroupLabel,
-                                                                                                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                                                                                                                                Short.MAX_VALUE)
-                                                                                                                                                                                                                .addPreferredGap(
-                                                                                                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-                                                                                                                                                                .addComponent(peopleListRemove,
-                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                                                                                40,
-                                                                                                                                                                                Short.MAX_VALUE)
-                                                                                                                                                                .addPreferredGap(
-                                                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                                                                                                                .addGroup(layout.createParallelGroup(
-                                                                                                                                                                                javax.swing.GroupLayout.Alignment.LEADING)
-                                                                                                                                                                                .addGroup(layout.createSequentialGroup()
-                                                                                                                                                                                                .addComponent(removeButton,
-                                                                                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                                                                                                                24,
-                                                                                                                                                                                                                Short.MAX_VALUE)
-                                                                                                                                                                                                .addGap(63, 63, 63))
-                                                                                                                                                                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
-                                                                                                                                                                                                layout.createSequentialGroup()
-                                                                                                                                                                                                                .addGap(21, 21, 21)
-                                                                                                                                                                                                                .addComponent(changeChatNameLabel,
-                                                                                                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                                                                                                                                Short.MAX_VALUE)
-                                                                                                                                                                                                                .addPreferredGap(
-                                                                                                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                                                                                                                                                                .addGroup(layout.createParallelGroup(
-                                                                                                                                                                                                                                javax.swing.GroupLayout.Alignment.BASELINE)
-                                                                                                                                                                                                                                .addComponent(changeChatName,
-                                                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                                                                                                                                                                                .addComponent(changeButton))
-                                                                                                                                                                                                                .addGap(17, 17, 17)))
-                                                                                                                                                                .addComponent(createGroupLabel)
-                                                                                                                                                                .addPreferredGap(
-                                                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                                                                                                                .addGroup(layout.createParallelGroup(
-                                                                                                                                                                                javax.swing.GroupLayout.Alignment.BASELINE)
-                                                                                                                                                                                .addComponent(groupNameLabel)
-                                                                                                                                                                                .addComponent(groupName,
-                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                                                                                                                                .addPreferredGap(
-                                                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                                                                                                                .addGroup(layout.createParallelGroup(
-                                                                                                                                                                                javax.swing.GroupLayout.Alignment.LEADING)
-                                                                                                                                                                                .addComponent(groupCodeLabel)
-                                                                                                                                                                                .addComponent(groupCode,
-                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                                                                                                                                .addComponent(chatsContainer))
                                                                                                                                 .addPreferredGap(
                                                                                                                                                 javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                                                                                .addGroup(layout.createParallelGroup(
-                                                                                                                                                javax.swing.GroupLayout.Alignment.BASELINE)
-                                                                                                                                                .addComponent(membersLabel)
-                                                                                                                                                .addComponent(membersInConvLabel))
+                                                                                                                                .addComponent(createButton)
+                                                                                                                                .addGap(24, 24, 24)
+                                                                                                                                .addComponent(joinToGroupLabel)
                                                                                                                                 .addPreferredGap(
-                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                                                                                                                 .addGroup(layout.createParallelGroup(
                                                                                                                                                 javax.swing.GroupLayout.Alignment.LEADING)
-                                                                                                                                                .addGroup(layout.createSequentialGroup()
-                                                                                                                                                                .addComponent(membersContainer,
-                                                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                                                                                98,
-                                                                                                                                                                                Short.MAX_VALUE)
-                                                                                                                                                                .addPreferredGap(
-                                                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                                                                                                                .addComponent(createButton)
-                                                                                                                                                                .addGap(61, 61, 61)
-                                                                                                                                                                .addComponent(joinToGroupLabel)
-                                                                                                                                                                .addPreferredGap(
-                                                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                                                                                                                .addGroup(layout.createParallelGroup(
-                                                                                                                                                                                javax.swing.GroupLayout.Alignment.BASELINE)
-                                                                                                                                                                                .addComponent(groupCodeLabel2)
-                                                                                                                                                                                .addComponent(groupCode2,
-                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                                                                                                                                .addGap(32, 32, 32))
-                                                                                                                                                .addComponent(membersInConContainer)))))
+                                                                                                                                                .addComponent(groupCodeLabel2)
+                                                                                                                                                .addComponent(groupCode2,
+                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                                                                                .addPreferredGap(
+                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                                                                                .addComponent(joinButton,
+                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                                                                                                20,
+                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                                                                                .addGap(9, 9, 9))
+                                                                                                                .addComponent(membersInConContainer)))
                                                                                 .addGroup(layout.createSequentialGroup()
-                                                                                                .addGap(12, 12, 12)
-                                                                                                .addComponent(peopleButton,
+                                                                                                .addComponent(chatContainer,
                                                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                35,
-                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                                                .addGap(11, 11, 11)
-                                                                                                .addComponent(musicButton,
-                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                35,
-                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                                                .addPreferredGap(
-                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                                                                .addComponent(accountButton,
-                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                35,
-                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                                                .addPreferredGap(
-                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                                                                .addComponent(mainScreenButton,
-                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                35,
-                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                                                .addPreferredGap(
-                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED,
-                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                                                0,
                                                                                                                 Short.MAX_VALUE)
+                                                                                                .addPreferredGap(
+                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                                                                 .addGroup(layout.createParallelGroup(
                                                                                                                 javax.swing.GroupLayout.Alignment.LEADING)
-                                                                                                                .addGroup(layout.createParallelGroup(
-                                                                                                                                javax.swing.GroupLayout.Alignment.LEADING)
-                                                                                                                                .addComponent(joinButton,
-                                                                                                                                                javax.swing.GroupLayout.Alignment.TRAILING)
-                                                                                                                                .addGroup(layout.createParallelGroup(
+                                                                                                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
+                                                                                                                                layout.createParallelGroup(
                                                                                                                                                 javax.swing.GroupLayout.Alignment.BASELINE)
                                                                                                                                                 .addComponent(sendButton)
-                                                                                                                                                .addComponent(photoButton)))
+                                                                                                                                                .addComponent(photoButton))
                                                                                                                 .addComponent(textContainer,
                                                                                                                                 javax.swing.GroupLayout.Alignment.TRAILING,
                                                                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE,
                                                                                                                                 23,
-                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                                                .addContainerGap()));
+                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                                                .addPreferredGap(
+                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                                                .addGroup(layout.createParallelGroup(
+                                                                                                                javax.swing.GroupLayout.Alignment.LEADING,
+                                                                                                                false)
+                                                                                                                .addGroup(layout.createParallelGroup(
+                                                                                                                                javax.swing.GroupLayout.Alignment.BASELINE)
+                                                                                                                                .addComponent(pathFileLabel)
+                                                                                                                                .addComponent(chosenFileLabel))
+                                                                                                                .addComponent(sendPhotoButton,
+                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                                                                                0,
+                                                                                                                                Short.MAX_VALUE))))
+                                                                .addGap(10, 10, 10))
+                                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout
+                                                                .createSequentialGroup()
+                                                                .addGap(12, 12, 12)
+                                                                .addComponent(peopleButton,
+                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                                35,
+                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addGap(11, 11, 11)
+                                                                .addComponent(musicButton,
+                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                                35,
+                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addPreferredGap(
+                                                                                javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                                .addComponent(accountButton,
+                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                                35,
+                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addPreferredGap(
+                                                                                javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                                .addComponent(mainScreenButton,
+                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                                35,
+                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                Short.MAX_VALUE)));
         }// </editor-fold>
 
         private void joinButtonActionPerformed(java.awt.event.ActionEvent evt) {
 
+        }
+
+        private void sendButtonActionPerformed(java.awt.event.ActionEvent evt) {
+                String message = this.textArea.getText().trim();
+                LeftChatPanel leftChatPanel = new LeftChatPanel();
+                if (!message.equals("")) {
+                        leftChatPanel.chatText.setText(message);
+                        leftChatPanel.chatText.setForeground(Color.black);
+                        // this.chatPanel.add(leftChatPanel.avatarChat);
+                        this.chatPanel.add(leftChatPanel.chatBlock, "wrap");
+                        this.chatPanel.repaint();
+                        this.chatPanel.revalidate();
+                        this.textArea.setText("");
+
+                }
         }
 
         private void createButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -743,6 +769,10 @@ public class People extends javax.swing.JPanel {
                 // TODO add your handling code here:
         }
 
+        private void sendPhotoButtonActionPerformed(java.awt.event.ActionEvent evt) {
+                // TODO add your handling code here:
+        }
+
         // Variables declaration - do not modify
         private javax.swing.JButton accountButton;
         private javax.swing.JButton addButton;
@@ -755,11 +785,11 @@ public class People extends javax.swing.JPanel {
         private javax.swing.JScrollPane chatsContainer;
         private javax.swing.JLabel chatsLabel;
         private javax.swing.JList<String> chatsList;
+        private javax.swing.JLabel chosenFileLabel;
         private javax.swing.JButton createButton;
         private javax.swing.JLabel createGroupLabel;
         private javax.swing.JTextField groupCode;
         private javax.swing.JTextField groupCode2;
-        private javax.swing.JLabel groupCodeLabel;
         private javax.swing.JLabel groupCodeLabel2;
         private javax.swing.JTextField groupName;
         private javax.swing.JLabel groupNameLabel;
@@ -774,14 +804,16 @@ public class People extends javax.swing.JPanel {
         private javax.swing.JLabel membersLabel;
         private javax.swing.JTextArea membersList;
         private javax.swing.JButton musicButton;
+        private javax.swing.JLabel pathFileLabel;
         private javax.swing.JButton peopleButton;
         private javax.swing.JScrollPane peopleContainer;
-        private javax.swing.JList<String> peopleList;
+        private javax.swing.JTextArea peopleToAddList;
         private javax.swing.JList<String> peopleListRemove;
         private javax.swing.JButton photoButton;
         private javax.swing.JButton removeButton;
         private javax.swing.JLabel removePersonFromGroupLabel;
         private javax.swing.JButton sendButton;
+        private javax.swing.JButton sendPhotoButton;
         private javax.swing.JTextArea textArea;
         private javax.swing.JScrollPane textContainer;
         private javax.swing.JLabel userOrGroupNameLabel;

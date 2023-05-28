@@ -27,6 +27,7 @@ public class ChatWorker extends SwingWorker<Boolean, Void> {
         while (true) {
             var data = serverConnector.waitForData();
             chat.updateStatus();
+            System.out.println(data);
             System.out.println("status updated");
             if (data.getString("text").equals("")) {
                 return false;

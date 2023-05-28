@@ -49,6 +49,10 @@ public class Chat {
         return userInfo;
     }
 
+    public JSONObject getCurrerntConversationInfo() {
+        return usersConversations.get(currentConversation);
+    }
+
     public ArrayList<JSONObject> switchConversations(int new_coveration) throws Exception {
         if (!setCurrentConversation(new_coveration)) {
             throw new Exception("user can't acces given conversation");
@@ -138,16 +142,17 @@ public class Chat {
                     getUsersInConversation(key);
                 }
                 for (String username : usernames) {
-                    System.out.println("\n");
-                    System.out.println(usersInConversarion.get(key));
                     JSONObject user_info = chatAccesor.getUserInfo(username).getJSONObject("value");
                     usersInConversarion.get(key).put(user_info.getInt("ID"), user_info);
-                    System.out.println(usersInConversarion.get(key));
                 }
                 return chatAccesor.addUsersToConversation(key, usernames).getJSONObject("value");
             }
         }
         return new JSONObject("{\"outcome\":false}");
+    }
+
+    public JSONObject addUsersToCurrentConversation(ArrayList<String> usernames) {
+        return addUsersToConversation(usersConversations.get(currentConversation).getString("name"), usernames);
     }
 
     public Hashtable<String, Integer> getConversationsNamesToIds() {
