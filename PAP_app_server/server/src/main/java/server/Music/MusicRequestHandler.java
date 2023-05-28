@@ -1,6 +1,9 @@
 package server.Music;
 
 import org.json.JSONObject;
+
+import java.util.Set;
+
 import javax.sound.sampled.AudioFormat;
 
 public class MusicRequestHandler {
@@ -21,23 +24,26 @@ public class MusicRequestHandler {
         JSONObject result = new JSONObject();
         result.put("type", MusicRequestTypes.START_STREAM.value());
         valueResult.put("port", port);
+        System.out.println("got out of start stream method");;
+        if(port != 0)
+        {
+            JSONObject formatParams = new JSONObject();
+            AudioFormat format = streamsManagerInstance.getFormat(chatId);
+            float sampleRate = format.getSampleRate();
+            int sampleSizeInBits = format.getSampleSizeInBits();
+            int channels = format.getChannels();
+            String encodingStr = format.getEncoding().toString(); // example "pcm_signed"
+            boolean bigEndian = format.isBigEndian();
+            int lengthInBytes = streamsManagerInstance.getLengthInBytes(chatId);
+            formatParams.put("sample_rate", sampleRate);
+            formatParams.put("sample_size", sampleSizeInBits);
+            formatParams.put("channels", channels);
+            formatParams.put("encoding", encodingStr);
+            formatParams.put("big_endian", bigEndian);
+            formatParams.put("length", lengthInBytes);
 
-        JSONObject formatParams = new JSONObject();
-        AudioFormat format = streamsManagerInstance.getFormat(chatId);
-        float sampleRate = format.getSampleRate();
-        int sampleSizeInBits = format.getSampleSizeInBits();
-        int channels = format.getChannels();
-        String encodingStr = format.getEncoding().toString(); // example "pcm_signed"
-        boolean bigEndian = format.isBigEndian();
-        int lengthInBytes = streamsManagerInstance.getLengthInBytes(chatId);
-        formatParams.put("sample_rate", sampleRate);
-        formatParams.put("sample_size", sampleSizeInBits);
-        formatParams.put("channels", channels);
-        formatParams.put("encoding", encodingStr);
-        formatParams.put("big_endian", bigEndian);
-        formatParams.put("length", lengthInBytes);
-
-        valueResult.put("format", formatParams);
+            valueResult.put("format", formatParams);
+        }
 
         result.put("value", valueResult);
         return result;
@@ -152,6 +158,7 @@ public class MusicRequestHandler {
         switch (reqType) {
             case START_STREAM:
                 response = _startStream(request);
+                System.out.print("response returned");
                 break;
             case TERMINATE_STREAM:
                 response = _terminateStream(request);

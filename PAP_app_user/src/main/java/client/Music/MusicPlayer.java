@@ -1,5 +1,6 @@
 package client.Music;
 
+import java.io.BufferedInputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 
@@ -16,13 +17,15 @@ public class MusicPlayer implements Runnable
     private AudioFormat format;
     private boolean playing;
     private boolean terminated;
+    private StreamStatusCallback streamStatusCb;
 
-    public MusicPlayer(PipedOutputStream pipedOutput, AudioFormat fileFormat) throws Exception
+    public MusicPlayer(PipedOutputStream pipedOutput, AudioFormat fileFormat, StreamStatusCallback streamStatusCb) throws Exception
     {
         this.format = fileFormat;
         int frameSize = format.getFrameSize();
         bufferSize = frameSize*256; //amount of read bytes must be multiplication of frames/second
         this.pipedInputStream = new PipedInputStream(pipedOutput, bufferSize*4);
+        this.streamStatusCb = streamStatusCb;
     }
 
     public void run()
@@ -37,7 +40,7 @@ public class MusicPlayer implements Runnable
         {
             while (pipedInputStream.available() < bufferSize*2)
             {
-                java.lang.Thread.sleep(100);
+                Thread.sleep(100);
             }
             DataLine.Info dataLineInfo = new DataLine.Info(SourceDataLine.class, format);
             SourceDataLine sourceDataLine = (SourceDataLine) AudioSystem.getLine(dataLineInfo);
@@ -46,11 +49,12 @@ public class MusicPlayer implements Runnable
 
             byte[] buf = new byte[bufferSize];
 
+            BufferedInputStream bis = new BufferedInputStream(pipedInputStream, bufferSize * 64);
+            
+            boolean checkedIfStopped = false;
 
-            while (pipedInputStream.read(buf = new byte[bufferSize], 0, buf.length) > 0)
+            while (true)
             {
-                sourceDataLine.write(buf, 0, buf.length);
-
                 while (playing == false)
                 {
                     if (terminated)
@@ -60,7 +64,24 @@ public class MusicPlayer implements Runnable
                         pipedInputStream.close();
                         return;
                     }
-                    java.lang.Thread.sleep(300);
+                    Thread.sleep(300);
+                }
+                if(bis.read(buf = new byte[bufferSize], 0, buf.length) > 0)
+                {
+                    sourceDataLine.write(buf, 0, buf.length);
+                    checkedIfStopped = false;
+                }
+                else
+                {
+                    if(!checkedIfStopped)
+                    {
+                        checkIfStreamPaused();
+                        checkedIfStopped = true;
+                    }
+                    else
+                    {
+                        break;
+                    }
                 }
             }
             sourceDataLine.drain();
@@ -94,4 +115,16 @@ public class MusicPlayer implements Runnable
         playing = false;
         terminated = true;
     }
+
+    private void checkIfStreamPaused()
+    {
+        streamStatusCb.checkIfPaused();
+    }
+
+    interface StreamStatusCallback
+    {
+        void checkIfPaused();
+    }
 }
+
+
