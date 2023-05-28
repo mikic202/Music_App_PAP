@@ -41,7 +41,7 @@ public class MessageDataAccesor implements DataAccesorInterface {
         String preparedStatement = String.format("Select MAX(%s) from %s where %s=?",
                 MessagesDatabaseInformation.ID_COLUMN.value(),
                 TABLENAME,
-                MessagesDatabaseInformation.SENDER_COLUMN.value());
+                MessagesDatabaseInformation.CONVERSATION_COLUMN.value());
 
         Connection connection = ConnectionPool.getConnection();
 
@@ -53,6 +53,7 @@ public class MessageDataAccesor implements DataAccesorInterface {
             while (result.next()) {
                 id = result.getInt(1);
             }
+            connection.commit();
         } catch (Exception e) {
             System.out.println(e);
 
@@ -85,14 +86,15 @@ public class MessageDataAccesor implements DataAccesorInterface {
 
             while (result.next()) {
                 Hashtable<String, String> msg_data = new Hashtable<>();
-                msg_data.put("ID", result.getString(1));
-                msg_data.put("sender", result.getString(2));
-                msg_data.put("conversation", result.getString(3));
-                msg_data.put("send_date", result.getString(4));
-                msg_data.put("text", result.getString(5));
-                msg_data.put("is_image", result.getString(6));
+                msg_data.put(MessagesDatabaseInformation.ID_COLUMN.value(), result.getString(1));
+                msg_data.put(MessagesDatabaseInformation.SENDER_COLUMN.value(), result.getString(2));
+                msg_data.put(MessagesDatabaseInformation.CONVERSATION_COLUMN.value(), result.getString(3));
+                msg_data.put(MessagesDatabaseInformation.DATE_COLUMN.value(), result.getString(4));
+                msg_data.put(MessagesDatabaseInformation.MESSAGE_COLUMN.value(), result.getString(5));
+                msg_data.put(MessagesDatabaseInformation.IS_IMAGE_COLUMN.value(), result.getString(6));
                 messages_data.add(msg_data);
             }
+            connection.commit();
 
             ConnectionPool.releaseConnection(connection);
         } catch (Exception e) {
@@ -105,22 +107,22 @@ public class MessageDataAccesor implements DataAccesorInterface {
     }
 
     protected static Hashtable<String, String> processResultToFullData(ResultSet result) {
-        Hashtable<String, String> umessage_data = new Hashtable<String, String>();
+        Hashtable<String, String> msg_data = new Hashtable<String, String>();
 
         try {
             while (result.next()) {
-                umessage_data.put("ID", result.getString(1));
-                umessage_data.put("sender", result.getString(2));
-                umessage_data.put("conversation", result.getString(3));
-                umessage_data.put("send_date", result.getString(4));
-                umessage_data.put("text", result.getString(5));
-                umessage_data.put("is_image", result.getString(6));
+                msg_data.put(MessagesDatabaseInformation.ID_COLUMN.value(), result.getString(1));
+                msg_data.put(MessagesDatabaseInformation.SENDER_COLUMN.value(), result.getString(2));
+                msg_data.put(MessagesDatabaseInformation.CONVERSATION_COLUMN.value(), result.getString(3));
+                msg_data.put(MessagesDatabaseInformation.DATE_COLUMN.value(), result.getString(4));
+                msg_data.put(MessagesDatabaseInformation.MESSAGE_COLUMN.value(), result.getString(5));
+                msg_data.put(MessagesDatabaseInformation.IS_IMAGE_COLUMN.value(), result.getString(6));
             }
         } catch (Exception e) {
             System.out.println(e);
         }
 
-        return umessage_data;
+        return msg_data;
     }
 
     protected static Hashtable<String, String> getQuerryResult(String preparedStatement, String value) {
@@ -134,6 +136,7 @@ public class MessageDataAccesor implements DataAccesorInterface {
             statement.setString(1, value);
             result = statement.executeQuery();
             messagesData = processResultToFullData(result);
+            connection.commit();
 
         } catch (Exception e) {
             System.out.println(e);
@@ -154,6 +157,7 @@ public class MessageDataAccesor implements DataAccesorInterface {
             statement.setInt(1, value);
             result = statement.executeQuery();
             messagesData = processResultToFullData(result);
+            connection.commit();
 
         } catch (Exception e) {
             System.out.println(e);

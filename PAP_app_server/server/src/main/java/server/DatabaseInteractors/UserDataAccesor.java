@@ -56,6 +56,7 @@ public class UserDataAccesor implements DataAccesorInterface {
             while (result.next()) {
                 conversations.add(result.getInt(1));
             }
+            connection.commit();
 
         } catch (Exception e) {
             System.out.println(e);
@@ -85,6 +86,7 @@ public class UserDataAccesor implements DataAccesorInterface {
             while (result.next()) {
                 id = result.getInt(1);
             }
+            connection.commit();
         } catch (Exception e) {
             System.out.println(e);
 
@@ -104,6 +106,7 @@ public class UserDataAccesor implements DataAccesorInterface {
                 userData.put("username", result.getString(2));
                 userData.put("email", result.getString(3));
                 userData.put("password", result.getString(4));
+                userData.put("profile_picture", result.getString(5));
             }
         } catch (Exception e) {
             System.out.println(e);
@@ -123,7 +126,7 @@ public class UserDataAccesor implements DataAccesorInterface {
             statement.setInt(1, value);
             result = statement.executeQuery();
             userData = processResultToFullData(result);
-
+            connection.commit();
         } catch (Exception e) {
             System.out.println(e);
         } finally {
@@ -143,7 +146,7 @@ public class UserDataAccesor implements DataAccesorInterface {
             statement.setString(1, value);
             result = statement.executeQuery();
             userData = processResultToFullData(result);
-
+            connection.commit();
         } catch (Exception e) {
             System.out.println(e);
         } finally {

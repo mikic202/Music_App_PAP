@@ -42,6 +42,7 @@ public class ConversationDataAccesor implements DataAccesorInterface {
             while (result.next()) {
                 users.add(result.getInt(1));
             }
+            connection.commit();
         } catch (Exception e) {
             System.out.println(e);
 
@@ -69,6 +70,7 @@ public class ConversationDataAccesor implements DataAccesorInterface {
             while (result.next()) {
                 messages.add(result.getInt(1));
             }
+            connection.commit();
         } catch (Exception e) {
             System.out.println(e);
 
@@ -93,6 +95,7 @@ public class ConversationDataAccesor implements DataAccesorInterface {
             while (result.next()) {
                 id = result.getInt(1);
             }
+            connection.commit();
         } catch (Exception e) {
             System.out.println(e);
 
@@ -108,9 +111,9 @@ public class ConversationDataAccesor implements DataAccesorInterface {
 
         try {
             while (result.next()) {
-                umessage_data.put("ID", result.getString(1));
-                umessage_data.put("name", result.getString(2));
-                umessage_data.put("number_of_users", result.getString(3));
+                umessage_data.put(ConversationDatabsaeInformation.ID_COLUMN.value(), result.getString(1));
+                umessage_data.put(ConversationDatabsaeInformation.NAME_COLUMN.value(), result.getString(2));
+                umessage_data.put(ConversationDatabsaeInformation.NUMBER_OF_USERS_COLUMN.value(), result.getString(3));
             }
         } catch (Exception e) {
             System.out.println(e);
@@ -130,7 +133,7 @@ public class ConversationDataAccesor implements DataAccesorInterface {
             statement.setInt(1, value);
             result = statement.executeQuery();
             userData = processResultToFullData(result);
-
+            connection.commit();
         } catch (Exception e) {
             System.out.println(e);
         } finally {
@@ -150,7 +153,7 @@ public class ConversationDataAccesor implements DataAccesorInterface {
             statement.setString(1, value);
             result = statement.executeQuery();
             userData = processResultToFullData(result);
-
+            connection.commit();
         } catch (Exception e) {
             System.out.println(e);
         } finally {

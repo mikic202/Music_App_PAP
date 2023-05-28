@@ -10,8 +10,8 @@ import java.util.ArrayList;
 public class ConnectionPool {
     private static ArrayList<Connection> availableConnections = new ArrayList<>();
     private static ArrayList<Connection> usedConnections = new ArrayList<>();
-    final private int MAX_POOL_SIZE = 5;
-    {
+    static final private int MAX_POOL_SIZE = 5;
+    static {
         System.out.println("Activating connections");
         try {
             for (int i = 0; i < MAX_POOL_SIZE; i++) {
@@ -46,7 +46,6 @@ public class ConnectionPool {
 
     @Override
     protected void finalize() throws Throwable {
-        // TODO Auto-generated method stub
         for (var con : availableConnections) {
             con.close();
         }

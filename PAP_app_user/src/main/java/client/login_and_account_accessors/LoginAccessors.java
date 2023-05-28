@@ -11,14 +11,14 @@ public class LoginAccessors {
 
     public JSONObject sendUserLoginData(String email, char[] password) {
         JSONObject procesed_request = LoginRequestCreator.createSendLoginRequest(email, password);
-        JSONObject response = server_connector.send_request(procesed_request);
+        JSONObject response = server_connector.sendRequest(procesed_request);
         return response;
     }
 
     public JSONObject sendUserRegisterData(String email, String nickname, char[] password, char[] confirm_password) {
         JSONObject procesed_request = LoginRequestCreator.createSendRegistrationRequest(email, nickname, password,
                 confirm_password);
-        JSONObject response = server_connector.send_request(procesed_request);
+        JSONObject response = server_connector.sendRequest(procesed_request);
         return response;
     }
 
@@ -26,13 +26,13 @@ public class LoginAccessors {
             char[] new_password, char[] confirm_new_password) {
         JSONObject procesed_request = LoginRequestCreator.createChangePasswordRequest(nickname, old_password,
                 confirm_old_password, new_password, confirm_new_password);
-        JSONObject response = server_connector.send_request(procesed_request);
+        JSONObject response = server_connector.sendRequest(procesed_request);
         return response;
     }
 
     public JSONObject sendRetrievePassword(String email) {
         JSONObject procesed_request = LoginRequestCreator.createRetrievePassword(email);
-        JSONObject response = server_connector.send_request(procesed_request);
+        JSONObject response = server_connector.sendRequest(procesed_request);
         return response;
     }
 

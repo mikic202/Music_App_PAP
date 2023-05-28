@@ -4,55 +4,19 @@
  */
 package client.GUI;
 
-import org.json.JSONObject;
+import com.formdev.flatlaf.FlatDarkLaf;
 
+import client.GUI.guiListeners.RegisterListener;
 import client.ServerConnector.ServerConnector;
-import client.login_and_account_accessors.LoginAccessors;
 
-/**
- *
- * @author Adam
- */
 public class RegisterScreen extends javax.swing.JFrame {
 
-        /**
-         * Creates new form RegisterScreen
-         */
+        ServerConnector serverConnector;
 
-        private LoginAccessors logging_accesor;
-        private LoginScreen logging_screen;
-
-        public RegisterScreen(ServerConnector server_connector, LoginScreen logging_screen) {
+        public RegisterScreen(ServerConnector serverConnector) {
+                FlatDarkLaf.setup();
+                this.serverConnector = serverConnector;
                 initComponents();
-                setDefaultCloseOperation(this.DISPOSE_ON_CLOSE);
-                logging_accesor = new LoginAccessors(server_connector);
-                this.logging_screen = logging_screen;
-        }
-
-        public RegisterScreen() {
-        }
-
-        private void register() {
-
-                if (Username.getText().equals("") || String.valueOf(FirstPassword.getPassword()).equals("")
-                                || Email.getText().equals("")) {
-                        return;
-                }
-
-                JSONObject response = logging_accesor.sendUserRegisterData(Email.getText(), Username.getText(),
-                                FirstPassword.getPassword(),
-                                ConfirmPassword.getPassword());
-                if (response.getBoolean("outcome")) {
-                        logging_screen.setVisible(true);
-                        AccountRegistered accountRegistered = new AccountRegistered();
-                        accountRegistered.setVisible(true);
-                        this.dispose();
-                } else {
-                        Email.setText("");
-                        Username.setText("");
-                        FirstPassword.setText("");
-                        ConfirmPassword.setText("");
-                }
         }
 
         /**
@@ -65,242 +29,266 @@ public class RegisterScreen extends javax.swing.JFrame {
         // Code">//GEN-BEGIN:initComponents
         private void initComponents() {
 
-                jPanel1 = new javax.swing.JPanel();
-                jLabel3 = new javax.swing.JLabel();
-                jLabel1 = new javax.swing.JLabel();
-                Email = new javax.swing.JTextField();
-                jLabel2 = new javax.swing.JLabel();
-                Username = new javax.swing.JTextField();
-                jLabel4 = new javax.swing.JLabel();
-                FirstPassword = new javax.swing.JPasswordField();
-                jLabel5 = new javax.swing.JLabel();
-                ConfirmPassword = new javax.swing.JPasswordField();
-                jLabel6 = new javax.swing.JLabel();
-                jLabel7 = new javax.swing.JLabel();
-                jButton1 = new javax.swing.JButton();
+                RegisterScreen = new javax.swing.JPanel();
+                Logo = new javax.swing.JLabel();
+                CreateAccount = new javax.swing.JLabel();
+                Email = new javax.swing.JLabel();
+                EmailField = new javax.swing.JTextField();
+                Nickname = new javax.swing.JLabel();
+                Password = new javax.swing.JLabel();
+                ConfirmPassword = new javax.swing.JLabel();
+                ConfirmPasswordField = new javax.swing.JPasswordField();
+                PasswordField = new javax.swing.JPasswordField();
+                NicknameField = new javax.swing.JTextField();
                 RegisterButton = new javax.swing.JButton();
+                HaveAccountText = new javax.swing.JLabel();
+                LoginButton = new javax.swing.JButton();
 
                 setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-                setPreferredSize(new java.awt.Dimension(500, 500));
                 setResizable(false);
 
-                jLabel3.setFont(new java.awt.Font("Segoe UI Semilight", 3, 48)); // NOI18N
-                jLabel3.setText("AppMusic");
+                Logo.setFont(new java.awt.Font("Segoe UI Semilight", 3, 48)); // NOI18N
+                Logo.setText("ConnectedByMusic");
 
-                jLabel1.setText("E-mail address:");
+                CreateAccount.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
+                CreateAccount.setText("Create account:");
 
-                jLabel2.setText("Nickname:");
+                Email.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+                Email.setText("E-mail address:");
 
-                jLabel4.setText("Password:");
+                Nickname.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+                Nickname.setText("Nickname:");
 
-                FirstPassword.setText("");
-                FirstPassword.addActionListener(new java.awt.event.ActionListener() {
+                Password.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+                Password.setText("Password:");
+
+                ConfirmPassword.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+                ConfirmPassword.setText("Confirm password:");
+
+                ConfirmPasswordField.setText("");
+                ConfirmPasswordField.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                jPasswordField1ActionPerformed(evt);
+                                ConfirmPasswordFieldActionPerformed(evt);
                         }
                 });
 
-                jLabel5.setText("Confirm password:");
-
-                ConfirmPassword.setText("");
-
-                jLabel6.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
-                jLabel6.setText("Create account:");
-
-                jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 10)); // NOI18N
-                jLabel7.setText("Already have account?");
-
-                jButton1.setText("Log in");
-                jButton1.addActionListener(new java.awt.event.ActionListener() {
+                PasswordField.setText("");
+                PasswordField.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                jButton1ActionPerformed(evt);
+                                PasswordFieldActionPerformed(evt);
                         }
                 });
 
-                RegisterButton.setFont(new java.awt.Font("Segoe UI Emoji", 3, 24)); // NOI18N
-                RegisterButton.setText("Register");
-                RegisterButton.addActionListener(new java.awt.event.ActionListener() {
+                RegisterButton.setLabel("Register");
+                RegisterButton.setMaximumSize(new java.awt.Dimension(73, 23));
+                RegisterButton.setMinimumSize(new java.awt.Dimension(73, 23));
+                RegisterButton.setName(""); // NOI18N
+                RegisterButton.addActionListener(
+                                new RegisterListener(EmailField, NicknameField, PasswordField, ConfirmPasswordField,
+                                                serverConnector, CreateAccount));
+
+                HaveAccountText.setFont(new java.awt.Font("Segoe UI", 1, 10)); // NOI18N
+                HaveAccountText.setText("Already have account?");
+
+                LoginButton.setText("Log in");
+                LoginButton.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                System.out.println(123);
-                                if (String.valueOf(FirstPassword.getPassword())
-                                                .equals(String.valueOf(ConfirmPassword.getPassword()))) {
-                                        register();
-                                } else {
-                                        System.out.println(FirstPassword.getPassword());
-                                        System.out.println(ConfirmPassword.getPassword());
-                                        FirstPassword.setText("");
-                                        ConfirmPassword.setText("");
-                                }
+                                LoginButtonActionPerformed(evt);
                         }
                 });
 
-                javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-                jPanel1.setLayout(jPanel1Layout);
-                jPanel1Layout.setHorizontalGroup(
-                                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                                                .addGap(123, 123, 123)
-                                                                .addGroup(jPanel1Layout
+                javax.swing.GroupLayout RegisterScreenLayout = new javax.swing.GroupLayout(RegisterScreen);
+                RegisterScreen.setLayout(RegisterScreenLayout);
+                RegisterScreenLayout.setHorizontalGroup(
+                                RegisterScreenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addGroup(RegisterScreenLayout.createSequentialGroup()
+                                                                .addGroup(RegisterScreenLayout
                                                                                 .createParallelGroup(
-                                                                                                javax.swing.GroupLayout.Alignment.TRAILING,
-                                                                                                false)
-                                                                                .addGroup(jPanel1Layout
+                                                                                                javax.swing.GroupLayout.Alignment.LEADING)
+                                                                                .addGroup(RegisterScreenLayout
                                                                                                 .createSequentialGroup()
-                                                                                                .addComponent(jLabel1)
-                                                                                                .addPreferredGap(
-                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED,
-                                                                                                                23,
-                                                                                                                Short.MAX_VALUE)
-                                                                                                .addComponent(Email,
-                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                155,
-                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                                                .addGroup(jPanel1Layout
-                                                                                                .createSequentialGroup()
-                                                                                                .addGroup(jPanel1Layout
+                                                                                                .addGap(63, 63, 63)
+                                                                                                .addGroup(RegisterScreenLayout
                                                                                                                 .createParallelGroup(
                                                                                                                                 javax.swing.GroupLayout.Alignment.LEADING)
-                                                                                                                .addComponent(jLabel2)
-                                                                                                                .addComponent(jLabel4)
-                                                                                                                .addComponent(jLabel5))
-                                                                                                .addPreferredGap(
-                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                                                .addGroup(jPanel1Layout
-                                                                                                                .createParallelGroup(
-                                                                                                                                javax.swing.GroupLayout.Alignment.LEADING,
-                                                                                                                                false)
-                                                                                                                .addComponent(Username)
-                                                                                                                .addComponent(FirstPassword)
-                                                                                                                .addComponent(ConfirmPassword,
+                                                                                                                .addGroup(RegisterScreenLayout
+                                                                                                                                .createSequentialGroup()
+                                                                                                                                .addComponent(Email)
+                                                                                                                                .addPreferredGap(
+                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED,
+                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                                                                                Short.MAX_VALUE)
+                                                                                                                                .addComponent(EmailField,
+                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                                                                                                210,
+                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                                                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
+                                                                                                                                RegisterScreenLayout
+                                                                                                                                                .createSequentialGroup()
+                                                                                                                                                .addComponent(Nickname)
+                                                                                                                                                .addPreferredGap(
+                                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED,
+                                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                                                                                                Short.MAX_VALUE)
+                                                                                                                                                .addComponent(NicknameField,
+                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                                                                                                                210,
+                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                                                                .addGroup(RegisterScreenLayout
+                                                                                                                                .createSequentialGroup()
+                                                                                                                                .addComponent(ConfirmPassword)
+                                                                                                                                .addPreferredGap(
+                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                                                                                .addComponent(ConfirmPasswordField))
+                                                                                                                .addGroup(RegisterScreenLayout
+                                                                                                                                .createSequentialGroup()
+                                                                                                                                .addComponent(Password)
+                                                                                                                                .addPreferredGap(
+                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED,
+                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                                                                                Short.MAX_VALUE)
+                                                                                                                                .addComponent(PasswordField,
+                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                                                                                                210,
+                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                                                                                .addGap(26, 26, 26))
+                                                                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
+                                                                                                RegisterScreenLayout
+                                                                                                                .createSequentialGroup()
+                                                                                                                .addGap(119, 119,
+                                                                                                                                119)
+                                                                                                                .addGroup(RegisterScreenLayout
+                                                                                                                                .createParallelGroup(
+                                                                                                                                                javax.swing.GroupLayout.Alignment.LEADING)
+                                                                                                                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
+                                                                                                                                                RegisterScreenLayout
+                                                                                                                                                                .createSequentialGroup()
+                                                                                                                                                                .addComponent(CreateAccount)
+                                                                                                                                                                .addGap(134, 134,
+                                                                                                                                                                                134))
+                                                                                                                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
+                                                                                                                                                RegisterScreenLayout
+                                                                                                                                                                .createSequentialGroup()
+                                                                                                                                                                .addComponent(RegisterButton,
+                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                                                                                                                                198,
+                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                                                                                                                .addGap(94, 94, 94))))
+                                                                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
+                                                                                                RegisterScreenLayout
+                                                                                                                .createSequentialGroup()
+                                                                                                                .addContainerGap()
+                                                                                                                .addComponent(Logo,
                                                                                                                                 javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                                155,
-                                                                                                                                Short.MAX_VALUE))))
-                                                                .addContainerGap(118, Short.MAX_VALUE))
-                                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout
-                                                                .createSequentialGroup()
-                                                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                Short.MAX_VALUE)
-                                                                .addGroup(jPanel1Layout.createParallelGroup(
-                                                                                javax.swing.GroupLayout.Alignment.LEADING)
-                                                                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
-                                                                                                jPanel1Layout.createSequentialGroup()
-                                                                                                                .addComponent(jLabel6)
-                                                                                                                .addGap(179, 179,
-                                                                                                                                179))
-                                                                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
-                                                                                                jPanel1Layout.createSequentialGroup()
-                                                                                                                .addComponent(jLabel3)
-                                                                                                                .addGap(139, 139,
-                                                                                                                                139))
-                                                                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
-                                                                                                jPanel1Layout.createSequentialGroup()
-                                                                                                                .addComponent(jButton1)
-                                                                                                                .addGap(205, 205,
-                                                                                                                                205))
-                                                                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
-                                                                                                jPanel1Layout.createSequentialGroup()
-                                                                                                                .addComponent(jLabel7)
-                                                                                                                .addGap(185, 185,
-                                                                                                                                185))
-                                                                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
-                                                                                                jPanel1Layout.createSequentialGroup()
-                                                                                                                .addComponent(RegisterButton,
+                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                                                                Short.MAX_VALUE)))
+                                                                .addContainerGap())
+                                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
+                                                                RegisterScreenLayout
+                                                                                .createSequentialGroup()
+                                                                                .addGap(0, 0, Short.MAX_VALUE)
+                                                                                .addGroup(RegisterScreenLayout
+                                                                                                .createParallelGroup(
+                                                                                                                javax.swing.GroupLayout.Alignment.LEADING)
+                                                                                                .addComponent(HaveAccountText)
+                                                                                                .addGroup(RegisterScreenLayout
+                                                                                                                .createSequentialGroup()
+                                                                                                                .addGap(6, 6, 6)
+                                                                                                                .addComponent(LoginButton,
                                                                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                                184,
-                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                                                                .addGap(151, 151,
-                                                                                                                                151)))));
-                jPanel1Layout.setVerticalGroup(
-                                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                                                .addGap(12, 12, 12)
-                                                                .addComponent(jLabel3,
-                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                75,
-                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                                                                                84,
+                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                                                                .addGap(143, 143, 143)));
+                RegisterScreenLayout.setVerticalGroup(
+                                RegisterScreenLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addGroup(RegisterScreenLayout.createSequentialGroup()
+                                                                .addContainerGap()
+                                                                .addComponent(Logo)
                                                                 .addPreferredGap(
                                                                                 javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                .addComponent(jLabel6)
-                                                                .addGap(27, 27, 27)
-                                                                .addGroup(jPanel1Layout.createParallelGroup(
-                                                                                javax.swing.GroupLayout.Alignment.BASELINE)
-                                                                                .addComponent(jLabel1,
-                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                Short.MAX_VALUE)
-                                                                                .addComponent(Email))
-                                                                .addGap(18, 18, 18)
-                                                                .addGroup(jPanel1Layout.createParallelGroup(
-                                                                                javax.swing.GroupLayout.Alignment.BASELINE)
-                                                                                .addComponent(jLabel2,
-                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                Short.MAX_VALUE)
-                                                                                .addComponent(Username))
-                                                                .addGap(18, 18, 18)
-                                                                .addGroup(jPanel1Layout.createParallelGroup(
-                                                                                javax.swing.GroupLayout.Alignment.BASELINE)
-                                                                                .addComponent(jLabel4,
-                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                Short.MAX_VALUE)
-                                                                                .addComponent(FirstPassword,
+                                                                .addComponent(CreateAccount)
+                                                                .addPreferredGap(
+                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                .addGroup(RegisterScreenLayout
+                                                                                .createParallelGroup(
+                                                                                                javax.swing.GroupLayout.Alignment.BASELINE)
+                                                                                .addComponent(Email)
+                                                                                .addComponent(EmailField,
                                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE,
                                                                                                 javax.swing.GroupLayout.DEFAULT_SIZE,
                                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                                .addGap(18, 18, 18)
-                                                                .addGroup(jPanel1Layout.createParallelGroup(
-                                                                                javax.swing.GroupLayout.Alignment.BASELINE)
-                                                                                .addComponent(jLabel5,
-                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                Short.MAX_VALUE)
-                                                                                .addComponent(ConfirmPassword,
+                                                                .addPreferredGap(
+                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                .addGroup(RegisterScreenLayout
+                                                                                .createParallelGroup(
+                                                                                                javax.swing.GroupLayout.Alignment.BASELINE)
+                                                                                .addComponent(Nickname)
+                                                                                .addComponent(NicknameField,
                                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE,
                                                                                                 javax.swing.GroupLayout.DEFAULT_SIZE,
                                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                                .addGap(24, 24, 24)
-                                                                .addComponent(jLabel7)
                                                                 .addPreferredGap(
                                                                                 javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                .addComponent(jButton1)
+                                                                .addGroup(RegisterScreenLayout
+                                                                                .createParallelGroup(
+                                                                                                javax.swing.GroupLayout.Alignment.BASELINE)
+                                                                                .addComponent(PasswordField,
+                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                                .addComponent(Password))
+                                                                .addPreferredGap(
+                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                .addGroup(RegisterScreenLayout
+                                                                                .createParallelGroup(
+                                                                                                javax.swing.GroupLayout.Alignment.BASELINE)
+                                                                                .addComponent(ConfirmPasswordField,
+                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                                .addComponent(ConfirmPassword))
                                                                 .addGap(18, 18, 18)
                                                                 .addComponent(RegisterButton,
                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                43,
+                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                .addGap(85, 85, 85)));
+                                                                .addPreferredGap(
+                                                                                javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                                .addComponent(HaveAccountText)
+                                                                .addPreferredGap(
+                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                .addComponent(LoginButton)
+                                                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                Short.MAX_VALUE)));
 
                 javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
                 getContentPane().setLayout(layout);
                 layout.setHorizontalGroup(
                                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                .addComponent(RegisterScreen, javax.swing.GroupLayout.DEFAULT_SIZE,
                                                                 javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
                 layout.setVerticalGroup(
                                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
+                                                .addComponent(RegisterScreen, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                javax.swing.GroupLayout.PREFERRED_SIZE));
 
                 pack();
         }// </editor-fold>//GEN-END:initComponents
 
-        private void jPasswordField1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jPasswordField1ActionPerformed
+        private void PasswordFieldActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_PasswordFieldActionPerformed
                 // TODO add your handling code here:
-        }// GEN-LAST:event_jPasswordField1ActionPerformed
+        }// GEN-LAST:event_PasswordFieldActionPerformed
 
-        private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton1ActionPerformed
-                this.dispose();
-                logging_screen.setVisible(true);
-        }// GEN-LAST:event_jButton1ActionPerformed
-
-        private void RegisterButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_RegisterButtonActionPerformed
+        private void ConfirmPasswordFieldActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_ConfirmPasswordFieldActionPerformed
                 // TODO add your handling code here:
+        }// GEN-LAST:event_ConfirmPasswordFieldActionPerformed
+
+        private void LoginButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_LoginButtonActionPerformed
+                LoginScreen loginScreen = new LoginScreen(serverConnector);
+                loginScreen.setVisible(true);
                 this.dispose();
-                logging_screen.setVisible(true);
-                AccountRegistered accountRegistered = new AccountRegistered();
-                accountRegistered.setVisible(true);
-        }// GEN-LAST:event_RegisterButtonActionPerformed
+        }// GEN-LAST:event_LoginButtonActionPerformed
 
         /**
          * @param args the command line arguments
@@ -345,25 +333,25 @@ public class RegisterScreen extends javax.swing.JFrame {
                 /* Create and display the form */
                 java.awt.EventQueue.invokeLater(new Runnable() {
                         public void run() {
-                                new RegisterScreen().setVisible(true);
+
                         }
                 });
         }
 
         // Variables declaration - do not modify//GEN-BEGIN:variables
-        private javax.swing.JButton jButton1;
+        private javax.swing.JLabel ConfirmPassword;
+        private javax.swing.JPasswordField ConfirmPasswordField;
+        private javax.swing.JLabel CreateAccount;
+        private javax.swing.JLabel Email;
+        private javax.swing.JTextField EmailField;
+        private javax.swing.JLabel HaveAccountText;
+        private javax.swing.JButton LoginButton;
+        private javax.swing.JLabel Logo;
+        private javax.swing.JLabel Nickname;
+        private javax.swing.JTextField NicknameField;
+        private javax.swing.JLabel Password;
+        private javax.swing.JPasswordField PasswordField;
         private javax.swing.JButton RegisterButton;
-        private javax.swing.JLabel jLabel1;
-        private javax.swing.JLabel jLabel2;
-        private javax.swing.JLabel jLabel3;
-        private javax.swing.JLabel jLabel4;
-        private javax.swing.JLabel jLabel5;
-        private javax.swing.JLabel jLabel6;
-        private javax.swing.JLabel jLabel7;
-        private javax.swing.JPanel jPanel1;
-        private javax.swing.JPasswordField FirstPassword;
-        private javax.swing.JPasswordField ConfirmPassword;
-        private javax.swing.JTextField Email;
-        private javax.swing.JTextField Username;
+        private javax.swing.JPanel RegisterScreen;
         // End of variables declaration//GEN-END:variables
 }

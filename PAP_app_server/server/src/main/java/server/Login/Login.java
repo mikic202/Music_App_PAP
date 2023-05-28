@@ -41,6 +41,7 @@ public class Login {
                 true_result.put("outcome", true);
                 true_result.put("username", user_info.get("username"));
                 true_result.put("user_id", user_info.get("ID"));
+                true_result.put("profile_picture", user_info.get("profile_picture"));
                 result.put("value", true_result);
             } else {
                 JSONObject false_result = new JSONObject();
@@ -91,7 +92,7 @@ public class Login {
             return result;
         }
         Hashtable<String, String> user_info = UserDataAccesor.getData(request.getInt("user_id"));
-        if (user_info.isEmpty()) {
+        if (user_info.isEmpty() || !user_info.get("password").equals(old_password)) {
             result.put("outcome", false);
             JSONObject response = new JSONObject();
             response.put("value", result);
@@ -150,7 +151,7 @@ public class Login {
 
     private static JSONObject _retrievePassword(JSONObject request) {
         JSONObject result = new JSONObject();
-        Hashtable<String, String> user_info = UserDataAccesor.getData(request.getInt("user_id"));
+        Hashtable<String, String> user_info = UserDataAccesor.getDataWithEmail(request.getString("email"));
         if (user_info.isEmpty()) {
             result.put("outcome", false);
             JSONObject response = new JSONObject();
@@ -158,14 +159,18 @@ public class Login {
             response.put("type", LoginRequestTypes.SEND_CHANGE_PASSWORD.value());
             return response;
         }
-        String email = request.getString("email");
-        String message = "Please DO NOT responde to this email\nNew Password: ";
+        final String email = request.getString("email");
         String newPassword = _generateRandomString();
-        message += newPassword;
-        message += "\n Please reset the Password after logging in";
+        final String message = "Please DO NOT responde to this email\nNew Password: " + newPassword
+                + "\n Please reset the Password after logging in";
         user_info.put("password", newPassword);
-        UserDataSetter.setData(request.getInt("user_id"), user_info);
-        _sendMessage(email, message);
+        System.out.println(user_info);
+        UserDataSetter.setData(Integer.parseInt(user_info.get("ID")), user_info);
+        new Thread(new Runnable() {
+            public void run() {
+                _sendMessage(email, message);
+            }
+        }).start();
         result.put("outcome", true);
         JSONObject response = new JSONObject();
         response.put("value", result);
@@ -189,21 +194,16 @@ public class Login {
 
             protected PasswordAuthentication getPasswordAuthentication() {
 
-                return new PasswordAuthentication(from, "wvdhgxvuqyhgccxe");
+                return new PasswordAuthentication(from, "cxlawlqoefcyfuhr");
             }
         });
         session.setDebug(true);
         try {
             MimeMessage message = new MimeMessage(session);
-
             message.setFrom(new InternetAddress(from));
-
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
-
             message.setSubject("Password retrieving");
-
             message.setText(messageToSend);
-
             System.out.println("sending...");
             Transport.send(message);
             System.out.println("Sent message successfully....");

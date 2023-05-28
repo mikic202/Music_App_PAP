@@ -14,38 +14,38 @@ public class AccountChangeRequestAccessors {
             char[] confirm_new_password) {
         JSONObject procesed_request = AccountChangeRequestCreator.create_send_account_request(email, nickname,
                 old_password, new_password, confirm_new_password);
-        JSONObject response = server_connector.send_request(procesed_request);
+        JSONObject response = server_connector.sendRequest(procesed_request);
         return response;
     }
 
     public JSONObject sendUserRegisterData(BufferedImage avatar) {
         JSONObject procesed_request = AccountChangeRequestCreator.create_send_avatar_request(avatar);
-        JSONObject response = server_connector.send_request(procesed_request);
+        JSONObject response = server_connector.sendRequest(procesed_request);
         return response;
     }
 
-    public JSONObject sendUserAccountEmailData(String email, int user_id) {
-        JSONObject procesed_request = AccountChangeRequestCreator.create_send_email_request(email, user_id);
-        JSONObject response = server_connector.send_request(procesed_request);
+    public JSONObject sendUserAccountEmailData(String email, int userId) {
+        JSONObject procesed_request = AccountChangeRequestCreator.create_send_email_request(email, userId);
+        JSONObject response = server_connector.sendRequest(procesed_request);
         return response;
     }
 
-    public JSONObject sendUserAccountNickanameData(String nickname, int user_id) {
-        JSONObject procesed_request = AccountChangeRequestCreator.create_send_nickname_request(nickname, user_id);
-        JSONObject response = server_connector.send_request(procesed_request);
+    public JSONObject sendUserAccountNickanameData(String nickname, int userId) {
+        JSONObject procesed_request = AccountChangeRequestCreator.create_send_nickname_request(nickname, userId);
+        JSONObject response = server_connector.sendRequest(procesed_request);
         return response;
     }
 
-    public JSONObject sendUserAccountNewPasswordData(char[] new_password, char[] old_password, int user_id) {
+    public JSONObject sendUserAccountNewPasswordData(char[] new_password, char[] old_password, int userId) {
         JSONObject procesed_request = AccountChangeRequestCreator.create_send_new_password_request(new_password,
-                old_password, user_id);
-        JSONObject response = server_connector.send_request(procesed_request);
+                old_password, userId);
+        JSONObject response = server_connector.sendRequest(procesed_request);
         return response;
     }
 
     public JSONObject sendUserAccountPasswordData(char[] password) {
         JSONObject procesed_request = AccountChangeRequestCreator.create_send_password_request(password);
-        JSONObject response = server_connector.send_request(procesed_request);
+        JSONObject response = server_connector.sendRequest(procesed_request);
         return response;
     }
 

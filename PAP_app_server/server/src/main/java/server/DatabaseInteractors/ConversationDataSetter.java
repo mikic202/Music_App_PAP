@@ -18,13 +18,13 @@ public class ConversationDataSetter implements DataSetterInterface {
         Connection connection = ConnectionPool.getConnection();
         try {
             var statement = connection.prepareStatement(preparedStatement);
-            statement.setString(1, data.get("name"));
-            statement.setString(1, data.get("number_of_users"));
-            statement.setString(1, data.get("ID"));
+            statement.setString(1, data.get(ConversationDatabsaeInformation.NAME_COLUMN.value()));
+            statement.setString(2, data.get(ConversationDatabsaeInformation.NUMBER_OF_USERS_COLUMN.value()));
+            statement.setString(3, data.get(ConversationDatabsaeInformation.ID_COLUMN.value()));
             connection.commit();
 
             statement.executeUpdate();
-
+            connection.commit();
         } catch (Exception e) {
             System.out.println(e);
 
@@ -44,11 +44,12 @@ public class ConversationDataSetter implements DataSetterInterface {
         Connection connection = ConnectionPool.getConnection();
         try {
             var statement = connection.prepareStatement(preparedStatement);
-            statement.setString(1, data.get("name"));
-            statement.setString(2, data.get("number_of_users"));
+            statement.setString(1, data.get(ConversationDatabsaeInformation.NAME_COLUMN.value()));
+            statement.setString(2, data.get(ConversationDatabsaeInformation.NUMBER_OF_USERS_COLUMN.value()));
             connection.commit();
             statement.executeUpdate();
             added_id = ConversationDataAccesor.getLatestConversation();
+            connection.commit();
         } catch (Exception e) {
             System.out.println(e);
 
