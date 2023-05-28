@@ -13,7 +13,7 @@ public class ChatWorker extends SwingWorker<Boolean, Void> {
     public ChatWorker(Chat chat, char[] userPassword) {
         this.chat = chat;
         try {
-            serverConnector = new ServerConnector(new Socket("localhost",
+            serverConnector = new ServerConnector(new Socket("144.91.114.89",
                     8005));
         } catch (Exception e) {
             System.out.println(e);

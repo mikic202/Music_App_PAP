@@ -52,7 +52,7 @@ public class LoggingWorker extends SwingWorker<Boolean, Void> {
 
 // public LoginScreen() {
 // // try {
-// // server_connector = new ServerConnector(new Socket("localhost", 8000));
+// // server_connector = new ServerConnector(new Socket("144.91.114.89", 8000));
 // // } catch (Exception e) {
 // // System.out.println(e);
 // // System.exit(-1);
