@@ -11,6 +11,7 @@ import javax.swing.SwingUtilities;
 import net.miginfocom.swing.MigLayout;
 
 import client.Chat.Chat;
+import client.GUI.guiListeners.AddUsersListener;
 import client.GUI.guiListeners.CreateGroupListener;
 import client.GUI.guiListeners.SendMessageListener;
 import client.GUI.guiListeners.SwitchConversationListener;
@@ -92,7 +93,7 @@ public class People extends javax.swing.JPanel {
                 chatPanel = new javax.swing.JPanel();
                 photoButton = new javax.swing.JButton();
                 peopleContainer = new javax.swing.JScrollPane();
-                peopleList = new javax.swing.JList<>();
+                peopleToAddList = new javax.swing.JTextArea();
                 addButton = new javax.swing.JButton();
                 removePersonFromGroupLabel = new javax.swing.JLabel();
                 peopleListRemove = new javax.swing.JList<>();
@@ -119,7 +120,7 @@ public class People extends javax.swing.JPanel {
 
                 groupName.setText("jTextField1");
 
-                membersLabel.setText("Members (example: friend1,friend2,friend3...):");
+                membersLabel.setText("Members (example: friend1;friend2;friend3...):");
 
                 membersList.setColumns(20);
                 membersList.setRows(5);
@@ -225,25 +226,10 @@ public class People extends javax.swing.JPanel {
                         }
                 });
 
-                peopleList.setModel(new javax.swing.AbstractListModel<String>() {
-                        String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-
-                        public int getSize() {
-                                return strings.length;
-                        }
-
-                        public String getElementAt(int i) {
-                                return strings[i];
-                        }
-                });
-                peopleContainer.setViewportView(peopleList);
+                peopleContainer.setViewportView(peopleToAddList);
 
                 addButton.setText("Add");
-                addButton.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                addButtonActionPerformed(evt);
-                        }
-                });
+                addButton.addActionListener(new AddUsersListener(chat, peopleToAddList));
 
                 removePersonFromGroupLabel.setFont(new java.awt.Font("Segoe UI Black", 0, 14)); // NOI18N
                 removePersonFromGroupLabel.setText("Remove person from current group:");
@@ -821,7 +807,7 @@ public class People extends javax.swing.JPanel {
         private javax.swing.JLabel pathFileLabel;
         private javax.swing.JButton peopleButton;
         private javax.swing.JScrollPane peopleContainer;
-        private javax.swing.JList<String> peopleList;
+        private javax.swing.JTextArea peopleToAddList;
         private javax.swing.JList<String> peopleListRemove;
         private javax.swing.JButton photoButton;
         private javax.swing.JButton removeButton;

@@ -151,6 +151,10 @@ public class Chat {
         return new JSONObject("{\"outcome\":false}");
     }
 
+    public JSONObject addUsersToCurrentConversation(ArrayList<String> usernames) {
+        return addUsersToConversation(usersConversations.get(currentConversation).getString("name"), usernames);
+    }
+
     public Hashtable<String, Integer> getConversationsNamesToIds() {
         Hashtable<String, Integer> conv = new Hashtable<>();
         for (int id_key : usersConversations.keySet()) {
