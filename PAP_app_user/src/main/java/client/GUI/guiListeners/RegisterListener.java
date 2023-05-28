@@ -35,7 +35,6 @@ public class RegisterListener implements ActionListener {
 
         @Override
         public void run() {
-            System.out.println(122334);
             if (!String.valueOf(passwordField.getPassword())
                     .equals(String.valueOf(repaetPasswordField.getPassword()))) {
                 passwordField.setText("");

@@ -11,6 +11,7 @@ import javax.swing.SwingUtilities;
 import net.miginfocom.swing.MigLayout;
 
 import client.Chat.Chat;
+import client.GUI.guiListeners.CreateGroupListener;
 import client.GUI.guiListeners.SendMessageListener;
 import client.GUI.guiListeners.SwitchConversationListener;
 import client.GUI.guiWorkers.ChatWorker;
@@ -67,7 +68,6 @@ public class People extends javax.swing.JPanel {
                 createGroupLabel = new javax.swing.JLabel();
                 groupNameLabel = new javax.swing.JLabel();
                 groupName = new javax.swing.JTextField();
-                groupCodeLabel = new javax.swing.JLabel();
                 membersLabel = new javax.swing.JLabel();
                 membersContainer = new javax.swing.JScrollPane();
                 membersList = new javax.swing.JTextArea();
@@ -84,7 +84,6 @@ public class People extends javax.swing.JPanel {
                 sendButton = new javax.swing.JButton();
                 addPersonToGroupLabel = new javax.swing.JLabel();
                 createButton = new javax.swing.JButton();
-                groupCode = new javax.swing.JTextField();
                 peopleButton = new javax.swing.JButton();
                 musicButton = new javax.swing.JButton();
                 accountButton = new javax.swing.JButton();
@@ -119,8 +118,6 @@ public class People extends javax.swing.JPanel {
                 groupNameLabel.setText("Group name:");
 
                 groupName.setText("jTextField1");
-
-                groupCodeLabel.setText("Group code:");
 
                 membersLabel.setText("Members (example: friend1,friend2,friend3...):");
 
@@ -180,13 +177,7 @@ public class People extends javax.swing.JPanel {
                 addPersonToGroupLabel.setText("Add person to current group:");
 
                 createButton.setText("Create");
-                createButton.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                createButtonActionPerformed(evt);
-                        }
-                });
-
-                groupCode.setText("jTextField1");
+                createButton.addActionListener(new CreateGroupListener(chat, groupName, membersList, chatsList));
 
                 peopleButton.setText("jButton1");
                 peopleButton.addActionListener(new java.awt.event.ActionListener() {
@@ -331,10 +322,6 @@ public class People extends javax.swing.JPanel {
                                                                                                 .addGroup(layout.createParallelGroup(
                                                                                                                 javax.swing.GroupLayout.Alignment.TRAILING,
                                                                                                                 false)
-                                                                                                                .addComponent(groupCodeLabel,
-                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                                Short.MAX_VALUE)
                                                                                                                 .addComponent(groupNameLabel,
                                                                                                                                 javax.swing.GroupLayout.DEFAULT_SIZE,
                                                                                                                                 javax.swing.GroupLayout.DEFAULT_SIZE,
@@ -343,7 +330,6 @@ public class People extends javax.swing.JPanel {
                                                                                                                 javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                                                                 .addGroup(layout.createParallelGroup(
                                                                                                                 javax.swing.GroupLayout.Alignment.LEADING)
-                                                                                                                .addComponent(groupCode)
                                                                                                                 .addComponent(groupName))
                                                                                                 .addGap(8, 8, 8))
                                                                                 .addGroup(layout.createSequentialGroup()
@@ -634,12 +620,7 @@ public class People extends javax.swing.JPanel {
                                                                                                                                 .addPreferredGap(
                                                                                                                                                 javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                                                                                                 .addGroup(layout.createParallelGroup(
-                                                                                                                                                javax.swing.GroupLayout.Alignment.LEADING)
-                                                                                                                                                .addComponent(groupCodeLabel)
-                                                                                                                                                .addComponent(groupCode,
-                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                                                                                                                                javax.swing.GroupLayout.Alignment.LEADING)))
                                                                                                                 .addComponent(chatsContainer))
                                                                                                 .addPreferredGap(
                                                                                                                 javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -823,7 +804,6 @@ public class People extends javax.swing.JPanel {
         private javax.swing.JLabel createGroupLabel;
         private javax.swing.JTextField groupCode;
         private javax.swing.JTextField groupCode2;
-        private javax.swing.JLabel groupCodeLabel;
         private javax.swing.JLabel groupCodeLabel2;
         private javax.swing.JTextField groupName;
         private javax.swing.JLabel groupNameLabel;

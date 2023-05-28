@@ -4,11 +4,13 @@ import java.awt.Color;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import javax.swing.ImageIcon;
-import javax.swing.JPanel;
+import javax.swing.JList;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 import org.json.JSONObject;
 
@@ -17,15 +19,16 @@ import client.GUI.LeftChatPanel;
 
 public class CreateGroupListener implements ActionListener {
 
-    public CreateGroupListener(Chat chat, JTextArea messageBox, JPanel messagesArea) {
+    public CreateGroupListener(Chat chat, JTextField groupName, JTextArea membersToAdd, JList<String> chatList) {
         this.chat = chat;
-        this.messageBox = messageBox;
-        this.messagesArea = messagesArea;
+        this.groupName = groupName;
+        this.membersToAdd = membersToAdd;
+        this.chatList = chatList;
     }
 
     @Override
     public void actionPerformed(ActionEvent event) {
-        if (messageBox.getText().trim().equals("")) {
+        if (groupName.getText().trim().equals("")) {
             return;
         }
         new Thread(new CreateGroupGuiUpdater()).start();
@@ -35,42 +38,47 @@ public class CreateGroupListener implements ActionListener {
 
         @Override
         public void run() {
-            addMessageToMessageArea(chat.sendMessage(messageBox.getText().trim()));
-            messageBox.setText("");
+            createConversation();
+            updateConversationList();
         }
 
     }
 
-    private void addMessageToMessageArea(JSONObject message) {
-        LeftChatPanel messagePanel = new LeftChatPanel();
-        messagePanel.chatText.setBackground(new java.awt.Color(0, 137, 255));
-        messagePanel.chatText.setForeground(Color.black);
-        messagePanel.chatText.setText(message.getString("text"));
-        messagePanel.dateLabel.setText(message.getString("creation_date"));
-        var userInfo = chat.getCurrentUserInfo();
-        if (!userInfo.getString("profile_picture").equals("0")) {
-            String imageString = userInfo.getString("profile_picture");
-            messagePanel.avatarChat.setIcon((new ImageIcon(convertStringArrayToImageBytes(imageString))));
+    private void createConversation() {
+        String name = groupName.getText();
+        ArrayList<String> usernames = new ArrayList<>();
+        String[] parsed_usernames = membersToAdd.getText().split(";");
+        for (String username : parsed_usernames) {
+            usernames.add(username);
         }
-        messagePanel.nicknameLabel.setText(userInfo.getString("username"));
-        this.messagesArea.add(messagePanel.chatBlock, "wrap");
-        this.messagesArea.repaint();
-        this.messagesArea.revalidate();
+        usernames.add(chat.getCurrentUserInfo().getString("username"));
+        chat.createConversation(name, usernames);
     }
 
-    byte[] convertStringArrayToImageBytes(String stringImage) {
-        stringImage = stringImage.replace("[", "");
-        stringImage = stringImage.replace("]", "");
-        List<String> byteListImage = Arrays.asList(stringImage.split(","));
-        byte[] imageData = new byte[byteListImage.size()];
+    private void updateConversationList() {
+        chatList.removeAll();
+        chat.updateStatus();
+        var convNamesSet = chat.getConversationsNamesToIds().keySet();
 
-        for (int i = 0; i < byteListImage.size(); i++) {
-            imageData[i] = Byte.parseByte(byteListImage.get(i));
+        String[] convNames = new String[convNamesSet.size()];
+        int i = 0;
+        for (String name : convNamesSet) {
+            convNames[i++] = name;
         }
-        return imageData;
+        chatList.setModel(new javax.swing.AbstractListModel<String>() {
+
+            public int getSize() {
+                return convNames.length;
+            }
+
+            public String getElementAt(int i) {
+                return convNames[i];
+            }
+        });
     }
 
     Chat chat;
-    JTextArea messageBox;
-    JPanel messagesArea;
+    JTextField groupName;
+    JTextArea membersToAdd;
+    JList<String> chatList;
 }
