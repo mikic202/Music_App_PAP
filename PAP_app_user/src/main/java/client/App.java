@@ -14,7 +14,7 @@ public class App {
                 8000));
         // ServerConnector connector = new ServerConnector(new Socket("localhost",
         // 8000));
-        Chat chat = new Chat(1, 2, connector);
+        //Chat chat = new Chat(1, 2, connector);
         ArrayList<String> users = new ArrayList<>();
         users.add("mikic");
         users.add("someone");
