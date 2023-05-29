@@ -48,7 +48,6 @@ public class ConversationDataSetter implements DataSetterInterface {
             statement.setString(2, data.get(ConversationDatabsaeInformation.NUMBER_OF_USERS_COLUMN.value()));
             connection.commit();
             statement.executeUpdate();
-            added_id = ConversationDataAccesor.getLatestConversation();
             connection.commit();
         } catch (Exception e) {
             System.out.println(e);
@@ -57,6 +56,7 @@ public class ConversationDataSetter implements DataSetterInterface {
 
         }
         ConnectionPool.releaseConnection(connection);
+        added_id = ConversationDataAccesor.getLatestConversation();
         return added_id;
     }
 
