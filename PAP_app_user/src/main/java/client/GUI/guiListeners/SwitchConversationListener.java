@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -20,9 +21,10 @@ import client.GUI.LeftChatPanel;
 
 public class SwitchConversationListener implements ListSelectionListener {
 
-    public SwitchConversationListener(Chat chat, JPanel messagesArea) {
+    public SwitchConversationListener(Chat chat, JPanel messagesArea, Callable<Void> chatGuiUpdater) {
         this.chat = chat;
         this.messagesArea = messagesArea;
+        this.chatGuiUpdater = chatGuiUpdater;
     }
 
     @Override
@@ -37,58 +39,13 @@ public class SwitchConversationListener implements ListSelectionListener {
     }
 
     private void updateChat(ArrayList<JSONObject> newMessages) {
-        messagesArea.removeAll();
-        for (JSONObject message : newMessages) {
-            if (message.getInt("is_image") == 1) {
-                addImage(message);
-            } else {
-                addTextMessage(message);
-            }
+        ChatContentsUpdater.updateChat(newMessages, chat, messagesArea);
+        try {
+            chatGuiUpdater.call();
+        } catch (Exception e) {
+            System.out.println(e);
         }
 
-    }
-
-    void addImage(JSONObject message) {
-        // TODO add new timestamp and username
-        ImageChatPanel chatPanel = new ImageChatPanel();
-        if (message.getInt("sender_id") == chat.userId()) {
-            chatPanel.jTextArea1.setBackground(new java.awt.Color(0, 137, 255));
-        }
-        String imageString = message.getString("text");
-        chatPanel.jTextArea1.setIcon((new ImageIcon(convertStringArrayToImageBytes(imageString))));
-        this.messagesArea.add(chatPanel.jTextArea1, "wrap");
-        this.messagesArea.repaint();
-        this.messagesArea.revalidate();
-    }
-
-    void addTextMessage(JSONObject message) {
-        LeftChatPanel chatPanel = new LeftChatPanel();
-        if (message.getInt("sender_id") == chat.userId()) {
-            chatPanel.chatText.setBackground(new java.awt.Color(0, 137, 255));
-        }
-        chatPanel.chatText.setText(message.getString("text"));
-        chatPanel.dateLabel.setText(message.getString("creation_date"));
-        var userInfo = chat.getUserInformation(message.getInt("sender_id"));
-        if (!userInfo.getString("profile_picture").equals("0")) {
-            String imageString = userInfo.getString("profile_picture");
-            chatPanel.avatarChat.setIcon((new ImageIcon(convertStringArrayToImageBytes(imageString))));
-        }
-        chatPanel.nicknameLabel.setText(userInfo.getString("username"));
-        this.messagesArea.add(chatPanel.chatText, "wrap");
-        this.messagesArea.repaint();
-        this.messagesArea.revalidate();
-    }
-
-    byte[] convertStringArrayToImageBytes(String stringImage) {
-        stringImage = stringImage.replace("[", "");
-        stringImage = stringImage.replace("]", "");
-        List<String> byteListImage = Arrays.asList(stringImage.split(","));
-        byte[] imageData = new byte[byteListImage.size()];
-
-        for (int i = 0; i < byteListImage.size(); i++) {
-            imageData[i] = Byte.parseByte(byteListImage.get(i));
-        }
-        return imageData;
     }
 
     class ConversationMessagesUpdater implements Runnable {
@@ -106,8 +63,13 @@ public class SwitchConversationListener implements ListSelectionListener {
 
     }
 
+    interface chatGuiUpdater {
+        void updateChatUi();
+    }
+
     String currentConversationName = "";
     Chat chat;
     JPanel messagesArea;
+    Callable<Void> chatGuiUpdater;
 
 }
