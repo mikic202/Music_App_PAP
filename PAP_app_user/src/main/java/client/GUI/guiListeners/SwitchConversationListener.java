@@ -18,6 +18,8 @@ import org.json.JSONObject;
 import client.Chat.Chat;
 import client.GUI.ImageChatPanel;
 import client.GUI.LeftChatPanel;
+import client.GUI.Music;
+import client.GUI.guiListeners.MusicEventListener;
 
 public class SwitchConversationListener implements ListSelectionListener {
 
@@ -33,9 +35,7 @@ public class SwitchConversationListener implements ListSelectionListener {
         if (!event.getValueIsAdjusting()) {
             currentConversationName = ((JList) event.getSource()).getSelectedValue().toString();
             new Thread(new ConversationMessagesUpdater()).start();
-
         }
-
     }
 
     private void updateChat(ArrayList<JSONObject> newMessages) {
@@ -56,6 +56,7 @@ public class SwitchConversationListener implements ListSelectionListener {
                 ArrayList<JSONObject> newMessages = chat
                         .switchConversations(currentConversationName);
                 updateChat(newMessages);
+                MusicEventListener.onChatIdChange(chat.getCurrentChatId());
             } catch (Exception e) {
                 System.out.println(e);
             }

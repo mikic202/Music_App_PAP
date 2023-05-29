@@ -51,10 +51,16 @@ public final class MusicStreamsManager {
 
     // returns port that the stream will be streamed from
     public int startStream(int chatId, int initiatorUserId, int songId) {
+        System.out.print("start stream called");
         int freePort = 0;
         if (streamerTable != null) {
             if (streamerTable.contains(chatId)) {
-                return freePort;
+                if(streamerTable.get(chatId).getInitiator() == initiatorUserId)
+                {
+                    // stream already started on this chat
+                    System.out.println("stream already started on this chat");
+                    return -1;
+                }
             }
         }
         Enumeration<Integer> e = portsTable.keys();
@@ -72,16 +78,21 @@ public final class MusicStreamsManager {
             nextPort += 1;
         }
 
-        Hashtable<String, String> querryResult = FileDataAccesor.getData(FileDatabsaeInformation.ID_COLUMN.value(),
-                songId);
+        Hashtable<String, String> querryResult = FileDataAccesor.getData(FileDatabsaeInformation.ID_COLUMN.value(), songId);
         String filePath = querryResult.get("file_path");
 
         MusicStreamer createdStreamer = new MusicStreamer(freePort, initiatorUserId, filePath, songId);
         streamerTable.put(chatId, createdStreamer);
         userChatTable.put(initiatorUserId, chatId);
 
+        if(!createdStreamer.checkIfSupportedEncoding())
+        {
+            terminateStream(initiatorUserId);
+            return 0;
+        }
         createdStreamer.start();
-
+        
+        System.out.println(freePort);
         return freePort;
     }
 
@@ -89,10 +100,12 @@ public final class MusicStreamsManager {
         int chatId = userChatTable.get(userId);
         MusicStreamer stream = streamerTable.get(chatId);
         boolean rtn;
-        if (stream == null) {
-            rtn = false;
-        } else {
-
+        if (stream == null || stream.getInitiator() != userId)
+        {
+           return false;
+        }
+        else
+        {
             rtn = stream.terminateStream(userId);
         }
 

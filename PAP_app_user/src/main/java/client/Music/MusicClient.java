@@ -8,9 +8,13 @@ import javax.sound.sampled.AudioFormat;
 
 import java.io.PipedOutputStream;
 import java.net.SocketTimeoutException;
+import client.Music.MusicPlayer;
+import client.Music.MusicPlayer.StreamStatusCallback;
 
-public class MusicClient extends Thread
+public class MusicClient implements Runnable
 {
+    public static final int PACKET_SIZE = 512;
+
     public static final String SERVER_ADDRESS = "144.91.114.89";
 
     private MusicPlayer player;
@@ -18,21 +22,26 @@ public class MusicClient extends Thread
     private InetAddress address;
     private int serverUdpPort;
     private boolean receive;
-    boolean connectionEstablished = false;
+    private boolean connectionEstablished = false;
+    private boolean playerPaused = false;
+    private boolean active = false;
 
     private PipedOutputStream pipedOutStream;
 
-    public MusicClient(AudioFormat fileFormat, int serverUdpPort)
+    public MusicClient(AudioFormat fileFormat, int serverUdpPort, boolean startNow, StreamStatusCallback streamStatusCb)
     {
-        super("MusicClient");
         try
         {
-            this.socket = new DatagramSocket();
+            socket = new DatagramSocket();
             pipedOutStream = new PipedOutputStream();
-            this.player = new MusicPlayer(pipedOutStream, fileFormat);
+            player = new MusicPlayer(pipedOutStream, fileFormat, streamStatusCb);
             this.serverUdpPort = serverUdpPort;
             System.out.println(serverUdpPort);
             address = InetAddress.getByName(SERVER_ADDRESS);
+            if(!startNow)
+            {
+                stopPlaying();
+            }
         }
         catch (Exception e)
         {
@@ -40,25 +49,32 @@ public class MusicClient extends Thread
         }
     }
 
-    public void terminateReceiving()
+    public synchronized void terminateReceiving()
     {
         receive = false;
         player.terminatePlayer();
     }
 
-    public void resumePlaying()
+    public synchronized void resumePlaying()
     {
+        playerPaused = false;
         player.resumePlaying();
     }
 
-    public void stopPlaying()
+    public  synchronized void stopPlaying()
     {
+        playerPaused = true;
         player.stopPlaying();
     }
 
-    public boolean isPlaying()
+    public synchronized boolean isPlaying()
     {
         return player.isPlaying();
+    }
+
+    public synchronized boolean isActive()
+    {
+        return active;
     }
 
     public void run()
@@ -77,7 +93,7 @@ public class MusicClient extends Thread
     {
         try
         {
-            byte[] buf = new byte[1024];
+            byte[] buf = new byte[PACKET_SIZE];
             buf = message.getBytes();
             DatagramPacket packet = new DatagramPacket(buf, buf.length, address, serverUdpPort);
             socket.send(packet);
@@ -90,6 +106,7 @@ public class MusicClient extends Thread
 
     private void receivePackets()
     {
+        active = true;
         try
         {
             sendMessage("hello");
@@ -97,9 +114,13 @@ public class MusicClient extends Thread
             int terminationCount = 0;
             while (receive)
             {
+                if(playerPaused)
+                {
+                    Thread.sleep(300);
+                }
                 try
                 {
-                    byte[] buf = new byte[1024];
+                    byte[] buf = new byte[PACKET_SIZE];
                     DatagramPacket packet = new DatagramPacket(buf, buf.length);
                     socket.receive(packet);
                     connectionEstablished = true;
@@ -123,9 +144,6 @@ public class MusicClient extends Thread
                             socket.close();
                         }
                     }
-                    // if any packet has been received before, then it means that the stream is probably paused or terminated
-                    // @TODO it should be handled properly depending on the stream state (paused/terminated)
-                    // now it just pressumes that it is terminated if is waiting more that 20s
                     continue;
                 }
             }
@@ -134,6 +152,7 @@ public class MusicClient extends Thread
         {
             e.printStackTrace();
         }
+        active = false;
     }
 
     private void startPlayer()

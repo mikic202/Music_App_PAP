@@ -1,7 +1,13 @@
 package server.Music;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
+
+import server.DatabaseInteractors.FileDataAccesor;
 import javax.sound.sampled.AudioFormat;
+
+import java.util.Enumeration;
+import java.util.Hashtable;
 
 public class MusicRequestHandler {
 
@@ -21,23 +27,26 @@ public class MusicRequestHandler {
         JSONObject result = new JSONObject();
         result.put("type", MusicRequestTypes.START_STREAM.value());
         valueResult.put("port", port);
+        System.out.println("got out of start stream method");;
+        if(port > 0)
+        {
+            JSONObject formatParams = new JSONObject();
+            AudioFormat format = streamsManagerInstance.getFormat(chatId);
+            float sampleRate = format.getSampleRate();
+            int sampleSizeInBits = format.getSampleSizeInBits();
+            int channels = format.getChannels();
+            String encodingStr = format.getEncoding().toString(); // example "pcm_signed"
+            boolean bigEndian = format.isBigEndian();
+            int lengthInBytes = streamsManagerInstance.getLengthInBytes(chatId);
+            formatParams.put("sample_rate", sampleRate);
+            formatParams.put("sample_size", sampleSizeInBits);
+            formatParams.put("channels", channels);
+            formatParams.put("encoding", encodingStr);
+            formatParams.put("big_endian", bigEndian);
+            formatParams.put("length", lengthInBytes);
 
-        JSONObject formatParams = new JSONObject();
-        AudioFormat format = streamsManagerInstance.getFormat(chatId);
-        float sampleRate = format.getSampleRate();
-        int sampleSizeInBits = format.getSampleSizeInBits();
-        int channels = format.getChannels();
-        String encodingStr = format.getEncoding().toString(); // example "pcm_signed"
-        boolean bigEndian = format.isBigEndian();
-        int lengthInBytes = streamsManagerInstance.getLengthInBytes(chatId);
-        formatParams.put("sample_rate", sampleRate);
-        formatParams.put("sample_size", sampleSizeInBits);
-        formatParams.put("channels", channels);
-        formatParams.put("encoding", encodingStr);
-        formatParams.put("big_endian", bigEndian);
-        formatParams.put("length", lengthInBytes);
-
-        valueResult.put("format", formatParams);
+            valueResult.put("format", formatParams);
+        }
 
         result.put("value", valueResult);
         return result;
@@ -147,11 +156,52 @@ public class MusicRequestHandler {
         return result;
     }
 
+    private static JSONObject _leaveStream(JSONObject request) {
+        int userId = request.getInt("user_id");
+
+        MusicStreamsManager streamsManagerInstance = MusicStreamsManager.getInstance();
+        boolean removeListenerFromCreatedStream = streamsManagerInstance.removeListenerFromCreatedStream(userId);
+
+        JSONObject valueResult = new JSONObject();
+        JSONObject result = new JSONObject();
+        result.put("type", MusicRequestTypes.LEAVE_STREAM.value());
+        valueResult.put("outcome", removeListenerFromCreatedStream);
+        result.put("value", valueResult);
+
+        return result;
+    }
+    private static JSONObject _getUserSongs(JSONObject request)
+    {
+        int userId = request.getInt("user_id");
+        JSONObject valueResult = new JSONObject();
+        JSONObject result = new JSONObject();
+
+        JSONArray songsList = new JSONArray();
+
+        Hashtable<String, Integer> songs = FileDataAccesor.getUserFiles(userId);
+        Enumeration<String> e = songs.keys();
+        while(e.hasMoreElements())
+        {
+            String key = e.nextElement();
+            int id = songs.get(key);
+            JSONObject data = new JSONObject();
+            data.put("name", key);
+            data.put("id", id);
+            songsList.put(data);
+        }
+
+        result.put("type", MusicRequestTypes.GET_USER_SONGS.value());
+        result.put("value", songsList);
+
+        return result;
+    }
+
     private static JSONObject procesRequests(MusicRequestTypes reqType, JSONObject request) {
         JSONObject response = new JSONObject();
         switch (reqType) {
             case START_STREAM:
                 response = _startStream(request);
+                System.out.print("response returned");
                 break;
             case TERMINATE_STREAM:
                 response = _terminateStream(request);
@@ -167,6 +217,12 @@ public class MusicRequestHandler {
                 break;
             case RESUME_STREAM:
                 response = _resumeStream(request);
+                break;
+            case LEAVE_STREAM:
+                response = _leaveStream(request);
+                break;
+            case GET_USER_SONGS:
+                response = _getUserSongs(request);
                 break;
         }
         return response;

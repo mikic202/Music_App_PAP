@@ -8,6 +8,8 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketTimeoutException;
+import java.time.Duration;
+import java.time.Instant;
 import java.io.DataInputStream;
 import java.io.File;
 
@@ -20,7 +22,7 @@ import javax.sound.sampled.AudioSystem;
 // Broadcast publisher
 class MusicStreamer extends Thread {
 
-    private int buffer_size = 1024;
+    private int PACKET_SIZE = 512;
 
     private DatagramSocket socket;
     private boolean running = false;
@@ -28,7 +30,6 @@ class MusicStreamer extends Thread {
 
     private int serverPort; // it is not used directly in the logic, it is just binded to this MusicPlayer
     private int songId; // it is not used directly in the logic, it is just binded to this MusicPlayer
-    private boolean modifying = false;
 
     private int initiator;
 
@@ -53,7 +54,7 @@ class MusicStreamer extends Thread {
             this.initiator = initiator;
             socket = new DatagramSocket(null);
             socket.bind(new InetSocketAddress(port));
-            socket.setSendBufferSize(buffer_size);
+            socket.setSendBufferSize(PACKET_SIZE);
 
             this.stream = AudioSystem.getAudioInputStream(new File(path));
 
@@ -107,13 +108,11 @@ class MusicStreamer extends Thread {
 
         int rtn = 0;
         if (initiateNewConnection(false)) {
-            modifying = true;
             listeners.add(userId);
             ListenersIPs.put(userId, waitingIpAddress);
             ListenersPorts.put(userId, waitingPort);
             waitingIpAddress = null;
             waitingPort = 0;
-            modifying = false;
             rtn = serverPort;
         }
 
@@ -125,15 +124,12 @@ class MusicStreamer extends Thread {
             terminateStream(userId);
             return true;
         }
-
-        modifying = true;
         if (listeners.contains(userId) == false) {
             return false;
         }
         listeners.remove(userId);
         ListenersIPs.remove(userId);
         ListenersPorts.remove(userId);
-        modifying = false;
         return true;
     }
 
@@ -153,6 +149,18 @@ class MusicStreamer extends Thread {
         return songId;
     }
 
+    public synchronized boolean checkIfSupportedEncoding()
+    {
+        int sampleSize = format.getSampleSizeInBits();
+        String encodingStr = format.getEncoding().toString();
+        if(sampleSize == 24 || (!encodingStr.equals("PCM_SIGNED") && !encodingStr.equals("PCM_UNSIGNED")))
+        {
+            System.out.println(String.format(("Unsupported encoding! sampleSize: %d, str: " + encodingStr), sampleSize));
+            return false;
+        }
+        return true;
+    }
+
     public void run() {
         initiateNewConnection(true);
         socket.close();
@@ -163,11 +171,21 @@ class MusicStreamer extends Thread {
             byte[] buffer;
             DataInputStream in = new DataInputStream(stream);
 
-            while ((in.read(buffer = new byte[buffer_size], 0, buffer.length)) > 0) {
+            while ((in.read(buffer = new byte[PACKET_SIZE], 0, buffer.length)) > 0) {
+                Instant start = Instant.now();
                 sendPacketToListeners(buffer);
-                sleep(5);
+                Instant finish = Instant.now();
+                long time = Duration.between(start, finish).toNanos();
+                if (time < 2500){
+                    time = 2500 - time;
+                    try
+                    {
+                        Thread.sleep(time / 1000);
+                    }
+                    catch (InterruptedException e){}
+                }
                 while (running == false) {
-                    sleep(100);
+                    Thread.sleep(100);
                     if (terminated) {
                         in.close();
                         return;
@@ -182,9 +200,7 @@ class MusicStreamer extends Thread {
 
     private void sendPacketToListeners(byte[] buffer) throws Exception {
         DatagramPacket dgp;
-        while (modifying) {
-            sleep(5);
-        }
+
         for (int user : listeners) {
             dgp = new DatagramPacket(buffer, buffer.length, ListenersIPs.get(user), ListenersPorts.get(user));
             socket.send(dgp);
@@ -193,7 +209,7 @@ class MusicStreamer extends Thread {
 
     private boolean initiateNewConnection(boolean initiatorConnection) {
         try {
-            byte[] messageBuffer = new byte[buffer_size];
+            byte[] messageBuffer = new byte[PACKET_SIZE];
             DatagramPacket packet = new DatagramPacket(messageBuffer, messageBuffer.length);
             socket.setSoTimeout(10000);
             socket.receive(packet);
