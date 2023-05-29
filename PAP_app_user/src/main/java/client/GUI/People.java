@@ -7,11 +7,20 @@ package client.GUI;
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.concurrent.Callable;
+
 import javax.swing.SwingUtilities;
+
+import org.json.JSONObject;
+
 import net.miginfocom.swing.MigLayout;
+
+import java.util.concurrent.Callable;
 
 import client.Chat.Chat;
 import client.GUI.guiListeners.AddUsersListener;
+import client.GUI.guiListeners.ChatContentsUpdater;
 import client.GUI.guiListeners.CreateGroupListener;
 import client.GUI.guiListeners.SendMessageListener;
 import client.GUI.guiListeners.SwitchConversationListener;
@@ -42,8 +51,18 @@ public class People extends javax.swing.JPanel {
                 this.textArea.setWrapStyleWord(true);
                 this.chatPanel.setLayout(new MigLayout("fillx"));
 
-                chatWorker = new ChatWorker(chat, userPassword);
+                chatWorker = new ChatWorker(chat, userPassword, new Callable<Void>() {
+                        @Override
+                        public Void call() throws Exception {
+                                ArrayList<JSONObject> newMessages = chat
+                                                .getCurrentMessages();
+                                ChatContentsUpdater.updateChat(newMessages, chat, chatPanel);
+                                return null;
+                        }
+                });
                 chatWorker.execute();
+
+                // updateChatUi();
         }
 
         public void Theme() {
@@ -54,6 +73,62 @@ public class People extends javax.swing.JPanel {
                         FlatDarkLaf.setup();
                         SwingUtilities.updateComponentTreeUI(this);
                 }
+        }
+
+        public void updateChatUi() {
+                var usersInConv = chat.getUsersInCurrentConversation();
+                String[] usersList = new String[usersInConv.size()];
+                int i = 0;
+                for (int userId : usersInConv.keySet()) {
+                        usersList[i] = usersInConv.get(userId).getString("username");
+                        i++;
+                }
+                membersInConvList.removeAll();
+                membersInConvList.setModel(new javax.swing.AbstractListModel<String>() {
+                        public int getSize() {
+                                return usersList.length;
+                        }
+
+                        public String getElementAt(int i) {
+                                return usersList[i];
+                        }
+                });
+                peopleListRemove.removeAll();
+                peopleListRemove.setModel(new javax.swing.AbstractListModel<String>() {
+                        public int getSize() {
+                                return usersList.length;
+                        }
+
+                        public String getElementAt(int i) {
+                                return usersList[i];
+                        }
+                });
+
+                changeChatNameLabel.setText("<html>Current Group Code:" + chat.getConversationCode()
+                                + "<br> Change Current Group Name:</html>");
+
+                // System.out.println(345);
+
+                // var convNamesSet = chat.getConversationsNamesToIds().keySet();
+
+                // chatsList.removeAll();
+
+                // String[] convNames = new String[convNamesSet.size()];
+                // i = 0;
+                // for (String name : convNamesSet) {
+                // convNames[i++] = name;
+                // }
+                // chatsList.setModel(new javax.swing.AbstractListModel<String>() {
+
+                // public int getSize() {
+                // return convNames.length;
+                // }
+
+                // public String getElementAt(int i) {
+                // return convNames[i];
+                // }
+                // });
+                // System.out.println(234);
         }
 
         /**
@@ -141,10 +216,10 @@ public class People extends javax.swing.JPanel {
                 });
 
                 chatsLabel.setFont(new java.awt.Font("Segoe UI Black", 1, 14)); // NOI18N
-                chatsLabel.setText("Chats:");
+                chatsLabel.setText("Groups:");
 
                 userOrGroupNameLabel.setFont(new java.awt.Font("Segoe UI Black", 1, 14)); // NOI18N
-                userOrGroupNameLabel.setText("User or group name:");
+                userOrGroupNameLabel.setText("");
 
                 var convNamesSet = chat.getConversationsNamesToIds().keySet();
 
@@ -164,7 +239,15 @@ public class People extends javax.swing.JPanel {
                         }
                 });
 
-                chatsList.addListSelectionListener(new SwitchConversationListener(chat, chatPanel));
+                chatsList.addListSelectionListener(
+                                new SwitchConversationListener(chat, chatPanel,
+                                                new Callable<Void>() {
+                                                        @Override
+                                                        public Void call() throws Exception {
+                                                                updateChatUi();
+                                                                return null;
+                                                        }
+                                                }));
                 chatsContainer.setViewportView(chatsList);
 
                 textArea.setColumns(20);
@@ -235,7 +318,7 @@ public class People extends javax.swing.JPanel {
                 removePersonFromGroupLabel.setText("Remove person from current group:");
 
                 peopleListRemove.setModel(new javax.swing.AbstractListModel<String>() {
-                        String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+                        String[] strings = {};
 
                         public int getSize() {
                                 return strings.length;
@@ -253,8 +336,9 @@ public class People extends javax.swing.JPanel {
                         }
                 });
 
-                changeChatNameLabel.setFont(new java.awt.Font("Segoe UI Black", 0, 14)); // NOI18N
-                changeChatNameLabel.setText("Change current chat name:");
+                changeChatNameLabel.setFont(new java.awt.Font("Segoe UI Black", 0, 13)); // NOI18N
+                changeChatNameLabel.setText(
+                                "<html>Current Group Code: <br> Change Current Group Name:</html>");
 
                 changeChatName.setText("jTextField1");
 
@@ -269,7 +353,7 @@ public class People extends javax.swing.JPanel {
                 membersInConvLabel.setText("Members:");
 
                 membersInConvList.setModel(new javax.swing.AbstractListModel<String>() {
-                        String[] strings = { "a", "b", "c" };
+                        String[] strings = {};
 
                         public int getSize() {
                                 return strings.length;
