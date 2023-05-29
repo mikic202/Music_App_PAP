@@ -39,77 +39,13 @@ public class SwitchConversationListener implements ListSelectionListener {
     }
 
     private void updateChat(ArrayList<JSONObject> newMessages) {
-        messagesArea.removeAll();
-        for (JSONObject message : newMessages) {
-            if (message.getInt("is_image") == 1) {
-                addImage(message);
-            } else {
-                addTextMessage(message);
-            }
-        }
+        ChatContentsUpdater.updateChat(newMessages, chat, messagesArea);
         try {
             chatGuiUpdater.call();
         } catch (Exception e) {
             System.out.println(e);
         }
 
-    }
-
-    void addImage(JSONObject message) {
-        ImageChatPanel chatPanel = new ImageChatPanel();
-        if (message.getInt("sender_id") == chat.userId()) {
-            chatPanel.chatText.setBackground(new java.awt.Color(0, 137, 255));
-        }
-        String textImageString = message.getString("text");
-        chatPanel.chatText.setIcon((new ImageIcon(convertStringArrayToImageBytes(textImageString))));
-        // TODO scale images
-        chatPanel.dateLabel.setText(message.getString("creation_date"));
-        var userInfo = chat.getUserInformation(message.getInt("sender_id"));
-        if (!userInfo.getString("profile_picture").equals("0")) {
-            String imageString = userInfo.getString("profile_picture");
-            chatPanel.avatarChat.setIcon((new ImageIcon(convertStringArrayToImageBytes(imageString))));
-        }
-        chatPanel.nicknameLabel.setText(userInfo.getString("username"));
-        this.messagesArea.add(chatPanel.chatBlock, "wrap");
-        this.messagesArea.repaint();
-        this.messagesArea.revalidate();
-    }
-
-    void addTextMessage(JSONObject message) {
-        LeftChatPanel chatPanel = new LeftChatPanel();
-        // leftChatPanel.chatText.setText(message);
-        // leftChatPanel.chatText.setForeground(Color.black);
-        // // this.chatPanel.add(leftChatPanel.avatarChat);
-        // this.chatPanel.add(leftChatPanel.chatBlock, "wrap");
-        // this.chatPanel.repaint();
-        // this.chatPanel.revalidate();
-        // this.textArea.setText("");
-        if (message.getInt("sender_id") == chat.userId()) {
-            chatPanel.chatText.setBackground(new java.awt.Color(0, 137, 255));
-        }
-        chatPanel.chatText.setText(message.getString("text"));
-        chatPanel.dateLabel.setText(message.getString("creation_date"));
-        var userInfo = chat.getUserInformation(message.getInt("sender_id"));
-        if (!userInfo.getString("profile_picture").equals("0")) {
-            String imageString = userInfo.getString("profile_picture");
-            chatPanel.avatarChat.setIcon((new ImageIcon(convertStringArrayToImageBytes(imageString))));
-        }
-        chatPanel.nicknameLabel.setText(userInfo.getString("username"));
-        this.messagesArea.add(chatPanel.chatBlock, "wrap");
-        this.messagesArea.repaint();
-        this.messagesArea.revalidate();
-    }
-
-    byte[] convertStringArrayToImageBytes(String stringImage) {
-        stringImage = stringImage.replace("[", "");
-        stringImage = stringImage.replace("]", "");
-        List<String> byteListImage = Arrays.asList(stringImage.split(","));
-        byte[] imageData = new byte[byteListImage.size()];
-
-        for (int i = 0; i < byteListImage.size(); i++) {
-            imageData[i] = Byte.parseByte(byteListImage.get(i));
-        }
-        return imageData;
     }
 
     class ConversationMessagesUpdater implements Runnable {

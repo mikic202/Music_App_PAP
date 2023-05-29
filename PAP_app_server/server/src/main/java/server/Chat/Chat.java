@@ -218,7 +218,7 @@ public class Chat {
         JSONObject responseValue = new JSONObject();
         responseValue.put("conversation code", code);
         response.put("value", responseValue);
-        response.put("type", RequestTypes.JOIN_CONVERSATION_WITH_CODE.value());
+        response.put("type", RequestTypes.GET_CONVERSATION_CODE.value());
         return response;
     }
 
@@ -236,7 +236,7 @@ public class Chat {
         }
         JSONObject response = new JSONObject();
         response.put("value", responseValue);
-        response.put("type", RequestTypes.GET_CONVERSATION_CODE.value());
+        response.put("type", RequestTypes.JOIN_CONVERSATION_WITH_CODE.value());
         return response;
     }
 
