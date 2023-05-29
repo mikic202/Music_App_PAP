@@ -12,7 +12,7 @@ import org.json.JSONObject;
 // @TODO still thinking about this interface
 public class MusicManager
 {
-    enum EStreamStatus
+    public enum EStreamStatus
     {
         STREAM_INVALID,
         STREAM_PAUSED,
@@ -37,7 +37,7 @@ public class MusicManager
         this.userId = userId;
     }
 
-    public boolean startStream(int chatId, int songId)
+    public EStreamStatus startStream(int chatId, int songId)
     {
         JSONObject response = musicAccessors.sendStartStream(userId, chatId, songId);
         JSONObject value = response.getJSONObject("value");
@@ -45,7 +45,11 @@ public class MusicManager
         int port = value.getInt("port");
         if (port == 0)
         {
-            return false;
+            return EStreamStatus.STREAM_INVALID;
+        }
+        else if (port == -1)
+        {
+            return EStreamStatus.STREAM_PAUSED;
         }
 
         JSONObject jsonFormat = value.getJSONObject("format");
@@ -69,7 +73,7 @@ public class MusicManager
         }
         else
         {
-            return false;
+            return EStreamStatus.STREAM_INVALID;
         }
         this.format = new AudioFormat(sampleRate, sampleSizeInBits, channels, signed, bigEndian);
         this.playingSongId = songId;
@@ -77,11 +81,12 @@ public class MusicManager
         this.currentChatId = chatId;
 
         musicClient = new MusicClient(format, port, true, streamStatusCb);
-        musicClient.run();
+        Thread musicClienThread = new Thread(musicClient);
+        musicClienThread.start();
 
         currentStreamStatus = EStreamStatus.STREAM_PLAYING;
         
-        return true;
+        return currentStreamStatus;
     }
 
     public EStreamStatus joinPlayingStream(int chatId)
@@ -96,7 +101,8 @@ public class MusicManager
             {
                 boolean startNow = (streamStatus == EStreamStatus.STREAM_PLAYING) ? true : false;
                 musicClient = new MusicClient(format, port, startNow, streamStatusCb);
-                musicClient.run();
+                Thread musicClienThread = new Thread(musicClient);
+                musicClienThread.start();
                 currentStreamStatus = streamStatus;
                 this.currentChatId = chatId;
             }

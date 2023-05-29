@@ -207,7 +207,7 @@ public class Music extends javax.swing.JPanel {
                         }
                 });
 
-                startListenButton.setText("Start listen");
+                startListenButton.setText("Join stream");
 
                 stopStreamButton.setText("Stop stream");
 

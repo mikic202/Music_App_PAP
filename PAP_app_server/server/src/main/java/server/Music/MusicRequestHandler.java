@@ -25,7 +25,7 @@ public class MusicRequestHandler {
         result.put("type", MusicRequestTypes.START_STREAM.value());
         valueResult.put("port", port);
         System.out.println("got out of start stream method");;
-        if(port != 0)
+        if(port > 0)
         {
             JSONObject formatParams = new JSONObject();
             AudioFormat format = streamsManagerInstance.getFormat(chatId);

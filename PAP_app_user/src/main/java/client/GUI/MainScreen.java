@@ -10,52 +10,28 @@ import com.formdev.flatlaf.FlatLightLaf;
 import client.Chat.Chat;
 import client.ServerConnector.ServerConnector;
 
-import javax.sound.sampled.*;
-import java.io.File;
 import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
 
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.sound.sampled.FloatControl;
+import client.GUI.guiListeners.MusicEventListener;
 
 public class MainScreen extends javax.swing.JFrame {
 
         boolean dark = true;
         boolean light = false;
         MusicChooser musicChooser;
-        File musicFile;
-        AudioInputStream audioStream;
-        Clip clip;
         People people;
         Music music;
         Account account;
         private ServerConnector serverConnector;
 
         private Chat chat;
-
-        private void loadMusic() {
-                musicFile = new File(musicChooser.selectedPath);
-                try {
-                        audioStream = AudioSystem.getAudioInputStream(musicFile);
-                } catch (UnsupportedAudioFileException | IOException ex) {
-                        Logger.getLogger(MainScreenCode.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                try {
-                        clip = AudioSystem.getClip();
-                } catch (LineUnavailableException ex) {
-                        Logger.getLogger(MainScreenCode.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                try {
-                        this.clip.open(this.audioStream);
-                } catch (LineUnavailableException | IOException ex) {
-                        Logger.getLogger(MainScreenCode.class.getName()).log(Level.SEVERE, null, ex);
-                }
-        }
 
         public MainScreen() {
                 JSONObject userInfo = new JSONObject();
@@ -64,7 +40,7 @@ public class MainScreen extends javax.swing.JFrame {
                 userInfo.put("email", "mikolaj.chomanski@gmail.com");
                 userInfo.put("profile_picture", "0");
                 try {
-                        serverConnector = new ServerConnector(new Socket("localhost",
+                        serverConnector = new ServerConnector(new Socket("144.91.114.89",
                                         8000));
                 } catch (Exception e) {
                         System.out.println(e);
@@ -78,12 +54,6 @@ public class MainScreen extends javax.swing.JFrame {
                                 "C:\\Users\\Adam\\Documents\\NetBeansProjects\\NewGUI\\src\\main\\java\\com\\mycompany\\newgui\\MusicPAP.png"));
                 this.accountButton.setIcon(new ImageIcon(
                                 "C:\\Users\\Adam\\Documents\\NetBeansProjects\\NewGUI\\src\\main\\java\\com\\mycompany\\newgui\\AccountSettingsPAP.png"));
-                // AudioFormat format = audioStream.getFormat();
-                // long frames = audioStream.getFrameLength();
-                // duration = (frames+0.0) / format.getFrameRate();
-                // Math.round(duration);
-                // jLabel21.setText(String.valueOf(duration));
-                // this.MainScreenCode.setLayout(new FlowLayout());
                 char[] userPassword = { '1', '2', '3', '4', '5', '6', '7' };
                 people = new People(this, chat, userPassword);
                 music = new Music(this);
@@ -101,12 +71,6 @@ public class MainScreen extends javax.swing.JFrame {
                                 "C:\\Users\\Adam\\Documents\\NetBeansProjects\\NewGUI\\src\\main\\java\\com\\mycompany\\newgui\\MusicPAP.png"));
                 this.accountButton.setIcon(new ImageIcon(
                                 "C:\\Users\\Adam\\Documents\\NetBeansProjects\\NewGUI\\src\\main\\java\\com\\mycompany\\newgui\\AccountSettingsPAP.png"));
-                // AudioFormat format = audioStream.getFormat();
-                // long frames = audioStream.getFrameLength();
-                // duration = (frames+0.0) / format.getFrameRate();
-                // Math.round(duration);
-                // jLabel21.setText(String.valueOf(duration));
-                // this.MainScreenCode.setLayout(new FlowLayout());
                 people = new People(this, chat, userPassword);
                 music = new Music(this);
                 account = new Account(this, serverConnector, chat);
@@ -271,11 +235,7 @@ public class MainScreen extends javax.swing.JFrame {
 
                 pauseLabel.setText("Pause");
                 pauseLabel.setToolTipText("");
-                pauseLabel.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                pauseLabelActionPerformed(evt);
-                        }
-                });
+                pauseLabel.addActionListener(new MusicEventListener());
 
                 loopButton.setText("Loop");
 
@@ -1165,8 +1125,7 @@ public class MainScreen extends javax.swing.JFrame {
         }// </editor-fold>
 
         private void volumeButtonActionPerformed(java.awt.event.ActionEvent evt) {
-                FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-                gainControl.setValue(-25.0f);
+                // TODO volume
         }
 
         private void panningButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -1197,8 +1156,7 @@ public class MainScreen extends javax.swing.JFrame {
         }
 
         private void playButtonActionPerformed(java.awt.event.ActionEvent evt) {
-
-                this.clip.start();
+                
         }
 
         private void themeButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -1231,7 +1189,7 @@ public class MainScreen extends javax.swing.JFrame {
         }
 
         private void loadButtonActionPerformed(java.awt.event.ActionEvent evt) {
-                this.loadMusic();
+                //this.loadMusic();
         }
 
         private void mainScreenButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -1254,7 +1212,7 @@ public class MainScreen extends javax.swing.JFrame {
         }
 
         private void pauseLabelActionPerformed(java.awt.event.ActionEvent evt) {
-                this.clip.stop();
+                //TODO stop
         }
 
         private void chooseMusicMouseClicked(java.awt.event.MouseEvent evt) {

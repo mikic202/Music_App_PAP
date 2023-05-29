@@ -59,7 +59,7 @@ public final class MusicStreamsManager {
                 {
                     // stream already started on this chat
                     System.out.println("stream already started on this chat");
-                    return freePort;
+                    return -1;
                 }
             }
         }
