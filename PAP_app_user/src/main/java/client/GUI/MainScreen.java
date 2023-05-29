@@ -235,7 +235,7 @@ public class MainScreen extends javax.swing.JFrame {
 
                 pauseLabel.setText("Pause");
                 pauseLabel.setToolTipText("");
-                pauseLabel.addActionListener(new MusicEventListener());
+                //pauseLabel.addActionListener(new MusicEventListener());
 
                 loopButton.setText("Loop");
 

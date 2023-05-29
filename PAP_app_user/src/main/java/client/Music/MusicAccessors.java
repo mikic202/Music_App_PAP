@@ -34,6 +34,12 @@ public class MusicAccessors {
         return response;
     }
 
+    public JSONObject sendLeaveStream(int userId) {
+        JSONObject processedRequest = MusicRequestCreator.createLeaveStreamRequest(userId);
+        JSONObject response = serverConnectorInstance.sendRequest(processedRequest);
+        return response;
+    }
+
     public JSONObject sendPause(int userId) {
         JSONObject processedRequest = MusicRequestCreator.createPauseRequest(userId);
         JSONObject response = serverConnectorInstance.sendRequest(processedRequest);

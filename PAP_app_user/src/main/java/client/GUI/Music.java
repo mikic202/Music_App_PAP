@@ -7,6 +7,9 @@ package client.GUI;
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import javax.swing.SwingUtilities;
+import javax.swing.event.ListSelectionListener;
+
+import client.GUI.guiListeners.SongListSelectionListener;
 
 /**
  *
@@ -306,6 +309,9 @@ public class Music extends javax.swing.JPanel {
                                 return strings[i];
                         }
                 });
+
+                chooseSongList.addListSelectionListener(new SongListSelectionListener());
+                
                 chooseSongContainer.setViewportView(chooseSongList);
 
                 viewsLabel.setText("Views:");

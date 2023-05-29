@@ -153,6 +153,21 @@ public class MusicRequestHandler {
         return result;
     }
 
+    private static JSONObject _leaveStream(JSONObject request) {
+        int userId = request.getInt("user_id");
+
+        MusicStreamsManager streamsManagerInstance = MusicStreamsManager.getInstance();
+        boolean removeListenerFromCreatedStream = streamsManagerInstance.removeListenerFromCreatedStream(userId);
+
+        JSONObject valueResult = new JSONObject();
+        JSONObject result = new JSONObject();
+        result.put("type", MusicRequestTypes.LEAVE_STREAM.value());
+        valueResult.put("outcome", removeListenerFromCreatedStream);
+        result.put("value", valueResult);
+
+        return result;
+    }
+
     private static JSONObject procesRequests(MusicRequestTypes reqType, JSONObject request) {
         JSONObject response = new JSONObject();
         switch (reqType) {
@@ -174,6 +189,9 @@ public class MusicRequestHandler {
                 break;
             case RESUME_STREAM:
                 response = _resumeStream(request);
+                break;
+            case LEAVE_STREAM:
+                response = _leaveStream(request);
                 break;
         }
         return response;

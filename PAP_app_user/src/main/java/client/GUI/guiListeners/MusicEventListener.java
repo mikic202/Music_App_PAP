@@ -27,9 +27,14 @@ public class MusicEventListener implements ActionListener {
         musicManagerInstance = new MusicManager(serverConnector, userId);
     }
 
-    public synchronized void onChatIdChange(int chatId)
+    public static synchronized void onChatIdChange(int chatId)
     {
         chosenChatId = chatId;
+    }
+
+    public static synchronized void onSongIdChange(int songId)
+    {
+        chosenSongId = songId;
     }
 
     @Override
@@ -38,11 +43,6 @@ public class MusicEventListener implements ActionListener {
         if(event.getSource() instanceof JButton) {
             text = ((JButton) event.getSource()).getText();
         }
-        else if()
-        {
-            
-        }
-
         if(text == "Play")
         {
             onEventPlay();
@@ -142,7 +142,7 @@ public class MusicEventListener implements ActionListener {
         }
         else
         {
-            popupText = "Chat not chosen!"
+            popupText = "Chat not chosen!";
         }
     }
 
