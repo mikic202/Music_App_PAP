@@ -7,9 +7,9 @@ package client.GUI;
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import javax.swing.SwingUtilities;
-import javax.swing.event.ListSelectionListener;
 
 import client.GUI.guiListeners.SongListSelectionListener;
+import client.Music.MusicManager;
 
 /**
  *
@@ -204,15 +204,13 @@ public class Music extends javax.swing.JPanel {
                 currentSongTitleLabel.setText("jLabel3");
 
                 startStreamButton.setText("Start stream");
-                startStreamButton.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                startStreamButtonActionPerformed(evt);
-                        }
-                });
+                startStreamButton.addActionListener(mainScreenWindow.musicEventListenerInstance);
 
                 startListenButton.setText("Join stream");
+                startListenButton.addActionListener(mainScreenWindow.musicEventListenerInstance);
 
                 stopStreamButton.setText("Stop stream");
+                stopStreamButton.addActionListener(mainScreenWindow.musicEventListenerInstance);
 
                 removeSongLabel.setFont(new java.awt.Font("Segoe UI Black", 0, 14)); // NOI18N
                 removeSongLabel.setText("Remove song:");
@@ -297,9 +295,19 @@ public class Music extends javax.swing.JPanel {
                 previousListensLabel.setText("Previously listened:");
 
                 chooseSongLabel.setText("Choose song:");
+                
+                //TODO song list shoul be updated after uploading/removing files
+                MusicManager.updateUserSongsList();
+                var songNameSet = MusicManager.getUserSongsData().keySet();
+
+                String[] songNames = new String[songNameSet.size()];
+                int i = 0;
+                for (String name : songNameSet) {
+                        songNames[i++] = name;
+                }
 
                 chooseSongList.setModel(new javax.swing.AbstractListModel<String>() {
-                        String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+                        String[] strings = songNames;
 
                         public int getSize() {
                                 return strings.length;
@@ -308,6 +316,7 @@ public class Music extends javax.swing.JPanel {
                         public String getElementAt(int i) {
                                 return strings[i];
                         }
+
                 });
 
                 chooseSongList.addListSelectionListener(new SongListSelectionListener());

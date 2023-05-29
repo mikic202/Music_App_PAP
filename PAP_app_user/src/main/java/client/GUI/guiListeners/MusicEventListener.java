@@ -5,15 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
 
-import org.json.JSONObject;
-
-import client.Chat.Chat;
 import client.ServerConnector.ServerConnector;
-import client.login_and_account_accessors.AccountChangeRequestAccessors;
 import client.Music.MusicManager;
 import client.Music.MusicManager.EStreamStatus;
 
@@ -40,9 +33,10 @@ public class MusicEventListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent event) {
         String text = new String();
-        if(event.getSource() instanceof JButton) {
+        //if(event.getSource() instanceof JButton) {
             text = ((JButton) event.getSource()).getText();
-        }
+            System.out.println(text);
+        //}
         if(text == "Play")
         {
             onEventPlay();
@@ -70,6 +64,7 @@ public class MusicEventListener implements ActionListener {
         if(!musicManagerInstance.resumePlaying())
         {
             //TODO error msg
+            System.out.println("failed to resume");
         }
     }
 
@@ -77,7 +72,7 @@ public class MusicEventListener implements ActionListener {
     {
         if(!musicManagerInstance.stopPlaying())
         {
-            //TODO error msg
+            System.out.println("failed to stop playing");
         }
     }
 
@@ -107,7 +102,7 @@ public class MusicEventListener implements ActionListener {
 
         }
 
-        //TODO add popup
+        System.out.println(popupText);
         
     }
 
@@ -116,7 +111,7 @@ public class MusicEventListener implements ActionListener {
         boolean response = musicManagerInstance.pauseStream();
         if(!response)
         {
-            //TODO add popup
+            System.out.println("Stopped not successfull");
         }
     }
 
@@ -144,6 +139,8 @@ public class MusicEventListener implements ActionListener {
         {
             popupText = "Chat not chosen!";
         }
+
+        System.out.println(popupText);
     }
 
 }

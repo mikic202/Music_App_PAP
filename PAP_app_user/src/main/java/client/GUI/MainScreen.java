@@ -20,6 +20,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.sound.sampled.FloatControl;
 import client.GUI.guiListeners.MusicEventListener;
+import client.Music.MusicManager;
 
 public class MainScreen extends javax.swing.JFrame {
 
@@ -30,6 +31,8 @@ public class MainScreen extends javax.swing.JFrame {
         Music music;
         Account account;
         private ServerConnector serverConnector;
+        MusicManager musicManagerInstance;
+        MusicEventListener musicEventListenerInstance;
 
         private Chat chat;
 
@@ -58,6 +61,8 @@ public class MainScreen extends javax.swing.JFrame {
                 people = new People(this, chat, userPassword);
                 music = new Music(this);
                 account = new Account(this, serverConnector, chat);
+                this.musicManagerInstance = new MusicManager(serverConnector, userInfo.getInt("user_id"));
+                this.musicEventListenerInstance = new MusicEventListener(serverConnector, userInfo.getInt("user_id"));
         }
 
         public MainScreen(ServerConnector serverConnector, JSONObject userInfo, char[] userPassword) {
@@ -74,6 +79,8 @@ public class MainScreen extends javax.swing.JFrame {
                 people = new People(this, chat, userPassword);
                 music = new Music(this);
                 account = new Account(this, serverConnector, chat);
+                this.musicManagerInstance = new MusicManager(serverConnector, userInfo.getInt("user_id"));
+                this.musicEventListenerInstance = new MusicEventListener(serverConnector, userInfo.getInt("user_id"));
         }
 
         /**
@@ -227,15 +234,11 @@ public class MainScreen extends javax.swing.JFrame {
 
                 playButton.setText("Play");
                 playButton.setToolTipText("");
-                playButton.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                playButtonActionPerformed(evt);
-                        }
-                });
+                playButton.addActionListener(musicEventListenerInstance);
 
                 pauseLabel.setText("Pause");
                 pauseLabel.setToolTipText("");
-                //pauseLabel.addActionListener(new MusicEventListener());
+                pauseLabel.addActionListener(musicEventListenerInstance);
 
                 loopButton.setText("Loop");
 

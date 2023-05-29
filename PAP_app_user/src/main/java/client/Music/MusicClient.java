@@ -24,6 +24,7 @@ public class MusicClient implements Runnable
     private boolean receive;
     private boolean connectionEstablished = false;
     private boolean playerPaused = false;
+    private boolean active = false;
 
     private PipedOutputStream pipedOutStream;
 
@@ -71,6 +72,11 @@ public class MusicClient implements Runnable
         return player.isPlaying();
     }
 
+    public synchronized boolean isActive()
+    {
+        return active;
+    }
+
     public void run()
     {
         try
@@ -100,6 +106,7 @@ public class MusicClient implements Runnable
 
     private void receivePackets()
     {
+        active = true;
         try
         {
             sendMessage("hello");
@@ -145,6 +152,7 @@ public class MusicClient implements Runnable
         {
             e.printStackTrace();
         }
+        active = false;
     }
 
     private void startPlayer()

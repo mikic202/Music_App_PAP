@@ -1,6 +1,7 @@
 package server.DatabaseInteractors;
 
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.Hashtable;
 
 import server.ConnectionPool.ConnectionPool;
@@ -26,30 +27,26 @@ public class FileDataAccesor implements DataAccesorInterface {
         return getQuerryResult(preparedStatements, column_value);
     }
 
-    public static ArrayList<Integer> getUserFiles(int userId) {
-        ArrayList<Integer> files = new ArrayList<>();
-        ResultSet result = null;
-        Connection connection = ConnectionPool.getConnection();
-
-        String preparedStatement = String.format("Select %s from %s where %s=?",
-                FileDatabsaeInformation.ID_COLUMN.value(),
+    public static Hashtable<String, Integer> getUserFiles(int userId) {
+        String songIdStatement = String.format("Select * from %s where %s=?",
                 TABLENAME, FileDatabsaeInformation.USER_COLUMN.value());
 
-        try {
+        Hashtable<String, String> songIdData = getQuerryResult(songIdStatement, userId);
+        Hashtable<String, Integer> files = new Hashtable<String, Integer>();
 
-            var statement = connection.prepareStatement(preparedStatement);
-            connection.commit();
-            statement.setInt(1, userId);
-            result = statement.executeQuery();
-            while (result.next()) {
-                files.add(result.getInt(1));
-            }
-        } catch (Exception e) {
-            System.out.println(e);
-
-        } finally {
-
+        Enumeration<String> e = songIdData.keys();
+        while(e.hasMoreElements())
+        {
+            String key = e.nextElement();
+            String id = songIdData.get(key);
+            files.put(key, Integer.parseInt(id));
         }
+
+        if(files.isEmpty())
+        {
+            files.put("none", -1);
+        }
+
         return files;
     }
 

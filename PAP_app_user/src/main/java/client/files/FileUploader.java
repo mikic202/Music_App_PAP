@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.Socket;
 import java.nio.ByteBuffer;
+import client.Music.MusicManager;
 
 public class FileUploader implements Runnable {
 	private FileInputStream input;
@@ -34,6 +35,7 @@ public class FileUploader implements Runnable {
 				bytesRead = input.read(buffer);
 			}
 			accessors.finishUpload(uuid);
+			MusicManager.updateUserSongsList();
 		} catch (IOException e) {
 			e.printStackTrace();
 			return;

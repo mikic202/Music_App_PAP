@@ -7,9 +7,12 @@ import client.ServerConnector.ServerConnector;
 import javax.sound.sampled.AudioFormat;
 import client.Music.MusicPlayer.StreamStatusCallback;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
+import java.util.ArrayList;
 
-// @TODO still thinking about this interface
+import java.util.Hashtable;
+
 public class MusicManager
 {
     public enum EStreamStatus
@@ -20,26 +23,61 @@ public class MusicManager
     }
 
     private MusicClient musicClient;
-    private MusicAccessors musicAccessors;
+    private static MusicAccessors musicAccessors;
 
-    private int userId = -1;
-    private int playingSongId;
+    private static int thisUserId = -1;
+    private int playingSongId = -1;
     private AudioFormat format = null;
     private long songLengthInBytes = 0;
     private EStreamStatus currentStreamStatus = EStreamStatus.STREAM_INVALID;
     private int currentChatId = -1;
+    private static Hashtable<String, Integer> userSongs = new Hashtable<String, Integer>();
 
     public StreamStatusCallback streamStatusCb = () -> {this.checkIfStreamPaused();};
 
     public MusicManager(ServerConnector serverConnector, int userId)
     {
-        this.musicAccessors = new MusicAccessors(serverConnector);
-        this.userId = userId;
+        musicAccessors = new MusicAccessors(serverConnector);
+        thisUserId = userId;
     }
 
-    public EStreamStatus startStream(int chatId, int songId)
+    public static synchronized void updateUserSongsList()
+    {/*
+        JSONObject result = musicAccessors.sendGetUserSongs(thisUserId);
+        JSONArray songs = result.getJSONArray("value");
+
+        for(int i = 0; i < songs.length(); i++)
+        {
+            JSONObject data = songs.getJSONObject(i);
+            String songName = data.getString("name");
+            int songId = data.getInt("id");
+            if(songName != "none")
+            {
+                userSongs.put(songName, songId);
+            }
+        }
+        */
+        userSongs.put("song", 2);
+    }
+
+    public static synchronized Hashtable<String, Integer> getUserSongsData()
     {
-        JSONObject response = musicAccessors.sendStartStream(userId, chatId, songId);
+        return userSongs;
+    }
+
+    public static synchronized int getSongIdByName(String songName)
+    {
+        return userSongs.get(songName);
+    }
+
+    public synchronized EStreamStatus startStream(int chatId, int songId)
+    {
+        if(musicClient.isActive())
+        {
+            musicAccessors.sendLeaveStream(thisUserId);
+            musicClient.terminateReceiving();
+        }
+        JSONObject response = musicAccessors.sendStartStream(thisUserId, chatId, songId);
         JSONObject value = response.getJSONObject("value");
 
         int port = value.getInt("port");
@@ -89,13 +127,17 @@ public class MusicManager
         return currentStreamStatus;
     }
 
-    public EStreamStatus joinPlayingStream(int chatId)
+    public synchronized EStreamStatus joinPlayingStream(int chatId)
     {
+        if(musicClient.isActive())
+        {
+            musicAccessors.sendLeaveStream(thisUserId);
+            musicClient.terminateReceiving();
+        }
         EStreamStatus streamStatus = getPlayingStreamInfo(chatId);
-        // TODO this should be handled in gui
         if(streamStatus != EStreamStatus.STREAM_INVALID)
         {
-            JSONObject response = musicAccessors.sendJoinPlayingStream(userId, chatId);
+            JSONObject response = musicAccessors.sendJoinPlayingStream(thisUserId, chatId);
             int port = response.getJSONObject("value").getInt("port");
             if (port != 0)
             {
@@ -114,13 +156,13 @@ public class MusicManager
         return streamStatus;
     }
 
-    public boolean terminateStream()
+    public synchronized boolean terminateStream()
     {
         if (musicClient == null)
         {
             return false;
         }
-        JSONObject response = musicAccessors.sendTerminateStream(userId);
+        JSONObject response = musicAccessors.sendTerminateStream(thisUserId);
         boolean outcome = response.getJSONObject("value").getBoolean("outcome");
         if(outcome)
         {
@@ -130,13 +172,13 @@ public class MusicManager
         return outcome;
     }
 
-    public boolean pauseStream()
+    public synchronized boolean pauseStream()
     {
         if (musicClient == null)
         {
             return false;
         }
-        JSONObject response = musicAccessors.sendPause(userId);
+        JSONObject response = musicAccessors.sendPause(thisUserId);
         boolean outcome = response.getJSONObject("value").getBoolean("outcome");
         if(outcome)
         {
@@ -145,9 +187,9 @@ public class MusicManager
         return outcome;
     }
 
-    public boolean resumeStream()
+    public synchronized boolean resumeStream()
     {
-        JSONObject response = musicAccessors.sendResume(userId);
+        JSONObject response = musicAccessors.sendResume(thisUserId);
         boolean outcome = response.getJSONObject("value").getBoolean("outcome");
         if(outcome)
         {
@@ -156,7 +198,7 @@ public class MusicManager
         return outcome;
     }
 
-    public boolean stopPlaying()
+    public synchronized boolean stopPlaying()
     {
         if(musicClient == null)
         {
@@ -166,7 +208,7 @@ public class MusicManager
         return true;
     }
 
-    public boolean resumePlaying()
+    public synchronized boolean resumePlaying()
     {
         if(musicClient == null)
         {
@@ -176,12 +218,12 @@ public class MusicManager
         return true;
     }
 
-    public long getSongLengthInBytes()
+    public synchronized long getSongLengthInBytes()
     {
         return songLengthInBytes;
     }
     
-    public int getPlayingSongId()
+    public synchronized int getPlayingSongId()
     {
         return playingSongId;
     }
@@ -237,7 +279,7 @@ public class MusicManager
         }
     }
 
-    public EStreamStatus checkCurrentStreamStatus()
+    public synchronized EStreamStatus checkCurrentStreamStatus()
     {
         return currentStreamStatus;
     }
@@ -250,7 +292,7 @@ public class MusicManager
 
     private void initializeMusicManager()
     {
-        userId = -1;
+        thisUserId = -1;
         playingSongId = 0;
         format = null;
         songLengthInBytes = 0;

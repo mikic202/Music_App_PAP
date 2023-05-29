@@ -49,7 +49,7 @@ public class MusicPlayer implements Runnable
 
             byte[] buf = new byte[bufferSize];
 
-            BufferedInputStream bis = new BufferedInputStream(pipedInputStream, bufferSize * 64);
+            BufferedInputStream bis = new BufferedInputStream(pipedInputStream);
             
             boolean checkedIfStopped = false;
 

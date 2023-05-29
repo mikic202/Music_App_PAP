@@ -52,5 +52,11 @@ public class MusicAccessors {
         return response;
     }
 
+    public JSONObject sendGetUserSongs(int userId){
+        JSONObject processedRequest = MusicRequestCreator.createGetUserSongsData(userId);
+        JSONObject response = serverConnectorInstance.sendRequest(processedRequest);
+        return response;
+    }
+
     private ServerConnector serverConnectorInstance;
 }
