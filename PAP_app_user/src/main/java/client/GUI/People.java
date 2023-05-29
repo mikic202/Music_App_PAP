@@ -7,8 +7,12 @@ package client.GUI;
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import java.awt.Color;
+import java.util.concurrent.Callable;
+
 import javax.swing.SwingUtilities;
 import net.miginfocom.swing.MigLayout;
+
+import java.util.concurrent.Callable;
 
 import client.Chat.Chat;
 import client.GUI.guiListeners.AddUsersListener;
@@ -44,6 +48,8 @@ public class People extends javax.swing.JPanel {
 
                 chatWorker = new ChatWorker(chat, userPassword);
                 chatWorker.execute();
+
+                // updateChatUi();
         }
 
         public void Theme() {
@@ -54,6 +60,58 @@ public class People extends javax.swing.JPanel {
                         FlatDarkLaf.setup();
                         SwingUtilities.updateComponentTreeUI(this);
                 }
+        }
+
+        public void updateChatUi() {
+                var usersInConv = chat.getUsersInCurrentConversation();
+                String[] usersList = new String[usersInConv.size()];
+                int i = 0;
+                for (int userId : usersInConv.keySet()) {
+                        usersList[i] = usersInConv.get(userId).getString("username");
+                        i++;
+                }
+                membersInConvList.removeAll();
+                membersInConvList.setModel(new javax.swing.AbstractListModel<String>() {
+                        public int getSize() {
+                                return usersList.length;
+                        }
+
+                        public String getElementAt(int i) {
+                                return usersList[i];
+                        }
+                });
+                peopleListRemove.removeAll();
+                peopleListRemove.setModel(new javax.swing.AbstractListModel<String>() {
+                        public int getSize() {
+                                return usersList.length;
+                        }
+
+                        public String getElementAt(int i) {
+                                return usersList[i];
+                        }
+                });
+                // System.out.println(345);
+
+                // var convNamesSet = chat.getConversationsNamesToIds().keySet();
+
+                // chatsList.removeAll();
+
+                // String[] convNames = new String[convNamesSet.size()];
+                // i = 0;
+                // for (String name : convNamesSet) {
+                // convNames[i++] = name;
+                // }
+                // chatsList.setModel(new javax.swing.AbstractListModel<String>() {
+
+                // public int getSize() {
+                // return convNames.length;
+                // }
+
+                // public String getElementAt(int i) {
+                // return convNames[i];
+                // }
+                // });
+                // System.out.println(234);
         }
 
         /**
@@ -164,7 +222,15 @@ public class People extends javax.swing.JPanel {
                         }
                 });
 
-                chatsList.addListSelectionListener(new SwitchConversationListener(chat, chatPanel));
+                chatsList.addListSelectionListener(
+                                new SwitchConversationListener(chat, chatPanel,
+                                                new Callable<Void>() {
+                                                        @Override
+                                                        public Void call() throws Exception {
+                                                                updateChatUi();
+                                                                return null;
+                                                        }
+                                                }));
                 chatsContainer.setViewportView(chatsList);
 
                 textArea.setColumns(20);
@@ -235,7 +301,7 @@ public class People extends javax.swing.JPanel {
                 removePersonFromGroupLabel.setText("Remove person from current group:");
 
                 peopleListRemove.setModel(new javax.swing.AbstractListModel<String>() {
-                        String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+                        String[] strings = {};
 
                         public int getSize() {
                                 return strings.length;
@@ -269,7 +335,7 @@ public class People extends javax.swing.JPanel {
                 membersInConvLabel.setText("Members:");
 
                 membersInConvList.setModel(new javax.swing.AbstractListModel<String>() {
-                        String[] strings = { "a", "b", "c" };
+                        String[] strings = {};
 
                         public int getSize() {
                                 return strings.length;

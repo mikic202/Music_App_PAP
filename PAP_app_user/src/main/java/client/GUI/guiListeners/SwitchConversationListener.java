@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -20,9 +21,10 @@ import client.GUI.LeftChatPanel;
 
 public class SwitchConversationListener implements ListSelectionListener {
 
-    public SwitchConversationListener(Chat chat, JPanel messagesArea) {
+    public SwitchConversationListener(Chat chat, JPanel messagesArea, Callable<Void> chatGuiUpdater) {
         this.chat = chat;
         this.messagesArea = messagesArea;
+        this.chatGuiUpdater = chatGuiUpdater;
     }
 
     @Override
@@ -45,11 +47,15 @@ public class SwitchConversationListener implements ListSelectionListener {
                 addTextMessage(message);
             }
         }
+        try {
+            chatGuiUpdater.call();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
 
     }
 
     void addImage(JSONObject message) {
-        // TODO add new timestamp and username
         ImageChatPanel chatPanel = new ImageChatPanel();
         if (message.getInt("sender_id") == chat.userId()) {
             chatPanel.chatText.setBackground(new java.awt.Color(0, 137, 255));
@@ -121,8 +127,13 @@ public class SwitchConversationListener implements ListSelectionListener {
 
     }
 
+    interface chatGuiUpdater {
+        void updateChatUi();
+    }
+
     String currentConversationName = "";
     Chat chat;
     JPanel messagesArea;
+    Callable<Void> chatGuiUpdater;
 
 }
