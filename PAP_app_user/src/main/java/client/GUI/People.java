@@ -22,6 +22,7 @@ import client.Chat.Chat;
 import client.GUI.guiListeners.AddUsersListener;
 import client.GUI.guiListeners.ChatContentsUpdater;
 import client.GUI.guiListeners.CreateGroupListener;
+import client.GUI.guiListeners.JoinGroupUsingCodeListener;
 import client.GUI.guiListeners.SendMessageListener;
 import client.GUI.guiListeners.SwitchConversationListener;
 import client.GUI.guiWorkers.ChatWorker;
@@ -210,11 +211,14 @@ public class People extends javax.swing.JPanel {
                 groupCode2.setText("jTextField1");
 
                 joinButton.setText("Join");
-                joinButton.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                joinButtonActionPerformed(evt);
+                joinButton.addActionListener(new JoinGroupUsingCodeListener(chat, groupCode2, new Callable<Void>() {
+                        @Override
+                        public Void call() throws Exception {
+                                updateChatUi();
+                                System.out.println("updated");
+                                return null;
                         }
-                });
+                }));
 
                 chatsLabel.setFont(new java.awt.Font("Segoe UI Black", 1, 14)); // NOI18N
                 chatsLabel.setText("Groups:");

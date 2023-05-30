@@ -75,11 +75,11 @@ public class Chat {
         return getCurrentMessages();
     }
 
-    public boolean setCurrentConversation(int new_currentConv) {
-        if (!usersConversations.containsKey(new_currentConv)) {
+    public boolean setCurrentConversation(int newCurrentConv) {
+        if (!usersConversations.containsKey(newCurrentConv)) {
             return false;
         }
-        currentConversation = new_currentConv;
+        currentConversation = newCurrentConv;
         return true;
     }
 
@@ -229,8 +229,11 @@ public class Chat {
     }
 
     public String getConversationCode() {
-        JSONObject response = chatAccesor.getConversationCode(currentConversation);
-        return response.getJSONObject("value").getString("conversation code");
+        if (currentConversation != -1) {
+            JSONObject response = chatAccesor.getConversationCode(currentConversation);
+            return response.getJSONObject("value").getString("conversation code");
+        }
+        return "";
     }
 
     public boolean joinConversationUsingCode(String code) {
