@@ -47,20 +47,21 @@ public class SendMessageListener implements ActionListener {
     }
 
     private void addMessageToMessageArea(JSONObject message) {
-        LeftChatPanel messagePanel = new LeftChatPanel();
-        messagePanel.chatText.setBackground(new java.awt.Color(0, 137, 255));
-        messagePanel.chatText.setForeground(Color.black);
-        messagePanel.chatText.setText(message.getString("text"));
-        messagePanel.dateLabel.setText(message.getString("creation_date"));
-        var userInfo = chat.getCurrentUserInfo();
-        if (!userInfo.getString("profile_picture").equals("0")) {
-            String imageString = userInfo.getString("profile_picture");
-            messagePanel.avatarChat.setIcon((new ImageIcon(convertStringArrayToImageBytes(imageString))));
-        }
-        messagePanel.nicknameLabel.setText(userInfo.getString("username"));
-        this.messagesArea.add(messagePanel.chatBlock, "wrap");
-        this.messagesArea.repaint();
-        this.messagesArea.revalidate();
+        // LeftChatPanel messagePanel = new LeftChatPanel();
+        // messagePanel.chatText.setBackground(new java.awt.Color(0, 137, 255));
+        // messagePanel.chatText.setForeground(Color.black);
+        // messagePanel.chatText.setText(message.getString("text"));
+        // messagePanel.dateLabel.setText(message.getString("creation_date"));
+        // var userInfo = chat.getCurrentUserInfo();
+        // if (!userInfo.getString("profile_picture").equals("0")) {
+        // String imageString = userInfo.getString("profile_picture");
+        // messagePanel.avatarChat.setIcon((new
+        // ImageIcon(convertStringArrayToImageBytes(imageString))));
+        // }
+        // messagePanel.nicknameLabel.setText(userInfo.getString("username"));
+        // this.messagesArea.add(messagePanel.chatBlock, "wrap");
+        // this.messagesArea.repaint();
+        // this.messagesArea.revalidate();
     }
 
     byte[] convertStringArrayToImageBytes(String stringImage) {

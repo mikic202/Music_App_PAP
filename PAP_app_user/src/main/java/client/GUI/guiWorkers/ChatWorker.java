@@ -28,14 +28,17 @@ public class ChatWorker extends SwingWorker<Boolean, Void> {
     protected Boolean doInBackground() throws Exception {
         while (true) {
             var data = serverConnector.waitForData();
-            chat.updateStatus();
-            updateChatContents.call();
-            System.out.println(data);
+            if (!data.getJSONObject("value").keySet().contains("outcome")) {
+                chat.addExternalMessage(data.getJSONObject("value"));
+                chat.updateStatus();
+                updateChatContents.call();
+            }
             System.out.println("status updated");
             if (data.getJSONObject("value").keySet().contains("outcome")
                     && !data.getJSONObject("value").getBoolean("outcome")) {
                 return false;
             }
+            System.out.println(123);
         }
     }
 

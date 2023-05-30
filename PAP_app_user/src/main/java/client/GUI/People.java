@@ -43,7 +43,7 @@ public class People extends javax.swing.JPanel {
                 mainScreenWindow = mainScreenParam;
                 initComponents();
                 this.membersList.setEditable(true);
-                this.textArea.setText("sssssss");
+                this.textArea.setText("");
                 this.membersList.setLineWrap(true);
                 this.textArea.setColumns(45);
                 this.textArea.setLineWrap(true);
@@ -57,6 +57,7 @@ public class People extends javax.swing.JPanel {
                                 ArrayList<JSONObject> newMessages = chat
                                                 .getCurrentMessages();
                                 ChatContentsUpdater.updateChat(newMessages, chat, chatPanel);
+                                updateChatUi();
                                 return null;
                         }
                 });
@@ -109,25 +110,25 @@ public class People extends javax.swing.JPanel {
 
                 // System.out.println(345);
 
-                // var convNamesSet = chat.getConversationsNamesToIds().keySet();
+                var convNamesSet = chat.getConversationsNamesToIds().keySet();
 
-                // chatsList.removeAll();
+                chatsList.removeAll();
 
-                // String[] convNames = new String[convNamesSet.size()];
-                // i = 0;
-                // for (String name : convNamesSet) {
-                // convNames[i++] = name;
-                // }
-                // chatsList.setModel(new javax.swing.AbstractListModel<String>() {
+                String[] convNames = new String[convNamesSet.size()];
+                i = 0;
+                for (String name : convNamesSet) {
+                        convNames[i++] = name;
+                }
+                chatsList.setModel(new javax.swing.AbstractListModel<String>() {
 
-                // public int getSize() {
-                // return convNames.length;
-                // }
+                        public int getSize() {
+                                return convNames.length;
+                        }
 
-                // public String getElementAt(int i) {
-                // return convNames[i];
-                // }
-                // });
+                        public String getElementAt(int i) {
+                                return convNames[i];
+                        }
+                });
                 // System.out.println(234);
         }
 

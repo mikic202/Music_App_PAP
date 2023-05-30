@@ -239,4 +239,11 @@ public class Chat {
         return outcome;
     }
 
+    public void addExternalMessage(JSONObject message) {
+        if (messagesInUsersConversation.keySet().contains(message.getInt("conversation_id"))
+                && message.getInt("sender_id") != userId) {
+            messagesInUsersConversation.get(message.getInt("conversation_id")).add(message);
+        }
+    }
+
 }

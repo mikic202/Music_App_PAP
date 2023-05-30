@@ -29,7 +29,10 @@ public class SwitchConversationListener implements ListSelectionListener {
 
     @Override
     public void valueChanged(ListSelectionEvent event) {
-
+        System.out.println(((JList) event.getSource()).getSelectedValue());
+        if (((JList) event.getSource()).getSelectedValue() == null) {
+            return;
+        }
         if (!event.getValueIsAdjusting()) {
             currentConversationName = ((JList) event.getSource()).getSelectedValue().toString();
             new Thread(new ConversationMessagesUpdater()).start();
