@@ -12,6 +12,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import client.ServerConnector.ServerConnector;
+
+import java.awt.Color;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 
 public class Chat {
@@ -218,10 +221,34 @@ public class Chat {
             format = path.substring(dotIndex + 1);
         }
         try {
-            BufferedImage bimage = ImageIO.read(new File(path));
-            ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
-            ImageIO.write(bimage, format, byteStream);
-            data = byteStream.toByteArray();
+            BufferedImage img = ImageIO.read(new File(path));
+            Double imageHeight = 0.0;
+            Double imageWidth = 0.0;
+            if (img.getWidth() < 100.0 && img.getHeight() < 100) {
+
+            } else if (img.getWidth() > img.getHeight()) {
+                imageWidth = 100.0;
+                imageHeight = img.getHeight() * (100.0 / img.getWidth());
+                System.out.println(img.getWidth());
+                System.out.println(100.0 / img.getWidth());
+            } else {
+                imageHeight = 100.0;
+                imageWidth = img.getWidth() * (100.0 / img.getHeight());
+                System.out.println(img.getHeight());
+                System.out.println((100.0 / img.getHeight()));
+            }
+
+            Image scaledImage = img.getScaledInstance(imageWidth.intValue(), imageHeight.intValue(),
+                    Image.SCALE_SMOOTH);
+            BufferedImage imageBuff = new BufferedImage(imageWidth.intValue(), imageHeight.intValue(),
+                    BufferedImage.TYPE_INT_RGB);
+            imageBuff.getGraphics().drawImage(scaledImage, 0, 0, new Color(0, 0, 0), null);
+
+            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+
+            ImageIO.write(imageBuff, format, buffer);
+
+            data = buffer.toByteArray();
         } catch (Exception e) {
             System.out.println(e);
         }
