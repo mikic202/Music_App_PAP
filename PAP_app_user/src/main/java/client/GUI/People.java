@@ -23,6 +23,7 @@ import client.GUI.guiListeners.ChatContentsUpdater;
 import client.GUI.guiListeners.CreateGroupListener;
 import client.GUI.guiListeners.JoinGroupUsingCodeListener;
 import client.GUI.guiListeners.SendMessageListener;
+import client.GUI.guiListeners.SendPhotoListener;
 import client.GUI.guiListeners.SwitchConversationListener;
 import client.GUI.guiWorkers.ChatWorker;
 
@@ -34,9 +35,10 @@ public class People extends javax.swing.JPanel {
 
         private ChatWorker chatWorker;
         private Chat chat;
-        StringBuilder ChoosenImagePath;
+        StringBuilder choosenImagePath;
 
         public People(MainScreen mainScreenParam, Chat chat, char[] userPassword) {
+                choosenImagePath = new StringBuilder();
                 this.chat = chat;
                 mainScreenWindow = mainScreenParam;
                 initComponents();
@@ -48,7 +50,6 @@ public class People extends javax.swing.JPanel {
                 this.membersList.setWrapStyleWord(true);
                 this.textArea.setWrapStyleWord(true);
                 this.chatPanel.setLayout(new MigLayout("fillx"));
-                ChoosenImagePath = new StringBuilder();
 
                 chatWorker = new ChatWorker(chat, userPassword, new Callable<Void>() {
                         @Override
@@ -76,7 +77,8 @@ public class People extends javax.swing.JPanel {
         }
 
         public void updateChatUi() {
-                System.out.println(ChoosenImagePath);
+                pathFileLabel.setText(choosenImagePath
+                                .substring(choosenImagePath.lastIndexOf("\\") + 1, choosenImagePath.length()));
                 var usersInConv = chat.getUsersInCurrentConversation();
                 String[] usersList = new String[usersInConv.size()];
                 int i = 0;
@@ -370,11 +372,7 @@ public class People extends javax.swing.JPanel {
                 membersInConContainer.setViewportView(membersInConvList);
 
                 sendPhotoButton.setText("Send photo");
-                sendPhotoButton.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                sendPhotoButtonActionPerformed(evt);
-                        }
-                });
+                sendPhotoButton.addActionListener(new SendPhotoListener(chat, choosenImagePath, pathFileLabel));
 
                 chosenFileLabel.setText("Chosen file:");
 
@@ -853,7 +851,7 @@ public class People extends javax.swing.JPanel {
         }
 
         private void photoButtonActionPerformed(java.awt.event.ActionEvent evt) {
-                AvatarChooser photoChooser = new AvatarChooser(ChoosenImagePath);
+                AvatarChooser photoChooser = new AvatarChooser(choosenImagePath);
                 photoChooser.setVisible(true);
         }
 

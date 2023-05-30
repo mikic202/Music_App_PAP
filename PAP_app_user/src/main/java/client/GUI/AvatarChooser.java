@@ -119,7 +119,7 @@ public class AvatarChooser extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new AvatarChooser().setVisible(true);
+                // new AvatarChooser().setVisible(true);
             }
         });
     }
