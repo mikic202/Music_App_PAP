@@ -5,31 +5,90 @@ import client.Music.MusicAccessors;
 import client.ServerConnector.ServerConnector;
 
 import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioFormat.Encoding;
+import client.Music.MusicPlayer.StreamStatusCallback;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
+import java.util.ArrayList;
 
-// @TODO still thinking about this interface
+import java.util.Hashtable;
+
 public class MusicManager
 {
+    public enum EStreamStatus
+    {
+        STREAM_INVALID,
+        STREAM_PAUSED,
+        STREAM_PLAYING
+    }
 
     private MusicClient musicClient;
-    private MusicAccessors musicAccessors;
+    private static MusicAccessors musicAccessors;
 
-    int userId = -1;
-    String playingSongId;
-    AudioFormat format = null;
+    private static int thisUserId = -1;
+    private int playingSongId = -1;
+    private AudioFormat format = null;
+    private long songLengthInBytes = 0;
+    private EStreamStatus currentStreamStatus = EStreamStatus.STREAM_INVALID;
+    private int currentChatId = -1;
+    private static Hashtable<String, Integer> userSongs = new Hashtable<String, Integer>();
+
+    public StreamStatusCallback streamStatusCb = () -> {this.checkIfStreamPaused();};
 
     public MusicManager(ServerConnector serverConnector, int userId)
     {
-        this.musicAccessors = new MusicAccessors(serverConnector);
-        this.userId = userId;
+        musicAccessors = new MusicAccessors(serverConnector);
+        thisUserId = userId;
     }
 
-    public boolean startStream(int chatId, int songId)
+    public static synchronized void updateUserSongsList()
+    {/*
+        JSONObject result = musicAccessors.sendGetUserSongs(thisUserId);
+        JSONArray songs = result.getJSONArray("value");
+
+        for(int i = 0; i < songs.length(); i++)
+        {
+            JSONObject data = songs.getJSONObject(i);
+            String songName = data.getString("name");
+            int songId = data.getInt("id");
+            if(songName != "none")
+            {
+                userSongs.put(songName, songId);
+            }
+        }
+        */
+        userSongs.put("song", 2);
+    }
+
+    public static synchronized Hashtable<String, Integer> getUserSongsData()
     {
-        JSONObject response = musicAccessors.sendStartStream(userId, chatId, songId);
+        return userSongs;
+    }
+
+    public static synchronized int getSongIdByName(String songName)
+    {
+        return userSongs.get(songName);
+    }
+
+    public synchronized EStreamStatus startStream(int chatId, int songId)
+    {
+        if(musicClient.isActive())
+        {
+            musicAccessors.sendLeaveStream(thisUserId);
+            musicClient.terminateReceiving();
+        }
+        JSONObject response = musicAccessors.sendStartStream(thisUserId, chatId, songId);
         JSONObject value = response.getJSONObject("value");
+
+        int port = value.getInt("port");
+        if (port == 0)
+        {
+            return EStreamStatus.STREAM_INVALID;
+        }
+        else if (port == -1)
+        {
+            return EStreamStatus.STREAM_PAUSED;
+        }
 
         JSONObject jsonFormat = value.getJSONObject("format");
 
@@ -52,29 +111,133 @@ public class MusicManager
         }
         else
         {
-            //TODO handle other formats
-            return false;
+            return EStreamStatus.STREAM_INVALID;
         }
         this.format = new AudioFormat(sampleRate, sampleSizeInBits, channels, signed, bigEndian);
+        this.playingSongId = songId;
+        this.songLengthInBytes = lengthInBytes;
+        this.currentChatId = chatId;
 
-        int port = value.getInt("port");
+        musicClient = new MusicClient(format, port, true, streamStatusCb);
+        Thread musicClienThread = new Thread(musicClient);
+        musicClienThread.start();
 
-        musicClient = new MusicClient(format, port);
-        musicClient.start();
-        return true;
-
+        currentStreamStatus = EStreamStatus.STREAM_PLAYING;
+        
+        return currentStreamStatus;
     }
 
-    public int checkIfPlaying(int chatId)
+    public synchronized EStreamStatus joinPlayingStream(int chatId)
+    {
+        if(musicClient.isActive())
+        {
+            musicAccessors.sendLeaveStream(thisUserId);
+            musicClient.terminateReceiving();
+        }
+        EStreamStatus streamStatus = getPlayingStreamInfo(chatId);
+        if(streamStatus != EStreamStatus.STREAM_INVALID)
+        {
+            JSONObject response = musicAccessors.sendJoinPlayingStream(thisUserId, chatId);
+            int port = response.getJSONObject("value").getInt("port");
+            if (port != 0)
+            {
+                boolean startNow = (streamStatus == EStreamStatus.STREAM_PLAYING) ? true : false;
+                musicClient = new MusicClient(format, port, startNow, streamStatusCb);
+                Thread musicClienThread = new Thread(musicClient);
+                musicClienThread.start();
+                currentStreamStatus = streamStatus;
+                this.currentChatId = chatId;
+            }
+            else
+            {
+                streamStatus = EStreamStatus.STREAM_INVALID;
+            }
+        }
+        return streamStatus;
+    }
+
+    public synchronized boolean terminateStream()
+    {
+        if (musicClient == null)
+        {
+            return false;
+        }
+        JSONObject response = musicAccessors.sendTerminateStream(thisUserId);
+        boolean outcome = response.getJSONObject("value").getBoolean("outcome");
+        if(outcome)
+        {
+            terminatePlayer();
+            initializeMusicManager();
+        }
+        return outcome;
+    }
+
+    public synchronized boolean pauseStream()
+    {
+        if (musicClient == null)
+        {
+            return false;
+        }
+        JSONObject response = musicAccessors.sendPause(thisUserId);
+        boolean outcome = response.getJSONObject("value").getBoolean("outcome");
+        if(outcome)
+        {
+            currentStreamStatus = EStreamStatus.STREAM_PAUSED;
+        }
+        return outcome;
+    }
+
+    public synchronized boolean resumeStream()
+    {
+        JSONObject response = musicAccessors.sendResume(thisUserId);
+        boolean outcome = response.getJSONObject("value").getBoolean("outcome");
+        if(outcome)
+        {
+            currentStreamStatus = EStreamStatus.STREAM_PLAYING;
+        }
+        return outcome;
+    }
+
+    public synchronized boolean stopPlaying()
+    {
+        if(musicClient == null)
+        {
+            return false;
+        }
+        musicClient.stopPlaying();
+        return true;
+    }
+
+    public synchronized boolean resumePlaying()
+    {
+        if(musicClient == null)
+        {
+            return false;
+        }
+        musicClient.resumePlaying();
+        return true;
+    }
+
+    public synchronized long getSongLengthInBytes()
+    {
+        return songLengthInBytes;
+    }
+    
+    public synchronized int getPlayingSongId()
+    {
+        return playingSongId;
+    }
+
+    public synchronized EStreamStatus getPlayingStreamInfo(int chatId)
     {
         JSONObject response = musicAccessors.sendCheckIfPlaying(chatId);
         JSONObject value = response.getJSONObject("value");
         boolean streamCreated = value.getBoolean("created");
         boolean streamPlaying = value.getBoolean("playing");
         boolean formatAvailable = value.getBoolean("format_available");
-        if (!formatAvailable)
+        if (!formatAvailable || !streamCreated)
         {
-            return -1;
+            return EStreamStatus.STREAM_INVALID;
         }
         JSONObject format = value.getJSONObject("format");
 
@@ -96,83 +259,43 @@ public class MusicManager
         }
         else
         {
-            //TODO handle other formats
-            return -1;
+            //Unsupported file format
+            return EStreamStatus.STREAM_INVALID;
         }
         this.format = new AudioFormat(sampleRate, sampleSizeInBits, channels, signed, bigEndian);
+        this.playingSongId = songId;
+        this.songLengthInBytes = lengthInBytes;
+        this.currentChatId = chatId;
 
-        return songId;
+        return streamPlaying ? EStreamStatus.STREAM_PLAYING : EStreamStatus.STREAM_PAUSED;
     }
 
-    public boolean joinPlayingStream(int chatId)
+    public synchronized void checkIfStreamPaused()
     {
-        JSONObject response = musicAccessors.sendJoinPlayingStream(userId, chatId);
-        int port = response.getJSONObject("value").getInt("port");
-        if (port != 0)
+        boolean streamPaused = getPlayingStreamInfo(currentChatId) == EStreamStatus.STREAM_PAUSED ? true : false;
+        if(streamPaused)
         {
-            musicClient = new MusicClient(format, port);
-            musicClient.start();
-            return true;
+            musicClient.stopPlaying();
         }
-        return false;
     }
 
-    public boolean terminateStream()
+    public synchronized EStreamStatus checkCurrentStreamStatus()
     {
-        if (musicClient == null)
-        {
-            return false;
-        }
-        JSONObject response = musicAccessors.sendTerminateStream(userId);
-        boolean outcome = response.getJSONObject("value").getBoolean("outcome");
-        if(outcome)
-        {
-            terminatePlayer();
-        }
-        return outcome;
-    }
-
-    public boolean pauseStream()
-    {
-        if (musicClient == null)
-        {
-            return false;
-        }
-        JSONObject response = musicAccessors.sendPause(userId);
-        boolean outcome = response.getJSONObject("value").getBoolean("outcome");
-        return outcome;
-    }
-
-    public boolean resumeStream()
-    {
-        JSONObject response = musicAccessors.sendResume(userId);
-        boolean outcome = response.getJSONObject("value").getBoolean("outcome");
-        return outcome;
-    }
-
-    public boolean stopPlaying()
-    {
-        if(musicClient == null)
-        {
-            return false;
-        }
-        musicClient.stopPlaying();
-        return true;
-    }
-
-    public boolean resumePlaying()
-    {
-        if(musicClient == null)
-        {
-            return false;
-        }
-        musicClient.resumePlaying();
-        return true;
+        return currentStreamStatus;
     }
 
     private void terminatePlayer()
     {
         musicClient.terminateReceiving();
         musicClient = null;
+    }
+
+    private void initializeMusicManager()
+    {
+        thisUserId = -1;
+        playingSongId = 0;
+        format = null;
+        songLengthInBytes = 0;
+        currentStreamStatus = EStreamStatus.STREAM_INVALID;
     }
 }

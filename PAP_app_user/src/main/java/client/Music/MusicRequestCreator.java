@@ -63,4 +63,22 @@ public class MusicRequestCreator {
         data.put("value", value);
         return data;
     }
+    public static JSONObject createLeaveStreamRequest(int userId)
+    {
+        var value = new JSONObject();
+        value.put("user_id", userId);
+        var data = new JSONObject();
+        data.put("type", MusicRequestTypes.LEAVE_STREAM.value());
+        data.put("value", value);
+        return data;
+    }
+    public static JSONObject createGetUserSongsData(int userId)
+    {
+        var value = new JSONObject();
+        value.put("user_id", userId);
+        var data = new JSONObject();
+        data.put("type", MusicRequestTypes.GET_USER_SONGS.value());
+        data.put("value", value);
+        return data;
+    }
 }

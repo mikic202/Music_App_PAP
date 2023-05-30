@@ -53,6 +53,10 @@ public class Chat {
         return usersConversations.get(currentConversation);
     }
 
+    public int getCurrentChatId() {
+        return currentConversation;
+    }
+
     public ArrayList<JSONObject> switchConversations(int new_coveration) throws Exception {
         if (!setCurrentConversation(new_coveration)) {
             throw new Exception("user can't acces given conversation");
