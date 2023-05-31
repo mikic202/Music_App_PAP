@@ -4,12 +4,14 @@ import java.util.List;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import org.json.JSONObject;
 
@@ -18,9 +20,12 @@ import client.GUI.ImageChatPanel;
 import client.GUI.LeftChatPanel;
 
 public class ChatContentsUpdater {
+    static final int PROFILE_PICTURE_SIZE = 40;
+
     static public void updateChat(ArrayList<JSONObject> newMessages, Chat chat, JPanel messagesArea) {
         messagesArea.removeAll();
-        for (JSONObject message : newMessages) {
+        for (int i = newMessages.size() - 1; i >= 0; i--) {
+            var message = newMessages.get(i);
             if (message.getInt("is_image") == 1) {
                 addImage(message, chat, messagesArea);
             } else {
@@ -53,6 +58,15 @@ public class ChatContentsUpdater {
         if (!userInfo.getString("profile_picture").equals("0")) {
             String imageString = userInfo.getString("profile_picture");
             chatPanel.avatarChat.setIcon((new ImageIcon(convertStringArrayToImageBytes(imageString))));
+        } else {
+            try {
+                Image defaultImage = ImageIO.read(new File("src\\main\\java\\client\\GUI\\deaudlt.png"));
+                Image scaledImage = defaultImage.getScaledInstance(PROFILE_PICTURE_SIZE, PROFILE_PICTURE_SIZE,
+                        Image.SCALE_DEFAULT);
+                chatPanel.avatarChat.setIcon(new ImageIcon(scaledImage));
+            } catch (Exception e) {
+                System.out.println(e);
+            }
         }
         chatPanel.nicknameLabel.setText(userInfo.getString("username"));
         messagesArea.add(chatPanel.chatBlock, "wrap");
@@ -69,6 +83,15 @@ public class ChatContentsUpdater {
         if (!userInfo.getString("profile_picture").equals("0")) {
             String imageString = userInfo.getString("profile_picture");
             chatPanel.avatarChat.setIcon((new ImageIcon(convertStringArrayToImageBytes(imageString))));
+        } else {
+            try {
+                Image defaultImage = ImageIO.read(new File("src\\main\\java\\client\\GUI\\deaudlt.png"));
+                Image scaledImage = defaultImage.getScaledInstance(PROFILE_PICTURE_SIZE, PROFILE_PICTURE_SIZE,
+                        Image.SCALE_DEFAULT);
+                chatPanel.avatarChat.setIcon(new ImageIcon(scaledImage));
+            } catch (Exception e) {
+                System.out.println(e);
+            }
         }
         chatPanel.nicknameLabel.setText(userInfo.getString("username"));
         messagesArea.add(chatPanel.chatBlock, "wrap");
