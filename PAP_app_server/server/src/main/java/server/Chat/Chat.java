@@ -264,6 +264,30 @@ public class Chat {
         return response;
     }
 
+    private static JSONObject _removeUserFromConversation(JSONObject request) {
+        JSONObject responseValue = new JSONObject();
+        JSONObject response = new JSONObject();
+        System.out.println(UserDataAccesor.getUserConversations(request.getInt("user_id")));
+        if (!UserDataAccesor.getUserConversations(request.getInt("user_id"))
+                .contains(request.getInt("conversation_id"))) {
+            responseValue.put("outcome", false);
+            response.put("value", responseValue);
+            response.put("type", RequestTypes.REMOVE_USER_FROM_CONVERSATION.value());
+            return response;
+        }
+        ConversationDataSetter.RemoveUserConversationRelation(request.getInt("user_id"),
+                request.getInt("conversation_id"));
+        var conversationInfo = ConversationDataAccesor.getData(request.getInt("conversation_id"));
+        conversationInfo.put(ConversationDatabsaeInformation.NUMBER_OF_USERS_COLUMN.value(), Integer.toString(
+                Integer.parseInt(conversationInfo.get(ConversationDatabsaeInformation.NUMBER_OF_USERS_COLUMN.value()))
+                        - 1));
+        ConversationDataSetter.setData(request.getInt("conversation_id"), conversationInfo);
+        responseValue.put("outcome", true);
+        response.put("value", responseValue);
+        response.put("type", RequestTypes.REMOVE_USER_FROM_CONVERSATION.value());
+        return response;
+    }
+
     private static JSONObject _generateResponse(RequestTypes reqType, JSONObject request) {
         JSONObject response = new JSONObject();
         switch (reqType) {
@@ -302,6 +326,9 @@ public class Chat {
                 break;
             case CHANGE_CONVERSATION_NAME:
                 response = _processChangeConversationName(request);
+                break;
+            case REMOVE_USER_FROM_CONVERSATION:
+                response = _removeUserFromConversation(request);
                 break;
 
         }

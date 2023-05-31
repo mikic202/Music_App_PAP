@@ -137,4 +137,14 @@ public class RequestCreator {
                 request.put("type", RequestTypes.CHANGE_CONVERSATION_NAME.value());
                 return request;
         }
+
+        public static JSONObject createRemoveUserFromConversationRequest(int conversationId, int userId) {
+                JSONObject value = new JSONObject();
+                value.put("conversation_id", conversationId);
+                value.put("user_id", userId);
+                JSONObject request = new JSONObject();
+                request.put("value", value);
+                request.put("type", RequestTypes.REMOVE_USER_FROM_CONVERSATION.value());
+                return request;
+        }
 }

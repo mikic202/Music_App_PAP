@@ -23,6 +23,7 @@ import client.GUI.guiListeners.ChangeConversationNameListener;
 import client.GUI.guiListeners.ChatContentsUpdater;
 import client.GUI.guiListeners.CreateGroupListener;
 import client.GUI.guiListeners.JoinGroupUsingCodeListener;
+import client.GUI.guiListeners.RemoveUserListener;
 import client.GUI.guiListeners.SendMessageListener;
 import client.GUI.guiListeners.SendPhotoListener;
 import client.GUI.guiListeners.SwitchConversationListener;
@@ -337,11 +338,13 @@ public class People extends javax.swing.JPanel {
                 });
 
                 removeButton.setText("Remove");
-                removeButton.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                removeButtonActionPerformed(evt);
+                removeButton.addActionListener(new RemoveUserListener(chat, membersInConvList, new Callable<Void>() {
+                        @Override
+                        public Void call() throws Exception {
+                                updateChatUi();
+                                return null;
                         }
-                });
+                }));
 
                 changeChatNameLabel.setFont(new java.awt.Font("Segoe UI Black", 0, 13)); // NOI18N
                 changeChatNameLabel.setText(

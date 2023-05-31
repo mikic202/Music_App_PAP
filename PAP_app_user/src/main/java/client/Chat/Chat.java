@@ -289,4 +289,25 @@ public class Chat {
         return usersConversations.get(currentConversation).getString("name");
     }
 
+    public Boolean removeUserFromCurrentConversation(String username) {
+        int userId = findUsersId(username);
+        if (userId == -1) {
+            return false;
+        }
+        JSONObject result = chatAccesor.RemoveUserFromConversation(currentConversation, userId);
+        if (result.getJSONObject("value").getBoolean("outcome")) {
+            usersInConversarion.get(currentConversation).remove(userId);
+        }
+        return result.getJSONObject("value").getBoolean("outcome");
+    }
+
+    private int findUsersId(String username) {
+        for (int userId : usersEncountered.keySet()) {
+            if (usersEncountered.get(userId).getString("username").equals(username)) {
+                return userId;
+            }
+        }
+        return -1;
+    }
+
 }

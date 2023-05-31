@@ -102,6 +102,12 @@ public class ChatAccesors {
         return response;
     }
 
+    public JSONObject RemoveUserFromConversation(int conversationId, int userTd) {
+        JSONObject request = RequestCreator.createRemoveUserFromConversationRequest(conversationId, userTd);
+        JSONObject response = serverConnector.sendRequest(request);
+        return response;
+    }
+
     private ServerConnector serverConnector;
 
 }
