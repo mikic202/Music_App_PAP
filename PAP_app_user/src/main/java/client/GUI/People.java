@@ -19,6 +19,7 @@ import net.miginfocom.swing.MigLayout;
 
 import client.Chat.Chat;
 import client.GUI.guiListeners.AddUsersListener;
+import client.GUI.guiListeners.ChangeConversationNameListener;
 import client.GUI.guiListeners.ChatContentsUpdater;
 import client.GUI.guiListeners.CreateGroupListener;
 import client.GUI.guiListeners.JoinGroupUsingCodeListener;
@@ -349,11 +350,14 @@ public class People extends javax.swing.JPanel {
                 changeChatName.setText("jTextField1");
 
                 changeButton.setText("Chnage");
-                changeButton.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                changeButtonActionPerformed(evt);
-                        }
-                });
+                changeButton.addActionListener(
+                                new ChangeConversationNameListener(changeChatName, chat, new Callable<Void>() {
+                                        @Override
+                                        public Void call() throws Exception {
+                                                updateChatUi();
+                                                return null;
+                                        }
+                                }));
 
                 membersInConvLabel.setFont(new java.awt.Font("Segoe UI Black", 1, 14)); // NOI18N
                 membersInConvLabel.setText("Members:");

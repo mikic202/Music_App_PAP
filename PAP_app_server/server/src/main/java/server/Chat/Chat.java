@@ -251,6 +251,19 @@ public class Chat {
 
     }
 
+    private static JSONObject _processChangeConversationName(JSONObject request) {
+        String newName = request.getString("conversation_name");
+        var oldConversationData = ConversationDataAccesor.getData(request.getInt("conversation_id"));
+        oldConversationData.put("name", newName);
+        ConversationDataSetter.setData(request.getInt("conversation_id"), oldConversationData);
+        JSONObject responseValue = new JSONObject();
+        responseValue.put("outcome", true);
+        JSONObject response = new JSONObject();
+        response.put("value", responseValue);
+        response.put("type", RequestTypes.CHANGE_CONVERSATION_NAME.value());
+        return response;
+    }
+
     private static JSONObject _generateResponse(RequestTypes reqType, JSONObject request) {
         JSONObject response = new JSONObject();
         switch (reqType) {
@@ -286,6 +299,9 @@ public class Chat {
                 break;
             case JOIN_CONVERSATION_WITH_CODE:
                 response = _procesJoinConversationUsingCode(request);
+                break;
+            case CHANGE_CONVERSATION_NAME:
+                response = _processChangeConversationName(request);
                 break;
 
         }

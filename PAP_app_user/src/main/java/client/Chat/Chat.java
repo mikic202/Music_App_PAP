@@ -280,4 +280,13 @@ public class Chat {
         }
     }
 
+    public String changeCurrentConversationName(String newName) {
+        JSONObject response = chatAccesor.changeConversationName(currentConversation, newName);
+        if (response.getJSONObject("value").getBoolean("outcome")) {
+            usersConversations.get(currentConversation).put("name", newName);
+            return newName;
+        }
+        return usersConversations.get(currentConversation).getString("name");
+    }
+
 }

@@ -127,4 +127,14 @@ public class RequestCreator {
                 request.put("type", RequestTypes.JOIN_CONVERSATION_WITH_CODE.value());
                 return request;
         }
+
+        public static JSONObject createChangeConversationNameRequest(int conversationId, String newName) {
+                JSONObject value = new JSONObject();
+                value.put("conversation_id", conversationId);
+                value.put("conversation_name", newName);
+                JSONObject request = new JSONObject();
+                request.put("value", value);
+                request.put("type", RequestTypes.CHANGE_CONVERSATION_NAME.value());
+                return request;
+        }
 }
