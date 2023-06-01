@@ -56,16 +56,19 @@ public class People extends javax.swing.JPanel {
                 chatWorker = new ChatWorker(chat, userPassword, new Callable<Void>() {
                         @Override
                         public Void call() throws Exception {
-                                ArrayList<JSONObject> newMessages = chat
-                                                .getCurrentMessages();
-                                ChatContentsUpdater.updateChat(newMessages, chat, chatPanel);
                                 updateChatUi();
                                 return null;
                         }
-                });
+                }, chatPanel);
                 chatWorker.execute();
 
-                // updateChatUi();
+                new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                                updateChatUi();
+                                ChatContentsUpdater.updateChat(chat.getCurrentMessages(), chat, chatPanel);
+                        }
+                }).start();
         }
 
         public void Theme() {

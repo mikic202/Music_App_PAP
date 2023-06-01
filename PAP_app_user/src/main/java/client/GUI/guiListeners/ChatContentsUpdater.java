@@ -22,21 +22,38 @@ import client.GUI.LeftChatPanel;
 public class ChatContentsUpdater {
     static final int PROFILE_PICTURE_SIZE = 40;
 
+    private static Image defaultImage;
+    static {
+        try {
+            defaultImage = ImageIO.read(new File("src\\main\\java\\client\\GUI\\deaudlt.png"));
+        } catch (Exception e) {
+
+        }
+    };
+
     static public void updateChat(ArrayList<JSONObject> newMessages, Chat chat, JPanel messagesArea) {
         messagesArea.removeAll();
         for (int i = newMessages.size() - 1; i >= 0; i--) {
             var message = newMessages.get(i);
             if (message.getInt("is_image") == 1) {
-                addImage(message, chat, messagesArea);
+                messagesArea.add(addImage(message, chat, messagesArea), "wrap");
             } else {
-                addTextMessage(message, chat, messagesArea);
+                messagesArea.add(addTextMessage(message, chat, messagesArea), "wrap");
             }
         }
         messagesArea.repaint();
         messagesArea.revalidate();
     }
 
-    static void addImage(JSONObject message, Chat chat, JPanel messagesArea) {
+    static public void addMessageToConversation(JSONObject message, Chat chat, JPanel messagesArea) {
+        if (message.getInt("is_image") == 1) {
+            messagesArea.add(addImage(message, chat, messagesArea), "wrap", 0);
+        } else {
+            messagesArea.add(addTextMessage(message, chat, messagesArea), "wrap", 0);
+        }
+    }
+
+    static JPanel addImage(JSONObject message, Chat chat, JPanel messagesArea) {
         ImageChatPanel chatPanel = new ImageChatPanel();
         if (message.getInt("sender_id") == chat.userId()) {
             chatPanel.chatText.setBackground(new java.awt.Color(0, 137, 255));
@@ -60,7 +77,6 @@ public class ChatContentsUpdater {
             chatPanel.avatarChat.setIcon((new ImageIcon(convertStringArrayToImageBytes(imageString))));
         } else {
             try {
-                Image defaultImage = ImageIO.read(new File("src\\main\\java\\client\\GUI\\deaudlt.png"));
                 Image scaledImage = defaultImage.getScaledInstance(PROFILE_PICTURE_SIZE, PROFILE_PICTURE_SIZE,
                         Image.SCALE_DEFAULT);
                 chatPanel.avatarChat.setIcon(new ImageIcon(scaledImage));
@@ -69,10 +85,10 @@ public class ChatContentsUpdater {
             }
         }
         chatPanel.nicknameLabel.setText(userInfo.getString("username"));
-        messagesArea.add(chatPanel.chatBlock, "wrap");
+        return chatPanel.chatBlock;
     }
 
-    static void addTextMessage(JSONObject message, Chat chat, JPanel messagesArea) {
+    static JPanel addTextMessage(JSONObject message, Chat chat, JPanel messagesArea) {
         LeftChatPanel chatPanel = new LeftChatPanel();
         if (message.getInt("sender_id") == chat.userId()) {
             chatPanel.chatText.setBackground(new java.awt.Color(0, 137, 255));
@@ -94,7 +110,7 @@ public class ChatContentsUpdater {
             }
         }
         chatPanel.nicknameLabel.setText(userInfo.getString("username"));
-        messagesArea.add(chatPanel.chatBlock, "wrap");
+        return chatPanel.chatBlock;
     }
 
     static byte[] convertStringArrayToImageBytes(String stringImage) {

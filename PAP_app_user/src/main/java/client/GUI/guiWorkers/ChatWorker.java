@@ -3,19 +3,24 @@ package client.GUI.guiWorkers;
 import java.net.Socket;
 import java.util.concurrent.Callable;
 
+import javax.swing.JPanel;
 import javax.swing.SwingWorker;
 
+import org.json.JSONObject;
+
 import client.Chat.Chat;
+import client.GUI.guiListeners.ChatContentsUpdater;
 import client.ServerConnector.ServerConnector;
 import client.login_and_account_accessors.LoginAccessors;
 
 public class ChatWorker extends SwingWorker<Boolean, Void> {
 
-    public ChatWorker(Chat chat, char[] userPassword, Callable<Void> updateChatContents) {
+    public ChatWorker(Chat chat, char[] userPassword, Callable<Void> chatInfoUpdater, JPanel messagesArea) {
+        this.messagesArea = messagesArea;
         this.chat = chat;
-        this.updateChatContents = updateChatContents;
+        this.chatInfoUpdater = chatInfoUpdater;
         try {
-            serverConnector = new ServerConnector(new Socket("144.91.114.89",
+            serverConnector = new ServerConnector(new Socket("localhost",
                     8005));
         } catch (Exception e) {
             System.out.println(e);
@@ -31,7 +36,9 @@ public class ChatWorker extends SwingWorker<Boolean, Void> {
             if (!data.getJSONObject("value").keySet().contains("outcome")) {
                 chat.addExternalMessage(data.getJSONObject("value"));
                 chat.updateStatus();
-                updateChatContents.call();
+                if (!addMesageToCurrentConversationView(data.getJSONObject("value"))) {
+                    chatInfoUpdater.call();
+                }
             }
             System.out.println("status updated");
             if (data.getJSONObject("value").keySet().contains("outcome")
@@ -48,9 +55,18 @@ public class ChatWorker extends SwingWorker<Boolean, Void> {
         return response.getJSONObject("value").getBoolean("outcome");
     }
 
+    private Boolean addMesageToCurrentConversationView(JSONObject message) {
+        if (message.getInt("conversation_id") == chat.getCurrentChatId()) {
+            ChatContentsUpdater.addMessageToConversation(message, chat, messagesArea);
+            return true;
+        }
+        return false;
+    }
+
     private Chat chat;
     private ServerConnector serverConnector;
     private boolean isConnected = false;
-    Callable<Void> updateChatContents;
+    Callable<Void> chatInfoUpdater;
+    JPanel messagesArea;
 
 }
