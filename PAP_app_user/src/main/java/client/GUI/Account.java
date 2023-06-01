@@ -41,6 +41,8 @@ public class Account extends javax.swing.JPanel {
                 } catch (Exception e) {
                         System.out.println(e);
                 }
+                email.setText(chat.getCurrentUserInfo().getString("email"));
+                nick.setText(chat.getCurrentUserInfo().getString("username"));
 
         }
 

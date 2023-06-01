@@ -12,6 +12,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import client.ServerConnector.ServerConnector;
+
+import java.awt.Color;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 
 public class Chat {
@@ -75,11 +78,11 @@ public class Chat {
         return getCurrentMessages();
     }
 
-    public boolean setCurrentConversation(int new_currentConv) {
-        if (!usersConversations.containsKey(new_currentConv)) {
+    public boolean setCurrentConversation(int newCurrentConv) {
+        if (!usersConversations.containsKey(newCurrentConv)) {
             return false;
         }
-        currentConversation = new_currentConv;
+        currentConversation = newCurrentConv;
         return true;
     }
 
@@ -218,10 +221,34 @@ public class Chat {
             format = path.substring(dotIndex + 1);
         }
         try {
-            BufferedImage bimage = ImageIO.read(new File(path));
-            ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
-            ImageIO.write(bimage, format, byteStream);
-            data = byteStream.toByteArray();
+            BufferedImage img = ImageIO.read(new File(path));
+            Double imageHeight = 0.0;
+            Double imageWidth = 0.0;
+            if (img.getWidth() < 100.0 && img.getHeight() < 100) {
+
+            } else if (img.getWidth() > img.getHeight()) {
+                imageWidth = 100.0;
+                imageHeight = img.getHeight() * (100.0 / img.getWidth());
+                System.out.println(img.getWidth());
+                System.out.println(100.0 / img.getWidth());
+            } else {
+                imageHeight = 100.0;
+                imageWidth = img.getWidth() * (100.0 / img.getHeight());
+                System.out.println(img.getHeight());
+                System.out.println((100.0 / img.getHeight()));
+            }
+
+            Image scaledImage = img.getScaledInstance(imageWidth.intValue(), imageHeight.intValue(),
+                    Image.SCALE_SMOOTH);
+            BufferedImage imageBuff = new BufferedImage(imageWidth.intValue(), imageHeight.intValue(),
+                    BufferedImage.TYPE_INT_RGB);
+            imageBuff.getGraphics().drawImage(scaledImage, 0, 0, new Color(0, 0, 0), null);
+
+            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+
+            ImageIO.write(imageBuff, format, buffer);
+
+            data = buffer.toByteArray();
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -229,8 +256,11 @@ public class Chat {
     }
 
     public String getConversationCode() {
-        JSONObject response = chatAccesor.getConversationCode(currentConversation);
-        return response.getJSONObject("value").getString("conversation code");
+        if (currentConversation != -1) {
+            JSONObject response = chatAccesor.getConversationCode(currentConversation);
+            return response.getJSONObject("value").getString("conversation code");
+        }
+        return "";
     }
 
     public boolean joinConversationUsingCode(String code) {
@@ -241,6 +271,43 @@ public class Chat {
             convertConversationsResponseToHashtable(conversations);
         }
         return outcome;
+    }
+
+    public void addExternalMessage(JSONObject message) {
+        if (messagesInUsersConversation.keySet().contains(message.getInt("conversation_id"))
+                && message.getInt("sender_id") != userId) {
+            messagesInUsersConversation.get(message.getInt("conversation_id")).add(message);
+        }
+    }
+
+    public String changeCurrentConversationName(String newName) {
+        JSONObject response = chatAccesor.changeConversationName(currentConversation, newName);
+        if (response.getJSONObject("value").getBoolean("outcome")) {
+            usersConversations.get(currentConversation).put("name", newName);
+            return newName;
+        }
+        return usersConversations.get(currentConversation).getString("name");
+    }
+
+    public Boolean removeUserFromCurrentConversation(String username) {
+        int userId = findUsersId(username);
+        if (userId == -1) {
+            return false;
+        }
+        JSONObject result = chatAccesor.RemoveUserFromConversation(currentConversation, userId);
+        if (result.getJSONObject("value").getBoolean("outcome")) {
+            usersInConversarion.get(currentConversation).remove(userId);
+        }
+        return result.getJSONObject("value").getBoolean("outcome");
+    }
+
+    private int findUsersId(String username) {
+        for (int userId : usersEncountered.keySet()) {
+            if (usersEncountered.get(userId).getString("username").equals(username)) {
+                return userId;
+            }
+        }
+        return -1;
     }
 
 }

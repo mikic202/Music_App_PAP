@@ -1,13 +1,8 @@
 package client.GUI.guiListeners;
 
-import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.Callable;
 
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.event.ListSelectionEvent;
@@ -16,10 +11,6 @@ import javax.swing.event.ListSelectionListener;
 import org.json.JSONObject;
 
 import client.Chat.Chat;
-import client.GUI.ImageChatPanel;
-import client.GUI.LeftChatPanel;
-import client.GUI.Music;
-import client.GUI.guiListeners.MusicEventListener;
 
 public class SwitchConversationListener implements ListSelectionListener {
 
@@ -31,7 +22,10 @@ public class SwitchConversationListener implements ListSelectionListener {
 
     @Override
     public void valueChanged(ListSelectionEvent event) {
-
+        System.out.println(((JList) event.getSource()).getSelectedValue());
+        if (((JList) event.getSource()).getSelectedValue() == null) {
+            return;
+        }
         if (!event.getValueIsAdjusting()) {
             currentConversationName = ((JList) event.getSource()).getSelectedValue().toString();
             new Thread(new ConversationMessagesUpdater()).start();
@@ -39,7 +33,12 @@ public class SwitchConversationListener implements ListSelectionListener {
     }
 
     private void updateChat(ArrayList<JSONObject> newMessages) {
-        ChatContentsUpdater.updateChat(newMessages, chat, messagesArea);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                ChatContentsUpdater.updateChat(newMessages, chat, messagesArea);
+            }
+        }).start();
         try {
             chatGuiUpdater.call();
         } catch (Exception e) {
@@ -62,10 +61,6 @@ public class SwitchConversationListener implements ListSelectionListener {
             }
         }
 
-    }
-
-    interface chatGuiUpdater {
-        void updateChatUi();
     }
 
     String currentConversationName = "";

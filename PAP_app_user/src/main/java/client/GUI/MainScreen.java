@@ -61,8 +61,10 @@ public class MainScreen extends javax.swing.JFrame {
                 people = new People(this, chat, userPassword);
                 music = new Music(this);
                 account = new Account(this, serverConnector, chat);
-                this.musicManagerInstance = new MusicManager(serverConnector, userInfo.getInt("user_id"));
-                this.musicEventListenerInstance = new MusicEventListener(serverConnector, userInfo.getInt("user_id"));
+                this.musicManagerInstance = new MusicManager(serverConnector,
+                                userInfo.getInt("user_id"));
+                this.musicEventListenerInstance = new MusicEventListener(serverConnector,
+                                userInfo.getInt("user_id"));
         }
 
         public MainScreen(ServerConnector serverConnector, JSONObject userInfo, char[] userPassword) {
@@ -1092,7 +1094,7 @@ public class MainScreen extends javax.swing.JFrame {
                 });
                 menu.add(chooseMusic);
 
-                changeAvatar.setText("");
+                changeAvatar.setText("Change avatar");
                 changeAvatar.addMenuKeyListener(new javax.swing.event.MenuKeyListener() {
                         public void menuKeyPressed(javax.swing.event.MenuKeyEvent evt) {
                                 changeAvatarMenuKeyPressed(evt);
@@ -1159,7 +1161,7 @@ public class MainScreen extends javax.swing.JFrame {
         }
 
         private void playButtonActionPerformed(java.awt.event.ActionEvent evt) {
-                
+
         }
 
         private void themeButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -1192,7 +1194,7 @@ public class MainScreen extends javax.swing.JFrame {
         }
 
         private void loadButtonActionPerformed(java.awt.event.ActionEvent evt) {
-                //this.loadMusic();
+                // this.loadMusic();
         }
 
         private void mainScreenButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -1215,7 +1217,7 @@ public class MainScreen extends javax.swing.JFrame {
         }
 
         private void pauseLabelActionPerformed(java.awt.event.ActionEvent evt) {
-                //TODO stop
+                // TODO stop
         }
 
         private void chooseMusicMouseClicked(java.awt.event.MouseEvent evt) {

@@ -17,21 +17,21 @@ public class ChatAccesors {
     }
 
     public JSONObject addConversation(String name, ArrayList<String> usernames) {
-        ArrayList<Integer> users_ids = getUsersIds(usernames);
-        JSONObject procesedRequest = RequestCreator.createAddRonversationRequest(name, users_ids);
+        ArrayList<Integer> usersIds = getUsersIds(usernames);
+        JSONObject procesedRequest = RequestCreator.createAddRonversationRequest(name, usersIds);
         JSONObject response = serverConnector.sendRequest(procesedRequest);
         return response;
     }
 
     private ArrayList<Integer> getUsersIds(ArrayList<String> usernames) {
-        ArrayList<Integer> users_ids = new ArrayList<>();
+        ArrayList<Integer> usersIds = new ArrayList<>();
         for (String user : usernames) {
             JSONObject user_info = getUserInfo(user).getJSONObject("value");
             if (user_info.has("ID")) {
-                users_ids.add(user_info.getInt("ID"));
+                usersIds.add(user_info.getInt("ID"));
             }
         }
-        return users_ids;
+        return usersIds;
     }
 
     public JSONObject getMessagesInConversation(int conversationId) {
@@ -47,9 +47,9 @@ public class ChatAccesors {
     }
 
     public JSONObject addUsersToConversation(int conversationId, ArrayList<String> usernames) {
-        ArrayList<Integer> users_ids = getUsersIds(usernames);
+        ArrayList<Integer> usersIds = getUsersIds(usernames);
         JSONObject procesedRequest = RequestCreator.createAddUserToConversationRequest(conversationId,
-                users_ids);
+                usersIds);
         JSONObject response = serverConnector.sendRequest(procesedRequest);
         return response;
     }
@@ -92,6 +92,18 @@ public class ChatAccesors {
 
     public JSONObject joinConversationUsingCode(String code, int userId) {
         JSONObject request = RequestCreator.createJoinConversationUsingCodeRequest(code, userId);
+        JSONObject response = serverConnector.sendRequest(request);
+        return response;
+    }
+
+    public JSONObject changeConversationName(int conversationId, String newName) {
+        JSONObject request = RequestCreator.createChangeConversationNameRequest(conversationId, newName);
+        JSONObject response = serverConnector.sendRequest(request);
+        return response;
+    }
+
+    public JSONObject RemoveUserFromConversation(int conversationId, int userTd) {
+        JSONObject request = RequestCreator.createRemoveUserFromConversationRequest(conversationId, userTd);
         JSONObject response = serverConnector.sendRequest(request);
         return response;
     }
