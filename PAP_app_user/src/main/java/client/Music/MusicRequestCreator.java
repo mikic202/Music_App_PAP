@@ -12,7 +12,7 @@ public class MusicRequestCreator {
         value.put("chat_id", chatId);
         value.put("song_id", songId);
         var data = new JSONObject();
-        data.put("type", MusicRequestTypes.START_STREAM.value());
+        data.put(MessagesTopLevelConstants.TYPE.value(), MusicRequestTypes.START_STREAM.value());
         data.put(MessagesTopLevelConstants.VALUE.value(), value);
         return data;
     }
@@ -21,7 +21,7 @@ public class MusicRequestCreator {
         var value = new JSONObject();
         value.put("user_id", userId);
         var data = new JSONObject();
-        data.put("type", MusicRequestTypes.TERMINATE_STREAM.value());
+        data.put(MessagesTopLevelConstants.TYPE.value(), MusicRequestTypes.TERMINATE_STREAM.value());
         data.put(MessagesTopLevelConstants.VALUE.value(), value);
         return data;
     }
@@ -30,7 +30,7 @@ public class MusicRequestCreator {
         var value = new JSONObject();
         value.put("chat_id", chatId);
         var data = new JSONObject();
-        data.put("type", MusicRequestTypes.CHECK_IF_PLAYING.value());
+        data.put(MessagesTopLevelConstants.TYPE.value(), MusicRequestTypes.CHECK_IF_PLAYING.value());
         data.put(MessagesTopLevelConstants.VALUE.value(), value);
         return data;
     }
@@ -40,7 +40,7 @@ public class MusicRequestCreator {
         value.put("user_id", userId);
         value.put("chat_id", chatId);
         var data = new JSONObject();
-        data.put("type", MusicRequestTypes.JOIN_PLAYING_STREAM.value());
+        data.put(MessagesTopLevelConstants.TYPE.value(), MusicRequestTypes.JOIN_PLAYING_STREAM.value());
         data.put(MessagesTopLevelConstants.VALUE.value(), value);
         return data;
     }
@@ -49,7 +49,7 @@ public class MusicRequestCreator {
         var value = new JSONObject();
         value.put("user_id", userId);
         var data = new JSONObject();
-        data.put("type", MusicRequestTypes.PAUSE_STREAM.value());
+        data.put(MessagesTopLevelConstants.TYPE.value(), MusicRequestTypes.PAUSE_STREAM.value());
         data.put(MessagesTopLevelConstants.VALUE.value(), value);
         return data;
     }
@@ -58,7 +58,7 @@ public class MusicRequestCreator {
         var value = new JSONObject();
         value.put("user_id", userId);
         var data = new JSONObject();
-        data.put("type", MusicRequestTypes.RESUME_STREAM.value());
+        data.put(MessagesTopLevelConstants.TYPE.value(), MusicRequestTypes.RESUME_STREAM.value());
         data.put(MessagesTopLevelConstants.VALUE.value(), value);
         return data;
     }
@@ -67,7 +67,7 @@ public class MusicRequestCreator {
         var value = new JSONObject();
         value.put("user_id", userId);
         var data = new JSONObject();
-        data.put("type", MusicRequestTypes.LEAVE_STREAM.value());
+        data.put(MessagesTopLevelConstants.TYPE.value(), MusicRequestTypes.LEAVE_STREAM.value());
         data.put(MessagesTopLevelConstants.VALUE.value(), value);
         return data;
     }
@@ -76,7 +76,7 @@ public class MusicRequestCreator {
         var value = new JSONObject();
         value.put("user_id", userId);
         var data = new JSONObject();
-        data.put("type", MusicRequestTypes.GET_USER_SONGS.value());
+        data.put(MessagesTopLevelConstants.TYPE.value(), MusicRequestTypes.GET_USER_SONGS.value());
         data.put(MessagesTopLevelConstants.VALUE.value(), value);
         return data;
     }

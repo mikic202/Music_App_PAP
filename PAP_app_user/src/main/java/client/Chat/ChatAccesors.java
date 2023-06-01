@@ -3,6 +3,7 @@ package client.Chat;
 import java.util.ArrayList;
 import org.json.JSONObject;
 
+import client.ServerConnectionConstants.MessagesTopLevelConstants;
 import client.ServerConnector.ServerConnector;
 
 public class ChatAccesors {
