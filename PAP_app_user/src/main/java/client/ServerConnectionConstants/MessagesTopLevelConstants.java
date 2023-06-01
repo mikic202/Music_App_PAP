@@ -1,11 +1,11 @@
 package client.ServerConnectionConstants;
 
-public enum TopLevelConstants {
-    VALUE("value");
+public enum MessagesTopLevelConstants {
+    VALUE("value"), TYPE("type");
 
     private String _value;
 
-    TopLevelConstants(String value) {
+    MessagesTopLevelConstants(String value) {
         _value = value;
     }
 
