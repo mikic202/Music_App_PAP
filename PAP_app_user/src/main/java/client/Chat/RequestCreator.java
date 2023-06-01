@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import org.json.JSONObject;
 
+import client.ServerConnectionConstants.MessagesTopLevelConstants;
+
 public class RequestCreator {
         public static JSONObject createSendMsgRequest(int conversationId, int senderId, String text) {
                 var request = new JSONObject();
@@ -12,7 +14,7 @@ public class RequestCreator {
                 value.put("sender_id", senderId);
                 value.put("conversation_id", conversationId);
                 value.put("text", text);
-                request.put("value", value);
+                request.put(MessagesTopLevelConstants.VALUE.value(), value);
                 return request;
         }
 
@@ -22,7 +24,7 @@ public class RequestCreator {
                 var value = new JSONObject();
                 value.put("name", name);
                 value.put("users", users);
-                request.put("value", value);
+                request.put(MessagesTopLevelConstants.VALUE.value(), value);
                 return request;
         }
 
@@ -31,7 +33,7 @@ public class RequestCreator {
                 request.put("type", RequestTypes.GET_MESSAGES.value());
                 var value = new JSONObject();
                 value.put("conversation_id", conversationId);
-                request.put("value", value);
+                request.put(MessagesTopLevelConstants.VALUE.value(), value);
                 return request;
 
         }
@@ -41,7 +43,7 @@ public class RequestCreator {
                 request.put("type", RequestTypes.GET_USERS_CONVERSATIONS.value());
                 var value = new JSONObject();
                 value.put("user_id", userId);
-                request.put("value", value);
+                request.put(MessagesTopLevelConstants.VALUE.value(), value);
                 return request;
         }
 
@@ -52,7 +54,7 @@ public class RequestCreator {
                 var value = new JSONObject();
                 value.put("conversation_id", conversationId);
                 value.put("users", users_ids);
-                request.put("value", value);
+                request.put(MessagesTopLevelConstants.VALUE.value(), value);
                 return request;
         }
 
@@ -62,7 +64,7 @@ public class RequestCreator {
                 var value = new JSONObject();
                 value.put("user_id", userId);
                 value.put("type", "user_id");
-                request.put("value", value);
+                request.put(MessagesTopLevelConstants.VALUE.value(), value);
                 return request;
         }
 
@@ -72,7 +74,7 @@ public class RequestCreator {
                 var value = new JSONObject();
                 value.put("username", username);
                 value.put("type", "username");
-                request.put("value", value);
+                request.put(MessagesTopLevelConstants.VALUE.value(), value);
                 return request;
 
         }
@@ -82,7 +84,7 @@ public class RequestCreator {
                 request.put("type", RequestTypes.GET_USERS_IN_CONVERSATION.value());
                 var value = new JSONObject();
                 value.put("conversation_id", conversationId);
-                request.put("value", value);
+                request.put(MessagesTopLevelConstants.VALUE.value(), value);
                 return request;
         }
 
@@ -92,7 +94,7 @@ public class RequestCreator {
                 var value = new JSONObject();
                 value.put("latest_message", latestMessage);
                 value.put("conversation_id", conversationId);
-                request.put("value", value);
+                request.put(MessagesTopLevelConstants.VALUE.value(), value);
                 return request;
         }
 
@@ -103,7 +105,7 @@ public class RequestCreator {
                 value.put("image", image);
                 value.put("format", format);
                 JSONObject request = new JSONObject();
-                request.put("value", value);
+                request.put(MessagesTopLevelConstants.VALUE.value(), value);
                 request.put("type", RequestTypes.SEND_IMAGE.value());
                 return request;
         }
@@ -113,7 +115,7 @@ public class RequestCreator {
                 JSONObject value = new JSONObject();
                 value.put("conversation_id", conversationId);
                 JSONObject request = new JSONObject();
-                request.put("value", value);
+                request.put(MessagesTopLevelConstants.VALUE.value(), value);
                 request.put("type", RequestTypes.GET_CONVERSATION_CODE.value());
                 return request;
         }
@@ -123,7 +125,7 @@ public class RequestCreator {
                 value.put("conversation_code", code);
                 value.put("user_id", userId);
                 JSONObject request = new JSONObject();
-                request.put("value", value);
+                request.put(MessagesTopLevelConstants.VALUE.value(), value);
                 request.put("type", RequestTypes.JOIN_CONVERSATION_WITH_CODE.value());
                 return request;
         }
@@ -133,7 +135,7 @@ public class RequestCreator {
                 value.put("conversation_id", conversationId);
                 value.put("conversation_name", newName);
                 JSONObject request = new JSONObject();
-                request.put("value", value);
+                request.put(MessagesTopLevelConstants.VALUE.value(), value);
                 request.put("type", RequestTypes.CHANGE_CONVERSATION_NAME.value());
                 return request;
         }
@@ -143,7 +145,7 @@ public class RequestCreator {
                 value.put("conversation_id", conversationId);
                 value.put("user_id", userId);
                 JSONObject request = new JSONObject();
-                request.put("value", value);
+                request.put(MessagesTopLevelConstants.VALUE.value(), value);
                 request.put("type", RequestTypes.REMOVE_USER_FROM_CONVERSATION.value());
                 return request;
         }

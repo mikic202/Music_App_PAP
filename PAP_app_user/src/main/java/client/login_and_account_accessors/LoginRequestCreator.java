@@ -9,7 +9,7 @@ public class LoginRequestCreator {
 		value.put("password", new String(password));
 		var data = new JSONObject();
 		data.put("type", LoginRequestTypes.SEND_LOGIN.value());
-		data.put("value", value);
+		data.put(MessagesTopLevelConstants.VALUE.value(), value);
 		return data;
 	}
 
@@ -22,7 +22,7 @@ public class LoginRequestCreator {
 		value.put("confirm_password", new String(confirm_password));
 		var data = new JSONObject();
 		data.put("type", LoginRequestTypes.SEND_REGISTER.value());
-		data.put("value", value);
+		data.put(MessagesTopLevelConstants.VALUE.value(), value);
 		return data;
 	}
 
@@ -36,7 +36,7 @@ public class LoginRequestCreator {
 		value.put("confirm_new_password", new String(confirm_new_password));
 		var data = new JSONObject();
 		data.put("type", LoginRequestTypes.SEND_CHANGE_PASSWORD.value());
-		data.put("value", value);
+		data.put(MessagesTopLevelConstants.VALUE.value(), value);
 		return data;
 	}
 
@@ -44,7 +44,7 @@ public class LoginRequestCreator {
 		var value = new JSONObject();
 		value.put("email", email);
 		var request = new JSONObject();
-		request.put("value", value);
+		request.put(MessagesTopLevelConstants.VALUE.value(), value);
 		request.put("type", LoginRequestTypes.RETRIEVE_PASSWORD.value());
 		return request;
 	}

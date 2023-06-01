@@ -38,7 +38,7 @@ public class ChangeUsernameListener implements ActionListener {
             String newEmail = newUsernameFIeld.getText();
             JSONObject response = accountAccesor.sendUserAccountNickanameData(newEmail,
                     chat.getCurrentUserInfo().getInt("user_id"));
-            if (response.getJSONObject("value").getBoolean("outcome")) {
+            if (response.getJSONObject(MessagesTopLevelConstants.VALUE.value()).getBoolean("outcome")) {
                 usernameLable.setText(newEmail);
             }
         }

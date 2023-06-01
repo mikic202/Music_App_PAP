@@ -10,6 +10,7 @@ import org.json.JSONObject;
 
 import client.GUI.LoginScreen;
 import client.GUI.MainScreen;
+import client.ServerConnectionConstants.MessagesTopLevelConstants;
 import client.ServerConnector.ServerConnector;
 import client.login_and_account_accessors.LoginAccessors;
 
@@ -37,9 +38,9 @@ public class LoggingListener implements ActionListener {
         public void run() {
             JSONObject response = loggingAccessors.sendUserLoginData(emailField.getText(),
                     passwordField.getPassword());
-            if (response.getJSONObject("value").getBoolean("outcome")) {
-                response.getJSONObject("value").put("email", emailField.getText());
-                logIn(response.getJSONObject("value"), passwordField.getPassword());
+            if (response.getJSONObject(MessagesTopLevelConstants.VALUE.value()).getBoolean("outcome")) {
+                response.getJSONObject(MessagesTopLevelConstants.VALUE.value()).put("email", emailField.getText());
+                logIn(response.getJSONObject(MessagesTopLevelConstants.VALUE.value()), passwordField.getPassword());
                 emailField.setText("");
                 passwordField.setText("");
             } else {
