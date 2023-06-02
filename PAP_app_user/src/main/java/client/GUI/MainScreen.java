@@ -44,7 +44,7 @@ public class MainScreen extends javax.swing.JFrame {
                 userInfo.put(ChatMessagesConstants.EMAIL.value(), "mikolaj.chomanski@gmail.com");
                 userInfo.put("profile_picture", "0");
                 try {
-                        serverConnector = new ServerConnector(new Socket("localhost",
+                        serverConnector = new ServerConnector(new Socket("144.91.114.89",
                                         8000));
                 } catch (Exception e) {
                         System.out.println(e);
