@@ -53,11 +53,11 @@ public class MainScreen extends javax.swing.JFrame {
                 FlatDarkLaf.setup();
                 initComponents();
                 this.peopleButton.setIcon(new ImageIcon(
-                                "C:\\Users\\Adam\\Documents\\NetBeansProjects\\NewGUI\\src\\main\\java\\com\\mycompany\\newgui\\PeoplePAP.png"));
+                                "src/main/java/client/GUI/PeoplePAP.png"));
                 this.musicButton.setIcon(new ImageIcon(
-                                "C:\\Users\\Adam\\Documents\\NetBeansProjects\\NewGUI\\src\\main\\java\\com\\mycompany\\newgui\\MusicPAP.png"));
+                                "src/main/java/client/GUI/MusicPAP.png"));
                 this.accountButton.setIcon(new ImageIcon(
-                                "C:\\Users\\Adam\\Documents\\NetBeansProjects\\NewGUI\\src\\main\\java\\com\\mycompany\\newgui\\AccountSettingsPAP.png"));
+                                "src/main/java/client/GUI/AccountSettingsPAP.png"));
                 char[] userPassword = { '1', '2', '3', '4', '5', '6', '7' };
                 people = new People(this, chat, userPassword);
                 music = new Music(this);
@@ -74,11 +74,11 @@ public class MainScreen extends javax.swing.JFrame {
                 FlatDarkLaf.setup();
                 initComponents();
                 this.peopleButton.setIcon(new ImageIcon(
-                                "C:\\Users\\Adam\\Documents\\NetBeansProjects\\NewGUI\\src\\main\\java\\com\\mycompany\\newgui\\PeoplePAP.png"));
+                                "src/main/java/client/GUI/PeoplePAP.png"));
                 this.musicButton.setIcon(new ImageIcon(
-                                "C:\\Users\\Adam\\Documents\\NetBeansProjects\\NewGUI\\src\\main\\java\\com\\mycompany\\newgui\\MusicPAP.png"));
+                                "src/main/java/client/GUI/MusicPAP.png"));
                 this.accountButton.setIcon(new ImageIcon(
-                                "C:\\Users\\Adam\\Documents\\NetBeansProjects\\NewGUI\\src\\main\\java\\com\\mycompany\\newgui\\AccountSettingsPAP.png"));
+                                "src/main/java/client/GUI/AccountSettingsPAP.png"));
                 people = new People(this, chat, userPassword);
                 music = new Music(this);
                 account = new Account(this, serverConnector, chat);
@@ -355,7 +355,7 @@ public class MainScreen extends javax.swing.JFrame {
 
                 gainLabel.setText("Gain");
 
-                peopleButton.setIcon(new javax.swing.ImageIcon("C:\\Users\\Adam\\Desktop\\PeoplePAP.png")); // NOI18N
+                peopleButton.setIcon(new javax.swing.ImageIcon("src/main/java/client/GUI/PeoplePAP.png")); // NOI18N
                 peopleButton.setText("jButton1");
                 peopleButton.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -363,7 +363,7 @@ public class MainScreen extends javax.swing.JFrame {
                         }
                 });
 
-                musicButton.setIcon(new javax.swing.ImageIcon("C:\\Users\\Adam\\Desktop\\MusicPAP.png")); // NOI18N
+                musicButton.setIcon(new javax.swing.ImageIcon("src/main/java/client/GUI/MusicPAP.png")); // NOI18N
                 musicButton.setText("jButton1");
                 musicButton.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -378,7 +378,7 @@ public class MainScreen extends javax.swing.JFrame {
                         }
                 });
 
-                accountButton.setIcon(new javax.swing.ImageIcon("C:\\Users\\Adam\\Desktop\\AccountSettingsPAP.png")); // NOI18N
+                accountButton.setIcon(new javax.swing.ImageIcon("src/main/java/client/GUI/AccountSettingsPAP.png")); // NOI18N
                 accountButton.setText("jButton1");
                 accountButton.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {

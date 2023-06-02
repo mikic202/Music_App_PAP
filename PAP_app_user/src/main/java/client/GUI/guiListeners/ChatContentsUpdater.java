@@ -26,7 +26,7 @@ public class ChatContentsUpdater {
     private static Image defaultImage;
     static {
         try {
-            defaultImage = ImageIO.read(new File("src\\main\\java\\client\\GUI\\deaudlt.png"));
+            defaultImage = ImageIO.read(new File("src/main/java/client/GUI/deaudlt.png"));
         } catch (Exception e) {
 
         }
@@ -115,7 +115,7 @@ public class ChatContentsUpdater {
             chatPanel.avatarChat.setIcon((new ImageIcon(convertStringArrayToImageBytes(imageString))));
         } else {
             try {
-                Image defaultImage = ImageIO.read(new File("src\\main\\java\\client\\GUI\\deaudlt.png"));
+                Image defaultImage = ImageIO.read(new File("src/main/java/client/GUI/deaudlt.png"));
                 Image scaledImage = defaultImage.getScaledInstance(PROFILE_PICTURE_SIZE, PROFILE_PICTURE_SIZE,
                         Image.SCALE_DEFAULT);
                 chatPanel.avatarChat.setIcon(new ImageIcon(scaledImage));

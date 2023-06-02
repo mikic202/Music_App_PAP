@@ -52,11 +52,11 @@ public class MainScreenCode extends javax.swing.JFrame {
                         Logger.getLogger(MainScreenCode.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 this.PeopleButton.setIcon(new ImageIcon(
-                                "C:\\Users\\Adam\\Documents\\NetBeansProjects\\NewGUI\\src\\main\\java\\com\\mycompany\\newgui\\PeoplePAP.png"));
+                                "src/main/java/client/GUI/PeoplePAP.png"));
                 this.MusicButton.setIcon(new ImageIcon(
-                                "C:\\Users\\Adam\\Documents\\NetBeansProjects\\NewGUI\\src\\main\\java\\com\\mycompany\\newgui\\MusicPAP.png"));
+                                "src/main/java/client/GUI/MusicPAP.png"));
                 this.MyAccountButton.setIcon(new ImageIcon(
-                                "C:\\Users\\Adam\\Documents\\NetBeansProjects\\NewGUI\\src\\main\\java\\com\\mycompany\\newgui\\AccountSettingsPAP.png"));
+                                "src/main/java/client/GUI/AccountSettingsPAP.png"));
                 AudioFormat format = audioStream.getFormat();
                 long frames = audioStream.getFrameLength();
                 duration = (frames + 0.0) / format.getFrameRate();
