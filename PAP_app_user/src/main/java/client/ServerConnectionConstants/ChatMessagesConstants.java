@@ -1,7 +1,7 @@
 package client.ServerConnectionConstants;
 
 public enum ChatMessagesConstants {
-    USER_ID("user_id");
+    USER_ID("user_id"), USERNAME("username");
 
     private String _value;
 

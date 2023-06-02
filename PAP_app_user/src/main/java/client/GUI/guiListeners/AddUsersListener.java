@@ -16,6 +16,7 @@ import org.json.JSONObject;
 
 import client.Chat.Chat;
 import client.GUI.LeftChatPanel;
+import client.ServerConnectionConstants.ChatMessagesConstants;
 
 public class AddUsersListener implements ActionListener {
 
@@ -47,7 +48,7 @@ public class AddUsersListener implements ActionListener {
         for (String username : parsed_usernames) {
             usernames.add(username);
         }
-        usernames.add(chat.getCurrentUserInfo().getString("username"));
+        usernames.add(chat.getCurrentUserInfo().getString(ChatMessagesConstants.USERNAME.value()));
         System.out.println(chat.addUsersToCurrentConversation(usernames));
         membersToAdd.setText("");
     }

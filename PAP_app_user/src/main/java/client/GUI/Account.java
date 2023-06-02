@@ -11,6 +11,7 @@ import client.Chat.Chat;
 import client.GUI.guiListeners.ChangeEmailListener;
 import client.GUI.guiListeners.ChangePasswordListener;
 import client.GUI.guiListeners.ChangeUsernameListener;
+import client.ServerConnectionConstants.ChatMessagesConstants;
 import client.ServerConnector.ServerConnector;
 
 import java.awt.Image;
@@ -42,7 +43,7 @@ public class Account extends javax.swing.JPanel {
                         System.out.println(e);
                 }
                 email.setText(chat.getCurrentUserInfo().getString("email"));
-                nick.setText(chat.getCurrentUserInfo().getString("username"));
+                nick.setText(chat.getCurrentUserInfo().getString(ChatMessagesConstants.USERNAME.value()));
 
         }
 

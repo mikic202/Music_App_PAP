@@ -73,8 +73,8 @@ public class RequestCreator {
                 var request = new JSONObject();
                 request.put(MessagesTopLevelConstants.TYPE.value(), RequestTypes.USER_INFO.value());
                 var value = new JSONObject();
-                value.put("username", username);
-                value.put(MessagesTopLevelConstants.TYPE.value(), "username");
+                value.put(ChatMessagesConstants.USERNAME.value(), username);
+                value.put(MessagesTopLevelConstants.TYPE.value(), ChatMessagesConstants.USERNAME.value());
                 request.put(MessagesTopLevelConstants.VALUE.value(), value);
                 return request;
 

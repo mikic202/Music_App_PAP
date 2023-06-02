@@ -311,7 +311,7 @@ public class Chat {
 
     private int findUsersId(String username) {
         for (int userId : usersEncountered.keySet()) {
-            if (usersEncountered.get(userId).getString("username").equals(username)) {
+            if (usersEncountered.get(userId).getString(ChatMessagesConstants.USERNAME.value()).equals(username)) {
                 return userId;
             }
         }

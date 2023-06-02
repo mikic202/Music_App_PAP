@@ -18,6 +18,7 @@ import org.json.JSONObject;
 import client.Chat.Chat;
 import client.GUI.ImageChatPanel;
 import client.GUI.LeftChatPanel;
+import client.ServerConnectionConstants.ChatMessagesConstants;
 
 public class ChatContentsUpdater {
     static final int PROFILE_PICTURE_SIZE = 40;
@@ -95,7 +96,7 @@ public class ChatContentsUpdater {
                 System.out.println(e);
             }
         }
-        chatPanel.nicknameLabel.setText(userInfo.getString("username"));
+        chatPanel.nicknameLabel.setText(userInfo.getString(ChatMessagesConstants.USERNAME.value()));
         return chatPanel.chatBlock;
     }
 
@@ -120,7 +121,7 @@ public class ChatContentsUpdater {
                 System.out.println(e);
             }
         }
-        chatPanel.nicknameLabel.setText(userInfo.getString("username"));
+        chatPanel.nicknameLabel.setText(userInfo.getString(ChatMessagesConstants.USERNAME.value()));
         return chatPanel.chatBlock;
     }
 

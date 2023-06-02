@@ -58,7 +58,7 @@ public class SendMessageListener implements ActionListener {
         // messagePanel.avatarChat.setIcon((new
         // ImageIcon(convertStringArrayToImageBytes(imageString))));
         // }
-        // messagePanel.nicknameLabel.setText(userInfo.getString("username"));
+        // messagePanel.nicknameLabel.setText(userInfo.getString(ChatMessagesConstants.USERNAME.value()));
         // this.messagesArea.add(messagePanel.chatBlock, "wrap");
         // this.messagesArea.repaint();
         // this.messagesArea.revalidate();
