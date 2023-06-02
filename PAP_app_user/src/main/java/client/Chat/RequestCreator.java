@@ -94,7 +94,7 @@ public class RequestCreator {
                 var request = new JSONObject();
                 request.put(MessagesTopLevelConstants.TYPE.value(), RequestTypes.GET_LATEST_MESSAGE.value());
                 var value = new JSONObject();
-                value.put("latest_message", latestMessage);
+                value.put(ChatMessagesConstants.LATEST_MESSAGE.value(), latestMessage);
                 value.put(ChatMessagesConstants.CONVERSATION_ID.value(), conversationId);
                 request.put(MessagesTopLevelConstants.VALUE.value(), value);
                 return request;
@@ -104,8 +104,8 @@ public class RequestCreator {
                 JSONObject value = new JSONObject();
                 value.put(ChatMessagesConstants.CONVERSATION_ID.value(), conversationId);
                 value.put(ChatMessagesConstants.MESSAGE_SENDER_ID.value(), senderId);
-                value.put("image", image);
-                value.put("format", format);
+                value.put(ChatMessagesConstants.IMAGE_MESSAGE.value(), image);
+                value.put(ChatMessagesConstants.IMAGE_MESSAGE_FORMAT.value(), format);
                 JSONObject request = new JSONObject();
                 request.put(MessagesTopLevelConstants.VALUE.value(), value);
                 request.put(MessagesTopLevelConstants.TYPE.value(), RequestTypes.SEND_IMAGE.value());
@@ -124,7 +124,7 @@ public class RequestCreator {
 
         public static JSONObject createJoinConversationUsingCodeRequest(String code, int userId) {
                 JSONObject value = new JSONObject();
-                value.put("conversation_code", code);
+                value.put(ChatMessagesConstants.CONVERSATION_CODE.value(), code);
                 value.put(ChatMessagesConstants.USER_ID.value(), userId);
                 JSONObject request = new JSONObject();
                 request.put(MessagesTopLevelConstants.VALUE.value(), value);
@@ -135,7 +135,7 @@ public class RequestCreator {
         public static JSONObject createChangeConversationNameRequest(int conversationId, String newName) {
                 JSONObject value = new JSONObject();
                 value.put(ChatMessagesConstants.CONVERSATION_ID.value(), conversationId);
-                value.put("conversation_name", newName);
+                value.put(ChatMessagesConstants.NEW_CONVERSATION_NAME.value(), newName);
                 JSONObject request = new JSONObject();
                 request.put(MessagesTopLevelConstants.VALUE.value(), value);
                 request.put(MessagesTopLevelConstants.TYPE.value(), RequestTypes.CHANGE_CONVERSATION_NAME.value());
