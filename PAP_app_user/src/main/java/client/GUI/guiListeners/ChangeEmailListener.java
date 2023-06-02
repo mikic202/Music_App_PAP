@@ -10,6 +10,7 @@ import javax.swing.JTextField;
 import org.json.JSONObject;
 
 import client.Chat.Chat;
+import client.ServerConnectionConstants.MessagesTopLevelConstants;
 import client.ServerConnector.ServerConnector;
 import client.login_and_account_accessors.AccountChangeRequestAccessors;
 
@@ -37,8 +38,8 @@ public class ChangeEmailListener implements ActionListener {
         public void run() {
             String newEmail = newEmailField.getText();
             JSONObject response = accountAccesor.sendUserAccountEmailData(newEmail,
-                    chat.getCurrentUserInfo().getInt("user_id"));
-            if (response.getJSONObject("value").getBoolean("outcome")) {
+                    chat.getCurrentUserInfo().getInt(ChatMessagesConstants.USER_ID.value()));
+            if (response.getJSONObject(MessagesTopLevelConstants.VALUE.value()).getBoolean("outcome")) {
                 emailLabel.setText(newEmail);
             }
         }

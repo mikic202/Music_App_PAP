@@ -18,6 +18,7 @@ import org.json.JSONObject;
 import client.Chat.Chat;
 import client.GUI.ImageChatPanel;
 import client.GUI.LeftChatPanel;
+import client.ServerConnectionConstants.ChatMessagesConstants;
 
 public class ChatContentsUpdater {
     static final int PROFILE_PICTURE_SIZE = 40;
@@ -45,20 +46,33 @@ public class ChatContentsUpdater {
         messagesArea.revalidate();
     }
 
-    static public void addMessageToConversation(JSONObject message, Chat chat, JPanel messagesArea) {
+    static public void addMessageToConversation(JSONObject message, Chat chat, JPanel messagesArea,
+            boolean atTheFront) {
         if (message.getInt("is_image") == 1) {
-            messagesArea.add(addImage(message, chat, messagesArea), "wrap", 0);
+            var chatBlock = addImage(message, chat, messagesArea);
+            if (atTheFront
+                    && chat.getCurrentChatId() == message.getInt(ChatMessagesConstants.CONVERSATION_ID.value())) {
+                messagesArea.add(chatBlock, "wrap", 0);
+            } else if (chat.getCurrentChatId() == message.getInt(ChatMessagesConstants.CONVERSATION_ID.value())) {
+                messagesArea.add(chatBlock, "wrap");
+            }
         } else {
-            messagesArea.add(addTextMessage(message, chat, messagesArea), "wrap", 0);
+            var chatBlock = addTextMessage(message, chat, messagesArea);
+            if (atTheFront
+                    && chat.getCurrentChatId() == message.getInt(ChatMessagesConstants.CONVERSATION_ID.value())) {
+                messagesArea.add(chatBlock, "wrap", 0);
+            } else if (chat.getCurrentChatId() == message.getInt(ChatMessagesConstants.CONVERSATION_ID.value())) {
+                messagesArea.add(chatBlock, "wrap");
+            }
         }
     }
 
     static JPanel addImage(JSONObject message, Chat chat, JPanel messagesArea) {
         ImageChatPanel chatPanel = new ImageChatPanel();
-        if (message.getInt("sender_id") == chat.userId()) {
+        if (message.getInt(ChatMessagesConstants.MESSAGE_SENDER_ID.value()) == chat.userId()) {
             chatPanel.chatText.setBackground(new java.awt.Color(0, 137, 255));
         }
-        String textImageString = message.getString("text");
+        String textImageString = message.getString(ChatMessagesConstants.MESSAGE_TEXT.value());
         try {
             BufferedImage defaultImage = ImageIO
                     .read(new ByteArrayInputStream((convertStringArrayToImageBytes(textImageString))));
@@ -71,7 +85,7 @@ public class ChatContentsUpdater {
 
         // TODO scale images
         chatPanel.dateLabel.setText(message.getString("creation_date"));
-        var userInfo = chat.getUserInformation(message.getInt("sender_id"));
+        var userInfo = chat.getUserInformation(message.getInt(ChatMessagesConstants.MESSAGE_SENDER_ID.value()));
         if (!userInfo.getString("profile_picture").equals("0")) {
             String imageString = userInfo.getString("profile_picture");
             chatPanel.avatarChat.setIcon((new ImageIcon(convertStringArrayToImageBytes(imageString))));
@@ -84,18 +98,18 @@ public class ChatContentsUpdater {
                 System.out.println(e);
             }
         }
-        chatPanel.nicknameLabel.setText(userInfo.getString("username"));
+        chatPanel.nicknameLabel.setText(userInfo.getString(ChatMessagesConstants.USERNAME.value()));
         return chatPanel.chatBlock;
     }
 
     static JPanel addTextMessage(JSONObject message, Chat chat, JPanel messagesArea) {
         LeftChatPanel chatPanel = new LeftChatPanel();
-        if (message.getInt("sender_id") == chat.userId()) {
+        if (message.getInt(ChatMessagesConstants.MESSAGE_SENDER_ID.value()) == chat.userId()) {
             chatPanel.chatText.setBackground(new java.awt.Color(0, 137, 255));
         }
-        chatPanel.chatText.setText(message.getString("text"));
+        chatPanel.chatText.setText(message.getString(ChatMessagesConstants.MESSAGE_TEXT.value()));
         chatPanel.dateLabel.setText(message.getString("creation_date"));
-        JSONObject userInfo = chat.getUserInformation(message.getInt("sender_id"));
+        JSONObject userInfo = chat.getUserInformation(message.getInt(ChatMessagesConstants.MESSAGE_SENDER_ID.value()));
         if (!userInfo.getString("profile_picture").equals("0")) {
             String imageString = userInfo.getString("profile_picture");
             chatPanel.avatarChat.setIcon((new ImageIcon(convertStringArrayToImageBytes(imageString))));
@@ -109,7 +123,7 @@ public class ChatContentsUpdater {
                 System.out.println(e);
             }
         }
-        chatPanel.nicknameLabel.setText(userInfo.getString("username"));
+        chatPanel.nicknameLabel.setText(userInfo.getString(ChatMessagesConstants.USERNAME.value()));
         return chatPanel.chatBlock;
     }
 

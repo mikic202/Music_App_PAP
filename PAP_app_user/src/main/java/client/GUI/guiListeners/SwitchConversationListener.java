@@ -18,6 +18,8 @@ public class SwitchConversationListener implements ListSelectionListener {
         this.chat = chat;
         this.messagesArea = messagesArea;
         this.chatGuiUpdater = chatGuiUpdater;
+        newMessages = new ArrayList<>();
+        updateChatPaneThread = new ConversationMessagesUpdater();
     }
 
     @Override
@@ -28,33 +30,29 @@ public class SwitchConversationListener implements ListSelectionListener {
         }
         if (!event.getValueIsAdjusting()) {
             currentConversationName = ((JList) event.getSource()).getSelectedValue().toString();
-            new Thread(new ConversationMessagesUpdater()).start();
+            new Thread(new ConversationContentsUpdater()).start();
         }
     }
 
     private void updateChat(ArrayList<JSONObject> newMessages) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                ChatContentsUpdater.updateChat(newMessages, chat, messagesArea);
-            }
-        }).start();
+        updateChatPaneThread.stopUpdating();
+        updateChatPaneThread = new ConversationMessagesUpdater();
+        this.newMessages = newMessages;
         try {
             chatGuiUpdater.call();
         } catch (Exception e) {
             System.out.println(e);
         }
-
+        updateChatPaneThread.start();
     }
 
-    class ConversationMessagesUpdater implements Runnable {
-
+    class ConversationContentsUpdater implements Runnable {
         @Override
         public void run() {
             try {
-                ArrayList<JSONObject> newMessages = chat
+                ArrayList<JSONObject> newMessagesAdded = chat
                         .switchConversations(currentConversationName);
-                updateChat(newMessages);
+                updateChat(newMessagesAdded);
                 MusicEventListener.onChatIdChange(chat.getCurrentChatId());
             } catch (Exception e) {
                 System.out.println(e);
@@ -63,9 +61,39 @@ public class SwitchConversationListener implements ListSelectionListener {
 
     }
 
+    class ConversationMessagesUpdater extends Thread {
+        @Override
+        public void run() {
+            messagesArea.removeAll();
+            needsToRun = true;
+            for (int i = newMessages.size() - 1; i >= 0; i--) {
+                try {
+                    Thread.sleep(10);
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+                if (!needsToRun) {
+                    break;
+                } else if (needsToRun) {
+                    ChatContentsUpdater.addMessageToConversation(newMessages.get(i), chat, messagesArea, false);
+                }
+            }
+            messagesArea.repaint();
+            messagesArea.revalidate();
+        }
+
+        public void stopUpdating() {
+            needsToRun = false;
+        }
+
+        private Boolean needsToRun = true;
+    }
+
     String currentConversationName = "";
     Chat chat;
     JPanel messagesArea;
     Callable<Void> chatGuiUpdater;
+    private ConversationMessagesUpdater updateChatPaneThread;
+    ArrayList<JSONObject> newMessages;
 
 }

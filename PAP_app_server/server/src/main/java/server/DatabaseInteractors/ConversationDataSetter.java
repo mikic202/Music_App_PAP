@@ -60,7 +60,7 @@ public class ConversationDataSetter implements DataSetterInterface {
         return added_id;
     }
 
-    static public void RemoveUserConversationRelation(int conversationId, int userId) {
+    static public void RemoveUserConversationRelation(int userId, int conversationId) {
         String preparedStatement = String.format(
                 "DELETE FROM %s WHERE %s = ? AND %s = ?",
                 UserDatabaseInformation.USER_CONVERSATION_TABLE.value(),
@@ -70,9 +70,9 @@ public class ConversationDataSetter implements DataSetterInterface {
         try {
             var statement = connection.prepareStatement(preparedStatement);
             statement.setInt(1, userId);
-            statement.setInt(2, userId);
-            statement.executeUpdate();
+            statement.setInt(2, conversationId);
             connection.commit();
+            statement.executeUpdate();
         } catch (Exception e) {
             System.out.println(e);
 

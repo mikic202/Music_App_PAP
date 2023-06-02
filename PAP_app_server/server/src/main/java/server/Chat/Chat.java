@@ -247,7 +247,7 @@ public class Chat {
         for (int i = 1; i < code.length(); i++) {
             conversationCode = chosenKeytable.indexOf(code.charAt(i), 0) + conversationCode;
         }
-        return Integer.parseInt(conversationCode);
+        return Integer.parseInt(new StringBuilder(conversationCode).reverse().toString());
 
     }
 

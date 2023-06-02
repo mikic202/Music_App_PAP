@@ -10,6 +10,8 @@ import org.json.JSONObject;
 
 import client.Chat.Chat;
 import client.GUI.guiListeners.ChatContentsUpdater;
+import client.ServerConnectionConstants.ChatMessagesConstants;
+import client.ServerConnectionConstants.MessagesTopLevelConstants;
 import client.ServerConnector.ServerConnector;
 import client.login_and_account_accessors.LoginAccessors;
 
@@ -33,16 +35,16 @@ public class ChatWorker extends SwingWorker<Boolean, Void> {
     protected Boolean doInBackground() throws Exception {
         while (true) {
             var data = serverConnector.waitForData();
-            if (!data.getJSONObject("value").keySet().contains("outcome")) {
-                chat.addExternalMessage(data.getJSONObject("value"));
+            if (!data.getJSONObject(MessagesTopLevelConstants.VALUE.value()).keySet().contains("outcome")) {
+                chat.addExternalMessage(data.getJSONObject(MessagesTopLevelConstants.VALUE.value()));
                 chat.updateStatus();
-                if (!addMesageToCurrentConversationView(data.getJSONObject("value"))) {
+                if (!addMesageToCurrentConversationView(data.getJSONObject(MessagesTopLevelConstants.VALUE.value()))) {
                     chatInfoUpdater.call();
                 }
             }
             System.out.println("status updated");
-            if (data.getJSONObject("value").keySet().contains("outcome")
-                    && !data.getJSONObject("value").getBoolean("outcome")) {
+            if (data.getJSONObject(MessagesTopLevelConstants.VALUE.value()).keySet().contains("outcome")
+                    && !data.getJSONObject(MessagesTopLevelConstants.VALUE.value()).getBoolean("outcome")) {
                 return false;
             }
             System.out.println(123);
@@ -51,13 +53,14 @@ public class ChatWorker extends SwingWorker<Boolean, Void> {
 
     boolean initConnection(char[] userPassword) {
         LoginAccessors loggingAccesor = new LoginAccessors(serverConnector);
-        var response = loggingAccesor.sendUserLoginData(chat.getCurrentUserInfo().getString("email"), userPassword);
-        return response.getJSONObject("value").getBoolean("outcome");
+        var response = loggingAccesor.sendUserLoginData(
+                chat.getCurrentUserInfo().getString(ChatMessagesConstants.EMAIL.value()), userPassword);
+        return response.getJSONObject(MessagesTopLevelConstants.VALUE.value()).getBoolean("outcome");
     }
 
     private Boolean addMesageToCurrentConversationView(JSONObject message) {
-        if (message.getInt("conversation_id") == chat.getCurrentChatId()) {
-            ChatContentsUpdater.addMessageToConversation(message, chat, messagesArea);
+        if (message.getInt(ChatMessagesConstants.CONVERSATION_ID.value()) == chat.getCurrentChatId()) {
+            ChatContentsUpdater.addMessageToConversation(message, chat, messagesArea, true);
             return true;
         }
         return false;

@@ -50,7 +50,7 @@ public class SendMessageListener implements ActionListener {
         // LeftChatPanel messagePanel = new LeftChatPanel();
         // messagePanel.chatText.setBackground(new java.awt.Color(0, 137, 255));
         // messagePanel.chatText.setForeground(Color.black);
-        // messagePanel.chatText.setText(message.getString("text"));
+        // messagePanel.chatText.setText(message.getString(ChatMessagesConstants.MESSAGE_TEXT.value()));
         // messagePanel.dateLabel.setText(message.getString("creation_date"));
         // var userInfo = chat.getCurrentUserInfo();
         // if (!userInfo.getString("profile_picture").equals("0")) {
@@ -58,7 +58,7 @@ public class SendMessageListener implements ActionListener {
         // messagePanel.avatarChat.setIcon((new
         // ImageIcon(convertStringArrayToImageBytes(imageString))));
         // }
-        // messagePanel.nicknameLabel.setText(userInfo.getString("username"));
+        // messagePanel.nicknameLabel.setText(userInfo.getString(ChatMessagesConstants.USERNAME.value()));
         // this.messagesArea.add(messagePanel.chatBlock, "wrap");
         // this.messagesArea.repaint();
         // this.messagesArea.revalidate();

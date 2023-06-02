@@ -11,6 +11,8 @@ import javax.imageio.ImageIO;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import client.ServerConnectionConstants.ChatMessagesConstants;
+import client.ServerConnectionConstants.MessagesTopLevelConstants;
 import client.ServerConnector.ServerConnector;
 
 import java.awt.Color;
@@ -31,7 +33,7 @@ public class Chat {
     public Chat(JSONObject userInfo, int currentConv, ServerConnector serverConnector) {
         currentConversation = currentConv;
         this.userInfo = userInfo;
-        this.userId = userInfo.getInt("user_id");
+        this.userId = userInfo.getInt(ChatMessagesConstants.USER_ID.value());
         usersEncountered = new Hashtable<>();
         usersEncountered.put(this.userId, this.userInfo);
         chatAccesor = new ChatAccesors(serverConnector);
@@ -97,24 +99,25 @@ public class Chat {
         }
         ArrayList<JSONObject> new_messages = new ArrayList<>();
         JSONObject response = chatAccesor.getMessagesInConversation(currentConversation);
-        for (int i = 0; i < response.getJSONArray("value").length(); i += 1) {
-            new_messages.add(response.getJSONArray("value").getJSONObject(i));
+        for (int i = 0; i < response.getJSONArray(MessagesTopLevelConstants.VALUE.value()).length(); i += 1) {
+            new_messages.add(response.getJSONArray(MessagesTopLevelConstants.VALUE.value()).getJSONObject(i));
         }
         messagesInUsersConversation.put(currentConversation, new_messages);
         return new_messages;
     }
 
     public JSONObject sendMessage(String text) {
-        JSONObject newMessage = chatAccesor.sendMessage(currentConversation, userId, text).getJSONObject("value");
+        JSONObject newMessage = chatAccesor.sendMessage(currentConversation, userId, text)
+                .getJSONObject(MessagesTopLevelConstants.VALUE.value());
         messagesInUsersConversation.get(currentConversation).add(newMessage);
         return newMessage;
     }
 
     private void convertConversationsResponseToHashtable(JSONObject response) {
         usersConversations.clear();
-        JSONArray conversations = response.getJSONArray("value");
+        JSONArray conversations = response.getJSONArray(MessagesTopLevelConstants.VALUE.value());
         for (int i = 0; i < conversations.length(); i += 1) {
-            usersConversations.put(conversations.getJSONObject(i).getInt("conversation_id"),
+            usersConversations.put(conversations.getJSONObject(i).getInt(ChatMessagesConstants.CONVERSATION_ID.value()),
                     conversations.getJSONObject(i));
         }
     }
@@ -127,45 +130,52 @@ public class Chat {
         if (usersEncountered.keySet().contains(id)) {
             return usersEncountered.get(id);
         }
-        var newUser = chatAccesor.getUserInfo(id).getJSONObject("value");
+        var newUser = chatAccesor.getUserInfo(id).getJSONObject(MessagesTopLevelConstants.VALUE.value());
         usersEncountered.put(newUser.getInt("ID"), newUser);
         return newUser;
     }
 
     public JSONObject getUserInformation(String username) {
-        return chatAccesor.getUserInfo(username).getJSONObject("value");
+        return chatAccesor.getUserInfo(username).getJSONObject(MessagesTopLevelConstants.VALUE.value());
     }
 
     public JSONObject createConversation(String name, ArrayList<String> usernames) {
-        JSONObject conversation_info = chatAccesor.addConversation(name, usernames).getJSONObject("value");
-        usersConversations.put(conversation_info.getInt("conversation_id"), conversation_info);
+        JSONObject conversation_info = chatAccesor.addConversation(name, usernames)
+                .getJSONObject(MessagesTopLevelConstants.VALUE.value());
+        usersConversations.put(conversation_info.getInt(ChatMessagesConstants.CONVERSATION_ID.value()),
+                conversation_info);
         return conversation_info;
     }
 
     public JSONObject addUsersToConversation(String conversation_name, ArrayList<String> usernames) {
         for (Integer key : usersConversations.keySet()) {
-            if (usersConversations.get(key).getString("name").equals(conversation_name)) {
+            if (usersConversations.get(key).getString(ChatMessagesConstants.CONVERSATION_NAME.value())
+                    .equals(conversation_name)) {
                 if (usersInConversarion.get(key) == null) {
                     getUsersInConversation(key);
                 }
                 for (String username : usernames) {
-                    JSONObject user_info = chatAccesor.getUserInfo(username).getJSONObject("value");
+                    JSONObject user_info = chatAccesor.getUserInfo(username)
+                            .getJSONObject(MessagesTopLevelConstants.VALUE.value());
                     usersInConversarion.get(key).put(user_info.getInt("ID"), user_info);
                 }
-                return chatAccesor.addUsersToConversation(key, usernames).getJSONObject("value");
+                return chatAccesor.addUsersToConversation(key, usernames)
+                        .getJSONObject(MessagesTopLevelConstants.VALUE.value());
             }
         }
         return new JSONObject("{\"outcome\":false}");
     }
 
     public JSONObject addUsersToCurrentConversation(ArrayList<String> usernames) {
-        return addUsersToConversation(usersConversations.get(currentConversation).getString("name"), usernames);
+        return addUsersToConversation(
+                usersConversations.get(currentConversation).getString(ChatMessagesConstants.CONVERSATION_NAME.value()),
+                usernames);
     }
 
     public Hashtable<String, Integer> getConversationsNamesToIds() {
         Hashtable<String, Integer> conv = new Hashtable<>();
         for (int id_key : usersConversations.keySet()) {
-            conv.put(usersConversations.get(id_key).getString("name"), id_key);
+            conv.put(usersConversations.get(id_key).getString(ChatMessagesConstants.CONVERSATION_NAME.value()), id_key);
         }
         return conv;
     }
@@ -179,7 +189,8 @@ public class Chat {
             return usersInConversarion.get(conversation);
         }
         Hashtable<Integer, JSONObject> users_in_conv = new Hashtable<Integer, JSONObject>();
-        JSONArray users = chatAccesor.getUsersInConversation(conversation).getJSONArray("value");
+        JSONArray users = chatAccesor.getUsersInConversation(conversation)
+                .getJSONArray(MessagesTopLevelConstants.VALUE.value());
         for (int i = 0; i < users.length(); i += 1) {
             users_in_conv.put(users.getInt(i), getUserInformation(users.getInt(i)));
         }
@@ -206,9 +217,10 @@ public class Chat {
         }
         JSONObject new_messages_response = chatAccesor.getNewMessagesInConverastion(currentConversation,
                 latest_msg);
-        for (int i = 0; i < new_messages_response.getJSONArray("value").length(); i += 1) {
+        for (int i = 0; i < new_messages_response.getJSONArray(MessagesTopLevelConstants.VALUE.value())
+                .length(); i += 1) {
             ArrayList<JSONObject> messages = messagesInUsersConversation.get(currentConversation);
-            messages.add(new_messages_response.getJSONArray("value").getJSONObject(i));
+            messages.add(new_messages_response.getJSONArray(MessagesTopLevelConstants.VALUE.value()).getJSONObject(i));
             messagesInUsersConversation.replace(currentConversation, messages);
         }
     }
@@ -258,14 +270,14 @@ public class Chat {
     public String getConversationCode() {
         if (currentConversation != -1) {
             JSONObject response = chatAccesor.getConversationCode(currentConversation);
-            return response.getJSONObject("value").getString("conversation code");
+            return response.getJSONObject(MessagesTopLevelConstants.VALUE.value()).getString("conversation code");
         }
         return "";
     }
 
     public boolean joinConversationUsingCode(String code) {
         JSONObject response = chatAccesor.joinConversationUsingCode(code, userId);
-        boolean outcome = response.getJSONObject("value").getBoolean("outcome");
+        boolean outcome = response.getJSONObject(MessagesTopLevelConstants.VALUE.value()).getBoolean("outcome");
         if (outcome) {
             JSONObject conversations = chatAccesor.getUsersConversations(userId);
             convertConversationsResponseToHashtable(conversations);
@@ -274,19 +286,19 @@ public class Chat {
     }
 
     public void addExternalMessage(JSONObject message) {
-        if (messagesInUsersConversation.keySet().contains(message.getInt("conversation_id"))
-                && message.getInt("sender_id") != userId) {
-            messagesInUsersConversation.get(message.getInt("conversation_id")).add(message);
+        if (messagesInUsersConversation.keySet().contains(message.getInt(ChatMessagesConstants.CONVERSATION_ID.value()))
+                && message.getInt(ChatMessagesConstants.MESSAGE_SENDER_ID.value()) != userId) {
+            messagesInUsersConversation.get(message.getInt(ChatMessagesConstants.CONVERSATION_ID.value())).add(message);
         }
     }
 
     public String changeCurrentConversationName(String newName) {
         JSONObject response = chatAccesor.changeConversationName(currentConversation, newName);
-        if (response.getJSONObject("value").getBoolean("outcome")) {
-            usersConversations.get(currentConversation).put("name", newName);
+        if (response.getJSONObject(MessagesTopLevelConstants.VALUE.value()).getBoolean("outcome")) {
+            usersConversations.get(currentConversation).put(ChatMessagesConstants.CONVERSATION_NAME.value(), newName);
             return newName;
         }
-        return usersConversations.get(currentConversation).getString("name");
+        return usersConversations.get(currentConversation).getString(ChatMessagesConstants.CONVERSATION_NAME.value());
     }
 
     public Boolean removeUserFromCurrentConversation(String username) {
@@ -295,15 +307,15 @@ public class Chat {
             return false;
         }
         JSONObject result = chatAccesor.RemoveUserFromConversation(currentConversation, userId);
-        if (result.getJSONObject("value").getBoolean("outcome")) {
+        if (result.getJSONObject(MessagesTopLevelConstants.VALUE.value()).getBoolean("outcome")) {
             usersInConversarion.get(currentConversation).remove(userId);
         }
-        return result.getJSONObject("value").getBoolean("outcome");
+        return result.getJSONObject(MessagesTopLevelConstants.VALUE.value()).getBoolean("outcome");
     }
 
     private int findUsersId(String username) {
         for (int userId : usersEncountered.keySet()) {
-            if (usersEncountered.get(userId).getString("username").equals(username)) {
+            if (usersEncountered.get(userId).getString(ChatMessagesConstants.USERNAME.value()).equals(username)) {
                 return userId;
             }
         }
