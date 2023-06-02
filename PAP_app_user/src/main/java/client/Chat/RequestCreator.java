@@ -25,7 +25,7 @@ public class RequestCreator {
                 request.put(MessagesTopLevelConstants.TYPE.value(), RequestTypes.CREATE_CONVERSATION.value());
                 var value = new JSONObject();
                 value.put(ChatMessagesConstants.CONVERSATION_NAME.value(), name);
-                value.put("users", users);
+                value.put(ChatMessagesConstants.USERS_IN_CONVERSATION.value(), users);
                 request.put(MessagesTopLevelConstants.VALUE.value(), value);
                 return request;
         }
@@ -55,7 +55,7 @@ public class RequestCreator {
                 request.put(MessagesTopLevelConstants.TYPE.value(), RequestTypes.ADD_USER_TO_CONVERSATION.value());
                 var value = new JSONObject();
                 value.put(ChatMessagesConstants.CONVERSATION_ID.value(), conversationId);
-                value.put("users", users_ids);
+                value.put(ChatMessagesConstants.USERS_IN_CONVERSATION.value(), users_ids);
                 request.put(MessagesTopLevelConstants.VALUE.value(), value);
                 return request;
         }
