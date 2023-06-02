@@ -6,7 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public enum DatabseInformation {
-    PASSWORD(Paths.get("./config/db_passwd")), URL("jdbc:mysql://144.91.114.89:3306/pap"),
+    PASSWORD(Paths.get("./config/db_passwd")), URL("jdbc:mysql://localhost:3306/pap"),
     USER(Paths.get("./config/db_user")), USER_TABLE("users"),
     MESSAGES_TABLE("messages"), CONVERSATION_TABLE("conversations"), FILES_TABLE("files"),
     USER_CONVERSATION_TABLE("user_conversation_relation");
