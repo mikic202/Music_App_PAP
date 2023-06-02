@@ -35,7 +35,7 @@ public class Account extends javax.swing.JPanel {
                 this.chat = chat;
                 initComponents();
                 try {
-                        Image defaultImage = ImageIO.read(new File("src\\main\\java\\client\\GUI\\deaudlt.png"));
+                        Image defaultImage = ImageIO.read(new File("src/main/java/client/GUI/deaudlt.png"));
                         Image scaledImage = defaultImage.getScaledInstance(300, 300, Image.SCALE_DEFAULT);
                         avatar.setIcon(new ImageIcon(scaledImage));
                 } catch (Exception e) {
@@ -155,7 +155,7 @@ public class Account extends javax.swing.JPanel {
                         }
                 });
 
-                msuicButton.setIcon(new javax.swing.ImageIcon("C:\\Users\\Adam\\Desktop\\MusicPAP.png")); // NOI18N
+                msuicButton.setIcon(new javax.swing.ImageIcon("src/main/java/client/GUI/MusicPAP.png")); // NOI18N
                 msuicButton.setText("jButton1");
                 msuicButton.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -163,7 +163,7 @@ public class Account extends javax.swing.JPanel {
                         }
                 });
 
-                accountButton.setIcon(new javax.swing.ImageIcon("C:\\Users\\Adam\\Desktop\\AccountSettingsPAP.png")); // NOI18N
+                accountButton.setIcon(new javax.swing.ImageIcon("src/main/java/client/GUI/AccountSettingsPAP.png")); // NOI18N
                 accountButton.setText("jButton1");
                 accountButton.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
