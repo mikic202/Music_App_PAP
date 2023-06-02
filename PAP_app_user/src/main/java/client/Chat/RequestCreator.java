@@ -13,7 +13,7 @@ public class RequestCreator {
                 request.put(MessagesTopLevelConstants.TYPE.value(), RequestTypes.SEND_MESSAGE.value());
                 var value = new JSONObject();
                 value.put("sender_id", senderId);
-                value.put("conversation_id", conversationId);
+                value.put(ChatMessagesConstants.CONVERSATION_ID.value(), conversationId);
                 value.put("text", text);
                 request.put(MessagesTopLevelConstants.VALUE.value(), value);
                 return request;
@@ -33,7 +33,7 @@ public class RequestCreator {
                 var request = new JSONObject();
                 request.put(MessagesTopLevelConstants.TYPE.value(), RequestTypes.GET_MESSAGES.value());
                 var value = new JSONObject();
-                value.put("conversation_id", conversationId);
+                value.put(ChatMessagesConstants.CONVERSATION_ID.value(), conversationId);
                 request.put(MessagesTopLevelConstants.VALUE.value(), value);
                 return request;
 
@@ -53,7 +53,7 @@ public class RequestCreator {
                 var request = new JSONObject();
                 request.put(MessagesTopLevelConstants.TYPE.value(), RequestTypes.ADD_USER_TO_CONVERSATION.value());
                 var value = new JSONObject();
-                value.put("conversation_id", conversationId);
+                value.put(ChatMessagesConstants.CONVERSATION_ID.value(), conversationId);
                 value.put("users", users_ids);
                 request.put(MessagesTopLevelConstants.VALUE.value(), value);
                 return request;
@@ -84,7 +84,7 @@ public class RequestCreator {
                 var request = new JSONObject();
                 request.put(MessagesTopLevelConstants.TYPE.value(), RequestTypes.GET_USERS_IN_CONVERSATION.value());
                 var value = new JSONObject();
-                value.put("conversation_id", conversationId);
+                value.put(ChatMessagesConstants.CONVERSATION_ID.value(), conversationId);
                 request.put(MessagesTopLevelConstants.VALUE.value(), value);
                 return request;
         }
@@ -94,14 +94,14 @@ public class RequestCreator {
                 request.put(MessagesTopLevelConstants.TYPE.value(), RequestTypes.GET_LATEST_MESSAGE.value());
                 var value = new JSONObject();
                 value.put("latest_message", latestMessage);
-                value.put("conversation_id", conversationId);
+                value.put(ChatMessagesConstants.CONVERSATION_ID.value(), conversationId);
                 request.put(MessagesTopLevelConstants.VALUE.value(), value);
                 return request;
         }
 
         public static JSONObject createSendImageRequest(int conversationId, int senderId, byte[] image, String format) {
                 JSONObject value = new JSONObject();
-                value.put("conversation_id", conversationId);
+                value.put(ChatMessagesConstants.CONVERSATION_ID.value(), conversationId);
                 value.put("sender_id", senderId);
                 value.put("image", image);
                 value.put("format", format);
@@ -114,7 +114,7 @@ public class RequestCreator {
         public static JSONObject createGetConversationCodeRequest(int conversationId) {
 
                 JSONObject value = new JSONObject();
-                value.put("conversation_id", conversationId);
+                value.put(ChatMessagesConstants.CONVERSATION_ID.value(), conversationId);
                 JSONObject request = new JSONObject();
                 request.put(MessagesTopLevelConstants.VALUE.value(), value);
                 request.put(MessagesTopLevelConstants.TYPE.value(), RequestTypes.GET_CONVERSATION_CODE.value());
@@ -133,7 +133,7 @@ public class RequestCreator {
 
         public static JSONObject createChangeConversationNameRequest(int conversationId, String newName) {
                 JSONObject value = new JSONObject();
-                value.put("conversation_id", conversationId);
+                value.put(ChatMessagesConstants.CONVERSATION_ID.value(), conversationId);
                 value.put("conversation_name", newName);
                 JSONObject request = new JSONObject();
                 request.put(MessagesTopLevelConstants.VALUE.value(), value);
@@ -143,7 +143,7 @@ public class RequestCreator {
 
         public static JSONObject createRemoveUserFromConversationRequest(int conversationId, int userId) {
                 JSONObject value = new JSONObject();
-                value.put("conversation_id", conversationId);
+                value.put(ChatMessagesConstants.CONVERSATION_ID.value(), conversationId);
                 value.put(ChatMessagesConstants.USER_ID.value(), userId);
                 JSONObject request = new JSONObject();
                 request.put(MessagesTopLevelConstants.VALUE.value(), value);

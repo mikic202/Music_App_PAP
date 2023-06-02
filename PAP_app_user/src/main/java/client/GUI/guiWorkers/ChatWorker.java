@@ -59,7 +59,7 @@ public class ChatWorker extends SwingWorker<Boolean, Void> {
     }
 
     private Boolean addMesageToCurrentConversationView(JSONObject message) {
-        if (message.getInt("conversation_id") == chat.getCurrentChatId()) {
+        if (message.getInt(ChatMessagesConstants.CONVERSATION_ID.value()) == chat.getCurrentChatId()) {
             ChatContentsUpdater.addMessageToConversation(message, chat, messagesArea, true);
             return true;
         }

@@ -117,7 +117,7 @@ public class Chat {
         usersConversations.clear();
         JSONArray conversations = response.getJSONArray(MessagesTopLevelConstants.VALUE.value());
         for (int i = 0; i < conversations.length(); i += 1) {
-            usersConversations.put(conversations.getJSONObject(i).getInt("conversation_id"),
+            usersConversations.put(conversations.getJSONObject(i).getInt(ChatMessagesConstants.CONVERSATION_ID.value()),
                     conversations.getJSONObject(i));
         }
     }
@@ -142,7 +142,8 @@ public class Chat {
     public JSONObject createConversation(String name, ArrayList<String> usernames) {
         JSONObject conversation_info = chatAccesor.addConversation(name, usernames)
                 .getJSONObject(MessagesTopLevelConstants.VALUE.value());
-        usersConversations.put(conversation_info.getInt("conversation_id"), conversation_info);
+        usersConversations.put(conversation_info.getInt(ChatMessagesConstants.CONVERSATION_ID.value()),
+                conversation_info);
         return conversation_info;
     }
 
@@ -282,9 +283,9 @@ public class Chat {
     }
 
     public void addExternalMessage(JSONObject message) {
-        if (messagesInUsersConversation.keySet().contains(message.getInt("conversation_id"))
+        if (messagesInUsersConversation.keySet().contains(message.getInt(ChatMessagesConstants.CONVERSATION_ID.value()))
                 && message.getInt("sender_id") != userId) {
-            messagesInUsersConversation.get(message.getInt("conversation_id")).add(message);
+            messagesInUsersConversation.get(message.getInt(ChatMessagesConstants.CONVERSATION_ID.value())).add(message);
         }
     }
 

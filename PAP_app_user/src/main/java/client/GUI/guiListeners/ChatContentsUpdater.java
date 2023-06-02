@@ -50,16 +50,18 @@ public class ChatContentsUpdater {
             boolean atTheFront) {
         if (message.getInt("is_image") == 1) {
             var chatBlock = addImage(message, chat, messagesArea);
-            if (atTheFront && chat.getCurrentChatId() == message.getInt("conversation_id")) {
+            if (atTheFront
+                    && chat.getCurrentChatId() == message.getInt(ChatMessagesConstants.CONVERSATION_ID.value())) {
                 messagesArea.add(chatBlock, "wrap", 0);
-            } else if (chat.getCurrentChatId() == message.getInt("conversation_id")) {
+            } else if (chat.getCurrentChatId() == message.getInt(ChatMessagesConstants.CONVERSATION_ID.value())) {
                 messagesArea.add(chatBlock, "wrap");
             }
         } else {
             var chatBlock = addTextMessage(message, chat, messagesArea);
-            if (atTheFront && chat.getCurrentChatId() == message.getInt("conversation_id")) {
+            if (atTheFront
+                    && chat.getCurrentChatId() == message.getInt(ChatMessagesConstants.CONVERSATION_ID.value())) {
                 messagesArea.add(chatBlock, "wrap", 0);
-            } else if (chat.getCurrentChatId() == message.getInt("conversation_id")) {
+            } else if (chat.getCurrentChatId() == message.getInt(ChatMessagesConstants.CONVERSATION_ID.value())) {
                 messagesArea.add(chatBlock, "wrap");
             }
         }

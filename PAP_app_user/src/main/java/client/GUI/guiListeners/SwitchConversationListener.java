@@ -68,7 +68,7 @@ public class SwitchConversationListener implements ListSelectionListener {
             needsToRun = true;
             for (int i = newMessages.size() - 1; i >= 0; i--) {
                 try {
-                    Thread.sleep(50);
+                    Thread.sleep(10);
                 } catch (Exception e) {
                     System.out.println(e);
                 }
