@@ -10,6 +10,7 @@ import javax.swing.JTextField;
 import org.json.JSONObject;
 
 import client.Chat.Chat;
+import client.ServerConnectionConstants.ChatMessagesConstants;
 import client.ServerConnectionConstants.MessagesTopLevelConstants;
 import client.ServerConnector.ServerConnector;
 import client.login_and_account_accessors.AccountChangeRequestAccessors;
@@ -48,7 +49,7 @@ public class ChangePasswordListener implements ActionListener {
                     .equals(String.valueOf(repeatNewPasswordField.getPassword()))) {
                 JSONObject response = accountAccesor.sendUserAccountNewPasswordData(newPasswordField.getPassword(),
                         oldPasswordField.getPassword(),
-                        chat.getCurrentUserInfo().getInt("user_id"));
+                        chat.getCurrentUserInfo().getInt(ChatMessagesConstants.USER_ID.value()));
                 if (response.getJSONObject(MessagesTopLevelConstants.VALUE.value()).getBoolean("outcome")) {
                     succesfulPasswordChangeLable.setText("Password Changed succesully");
                 } else {

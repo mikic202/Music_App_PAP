@@ -11,6 +11,7 @@ import javax.imageio.ImageIO;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import client.ServerConnectionConstants.ChatMessagesConstants;
 import client.ServerConnectionConstants.MessagesTopLevelConstants;
 import client.ServerConnector.ServerConnector;
 
@@ -32,7 +33,7 @@ public class Chat {
     public Chat(JSONObject userInfo, int currentConv, ServerConnector serverConnector) {
         currentConversation = currentConv;
         this.userInfo = userInfo;
-        this.userId = userInfo.getInt("user_id");
+        this.userId = userInfo.getInt(ChatMessagesConstants.USER_ID.value());
         usersEncountered = new Hashtable<>();
         usersEncountered.put(this.userId, this.userInfo);
         chatAccesor = new ChatAccesors(serverConnector);

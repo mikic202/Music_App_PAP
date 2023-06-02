@@ -38,7 +38,7 @@ public class ChangeEmailListener implements ActionListener {
         public void run() {
             String newEmail = newEmailField.getText();
             JSONObject response = accountAccesor.sendUserAccountEmailData(newEmail,
-                    chat.getCurrentUserInfo().getInt("user_id"));
+                    chat.getCurrentUserInfo().getInt(ChatMessagesConstants.USER_ID.value()));
             if (response.getJSONObject(MessagesTopLevelConstants.VALUE.value()).getBoolean("outcome")) {
                 emailLabel.setText(newEmail);
             }
