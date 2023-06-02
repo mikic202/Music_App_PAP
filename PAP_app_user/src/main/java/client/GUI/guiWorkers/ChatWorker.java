@@ -10,6 +10,7 @@ import org.json.JSONObject;
 
 import client.Chat.Chat;
 import client.GUI.guiListeners.ChatContentsUpdater;
+import client.ServerConnectionConstants.ChatMessagesConstants;
 import client.ServerConnectionConstants.MessagesTopLevelConstants;
 import client.ServerConnector.ServerConnector;
 import client.login_and_account_accessors.LoginAccessors;
@@ -52,7 +53,8 @@ public class ChatWorker extends SwingWorker<Boolean, Void> {
 
     boolean initConnection(char[] userPassword) {
         LoginAccessors loggingAccesor = new LoginAccessors(serverConnector);
-        var response = loggingAccesor.sendUserLoginData(chat.getCurrentUserInfo().getString("email"), userPassword);
+        var response = loggingAccesor.sendUserLoginData(
+                chat.getCurrentUserInfo().getString(ChatMessagesConstants.EMAIL.value()), userPassword);
         return response.getJSONObject(MessagesTopLevelConstants.VALUE.value()).getBoolean("outcome");
     }
 

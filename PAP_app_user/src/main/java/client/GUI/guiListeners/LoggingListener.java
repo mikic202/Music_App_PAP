@@ -10,6 +10,7 @@ import org.json.JSONObject;
 
 import client.GUI.LoginScreen;
 import client.GUI.MainScreen;
+import client.ServerConnectionConstants.ChatMessagesConstants;
 import client.ServerConnectionConstants.MessagesTopLevelConstants;
 import client.ServerConnector.ServerConnector;
 import client.login_and_account_accessors.LoginAccessors;
@@ -39,7 +40,8 @@ public class LoggingListener implements ActionListener {
             JSONObject response = loggingAccessors.sendUserLoginData(emailField.getText(),
                     passwordField.getPassword());
             if (response.getJSONObject(MessagesTopLevelConstants.VALUE.value()).getBoolean("outcome")) {
-                response.getJSONObject(MessagesTopLevelConstants.VALUE.value()).put("email", emailField.getText());
+                response.getJSONObject(MessagesTopLevelConstants.VALUE.value()).put(ChatMessagesConstants.EMAIL.value(),
+                        emailField.getText());
                 logIn(response.getJSONObject(MessagesTopLevelConstants.VALUE.value()), passwordField.getPassword());
                 emailField.setText("");
                 passwordField.setText("");
