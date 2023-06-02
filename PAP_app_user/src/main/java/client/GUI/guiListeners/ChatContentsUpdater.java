@@ -45,11 +45,22 @@ public class ChatContentsUpdater {
         messagesArea.revalidate();
     }
 
-    static public void addMessageToConversation(JSONObject message, Chat chat, JPanel messagesArea) {
+    static public void addMessageToConversation(JSONObject message, Chat chat, JPanel messagesArea,
+            boolean atTheFront) {
         if (message.getInt("is_image") == 1) {
-            messagesArea.add(addImage(message, chat, messagesArea), "wrap", 0);
+            var chatBlock = addImage(message, chat, messagesArea);
+            if (atTheFront && chat.getCurrentChatId() == message.getInt("conversation_id")) {
+                messagesArea.add(chatBlock, "wrap", 0);
+            } else if (chat.getCurrentChatId() == message.getInt("conversation_id")) {
+                messagesArea.add(chatBlock, "wrap");
+            }
         } else {
-            messagesArea.add(addTextMessage(message, chat, messagesArea), "wrap", 0);
+            var chatBlock = addTextMessage(message, chat, messagesArea);
+            if (atTheFront && chat.getCurrentChatId() == message.getInt("conversation_id")) {
+                messagesArea.add(chatBlock, "wrap", 0);
+            } else if (chat.getCurrentChatId() == message.getInt("conversation_id")) {
+                messagesArea.add(chatBlock, "wrap");
+            }
         }
     }
 
