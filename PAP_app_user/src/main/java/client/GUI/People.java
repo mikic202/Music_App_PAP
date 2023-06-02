@@ -861,7 +861,7 @@ public class People extends javax.swing.JPanel {
         }
 
         private void photoButtonActionPerformed(java.awt.event.ActionEvent evt) {
-                AvatarChooser photoChooser = new AvatarChooser(choosenImagePath);
+                AvatarChooser photoChooser = new AvatarChooser();
                 photoChooser.setVisible(true);
         }
 

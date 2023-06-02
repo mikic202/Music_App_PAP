@@ -17,10 +17,8 @@ public class AvatarChooser extends javax.swing.JFrame {
     /**
      * Creates new form AvatarChooser
      */
-    StringBuilder outputPath;
 
-    public AvatarChooser(StringBuilder outputPath) {
-        this.outputPath = outputPath;
+    public AvatarChooser() {
         initComponents();
         avatarChooser.addChoosableFileFilter(new FileNameExtensionFilter("Images", "jpg", "png"));
     }
@@ -72,8 +70,6 @@ public class AvatarChooser extends javax.swing.JFrame {
                 && (path.substring(path.lastIndexOf("."), path.length()).equals(".png")
                         || path.substring(path.lastIndexOf("."), path.length()).equals(".jpg"))) {
             System.out.println(path);
-            outputPath.delete(0, outputPath.length());
-            outputPath.append(path);
             this.dispose();
         }
         if (returnVal == this.avatarChooser.CANCEL_OPTION) {
