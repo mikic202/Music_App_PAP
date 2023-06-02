@@ -284,7 +284,7 @@ public class Chat {
 
     public void addExternalMessage(JSONObject message) {
         if (messagesInUsersConversation.keySet().contains(message.getInt(ChatMessagesConstants.CONVERSATION_ID.value()))
-                && message.getInt("sender_id") != userId) {
+                && message.getInt(ChatMessagesConstants.MESSAGE_SENDER_ID.value()) != userId) {
             messagesInUsersConversation.get(message.getInt(ChatMessagesConstants.CONVERSATION_ID.value())).add(message);
         }
     }

@@ -69,7 +69,7 @@ public class ChatContentsUpdater {
 
     static JPanel addImage(JSONObject message, Chat chat, JPanel messagesArea) {
         ImageChatPanel chatPanel = new ImageChatPanel();
-        if (message.getInt("sender_id") == chat.userId()) {
+        if (message.getInt(ChatMessagesConstants.MESSAGE_SENDER_ID.value()) == chat.userId()) {
             chatPanel.chatText.setBackground(new java.awt.Color(0, 137, 255));
         }
         String textImageString = message.getString(ChatMessagesConstants.MESSAGE_TEXT.value());
@@ -85,7 +85,7 @@ public class ChatContentsUpdater {
 
         // TODO scale images
         chatPanel.dateLabel.setText(message.getString("creation_date"));
-        var userInfo = chat.getUserInformation(message.getInt("sender_id"));
+        var userInfo = chat.getUserInformation(message.getInt(ChatMessagesConstants.MESSAGE_SENDER_ID.value()));
         if (!userInfo.getString("profile_picture").equals("0")) {
             String imageString = userInfo.getString("profile_picture");
             chatPanel.avatarChat.setIcon((new ImageIcon(convertStringArrayToImageBytes(imageString))));
@@ -104,12 +104,12 @@ public class ChatContentsUpdater {
 
     static JPanel addTextMessage(JSONObject message, Chat chat, JPanel messagesArea) {
         LeftChatPanel chatPanel = new LeftChatPanel();
-        if (message.getInt("sender_id") == chat.userId()) {
+        if (message.getInt(ChatMessagesConstants.MESSAGE_SENDER_ID.value()) == chat.userId()) {
             chatPanel.chatText.setBackground(new java.awt.Color(0, 137, 255));
         }
         chatPanel.chatText.setText(message.getString(ChatMessagesConstants.MESSAGE_TEXT.value()));
         chatPanel.dateLabel.setText(message.getString("creation_date"));
-        JSONObject userInfo = chat.getUserInformation(message.getInt("sender_id"));
+        JSONObject userInfo = chat.getUserInformation(message.getInt(ChatMessagesConstants.MESSAGE_SENDER_ID.value()));
         if (!userInfo.getString("profile_picture").equals("0")) {
             String imageString = userInfo.getString("profile_picture");
             chatPanel.avatarChat.setIcon((new ImageIcon(convertStringArrayToImageBytes(imageString))));

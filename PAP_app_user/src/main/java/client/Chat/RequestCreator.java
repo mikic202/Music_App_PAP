@@ -12,7 +12,7 @@ public class RequestCreator {
                 var request = new JSONObject();
                 request.put(MessagesTopLevelConstants.TYPE.value(), RequestTypes.SEND_MESSAGE.value());
                 var value = new JSONObject();
-                value.put("sender_id", senderId);
+                value.put(ChatMessagesConstants.MESSAGE_SENDER_ID.value(), senderId);
                 value.put(ChatMessagesConstants.CONVERSATION_ID.value(), conversationId);
                 value.put(ChatMessagesConstants.MESSAGE_TEXT.value(), text);
                 request.put(MessagesTopLevelConstants.VALUE.value(), value);
@@ -102,7 +102,7 @@ public class RequestCreator {
         public static JSONObject createSendImageRequest(int conversationId, int senderId, byte[] image, String format) {
                 JSONObject value = new JSONObject();
                 value.put(ChatMessagesConstants.CONVERSATION_ID.value(), conversationId);
-                value.put("sender_id", senderId);
+                value.put(ChatMessagesConstants.MESSAGE_SENDER_ID.value(), senderId);
                 value.put("image", image);
                 value.put("format", format);
                 JSONObject request = new JSONObject();
