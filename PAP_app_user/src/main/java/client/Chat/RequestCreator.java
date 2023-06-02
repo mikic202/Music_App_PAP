@@ -14,7 +14,7 @@ public class RequestCreator {
                 var value = new JSONObject();
                 value.put("sender_id", senderId);
                 value.put(ChatMessagesConstants.CONVERSATION_ID.value(), conversationId);
-                value.put("text", text);
+                value.put(ChatMessagesConstants.MESSAGE_TEXT.value(), text);
                 request.put(MessagesTopLevelConstants.VALUE.value(), value);
                 return request;
         }

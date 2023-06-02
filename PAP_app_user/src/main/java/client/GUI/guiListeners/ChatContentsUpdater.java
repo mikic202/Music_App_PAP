@@ -72,7 +72,7 @@ public class ChatContentsUpdater {
         if (message.getInt("sender_id") == chat.userId()) {
             chatPanel.chatText.setBackground(new java.awt.Color(0, 137, 255));
         }
-        String textImageString = message.getString("text");
+        String textImageString = message.getString(ChatMessagesConstants.MESSAGE_TEXT.value());
         try {
             BufferedImage defaultImage = ImageIO
                     .read(new ByteArrayInputStream((convertStringArrayToImageBytes(textImageString))));
@@ -107,7 +107,7 @@ public class ChatContentsUpdater {
         if (message.getInt("sender_id") == chat.userId()) {
             chatPanel.chatText.setBackground(new java.awt.Color(0, 137, 255));
         }
-        chatPanel.chatText.setText(message.getString("text"));
+        chatPanel.chatText.setText(message.getString(ChatMessagesConstants.MESSAGE_TEXT.value()));
         chatPanel.dateLabel.setText(message.getString("creation_date"));
         JSONObject userInfo = chat.getUserInformation(message.getInt("sender_id"));
         if (!userInfo.getString("profile_picture").equals("0")) {
