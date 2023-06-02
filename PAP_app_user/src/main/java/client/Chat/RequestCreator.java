@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.json.JSONObject;
 
+import client.GUI.guiListeners.ChatContentsUpdater;
 import client.ServerConnectionConstants.ChatMessagesConstants;
 import client.ServerConnectionConstants.MessagesTopLevelConstants;
 
@@ -23,7 +24,7 @@ public class RequestCreator {
                 var request = new JSONObject();
                 request.put(MessagesTopLevelConstants.TYPE.value(), RequestTypes.CREATE_CONVERSATION.value());
                 var value = new JSONObject();
-                value.put("name", name);
+                value.put(ChatMessagesConstants.CONVERSATION_NAME.value(), name);
                 value.put("users", users);
                 request.put(MessagesTopLevelConstants.VALUE.value(), value);
                 return request;

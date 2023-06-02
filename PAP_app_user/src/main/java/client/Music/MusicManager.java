@@ -51,7 +51,9 @@ public class MusicManager {
                                                             * for(int i = 0; i < songs.length(); i++)
                                                             * {
                                                             * JSONObject data = songs.getJSONObject(i);
-                                                            * String songName = data.getString("name");
+                                                            * String songName =
+                                                            * data.getString(ChatMessagesConstants.CONVERSATION_NAME.
+                                                            * value());
                                                             * int songId = data.getInt("id");
                                                             * if(songName != "none")
                                                             * {

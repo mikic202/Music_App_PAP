@@ -149,7 +149,8 @@ public class Chat {
 
     public JSONObject addUsersToConversation(String conversation_name, ArrayList<String> usernames) {
         for (Integer key : usersConversations.keySet()) {
-            if (usersConversations.get(key).getString("name").equals(conversation_name)) {
+            if (usersConversations.get(key).getString(ChatMessagesConstants.CONVERSATION_NAME.value())
+                    .equals(conversation_name)) {
                 if (usersInConversarion.get(key) == null) {
                     getUsersInConversation(key);
                 }
@@ -166,13 +167,15 @@ public class Chat {
     }
 
     public JSONObject addUsersToCurrentConversation(ArrayList<String> usernames) {
-        return addUsersToConversation(usersConversations.get(currentConversation).getString("name"), usernames);
+        return addUsersToConversation(
+                usersConversations.get(currentConversation).getString(ChatMessagesConstants.CONVERSATION_NAME.value()),
+                usernames);
     }
 
     public Hashtable<String, Integer> getConversationsNamesToIds() {
         Hashtable<String, Integer> conv = new Hashtable<>();
         for (int id_key : usersConversations.keySet()) {
-            conv.put(usersConversations.get(id_key).getString("name"), id_key);
+            conv.put(usersConversations.get(id_key).getString(ChatMessagesConstants.CONVERSATION_NAME.value()), id_key);
         }
         return conv;
     }
@@ -292,10 +295,10 @@ public class Chat {
     public String changeCurrentConversationName(String newName) {
         JSONObject response = chatAccesor.changeConversationName(currentConversation, newName);
         if (response.getJSONObject(MessagesTopLevelConstants.VALUE.value()).getBoolean("outcome")) {
-            usersConversations.get(currentConversation).put("name", newName);
+            usersConversations.get(currentConversation).put(ChatMessagesConstants.CONVERSATION_NAME.value(), newName);
             return newName;
         }
-        return usersConversations.get(currentConversation).getString("name");
+        return usersConversations.get(currentConversation).getString(ChatMessagesConstants.CONVERSATION_NAME.value());
     }
 
     public Boolean removeUserFromCurrentConversation(String username) {
