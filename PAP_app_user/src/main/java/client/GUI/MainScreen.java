@@ -6,7 +6,6 @@ package client.GUI;
 
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
-
 import client.Chat.Chat;
 import client.ServerConnector.ServerConnector;
 
@@ -25,6 +24,9 @@ import client.ServerConnectionConstants.ChatMessagesConstants;
 
 public class MainScreen extends javax.swing.JFrame {
 
+        /**
+         * Creates new form MainScreen
+         */
         boolean dark = true;
         boolean light = false;
         MusicChooser musicChooser;
@@ -123,47 +125,29 @@ public class MainScreen extends javax.swing.JFrame {
                 timeSlashLabel = new javax.swing.JLabel();
                 playButton = new javax.swing.JButton();
                 pauseLabel = new javax.swing.JButton();
-                loopButton = new javax.swing.JToggleButton();
-                randomButton = new javax.swing.JButton();
-                timeSongSlider = new javax.swing.JSlider();
+                muteButton = new javax.swing.JToggleButton();
                 volumeButton = new javax.swing.JToggleButton();
-                panningButton = new javax.swing.JToggleButton();
-                equalizerButton = new javax.swing.JToggleButton();
-                reverbButton = new javax.swing.JToggleButton();
                 gainSlider = new javax.swing.JSlider();
-                leftSlider = new javax.swing.JSlider();
-                rightSlider = new javax.swing.JSlider();
-                Slider32Hz = new javax.swing.JSlider();
-                Slider64Hz = new javax.swing.JSlider();
-                Slider125Hz = new javax.swing.JSlider();
-                Slider250Hz = new javax.swing.JSlider();
-                Slider500Hz = new javax.swing.JSlider();
-                Slider1kHz = new javax.swing.JSlider();
-                Slider2kHz = new javax.swing.JSlider();
-                Slider4kHz = new javax.swing.JSlider();
-                Slider8kHz = new javax.swing.JSlider();
-                Slider16kHz = new javax.swing.JSlider();
-                Label16kHz = new javax.swing.JLabel();
-                Label8kHz = new javax.swing.JLabel();
-                Label4kHz = new javax.swing.JLabel();
-                Label2kHz = new javax.swing.JLabel();
-                Label1kHz = new javax.swing.JLabel();
-                Label500Hz = new javax.swing.JLabel();
-                Label250Hz = new javax.swing.JLabel();
-                Label125Hz = new javax.swing.JLabel();
-                Label64Hz = new javax.swing.JLabel();
-                Label32Hz = new javax.swing.JLabel();
-                rightLabel = new javax.swing.JLabel();
-                leftLabel = new javax.swing.JLabel();
-                reverbListContainer = new javax.swing.JScrollPane();
-                reverbList = new javax.swing.JList<>();
-                gainLabel = new javax.swing.JLabel();
                 peopleButton = new javax.swing.JButton();
                 musicButton = new javax.swing.JButton();
                 themeButton = new javax.swing.JRadioButton();
                 accountButton = new javax.swing.JButton();
                 loadButton = new javax.swing.JButton();
                 mainScreenButton = new javax.swing.JButton();
+                jProgressBar1 = new javax.swing.JProgressBar();
+                leaveStreamButton1 = new javax.swing.JButton();
+                chatsContainer = new javax.swing.JScrollPane();
+                chatsList = new javax.swing.JList<>();
+                joinStreamButton = new javax.swing.JButton();
+                stopStreamButton = new javax.swing.JButton();
+                startStreamButton = new javax.swing.JButton();
+                currentSongTitleLabel1 = new javax.swing.JLabel();
+                chatsLabel = new javax.swing.JLabel();
+                currentSessionLabel = new javax.swing.JLabel();
+                currentSongLabel = new javax.swing.JLabel();
+                chatsContainer1 = new javax.swing.JScrollPane();
+                chatsList1 = new javax.swing.JList<>();
+                currentSongLabel1 = new javax.swing.JLabel();
                 menu = new javax.swing.JMenuBar();
                 chooseMusic = new javax.swing.JMenu();
                 changeAvatar = new javax.swing.JMenu();
@@ -239,18 +223,21 @@ public class MainScreen extends javax.swing.JFrame {
 
                 playButton.setText("Play");
                 playButton.setToolTipText("");
-                playButton.addActionListener(musicEventListenerInstance);
+                playButton.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                playButtonActionPerformed(evt);
+                        }
+                });
 
                 pauseLabel.setText("Pause");
                 pauseLabel.setToolTipText("");
-                pauseLabel.addActionListener(musicEventListenerInstance);
+                pauseLabel.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                pauseLabelActionPerformed(evt);
+                        }
+                });
 
-                loopButton.setText("Loop");
-
-                randomButton.setText("Random");
-                randomButton.setToolTipText("");
-
-                timeSongSlider.setValue(0);
+                muteButton.setText("Mute");
 
                 volumeButton.setText("Volume");
                 volumeButton.addActionListener(new java.awt.event.ActionListener() {
@@ -259,103 +246,8 @@ public class MainScreen extends javax.swing.JFrame {
                         }
                 });
 
-                panningButton.setText("Panning");
-                panningButton.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                panningButtonActionPerformed(evt);
-                        }
-                });
-
-                equalizerButton.setText("Equalizer");
-                equalizerButton.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                equalizerButtonActionPerformed(evt);
-                        }
-                });
-
-                reverbButton.setText("Reverb");
-                reverbButton.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                reverbButtonActionPerformed(evt);
-                        }
-                });
-
                 gainSlider.setOrientation(javax.swing.JSlider.VERTICAL);
 
-                leftSlider.setOrientation(javax.swing.JSlider.VERTICAL);
-
-                rightSlider.setOrientation(javax.swing.JSlider.VERTICAL);
-
-                Slider32Hz.setOrientation(javax.swing.JSlider.VERTICAL);
-
-                Slider64Hz.setOrientation(javax.swing.JSlider.VERTICAL);
-
-                Slider125Hz.setOrientation(javax.swing.JSlider.VERTICAL);
-
-                Slider250Hz.setOrientation(javax.swing.JSlider.VERTICAL);
-
-                Slider500Hz.setOrientation(javax.swing.JSlider.VERTICAL);
-
-                Slider1kHz.setOrientation(javax.swing.JSlider.VERTICAL);
-
-                Slider2kHz.setOrientation(javax.swing.JSlider.VERTICAL);
-
-                Slider4kHz.setOrientation(javax.swing.JSlider.VERTICAL);
-
-                Slider8kHz.setOrientation(javax.swing.JSlider.VERTICAL);
-
-                Slider16kHz.setOrientation(javax.swing.JSlider.VERTICAL);
-
-                Label16kHz.setFont(new java.awt.Font("Segoe UI", 0, 8)); // NOI18N
-                Label16kHz.setText("16kHz");
-
-                Label8kHz.setFont(new java.awt.Font("Segoe UI", 0, 8)); // NOI18N
-                Label8kHz.setText("8kHz");
-
-                Label4kHz.setFont(new java.awt.Font("Segoe UI", 0, 8)); // NOI18N
-                Label4kHz.setText("4kHz");
-
-                Label2kHz.setFont(new java.awt.Font("Segoe UI", 0, 8)); // NOI18N
-                Label2kHz.setText("2kHz");
-
-                Label1kHz.setFont(new java.awt.Font("Segoe UI", 0, 8)); // NOI18N
-                Label1kHz.setText("1kHz");
-
-                Label500Hz.setFont(new java.awt.Font("Segoe UI", 0, 8)); // NOI18N
-                Label500Hz.setText("500Hz");
-
-                Label250Hz.setFont(new java.awt.Font("Segoe UI", 0, 8)); // NOI18N
-                Label250Hz.setText("250Hz");
-
-                Label125Hz.setFont(new java.awt.Font("Segoe UI", 0, 8)); // NOI18N
-                Label125Hz.setText("125Hz");
-
-                Label64Hz.setFont(new java.awt.Font("Segoe UI", 0, 8)); // NOI18N
-                Label64Hz.setText("64Hz\n");
-
-                Label32Hz.setFont(new java.awt.Font("Segoe UI", 0, 8)); // NOI18N
-                Label32Hz.setText("32Hz");
-
-                rightLabel.setText("Right");
-
-                leftLabel.setText("Left");
-
-                reverbList.setModel(new javax.swing.AbstractListModel<String>() {
-                        String[] strings = { "Cavern", "Dungeon", "Garage", "Acoustinc Lab", "Closet" };
-
-                        public int getSize() {
-                                return strings.length;
-                        }
-
-                        public String getElementAt(int i) {
-                                return strings[i];
-                        }
-                });
-                reverbListContainer.setViewportView(reverbList);
-
-                gainLabel.setText("Gain");
-
-                peopleButton.setIcon(new javax.swing.ImageIcon("src/main/java/client/GUI/PeoplePAP.png")); // NOI18N
                 peopleButton.setText("jButton1");
                 peopleButton.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -401,6 +293,68 @@ public class MainScreen extends javax.swing.JFrame {
                         }
                 });
 
+                leaveStreamButton1.setText("Leave stream");
+                leaveStreamButton1.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                leaveStreamButton1ActionPerformed(evt);
+                        }
+                });
+
+                chatsList.setModel(new javax.swing.AbstractListModel<String>() {
+                        String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5", "a", "b", "c", "d",
+                                        "e" };
+
+                        public int getSize() {
+                                return strings.length;
+                        }
+
+                        public String getElementAt(int i) {
+                                return strings[i];
+                        }
+                });
+                chatsContainer.setViewportView(chatsList);
+
+                joinStreamButton.setText("Join stream");
+                joinStreamButton.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                joinStreamButtonActionPerformed(evt);
+                        }
+                });
+
+                stopStreamButton.setText("Stop stream");
+
+                startStreamButton.setText("Start stream");
+                startStreamButton.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                startStreamButtonActionPerformed(evt);
+                        }
+                });
+
+                currentSongTitleLabel1.setText("jLabel3");
+
+                chatsLabel.setText("Chats:");
+
+                currentSessionLabel.setFont(new java.awt.Font("Segoe UI Black", 0, 14)); // NOI18N
+                currentSessionLabel.setText("Current session:");
+
+                currentSongLabel.setText("Current song:");
+
+                chatsList1.setModel(new javax.swing.AbstractListModel<String>() {
+                        String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5", "a", "b", "c", "d",
+                                        "e" };
+
+                        public int getSize() {
+                                return strings.length;
+                        }
+
+                        public String getElementAt(int i) {
+                                return strings[i];
+                        }
+                });
+                chatsContainer1.setViewportView(chatsList1);
+
+                currentSongLabel1.setText("Songs:");
+
                 javax.swing.GroupLayout mainScreenLayout = new javax.swing.GroupLayout(mainScreen);
                 mainScreen.setLayout(mainScreenLayout);
                 mainScreenLayout.setHorizontalGroup(
@@ -414,7 +368,7 @@ public class MainScreen extends javax.swing.JFrame {
                                                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE,
                                                                                                                 426,
                                                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                                                .addGap(0, 6, Short.MAX_VALUE))
+                                                                                                .addGap(0, 0, Short.MAX_VALUE))
                                                                                 .addGroup(mainScreenLayout
                                                                                                 .createSequentialGroup()
                                                                                                 .addContainerGap()
@@ -457,223 +411,133 @@ public class MainScreen extends javax.swing.JFrame {
                                                                                                                                 javax.swing.GroupLayout.DEFAULT_SIZE,
                                                                                                                                 javax.swing.GroupLayout.DEFAULT_SIZE,
                                                                                                                                 Short.MAX_VALUE)
-                                                                                                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
-                                                                                                                                mainScreenLayout.createSequentialGroup()
-                                                                                                                                                .addComponent(loadButton,
-                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                                                                155,
-                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                                                                                                .addPreferredGap(
-                                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                                                                                                .addComponent(playButton,
-                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                                                                155,
-                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                                                                                                .addPreferredGap(
-                                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                                                                                                .addComponent(pauseLabel,
-                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                                                                156,
-                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                                                                                                .addPreferredGap(
-                                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                                                                                                .addComponent(loopButton,
-                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                                                                141,
-                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                                                                                                .addPreferredGap(
-                                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                                                                                                .addComponent(randomButton,
-                                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                                                                Short.MAX_VALUE))
+                                                                                                                .addComponent(jProgressBar1,
+                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                                                                Short.MAX_VALUE)
                                                                                                                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
                                                                                                                                 mainScreenLayout.createSequentialGroup()
                                                                                                                                                 .addGroup(mainScreenLayout
                                                                                                                                                                 .createParallelGroup(
-                                                                                                                                                                                javax.swing.GroupLayout.Alignment.TRAILING)
+                                                                                                                                                                                javax.swing.GroupLayout.Alignment.LEADING)
+                                                                                                                                                                .addComponent(loadButton,
+                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                                                                                                                                155,
+                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                                                                                                                .addComponent(volumeButton,
+                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                                                                                                                                155,
+                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
                                                                                                                                                                 .addGroup(mainScreenLayout
                                                                                                                                                                                 .createSequentialGroup()
-                                                                                                                                                                                .addComponent(volumeButton,
+                                                                                                                                                                                .addGap(67, 67, 67)
+                                                                                                                                                                                .addComponent(gainSlider,
                                                                                                                                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                                                                                                155,
-                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                                                                                                                                .addPreferredGap(
-                                                                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                                                                                                                                .addComponent(panningButton,
-                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                                                                                                155,
-                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                                                                                                                                .addPreferredGap(
-                                                                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                                                                                                                                .addComponent(equalizerButton,
                                                                                                                                                                                                 javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                                                                                                Short.MAX_VALUE))
+                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                                                                                                                                .addPreferredGap(
+                                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED,
+                                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                                                                                                Short.MAX_VALUE)
+                                                                                                                                                .addGroup(mainScreenLayout
+                                                                                                                                                                .createParallelGroup(
+                                                                                                                                                                                javax.swing.GroupLayout.Alignment.LEADING,
+                                                                                                                                                                                false)
                                                                                                                                                                 .addGroup(mainScreenLayout
                                                                                                                                                                                 .createSequentialGroup()
-                                                                                                                                                                                .addGap(68, 68, 68)
                                                                                                                                                                                 .addGroup(mainScreenLayout
                                                                                                                                                                                                 .createParallelGroup(
-                                                                                                                                                                                                                javax.swing.GroupLayout.Alignment.LEADING)
-                                                                                                                                                                                                .addComponent(gainSlider,
-                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                                                                                                                                                .addComponent(gainLabel,
-                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                                                                                                                37,
-                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                                                                                                                                                                javax.swing.GroupLayout.Alignment.LEADING,
+                                                                                                                                                                                                                false)
+                                                                                                                                                                                                .addGroup(mainScreenLayout
+                                                                                                                                                                                                                .createSequentialGroup()
+                                                                                                                                                                                                                .addGroup(mainScreenLayout
+                                                                                                                                                                                                                                .createParallelGroup(
+                                                                                                                                                                                                                                                javax.swing.GroupLayout.Alignment.LEADING)
+                                                                                                                                                                                                                                .addComponent(currentSessionLabel)
+                                                                                                                                                                                                                                .addComponent(chatsLabel))
+                                                                                                                                                                                                                .addGap(148, 148,
+                                                                                                                                                                                                                                148))
+                                                                                                                                                                                                .addGroup(mainScreenLayout
+                                                                                                                                                                                                                .createSequentialGroup()
+                                                                                                                                                                                                                .addGap(140, 140,
+                                                                                                                                                                                                                                140)
+                                                                                                                                                                                                                .addComponent(currentSongLabel)
+                                                                                                                                                                                                                .addGap(0, 0, Short.MAX_VALUE))
+                                                                                                                                                                                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
+                                                                                                                                                                                                                mainScreenLayout.createSequentialGroup()
+                                                                                                                                                                                                                                .addComponent(chatsContainer,
+                                                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                                                                                                                                                                                                110,
+                                                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                                                                                                                                                                                .addGroup(mainScreenLayout
+                                                                                                                                                                                                                                                .createParallelGroup(
+                                                                                                                                                                                                                                                                javax.swing.GroupLayout.Alignment.LEADING)
+                                                                                                                                                                                                                                                .addGroup(mainScreenLayout
+                                                                                                                                                                                                                                                                .createSequentialGroup()
+                                                                                                                                                                                                                                                                .addPreferredGap(
+                                                                                                                                                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED,
+                                                                                                                                                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                                                                                                                                                                                                                Short.MAX_VALUE)
+                                                                                                                                                                                                                                                                .addGroup(mainScreenLayout
+                                                                                                                                                                                                                                                                                .createParallelGroup(
+                                                                                                                                                                                                                                                                                                javax.swing.GroupLayout.Alignment.LEADING)
+                                                                                                                                                                                                                                                                                .addComponent(joinStreamButton,
+                                                                                                                                                                                                                                                                                                javax.swing.GroupLayout.Alignment.TRAILING,
+                                                                                                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                                                                                                                                                                                                                                                123,
+                                                                                                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                                                                                                                                                                                                                                .addComponent(stopStreamButton,
+                                                                                                                                                                                                                                                                                                javax.swing.GroupLayout.Alignment.TRAILING,
+                                                                                                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                                                                                                                                                                                                                                                123,
+                                                                                                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                                                                                                                                                                                                                                .addComponent(startStreamButton,
+                                                                                                                                                                                                                                                                                                javax.swing.GroupLayout.Alignment.TRAILING,
+                                                                                                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                                                                                                                                                                                                                                                123,
+                                                                                                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                                                                                                                                                                                                                                .addComponent(leaveStreamButton1,
+                                                                                                                                                                                                                                                                                                javax.swing.GroupLayout.Alignment.TRAILING,
+                                                                                                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                                                                                                                                                                                                                                                123,
+                                                                                                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                                                                                                                                                                                                                                .addGroup(mainScreenLayout
+                                                                                                                                                                                                                                                                .createSequentialGroup()
+                                                                                                                                                                                                                                                                .addGap(30, 30, 30)
+                                                                                                                                                                                                                                                                .addComponent(currentSongTitleLabel1,
+                                                                                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                                                                                                                                                                                                                                117,
+                                                                                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                                                                                                                                                                                                                .addGap(0, 0, Short.MAX_VALUE)))))
                                                                                                                                                                                 .addPreferredGap(
                                                                                                                                                                                                 javax.swing.LayoutStyle.ComponentPlacement.RELATED,
                                                                                                                                                                                                 javax.swing.GroupLayout.DEFAULT_SIZE,
                                                                                                                                                                                                 Short.MAX_VALUE)
                                                                                                                                                                                 .addGroup(mainScreenLayout
                                                                                                                                                                                                 .createParallelGroup(
-                                                                                                                                                                                                                javax.swing.GroupLayout.Alignment.TRAILING)
-                                                                                                                                                                                                .addGroup(mainScreenLayout
-                                                                                                                                                                                                                .createSequentialGroup()
-                                                                                                                                                                                                                .addComponent(leftSlider,
-                                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                                                                                                                                                                .addPreferredGap(
-                                                                                                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                                                                                                                                                                .addComponent(rightSlider,
-                                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                                                                                                                                28,
-                                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                                                                                                                                                                .addGroup(mainScreenLayout
-                                                                                                                                                                                                                .createSequentialGroup()
-                                                                                                                                                                                                                .addComponent(leftLabel)
-                                                                                                                                                                                                                .addPreferredGap(
-                                                                                                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                                                                                                                                                                .addComponent(rightLabel)))
-                                                                                                                                                                                .addGap(60, 60, 60)
-                                                                                                                                                                                .addGroup(mainScreenLayout
-                                                                                                                                                                                                .createParallelGroup(
-                                                                                                                                                                                                                javax.swing.GroupLayout.Alignment.TRAILING)
-                                                                                                                                                                                                .addGroup(mainScreenLayout
-                                                                                                                                                                                                                .createSequentialGroup()
-                                                                                                                                                                                                                .addComponent(Slider32Hz,
-                                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                                                                                                                                                                .addPreferredGap(
-                                                                                                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                                                                                                                                                                .addComponent(Slider64Hz,
-                                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                                                                                                                                                                .addGroup(mainScreenLayout
-                                                                                                                                                                                                                .createSequentialGroup()
-                                                                                                                                                                                                                .addComponent(Label32Hz)
-                                                                                                                                                                                                                .addPreferredGap(
-                                                                                                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                                                                                                                                                                .addComponent(Label64Hz)))
-                                                                                                                                                                                .addPreferredGap(
-                                                                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                                                                                                                                .addGroup(mainScreenLayout
-                                                                                                                                                                                                .createParallelGroup(
-                                                                                                                                                                                                                javax.swing.GroupLayout.Alignment.LEADING,
-                                                                                                                                                                                                                false)
-                                                                                                                                                                                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
-                                                                                                                                                                                                                mainScreenLayout.createSequentialGroup()
-                                                                                                                                                                                                                                .addComponent(Label125Hz)
-                                                                                                                                                                                                                                .addPreferredGap(
-                                                                                                                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED,
-                                                                                                                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                                                                                                                                                Short.MAX_VALUE)
-                                                                                                                                                                                                                                .addComponent(Label250Hz))
-                                                                                                                                                                                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
-                                                                                                                                                                                                                mainScreenLayout.createSequentialGroup()
-                                                                                                                                                                                                                                .addComponent(Slider125Hz,
-                                                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                                                                                                                                                                                .addPreferredGap(
-                                                                                                                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                                                                                                                                                                                .addComponent(Slider250Hz,
-                                                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                                                                                                                                                                .addPreferredGap(
-                                                                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                                                                                                                                .addGroup(mainScreenLayout
-                                                                                                                                                                                                .createParallelGroup(
-                                                                                                                                                                                                                javax.swing.GroupLayout.Alignment.LEADING,
-                                                                                                                                                                                                                false)
-                                                                                                                                                                                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
-                                                                                                                                                                                                                mainScreenLayout.createSequentialGroup()
-                                                                                                                                                                                                                                .addComponent(Slider500Hz,
-                                                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                                                                                                                                                                                .addPreferredGap(
-                                                                                                                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                                                                                                                                                                                .addComponent(Slider1kHz,
-                                                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                                                                                                                                                                                .addPreferredGap(
-                                                                                                                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                                                                                                                                                                                .addComponent(Slider2kHz,
-                                                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                                                                                                                                                                                .addPreferredGap(
-                                                                                                                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                                                                                                                                                                                .addComponent(Slider4kHz,
-                                                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                                                                                                                                                                                .addPreferredGap(
-                                                                                                                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                                                                                                                                                                                .addComponent(Slider8kHz,
-                                                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                                                                                                                                                                                .addPreferredGap(
-                                                                                                                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                                                                                                                                                                                .addComponent(Slider16kHz,
-                                                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                                                                                                                                                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
-                                                                                                                                                                                                                mainScreenLayout.createSequentialGroup()
-                                                                                                                                                                                                                                .addComponent(Label500Hz,
-                                                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                                                                                                                                                26,
-                                                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                                                                                                                                                                                .addPreferredGap(
-                                                                                                                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                                                                                                                                                                                .addComponent(Label1kHz)
-                                                                                                                                                                                                                                .addPreferredGap(
-                                                                                                                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                                                                                                                                                                                .addComponent(Label2kHz)
-                                                                                                                                                                                                                                .addPreferredGap(
-                                                                                                                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                                                                                                                                                                                .addComponent(Label4kHz)
-                                                                                                                                                                                                                                .addPreferredGap(
-                                                                                                                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                                                                                                                                                                                .addComponent(Label8kHz)
-                                                                                                                                                                                                                                .addPreferredGap(
-                                                                                                                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                                                                                                                                                                                .addComponent(Label16kHz)))))
-                                                                                                                                                .addPreferredGap(
-                                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                                                                                                .addGroup(mainScreenLayout
-                                                                                                                                                                .createParallelGroup(
-                                                                                                                                                                                javax.swing.GroupLayout.Alignment.LEADING)
-                                                                                                                                                                .addComponent(reverbButton,
-                                                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                                                                                Short.MAX_VALUE)
-                                                                                                                                                                .addComponent(reverbListContainer)))
-                                                                                                                .addComponent(timeSongSlider,
-                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                                Short.MAX_VALUE))
+                                                                                                                                                                                                                javax.swing.GroupLayout.Alignment.LEADING)
+                                                                                                                                                                                                .addComponent(chatsContainer1,
+                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                                                                                                                                                                110,
+                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                                                                                                                                                .addComponent(currentSongLabel1)))
+                                                                                                                                                                .addGroup(mainScreenLayout
+                                                                                                                                                                                .createSequentialGroup()
+                                                                                                                                                                                .addComponent(playButton,
+                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                                                                                                                                                155,
+                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                                                                                                                                .addGap(64, 64, 64)
+                                                                                                                                                                                .addComponent(pauseLabel,
+                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                                                                                                                                                156,
+                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                                                                                                                                .addGap(48, 48, 48)
+                                                                                                                                                                                .addComponent(muteButton,
+                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                                                                                                                                                141,
+                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)))))
                                                                                                 .addPreferredGap(
                                                                                                                 javax.swing.LayoutStyle.ComponentPlacement.RELATED))
                                                                                 .addGroup(mainScreenLayout
@@ -769,7 +633,7 @@ public class MainScreen extends javax.swing.JFrame {
                                                                                                                                 .createSequentialGroup()
                                                                                                                                 .addComponent(currentTotalTimeLabel,
                                                                                                                                                 javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                                                375,
+                                                                                                                                                381,
                                                                                                                                                 Short.MAX_VALUE)
                                                                                                                                 .addPreferredGap(
                                                                                                                                                 javax.swing.LayoutStyle.ComponentPlacement.RELATED)))))
@@ -935,159 +799,87 @@ public class MainScreen extends javax.swing.JFrame {
                                                                                                                 javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                                                                 .addGroup(mainScreenLayout
                                                                                                                 .createParallelGroup(
-                                                                                                                                javax.swing.GroupLayout.Alignment.LEADING)
+                                                                                                                                javax.swing.GroupLayout.Alignment.TRAILING)
+                                                                                                                .addGroup(mainScreenLayout
+                                                                                                                                .createSequentialGroup()
+                                                                                                                                .addGap(0, 0, Short.MAX_VALUE)
+                                                                                                                                .addComponent(themeButton))
                                                                                                                 .addGroup(mainScreenLayout
                                                                                                                                 .createSequentialGroup()
                                                                                                                                 .addComponent(currentSongTitleLabel)
-                                                                                                                                .addGap(4, 4, 4)
-                                                                                                                                .addComponent(timeSongSlider,
+                                                                                                                                .addPreferredGap(
+                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                                                                                .addComponent(jProgressBar1,
                                                                                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                                                                                18,
                                                                                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE)
                                                                                                                                 .addPreferredGap(
                                                                                                                                                 javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                                                                                                 .addGroup(mainScreenLayout
                                                                                                                                                 .createParallelGroup(
-                                                                                                                                                                javax.swing.GroupLayout.Alignment.LEADING)
-                                                                                                                                                .addComponent(randomButton,
-                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                                                                23,
-                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                                                                                                .addGroup(mainScreenLayout
-                                                                                                                                                                .createParallelGroup(
-                                                                                                                                                                                javax.swing.GroupLayout.Alignment.BASELINE)
-                                                                                                                                                                .addComponent(pauseLabel)
-                                                                                                                                                                .addComponent(loadButton)
-                                                                                                                                                                .addComponent(playButton)
-                                                                                                                                                                .addComponent(loopButton)))
+                                                                                                                                                                javax.swing.GroupLayout.Alignment.BASELINE)
+                                                                                                                                                .addComponent(pauseLabel)
+                                                                                                                                                .addComponent(loadButton)
+                                                                                                                                                .addComponent(playButton)
+                                                                                                                                                .addComponent(muteButton))
                                                                                                                                 .addPreferredGap(
                                                                                                                                                 javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                                                                                .addGroup(mainScreenLayout
-                                                                                                                                                .createParallelGroup(
-                                                                                                                                                                javax.swing.GroupLayout.Alignment.BASELINE)
-                                                                                                                                                .addComponent(volumeButton)
-                                                                                                                                                .addComponent(panningButton)
-                                                                                                                                                .addComponent(equalizerButton)
-                                                                                                                                                .addComponent(reverbButton))
                                                                                                                                 .addGroup(mainScreenLayout
                                                                                                                                                 .createParallelGroup(
                                                                                                                                                                 javax.swing.GroupLayout.Alignment.LEADING)
                                                                                                                                                 .addGroup(mainScreenLayout
                                                                                                                                                                 .createSequentialGroup()
-                                                                                                                                                                .addGap(6, 6, 6)
+                                                                                                                                                                .addComponent(volumeButton)
+                                                                                                                                                                .addPreferredGap(
+                                                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                                                                                                                .addComponent(gainSlider,
+                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                                                                                                                                0,
+                                                                                                                                                                                Short.MAX_VALUE))
+                                                                                                                                                .addGroup(mainScreenLayout
+                                                                                                                                                                .createSequentialGroup()
+                                                                                                                                                                .addGroup(mainScreenLayout
+                                                                                                                                                                                .createParallelGroup(
+                                                                                                                                                                                                javax.swing.GroupLayout.Alignment.BASELINE)
+                                                                                                                                                                                .addComponent(currentSessionLabel)
+                                                                                                                                                                                .addComponent(currentSongLabel)
+                                                                                                                                                                                .addComponent(currentSongLabel1))
+                                                                                                                                                                .addGap(4, 4, 4)
                                                                                                                                                                 .addGroup(mainScreenLayout
                                                                                                                                                                                 .createParallelGroup(
                                                                                                                                                                                                 javax.swing.GroupLayout.Alignment.LEADING)
                                                                                                                                                                                 .addGroup(mainScreenLayout
                                                                                                                                                                                                 .createSequentialGroup()
-                                                                                                                                                                                                .addComponent(gainSlider,
+                                                                                                                                                                                                .addComponent(chatsLabel)
+                                                                                                                                                                                                .addPreferredGap(
+                                                                                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                                                                                                                                                .addComponent(chatsContainer,
                                                                                                                                                                                                                 javax.swing.GroupLayout.PREFERRED_SIZE,
                                                                                                                                                                                                                 0,
+                                                                                                                                                                                                                Short.MAX_VALUE))
+                                                                                                                                                                                .addGroup(mainScreenLayout
+                                                                                                                                                                                                .createSequentialGroup()
+                                                                                                                                                                                                .addComponent(currentSongTitleLabel1,
+                                                                                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
                                                                                                                                                                                                                 Short.MAX_VALUE)
-                                                                                                                                                                                                .addGap(22, 22, 22))
-                                                                                                                                                                                .addGroup(mainScreenLayout
-                                                                                                                                                                                                .createSequentialGroup()
-                                                                                                                                                                                                .addGroup(mainScreenLayout
-                                                                                                                                                                                                                .createParallelGroup(
-                                                                                                                                                                                                                                javax.swing.GroupLayout.Alignment.LEADING)
-                                                                                                                                                                                                                .addComponent(Slider16kHz,
-                                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                                                                                                                                0,
-                                                                                                                                                                                                                                Short.MAX_VALUE)
-                                                                                                                                                                                                                .addComponent(Slider8kHz,
-                                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                                                                                                                                0,
-                                                                                                                                                                                                                                Short.MAX_VALUE)
-                                                                                                                                                                                                                .addComponent(Slider4kHz,
-                                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                                                                                                                                0,
-                                                                                                                                                                                                                                Short.MAX_VALUE)
-                                                                                                                                                                                                                .addComponent(Slider2kHz,
-                                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                                                                                                                                0,
-                                                                                                                                                                                                                                Short.MAX_VALUE)
-                                                                                                                                                                                                                .addComponent(Slider1kHz,
-                                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                                                                                                                                0,
-                                                                                                                                                                                                                                Short.MAX_VALUE)
-                                                                                                                                                                                                                .addComponent(Slider500Hz,
-                                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                                                                                                                                0,
-                                                                                                                                                                                                                                Short.MAX_VALUE)
-                                                                                                                                                                                                                .addComponent(Slider250Hz,
-                                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                                                                                                                                0,
-                                                                                                                                                                                                                                Short.MAX_VALUE)
-                                                                                                                                                                                                                .addComponent(Slider125Hz,
-                                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                                                                                                                                0,
-                                                                                                                                                                                                                                Short.MAX_VALUE)
-                                                                                                                                                                                                                .addComponent(Slider64Hz,
-                                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                                                                                                                                0,
-                                                                                                                                                                                                                                Short.MAX_VALUE)
-                                                                                                                                                                                                                .addComponent(Slider32Hz,
-                                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                                                                                                                                0,
-                                                                                                                                                                                                                                Short.MAX_VALUE))
                                                                                                                                                                                                 .addPreferredGap(
                                                                                                                                                                                                                 javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                                                                                                                                                .addGroup(mainScreenLayout
-                                                                                                                                                                                                                .createParallelGroup(
-                                                                                                                                                                                                                                javax.swing.GroupLayout.Alignment.LEADING)
-                                                                                                                                                                                                                .addComponent(Label125Hz,
-                                                                                                                                                                                                                                javax.swing.GroupLayout.Alignment.TRAILING,
-                                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                                                                                                                                11,
-                                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                                                                                                                                                                .addGroup(mainScreenLayout
-                                                                                                                                                                                                                                .createParallelGroup(
-                                                                                                                                                                                                                                                javax.swing.GroupLayout.Alignment.BASELINE)
-                                                                                                                                                                                                                                .addComponent(Label16kHz)
-                                                                                                                                                                                                                                .addComponent(Label8kHz)
-                                                                                                                                                                                                                                .addComponent(Label4kHz)
-                                                                                                                                                                                                                                .addComponent(Label2kHz)
-                                                                                                                                                                                                                                .addComponent(Label1kHz)
-                                                                                                                                                                                                                                .addComponent(Label500Hz)
-                                                                                                                                                                                                                                .addComponent(Label250Hz)
-                                                                                                                                                                                                                                .addComponent(Label64Hz)
-                                                                                                                                                                                                                                .addComponent(Label32Hz)))
-                                                                                                                                                                                                .addGap(3, 3, 3))
-                                                                                                                                                                                .addGroup(mainScreenLayout
-                                                                                                                                                                                                .createSequentialGroup()
-                                                                                                                                                                                                .addGroup(mainScreenLayout
-                                                                                                                                                                                                                .createParallelGroup(
-                                                                                                                                                                                                                                javax.swing.GroupLayout.Alignment.LEADING)
-                                                                                                                                                                                                                .addComponent(leftSlider,
-                                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                                                                                                                                0,
-                                                                                                                                                                                                                                Short.MAX_VALUE)
-                                                                                                                                                                                                                .addComponent(rightSlider,
-                                                                                                                                                                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                                                                                                                                                                                0,
-                                                                                                                                                                                                                                Short.MAX_VALUE))
+                                                                                                                                                                                                .addComponent(startStreamButton)
                                                                                                                                                                                                 .addPreferredGap(
                                                                                                                                                                                                                 javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                                                                                                                                                .addGroup(mainScreenLayout
-                                                                                                                                                                                                                .createParallelGroup(
-                                                                                                                                                                                                                                javax.swing.GroupLayout.Alignment.BASELINE)
-                                                                                                                                                                                                                .addComponent(rightLabel)
-                                                                                                                                                                                                                .addComponent(leftLabel)
-                                                                                                                                                                                                                .addComponent(gainLabel))
-                                                                                                                                                                                                .addContainerGap())))
-                                                                                                                                                .addGroup(mainScreenLayout
-                                                                                                                                                                .createSequentialGroup()
-                                                                                                                                                                .addPreferredGap(
-                                                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                                                                                                                .addComponent(reverbListContainer,
-                                                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                                                                                                                                151,
-                                                                                                                                                                                Short.MAX_VALUE)
-                                                                                                                                                                .addContainerGap())))
-                                                                                                                .addGroup(mainScreenLayout
-                                                                                                                                .createSequentialGroup()
-                                                                                                                                .addGap(0, 0, Short.MAX_VALUE)
-                                                                                                                                .addComponent(themeButton)))))));
+                                                                                                                                                                                                .addComponent(stopStreamButton)
+                                                                                                                                                                                                .addPreferredGap(
+                                                                                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                                                                                                                                                .addComponent(joinStreamButton)
+                                                                                                                                                                                                .addPreferredGap(
+                                                                                                                                                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                                                                                                                                                .addComponent(leaveStreamButton1))
+                                                                                                                                                                                .addComponent(chatsContainer1,
+                                                                                                                                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                                                                                                                                157,
+                                                                                                                                                                                                Short.MAX_VALUE))))
+                                                                                                                                .addContainerGap()))))));
 
                 chooseMusic.setText("Choose music");
                 chooseMusic.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -1133,19 +925,11 @@ public class MainScreen extends javax.swing.JFrame {
         }// </editor-fold>
 
         private void volumeButtonActionPerformed(java.awt.event.ActionEvent evt) {
-                // TODO volume
-        }
-
-        private void panningButtonActionPerformed(java.awt.event.ActionEvent evt) {
-                // TODO add your handling code here:
-        }
-
-        private void equalizerButtonActionPerformed(java.awt.event.ActionEvent evt) {
-                // TODO add your handling code here:
-        }
-
-        private void reverbButtonActionPerformed(java.awt.event.ActionEvent evt) {
-                // TODO add your handling code here:
+                // if (filePlaying == true) {
+                // FloatControl gainControl = (FloatControl)
+                // clip.getControl(FloatControl.Type.MASTER_GAIN);
+                // gainControl.setValue(-25.0f);
+                // }
         }
 
         private void peopleButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -1164,7 +948,9 @@ public class MainScreen extends javax.swing.JFrame {
         }
 
         private void playButtonActionPerformed(java.awt.event.ActionEvent evt) {
-
+                // if (filePlaying == true) {
+                // this.clip.start();
+                // }
         }
 
         private void themeButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -1197,7 +983,9 @@ public class MainScreen extends javax.swing.JFrame {
         }
 
         private void loadButtonActionPerformed(java.awt.event.ActionEvent evt) {
+                // if (filePlaying == true) {
                 // this.loadMusic();
+                // }
         }
 
         private void mainScreenButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -1220,7 +1008,9 @@ public class MainScreen extends javax.swing.JFrame {
         }
 
         private void pauseLabelActionPerformed(java.awt.event.ActionEvent evt) {
-                // TODO stop
+                // if (filePlaying == true) {
+                // this.clip.stop();
+                // }
         }
 
         private void chooseMusicMouseClicked(java.awt.event.MouseEvent evt) {
@@ -1234,8 +1024,20 @@ public class MainScreen extends javax.swing.JFrame {
         }
 
         private void changeAvatarMouseClicked(java.awt.event.MouseEvent evt) {
-                AvatarChooser avatarChooser = new AvatarChooser();
-                avatarChooser.setVisible(true);
+                // AvatarChooser avatarChooser = new AvatarChooser();
+                // avatarChooser.setVisible(true);
+        }
+
+        private void leaveStreamButton1ActionPerformed(java.awt.event.ActionEvent evt) {
+                // TODO add your handling code here:
+        }
+
+        private void joinStreamButtonActionPerformed(java.awt.event.ActionEvent evt) {
+                // TODO add your handling code here:
+        }
+
+        private void startStreamButtonActionPerformed(java.awt.event.ActionEvent evt) {
+
         }
 
         /**
@@ -1283,56 +1085,43 @@ public class MainScreen extends javax.swing.JFrame {
         }
 
         // Variables declaration - do not modify
-        private javax.swing.JLabel Label125Hz;
-        private javax.swing.JLabel Label16kHz;
-        private javax.swing.JLabel Label1kHz;
-        private javax.swing.JLabel Label250Hz;
-        private javax.swing.JLabel Label2kHz;
-        private javax.swing.JLabel Label32Hz;
-        private javax.swing.JLabel Label4kHz;
-        private javax.swing.JLabel Label500Hz;
-        private javax.swing.JLabel Label64Hz;
-        private javax.swing.JLabel Label8kHz;
-        private javax.swing.JSlider Slider125Hz;
-        private javax.swing.JSlider Slider16kHz;
-        private javax.swing.JSlider Slider1kHz;
-        private javax.swing.JSlider Slider250Hz;
-        private javax.swing.JSlider Slider2kHz;
-        private javax.swing.JSlider Slider32Hz;
-        private javax.swing.JSlider Slider4kHz;
-        private javax.swing.JSlider Slider500Hz;
-        private javax.swing.JSlider Slider64Hz;
-        private javax.swing.JSlider Slider8kHz;
         private javax.swing.JButton accountButton;
         private javax.swing.JLabel authorLabel;
         private javax.swing.JMenu changeAvatar;
+        private javax.swing.JScrollPane chatsContainer;
+        private javax.swing.JScrollPane chatsContainer1;
+        private javax.swing.JLabel chatsLabel;
+        private javax.swing.JList<String> chatsList;
+        private javax.swing.JList<String> chatsList1;
         private javax.swing.JMenu chooseMusic;
+        private javax.swing.JLabel currentSessionLabel;
+        private javax.swing.JLabel currentSongLabel;
+        private javax.swing.JLabel currentSongLabel1;
         private javax.swing.JLabel currentSongNameLabel;
         private javax.swing.JLabel currentSongTitleLabel;
+        private javax.swing.JLabel currentSongTitleLabel1;
         private javax.swing.JLabel currentTimeLabel;
         private javax.swing.JLabel currentTotalTimeLabel;
         private javax.swing.JLabel currentViewsLabel;
-        private javax.swing.JToggleButton equalizerButton;
-        private javax.swing.JLabel gainLabel;
         private javax.swing.JSlider gainSlider;
         private javax.swing.JLabel genreLabel;
         private javax.swing.JLabel hereGenreLabel;
         private javax.swing.JEditorPane jEditorPane1;
+        private javax.swing.JProgressBar jProgressBar1;
         private javax.swing.JScrollPane jScrollPane5;
-        private javax.swing.JLabel leftLabel;
-        private javax.swing.JSlider leftSlider;
+        private javax.swing.JButton joinStreamButton;
+        private javax.swing.JButton leaveStreamButton1;
         private javax.swing.JLabel listeningNowLabel;
         private javax.swing.JButton loadButton;
         private javax.swing.JLabel logoLabel;
-        private javax.swing.JToggleButton loopButton;
         public javax.swing.JPanel mainScreen;
         private javax.swing.JButton mainScreenButton;
         public javax.swing.JMenuBar menu;
         private javax.swing.JButton musicButton;
         private javax.swing.JEditorPane musicPicture;
         private javax.swing.JScrollPane musicPictureContainer;
+        private javax.swing.JToggleButton muteButton;
         private javax.swing.JLabel nicknameAndDateLabel;
-        private javax.swing.JToggleButton panningButton;
         private javax.swing.JButton pauseLabel;
         public javax.swing.JButton peopleButton;
         private javax.swing.JButton playButton;
@@ -1340,15 +1129,10 @@ public class MainScreen extends javax.swing.JFrame {
         private javax.swing.JLabel previousListensLabel;
         private javax.swing.JList<String> previousListensList;
         private javax.swing.JLabel producerAuthorLabel;
-        private javax.swing.JButton randomButton;
-        private javax.swing.JToggleButton reverbButton;
-        private javax.swing.JList<String> reverbList;
-        private javax.swing.JScrollPane reverbListContainer;
-        private javax.swing.JLabel rightLabel;
-        private javax.swing.JSlider rightSlider;
+        private javax.swing.JButton startStreamButton;
+        private javax.swing.JButton stopStreamButton;
         public javax.swing.JRadioButton themeButton;
         private javax.swing.JLabel timeSlashLabel;
-        private javax.swing.JSlider timeSongSlider;
         private javax.swing.JLabel totalTimeLabel;
         private javax.swing.JLabel uploadedByLabel;
         private javax.swing.JLabel viewsLabel;
