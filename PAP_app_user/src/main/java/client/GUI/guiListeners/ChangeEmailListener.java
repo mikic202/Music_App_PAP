@@ -11,6 +11,7 @@ import org.json.JSONObject;
 
 import client.Chat.Chat;
 import client.ServerConnectionConstants.MessagesTopLevelConstants;
+import client.ServerConnectionConstants.ChatMessagesConstants;
 import client.ServerConnector.ServerConnector;
 import client.login_and_account_accessors.AccountChangeRequestAccessors;
 
