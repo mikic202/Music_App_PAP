@@ -20,6 +20,7 @@ import java.util.logging.Logger;
 import javax.sound.sampled.FloatControl;
 import client.GUI.guiListeners.MusicEventListener;
 import client.Music.MusicManager;
+import client.ServerConnectionConstants.ChatMessagesConstants;
 
 public class MainScreen extends javax.swing.JFrame {
 
@@ -40,9 +41,9 @@ public class MainScreen extends javax.swing.JFrame {
 
         public MainScreen() {
                 JSONObject userInfo = new JSONObject();
-                userInfo.put("user_id", 1);
-                userInfo.put("username", "mikic202");
-                userInfo.put("email", "mikolaj.chomanski@gmail.com");
+                userInfo.put(ChatMessagesConstants.USER_ID.value(), 1);
+                userInfo.put(ChatMessagesConstants.USERNAME.value(), "mikic202");
+                userInfo.put(ChatMessagesConstants.EMAIL.value(), "mikolaj.chomanski@gmail.com");
                 userInfo.put("profile_picture", "0");
                 try {
                         serverConnector = new ServerConnector(new Socket("144.91.114.89",
@@ -54,19 +55,19 @@ public class MainScreen extends javax.swing.JFrame {
                 FlatDarkLaf.setup();
                 initComponents();
                 this.peopleButton.setIcon(new ImageIcon(
-                                "C:\\Users\\Adam\\Documents\\NetBeansProjects\\NewGUI\\src\\main\\java\\com\\mycompany\\newgui\\PeoplePAP.png"));
+                                "src/main/java/client/GUI/PeoplePAP.png"));
                 this.musicButton.setIcon(new ImageIcon(
-                                "C:\\Users\\Adam\\Documents\\NetBeansProjects\\NewGUI\\src\\main\\java\\com\\mycompany\\newgui\\MusicPAP.png"));
+                                "src/main/java/client/GUI/MusicPAP.png"));
                 this.accountButton.setIcon(new ImageIcon(
-                                "C:\\Users\\Adam\\Documents\\NetBeansProjects\\NewGUI\\src\\main\\java\\com\\mycompany\\newgui\\AccountSettingsPAP.png"));
+                                "src/main/java/client/GUI/AccountSettingsPAP.png"));
                 char[] userPassword = { '1', '2', '3', '4', '5', '6', '7' };
                 people = new People(this, chat, userPassword);
                 music = new Music(this);
                 account = new Account(this, serverConnector, chat);
                 this.musicManagerInstance = new MusicManager(serverConnector,
-                                userInfo.getInt("user_id"));
+                                userInfo.getInt(ChatMessagesConstants.USER_ID.value()));
                 this.musicEventListenerInstance = new MusicEventListener(serverConnector,
-                                userInfo.getInt("user_id"));
+                                userInfo.getInt(ChatMessagesConstants.USER_ID.value()));
         }
 
         public MainScreen(ServerConnector serverConnector, JSONObject userInfo, char[] userPassword) {
@@ -75,16 +76,18 @@ public class MainScreen extends javax.swing.JFrame {
                 FlatDarkLaf.setup();
                 initComponents();
                 this.peopleButton.setIcon(new ImageIcon(
-                                "C:\\Users\\Adam\\Documents\\NetBeansProjects\\NewGUI\\src\\main\\java\\com\\mycompany\\newgui\\PeoplePAP.png"));
+                                "src/main/java/client/GUI/PeoplePAP.png"));
                 this.musicButton.setIcon(new ImageIcon(
-                                "C:\\Users\\Adam\\Documents\\NetBeansProjects\\NewGUI\\src\\main\\java\\com\\mycompany\\newgui\\MusicPAP.png"));
+                                "src/main/java/client/GUI/MusicPAP.png"));
                 this.accountButton.setIcon(new ImageIcon(
-                                "C:\\Users\\Adam\\Documents\\NetBeansProjects\\NewGUI\\src\\main\\java\\com\\mycompany\\newgui\\AccountSettingsPAP.png"));
+                                "src/main/java/client/GUI/AccountSettingsPAP.png"));
                 people = new People(this, chat, userPassword);
                 music = new Music(this);
                 account = new Account(this, serverConnector, chat);
-                this.musicManagerInstance = new MusicManager(serverConnector, userInfo.getInt("user_id"));
-                this.musicEventListenerInstance = new MusicEventListener(serverConnector, userInfo.getInt("user_id"));
+                this.musicManagerInstance = new MusicManager(serverConnector,
+                                userInfo.getInt(ChatMessagesConstants.USER_ID.value()));
+                this.musicEventListenerInstance = new MusicEventListener(serverConnector,
+                                userInfo.getInt(ChatMessagesConstants.USER_ID.value()));
         }
 
         /**
@@ -252,6 +255,7 @@ public class MainScreen extends javax.swing.JFrame {
                         }
                 });
 
+                musicButton.setIcon(new javax.swing.ImageIcon("src/main/java/client/GUI/MusicPAP.png")); // NOI18N
                 musicButton.setText("jButton1");
                 musicButton.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -266,6 +270,7 @@ public class MainScreen extends javax.swing.JFrame {
                         }
                 });
 
+                accountButton.setIcon(new javax.swing.ImageIcon("src/main/java/client/GUI/AccountSettingsPAP.png")); // NOI18N
                 accountButton.setText("jButton1");
                 accountButton.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {

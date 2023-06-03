@@ -28,6 +28,7 @@ import client.GUI.guiListeners.SendMessageListener;
 import client.GUI.guiListeners.SendPhotoListener;
 import client.GUI.guiListeners.SwitchConversationListener;
 import client.GUI.guiWorkers.ChatWorker;
+import client.ServerConnectionConstants.ChatMessagesConstants;
 
 public class People extends javax.swing.JPanel {
 
@@ -88,7 +89,7 @@ public class People extends javax.swing.JPanel {
                 String[] usersList = new String[usersInConv.size()];
                 int i = 0;
                 for (int userId : usersInConv.keySet()) {
-                        usersList[i] = usersInConv.get(userId).getString("username");
+                        usersList[i] = usersInConv.get(userId).getString(ChatMessagesConstants.USERNAME.value());
                         i++;
                 }
                 membersInConvList.removeAll();
@@ -861,7 +862,7 @@ public class People extends javax.swing.JPanel {
         }
 
         private void photoButtonActionPerformed(java.awt.event.ActionEvent evt) {
-                AvatarChooser photoChooser = new AvatarChooser(choosenImagePath);
+                AvatarChooser photoChooser = new AvatarChooser();
                 photoChooser.setVisible(true);
         }
 

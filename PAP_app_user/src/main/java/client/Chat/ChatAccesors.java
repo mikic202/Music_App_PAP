@@ -3,6 +3,7 @@ package client.Chat;
 import java.util.ArrayList;
 import org.json.JSONObject;
 
+import client.ServerConnectionConstants.MessagesTopLevelConstants;
 import client.ServerConnector.ServerConnector;
 
 public class ChatAccesors {
@@ -26,7 +27,7 @@ public class ChatAccesors {
     private ArrayList<Integer> getUsersIds(ArrayList<String> usernames) {
         ArrayList<Integer> usersIds = new ArrayList<>();
         for (String user : usernames) {
-            JSONObject user_info = getUserInfo(user).getJSONObject("value");
+            JSONObject user_info = getUserInfo(user).getJSONObject(MessagesTopLevelConstants.VALUE.value());
             if (user_info.has("ID")) {
                 usersIds.add(user_info.getInt("ID"));
             }
