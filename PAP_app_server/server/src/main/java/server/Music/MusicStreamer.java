@@ -170,17 +170,20 @@ class MusicStreamer extends Thread {
         try {
             byte[] buffer;
             DataInputStream in = new DataInputStream(stream);
+            int count = 0;
 
             while ((in.read(buffer = new byte[PACKET_SIZE], 0, buffer.length)) > 0) {
                 Instant start = Instant.now();
+                System.out.println(count);
+                count += 1;
                 sendPacketToListeners(buffer);
                 Instant finish = Instant.now();
                 long time = Duration.between(start, finish).toNanos();
-                if (time < 2500){
-                    time = 2500 - time;
+                if (time < 3000000){
+                    time = 3000000 - time;
                     try
                     {
-                        Thread.sleep(time / 1000);
+                        Thread.sleep(time/1000000);
                     }
                     catch (InterruptedException e){}
                 }

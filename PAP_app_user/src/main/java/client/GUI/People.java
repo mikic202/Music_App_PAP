@@ -29,6 +29,7 @@ import client.GUI.guiListeners.SendPhotoListener;
 import client.GUI.guiListeners.SwitchConversationListener;
 import client.GUI.guiWorkers.ChatWorker;
 import client.ServerConnectionConstants.ChatMessagesConstants;
+import client.GUI.AvatarChooser;
 
 public class People extends javax.swing.JPanel {
 
@@ -862,8 +863,8 @@ public class People extends javax.swing.JPanel {
         }
 
         private void photoButtonActionPerformed(java.awt.event.ActionEvent evt) {
-                AvatarChooser photoChooser = new AvatarChooser();
-                photoChooser.setVisible(true);
+                //AvatarChooser photoChooser = new AvatarChooser();
+                //photoChooser.setVisible(true);
         }
 
         private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {

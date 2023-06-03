@@ -7,6 +7,7 @@ import client.ServerConnector.ServerConnector;
 import javax.sound.sampled.AudioFormat;
 import client.Music.MusicPlayer.StreamStatusCallback;
 import client.ServerConnectionConstants.MessagesTopLevelConstants;
+import client.ServerConnectionConstants.ChatMessagesConstants;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -41,26 +42,23 @@ public class MusicManager {
         thisUserId = userId;
     }
 
-    public static synchronized void updateUserSongsList() {/*
-                                                            * JSONObject result =
-                                                            * musicAccessors.sendGetUserSongs(thisUserId);
-                                                            * JSONArray songs =
-                                                            * result.getJSONArray(MessagesTopLevelConstants.VALUE.value(
-                                                            * ));
-                                                            *
-                                                            * for(int i = 0; i < songs.length(); i++)
-                                                            * {
-                                                            * JSONObject data = songs.getJSONObject(i);
-                                                            * String songName =
-                                                            * data.getString(ChatMessagesConstants.CONVERSATION_NAME.
-                                                            * value());
-                                                            * int songId = data.getInt("id");
-                                                            * if(songName != "none")
-                                                            * {
-                                                            * userSongs.put(songName, songId);
-                                                            * }
-                                                            * }
-                                                            */
+    public static synchronized void updateUserSongsList() {
+        /*JSONObject result = musicAccessors.sendGetUserSongs(thisUserId);
+        JSONArray songs = result.getJSONArray(MessagesTopLevelConstants.VALUE.value());
+
+        for(int i = 0; i < songs.length(); i++)
+        {
+            JSONObject data = songs.getJSONObject(i);
+            String songName =
+            data.getString(ChatMessagesConstants.CONVERSATION_NAME.value());
+            int songId = data.getInt("id");
+            if(songName != "none")
+            {
+                userSongs.put(songName, songId);
+            }
+        }
+        */
+        userSongs.put("inva", 3);
         userSongs.put("song", 2);
     }
 
@@ -73,9 +71,12 @@ public class MusicManager {
     }
 
     public synchronized EStreamStatus startStream(int chatId, int songId) {
-        if (musicClient.isActive()) {
-            musicAccessors.sendLeaveStream(thisUserId);
-            musicClient.terminateReceiving();
+        if (musicClient != null) {
+            if(musicClient.isActive())
+            {
+                musicAccessors.sendLeaveStream(thisUserId);
+                musicClient.terminateReceiving();
+            }
         }
         JSONObject response = musicAccessors.sendStartStream(thisUserId, chatId, songId);
         JSONObject value = response.getJSONObject(MessagesTopLevelConstants.VALUE.value());
@@ -120,9 +121,12 @@ public class MusicManager {
     }
 
     public synchronized EStreamStatus joinPlayingStream(int chatId) {
-        if (musicClient.isActive()) {
-            musicAccessors.sendLeaveStream(thisUserId);
-            musicClient.terminateReceiving();
+        if (musicClient != null) {
+            if(musicClient.isActive())
+            {
+                musicAccessors.sendLeaveStream(thisUserId);
+                musicClient.terminateReceiving();
+            }
         }
         EStreamStatus streamStatus = getPlayingStreamInfo(chatId);
         if (streamStatus != EStreamStatus.STREAM_INVALID) {
@@ -142,11 +146,11 @@ public class MusicManager {
         return streamStatus;
     }
 
-    public synchronized boolean terminateStream() {
+    public synchronized boolean leaveStream() {
         if (musicClient == null) {
             return false;
         }
-        JSONObject response = musicAccessors.sendTerminateStream(thisUserId);
+        JSONObject response = musicAccessors.sendLeaveStream(thisUserId);
         boolean outcome = response.getJSONObject(MessagesTopLevelConstants.VALUE.value()).getBoolean("outcome");
         if (outcome) {
             terminatePlayer();

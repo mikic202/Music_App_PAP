@@ -124,7 +124,7 @@ public class MusicClient implements Runnable
                     DatagramPacket packet = new DatagramPacket(buf, buf.length);
                     socket.receive(packet);
                     connectionEstablished = true;
-
+                    terminationCount = 0;
                     pipedOutStream.write(packet.getData());
                     sendMessage(".");
                 }

@@ -23,8 +23,8 @@ public class MusicPlayer implements Runnable
     {
         this.format = fileFormat;
         int frameSize = format.getFrameSize();
-        bufferSize = frameSize*256; //amount of read bytes must be multiplication of frames/second
-        this.pipedInputStream = new PipedInputStream(pipedOutput, bufferSize*4);
+        bufferSize = frameSize*128; //amount of read bytes must be multiplication of frames/second
+        this.pipedInputStream = new PipedInputStream(pipedOutput, bufferSize*1024*1024);
         this.streamStatusCb = streamStatusCb;
     }
 
@@ -38,7 +38,9 @@ public class MusicPlayer implements Runnable
     {
         try
         {
-            while (pipedInputStream.available() < bufferSize*2)
+            BufferedInputStream bis = new BufferedInputStream(pipedInputStream);
+
+            while (pipedInputStream.available() < bufferSize*64)
             {
                 Thread.sleep(100);
             }
@@ -48,8 +50,6 @@ public class MusicPlayer implements Runnable
             sourceDataLine.start();
 
             byte[] buf = new byte[bufferSize];
-
-            BufferedInputStream bis = new BufferedInputStream(pipedInputStream);
             
             boolean checkedIfStopped = false;
 
