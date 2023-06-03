@@ -7,6 +7,7 @@ import javax.swing.JLabel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+import client.GUI.InformationWindow;
 import client.ServerConnector.ServerConnector;
 import client.login_and_account_accessors.LoginAccessors;
 
@@ -41,7 +42,7 @@ public class RegisterListener implements ActionListener {
                 repaetPasswordField.setText("");
             } else {
                 if (sendRegisterRequest()) {
-                    registerLabel.setText("Account registered");
+                    new InformationWindow("User Registered!").setVisible(true);
                 }
             }
 

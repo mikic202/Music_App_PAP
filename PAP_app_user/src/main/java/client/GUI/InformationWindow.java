@@ -1,8 +1,11 @@
 package client.GUI;
 
+import java.awt.Dimension;
+
 public class InformationWindow extends javax.swing.JFrame {
 
     public InformationWindow(String displayedText) {
+        this.setMinimumSize(new Dimension(100, 30));
         initComponents();
         TextLable.setText(displayedText);
     }
