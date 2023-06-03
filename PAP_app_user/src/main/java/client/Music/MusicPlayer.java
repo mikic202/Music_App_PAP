@@ -15,8 +15,8 @@ public class MusicPlayer implements Runnable
 
     private PipedInputStream pipedInputStream;
     private AudioFormat format;
-    private boolean playing;
-    private boolean terminated;
+    private boolean playing = false;
+    private boolean terminated = false;
     private StreamStatusCallback streamStatusCb;
 
     public MusicPlayer(PipedOutputStream pipedOutput, AudioFormat fileFormat, StreamStatusCallback streamStatusCb) throws Exception
@@ -39,6 +39,7 @@ public class MusicPlayer implements Runnable
         try
         {
             BufferedInputStream bis = new BufferedInputStream(pipedInputStream);
+            System.out.println("AAAAAAAAAAAAAAAAAA");
 
             while (pipedInputStream.available() < bufferSize*64)
             {
@@ -50,38 +51,25 @@ public class MusicPlayer implements Runnable
             sourceDataLine.start();
 
             byte[] buf = new byte[bufferSize];
-            
-            boolean checkedIfStopped = false;
+            System.out.println("BBBBBBB");
 
-            while (true)
+            while (terminated == false)
             {
-                while (playing == false)
+                if (playing)
                 {
-                    if (terminated)
+                    if(bis.read(buf = new byte[bufferSize], 0, buf.length) > 0)
                     {
-                        sourceDataLine.drain();
-                        sourceDataLine.close();
-                        pipedInputStream.close();
-                        return;
-                    }
-                    Thread.sleep(300);
-                }
-                if(bis.read(buf = new byte[bufferSize], 0, buf.length) > 0)
-                {
-                    sourceDataLine.write(buf, 0, buf.length);
-                    checkedIfStopped = false;
-                }
-                else
-                {
-                    if(!checkedIfStopped)
-                    {
-                        checkIfStreamPaused();
-                        checkedIfStopped = true;
+                        sourceDataLine.write(buf, 0, buf.length);
                     }
                     else
                     {
-                        break;
+                        System.out.println("CCCCCCC");
+                        checkIfStreamPaused();
                     }
+                }
+                else
+                {
+                    Thread.sleep(300);
                 }
             }
             sourceDataLine.drain();

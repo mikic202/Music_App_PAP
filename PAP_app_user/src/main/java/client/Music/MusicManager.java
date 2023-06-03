@@ -168,6 +168,7 @@ public class MusicManager {
         if (outcome) {
             currentStreamStatus = EStreamStatus.STREAM_PAUSED;
         }
+        musicClient.stopPlaying();
         return outcome;
     }
 
@@ -177,6 +178,7 @@ public class MusicManager {
         if (outcome) {
             currentStreamStatus = EStreamStatus.STREAM_PLAYING;
         }
+        musicClient.resumePlaying();
         return outcome;
     }
 
@@ -240,9 +242,13 @@ public class MusicManager {
     }
 
     public synchronized void checkIfStreamPaused() {
-        boolean streamPaused = getPlayingStreamInfo(currentChatId) == EStreamStatus.STREAM_PAUSED ? true : false;
-        if (streamPaused) {
+        EStreamStatus status = getPlayingStreamInfo(currentChatId);
+        if (status == EStreamStatus.STREAM_PAUSED) {
             musicClient.stopPlaying();
+        }
+        else if(status == EStreamStatus.STREAM_INVALID)
+        {
+            musicClient.terminateReceiving();
         }
     }
 

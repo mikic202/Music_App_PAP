@@ -52,6 +52,7 @@ public class MusicClient implements Runnable
     public synchronized void terminateReceiving()
     {
         receive = false;
+        active = false;
         player.terminatePlayer();
     }
 
@@ -152,7 +153,6 @@ public class MusicClient implements Runnable
         {
             e.printStackTrace();
         }
-        active = false;
     }
 
     private void startPlayer()

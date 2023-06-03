@@ -164,6 +164,8 @@ class MusicStreamer extends Thread {
     public void run() {
         initiateNewConnection(true);
         socket.close();
+        running = false;
+        terminated = true;
     }
 
     private void startStreaming(InetAddress address, int port) {

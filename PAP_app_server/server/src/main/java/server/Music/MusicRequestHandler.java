@@ -173,7 +173,6 @@ public class MusicRequestHandler {
     private static JSONObject _getUserSongs(JSONObject request)
     {
         int userId = request.getInt("user_id");
-        JSONObject valueResult = new JSONObject();
         JSONObject result = new JSONObject();
 
         JSONArray songsList = new JSONArray();
