@@ -247,8 +247,45 @@ public class Chat {
         for (int i = 1; i < code.length(); i++) {
             conversationCode = chosenKeytable.indexOf(code.charAt(i), 0) + conversationCode;
         }
-        return Integer.parseInt(conversationCode);
+        return Integer.parseInt(new StringBuilder(conversationCode).reverse().toString());
 
+    }
+
+    private static JSONObject _processChangeConversationName(JSONObject request) {
+        String newName = request.getString("conversation_name");
+        var oldConversationData = ConversationDataAccesor.getData(request.getInt("conversation_id"));
+        oldConversationData.put("name", newName);
+        ConversationDataSetter.setData(request.getInt("conversation_id"), oldConversationData);
+        JSONObject responseValue = new JSONObject();
+        responseValue.put("outcome", true);
+        JSONObject response = new JSONObject();
+        response.put("value", responseValue);
+        response.put("type", RequestTypes.CHANGE_CONVERSATION_NAME.value());
+        return response;
+    }
+
+    private static JSONObject _removeUserFromConversation(JSONObject request) {
+        JSONObject responseValue = new JSONObject();
+        JSONObject response = new JSONObject();
+        System.out.println(UserDataAccesor.getUserConversations(request.getInt("user_id")));
+        if (!UserDataAccesor.getUserConversations(request.getInt("user_id"))
+                .contains(request.getInt("conversation_id"))) {
+            responseValue.put("outcome", false);
+            response.put("value", responseValue);
+            response.put("type", RequestTypes.REMOVE_USER_FROM_CONVERSATION.value());
+            return response;
+        }
+        ConversationDataSetter.RemoveUserConversationRelation(request.getInt("user_id"),
+                request.getInt("conversation_id"));
+        var conversationInfo = ConversationDataAccesor.getData(request.getInt("conversation_id"));
+        conversationInfo.put(ConversationDatabsaeInformation.NUMBER_OF_USERS_COLUMN.value(), Integer.toString(
+                Integer.parseInt(conversationInfo.get(ConversationDatabsaeInformation.NUMBER_OF_USERS_COLUMN.value()))
+                        - 1));
+        ConversationDataSetter.setData(request.getInt("conversation_id"), conversationInfo);
+        responseValue.put("outcome", true);
+        response.put("value", responseValue);
+        response.put("type", RequestTypes.REMOVE_USER_FROM_CONVERSATION.value());
+        return response;
     }
 
     private static JSONObject _generateResponse(RequestTypes reqType, JSONObject request) {
@@ -286,6 +323,12 @@ public class Chat {
                 break;
             case JOIN_CONVERSATION_WITH_CODE:
                 response = _procesJoinConversationUsingCode(request);
+                break;
+            case CHANGE_CONVERSATION_NAME:
+                response = _processChangeConversationName(request);
+                break;
+            case REMOVE_USER_FROM_CONVERSATION:
+                response = _removeUserFromConversation(request);
                 break;
 
         }

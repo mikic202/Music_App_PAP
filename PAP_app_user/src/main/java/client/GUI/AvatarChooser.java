@@ -4,6 +4,8 @@
  */
 package client.GUI;
 
+import java.nio.file.Files;
+
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
@@ -15,8 +17,10 @@ public class AvatarChooser extends javax.swing.JFrame {
     /**
      * Creates new form AvatarChooser
      */
+
     public AvatarChooser() {
         initComponents();
+        avatarChooser.addChoosableFileFilter(new FileNameExtensionFilter("Images", "jpg", "png"));
     }
 
     /**
@@ -57,12 +61,15 @@ public class AvatarChooser extends javax.swing.JFrame {
     }// </editor-fold>
 
     private void avatarChooserActionPerformed(java.awt.event.ActionEvent evt) {
-        FileNameExtensionFilter filter = new FileNameExtensionFilter(
-                "JPG & GIF Images", "jpg", "gif");
-        this.avatarChooser.setFileFilter(filter);
+        System.out.println(1234);
         int returnVal = this.avatarChooser.showOpenDialog(this);
-        if (returnVal == this.avatarChooser.APPROVE_OPTION) {
-            String path = avatarChooser.getSelectedFile().getAbsolutePath();
+        String path = avatarChooser.getSelectedFile().getAbsolutePath();
+        System.out.println(path);
+        System.out.println(234);
+        if (returnVal == this.avatarChooser.APPROVE_OPTION
+                && (path.substring(path.lastIndexOf("."), path.length()).equals(".png")
+                        || path.substring(path.lastIndexOf("."), path.length()).equals(".jpg"))) {
+            System.out.println(path);
             this.dispose();
         }
         if (returnVal == this.avatarChooser.CANCEL_OPTION) {
@@ -108,7 +115,7 @@ public class AvatarChooser extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new AvatarChooser().setVisible(true);
+                // new AvatarChooser().setVisible(true);
             }
         });
     }
