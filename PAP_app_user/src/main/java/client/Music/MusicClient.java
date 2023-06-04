@@ -54,7 +54,6 @@ public class MusicClient implements Runnable
     {
         receive = false;
         active = false;
-        packetNum = 0;
         player.terminatePlayer();
     }
 
