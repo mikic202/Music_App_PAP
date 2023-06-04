@@ -6,6 +6,8 @@ package client.GUI;
 
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
+
+import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
 
 import com.formdev.flatlaf.FlatDarkLaf;
@@ -28,6 +30,10 @@ public class Music extends javax.swing.JPanel {
 	public Music(MainScreen mainScreenParam) {
 		mainScreenWindow = mainScreenParam;
 		initComponents();
+		this.peopleButton.setIcon(new ImageIcon("src/main/java/client/GUI/PeoplePAP.png"));
+		this.musicButton.setIcon(new ImageIcon("src/main/java/client/GUI/MusicPAP.png"));
+		this.accountButton.setIcon(new ImageIcon("src/main/java/client/GUI/AccountSettingsPAP.png"));
+		mainScreenButton.setIcon(new ImageIcon("src/main/java/client/GUI/MainScreenPAP.png"));
 	}
 
 	public void Theme() {
@@ -290,7 +296,7 @@ public class Music extends javax.swing.JPanel {
 				accountButtonActionPerformed(evt);
 			}
 		});
-
+		mainScreenButton.setIcon(new javax.swing.ImageIcon("src/main/java/client/GUI/MainScreenPAP.png")); // NOI18N
 		mainScreenButton.setText("jButton1");
 		mainScreenButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {

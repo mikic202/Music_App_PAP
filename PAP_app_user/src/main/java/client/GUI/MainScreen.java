@@ -247,7 +247,8 @@ public class MainScreen extends javax.swing.JFrame {
 		});
 
 		gainSlider.setOrientation(javax.swing.JSlider.VERTICAL);
-
+		
+		peopleButton.setIcon(new javax.swing.ImageIcon("src/main/java/client/GUI/PeoplePAP.png")); // NOI18N
 		peopleButton.setText("jButton1");
 		peopleButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
