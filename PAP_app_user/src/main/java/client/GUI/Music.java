@@ -8,6 +8,10 @@ import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import javax.swing.SwingUtilities;
 
+import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatLightLaf;
+import javax.swing.SwingUtilities;
+
 import client.GUI.guiListeners.SongListSelectionListener;
 import client.Music.MusicManager;
 
@@ -59,20 +63,6 @@ public class Music extends javax.swing.JPanel {
 		producer = new javax.swing.JTextField();
 		genre = new javax.swing.JTextField();
 		uploadButton = new javax.swing.JButton();
-		currentSessionLabel = new javax.swing.JLabel();
-		chatsLabel = new javax.swing.JLabel();
-		chatsContainer = new javax.swing.JScrollPane();
-		chatsList = new javax.swing.JList<>();
-		playlistLabel = new javax.swing.JLabel();
-		playlistContainer = new javax.swing.JScrollPane();
-		playlist = new javax.swing.JList<>();
-		loadToPlaylistButton = new javax.swing.JButton();
-		favouriteButton = new javax.swing.JButton();
-		currentSongLabel = new javax.swing.JLabel();
-		currentSongTitleLabel = new javax.swing.JLabel();
-		startStreamButton = new javax.swing.JButton();
-		startListenButton = new javax.swing.JButton();
-		stopStreamButton = new javax.swing.JButton();
 		removeSongLabel = new javax.swing.JLabel();
 		songNameLabel = new javax.swing.JLabel();
 		songName = new javax.swing.JTextField();
@@ -149,67 +139,6 @@ public class Music extends javax.swing.JPanel {
 				uploadButtonActionPerformed(evt);
 			}
 		});
-
-		currentSessionLabel.setFont(new java.awt.Font("Segoe UI Black", 0, 14)); // NOI18N
-		currentSessionLabel.setText("Current session:");
-
-		chatsLabel.setText("Chats:");
-
-		chatsList.setModel(new javax.swing.AbstractListModel<String>() {
-			String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5", "a", "b", "c", "d", "e" };
-
-			public int getSize() {
-				return strings.length;
-			}
-
-			public String getElementAt(int i) {
-				return strings[i];
-			}
-		});
-		chatsContainer.setViewportView(chatsList);
-
-		playlistLabel.setFont(new java.awt.Font("Segoe UI Black", 0, 14)); // NOI18N
-		playlistLabel.setText("Playlist:");
-
-		playlist.setModel(new javax.swing.AbstractListModel<String>() {
-			String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-
-			public int getSize() {
-				return strings.length;
-			}
-
-			public String getElementAt(int i) {
-				return strings[i];
-			}
-		});
-		playlistContainer.setViewportView(playlist);
-
-		loadToPlaylistButton.setText("Load to playlist");
-		loadToPlaylistButton.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				loadToPlaylistButtonActionPerformed(evt);
-			}
-		});
-
-		favouriteButton.setText("Add as favourite");
-		favouriteButton.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				favouriteButtonActionPerformed(evt);
-			}
-		});
-
-		currentSongLabel.setText("Current song:");
-
-		currentSongTitleLabel.setText("jLabel3");
-
-		startStreamButton.setText("Start stream");
-		startStreamButton.addActionListener(mainScreenWindow.musicEventListenerInstance);
-
-		startListenButton.setText("Join stream");
-		startListenButton.addActionListener(mainScreenWindow.musicEventListenerInstance);
-
-		stopStreamButton.setText("Stop stream");
-		stopStreamButton.addActionListener(mainScreenWindow.musicEventListenerInstance);
 
 		removeSongLabel.setFont(new java.awt.Font("Segoe UI Black", 0, 14)); // NOI18N
 		removeSongLabel.setText("Remove song:");
@@ -420,16 +349,12 @@ public class Music extends javax.swing.JPanel {
 										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 										.addComponent(removeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 143,
 												javax.swing.GroupLayout.PREFERRED_SIZE))
-								.addGroup(layout.createSequentialGroup().addGroup(layout
-										.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-										.addComponent(addSongLabel)
-										.addGroup(layout.createSequentialGroup().addGap(459, 459, 459).addComponent(
-												uploadButton, javax.swing.GroupLayout.PREFERRED_SIZE, 143,
-												javax.swing.GroupLayout.PREFERRED_SIZE))
-										.addComponent(removeSongLabel).addComponent(songNameLabel,
-												javax.swing.GroupLayout.PREFERRED_SIZE, 103,
-												javax.swing.GroupLayout.PREFERRED_SIZE))
-										.addGap(0, 0, Short.MAX_VALUE)))))
+								.addComponent(addSongLabel)
+								.addGroup(layout.createSequentialGroup().addGap(459, 459, 459).addComponent(
+										uploadButton, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE))
+								.addComponent(removeSongLabel).addComponent(songNameLabel,
+										javax.swing.GroupLayout.PREFERRED_SIZE, 103,
+										javax.swing.GroupLayout.PREFERRED_SIZE))))
 				.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 				.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout
 						.createSequentialGroup()
@@ -448,10 +373,11 @@ public class Music extends javax.swing.JPanel {
 										.addGroup(layout
 												.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
 												.addComponent(uploadedBy, javax.swing.GroupLayout.Alignment.LEADING,
-														javax.swing.GroupLayout.DEFAULT_SIZE, 199, Short.MAX_VALUE)
-												.addComponent(uploadedOn, javax.swing.GroupLayout.Alignment.LEADING,
 														javax.swing.GroupLayout.DEFAULT_SIZE,
-														javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+														javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+												.addComponent(uploadedOn, javax.swing.GroupLayout.Alignment.LEADING,
+														javax.swing.GroupLayout.PREFERRED_SIZE, 199,
+														javax.swing.GroupLayout.PREFERRED_SIZE))
 										.addComponent(views, javax.swing.GroupLayout.PREFERRED_SIZE, 156,
 												javax.swing.GroupLayout.PREFERRED_SIZE)))
 								.addGroup(layout.createSequentialGroup()
@@ -467,287 +393,234 @@ public class Music extends javax.swing.JPanel {
 												.addComponent(genre2, javax.swing.GroupLayout.PREFERRED_SIZE, 177,
 														javax.swing.GroupLayout.PREFERRED_SIZE)))))
 						.addComponent(chooseSongLabel)
-						.addGroup(layout.createSequentialGroup().addGroup(layout
-								.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-								.addGroup(layout.createSequentialGroup()
-										.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-												.addComponent(uploadedByYouLabel).addComponent(uploadedByYouContainer,
-														javax.swing.GroupLayout.PREFERRED_SIZE, 140,
+						.addGroup(layout.createSequentialGroup()
+								.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+										.addComponent(uploadedByYouLabel).addComponent(uploadedByYouContainer,
+												javax.swing.GroupLayout.PREFERRED_SIZE, 140,
+												javax.swing.GroupLayout.PREFERRED_SIZE))
+								.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+								.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+										.addComponent(favouritesLabel).addComponent(favouritesContainer,
+												javax.swing.GroupLayout.PREFERRED_SIZE, 140,
+												javax.swing.GroupLayout.PREFERRED_SIZE))
+								.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+								.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+										.addComponent(mostPopularLabel).addComponent(mostPopularContainer,
+												javax.swing.GroupLayout.PREFERRED_SIZE, 140,
+												javax.swing.GroupLayout.PREFERRED_SIZE))
+								.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+								.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+										.addComponent(previousListensLabel).addComponent(previousListensContainer,
+												javax.swing.GroupLayout.PREFERRED_SIZE, 141,
+												javax.swing.GroupLayout.PREFERRED_SIZE))))
+				.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+				.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout
+						.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+						.addComponent(musicButton, javax.swing.GroupLayout.Alignment.TRAILING,
+								javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+						.addComponent(accountButton, javax.swing.GroupLayout.Alignment.TRAILING,
+								javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+						.addComponent(mainScreenButton, javax.swing.GroupLayout.Alignment.TRAILING,
+								javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE))
+						.addComponent(peopleButton, javax.swing.GroupLayout.Alignment.TRAILING,
+								javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE))
+				.addContainerGap()));
+		layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(layout.createSequentialGroup()
+						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+										.addComponent(logoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 58,
+												javax.swing.GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+										.addComponent(addSongLabel)
+										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+										.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+												.addComponent(loadedMusicFileLabel).addComponent(loadedMusicFile))
+										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+										.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+												.addComponent(titleLabel).addComponent(title,
+														javax.swing.GroupLayout.PREFERRED_SIZE,
+														javax.swing.GroupLayout.DEFAULT_SIZE,
 														javax.swing.GroupLayout.PREFERRED_SIZE))
 										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 										.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-												.addGroup(layout.createSequentialGroup().addGroup(layout
-														.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-														.addComponent(favouritesLabel)
-														.addComponent(currentSongLabel,
-																javax.swing.GroupLayout.PREFERRED_SIZE, 110,
-																javax.swing.GroupLayout.PREFERRED_SIZE)
-														.addComponent(favouritesContainer,
-																javax.swing.GroupLayout.PREFERRED_SIZE, 140,
-																javax.swing.GroupLayout.PREFERRED_SIZE))
-														.addPreferredGap(
-																javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-														.addGroup(layout
-																.createParallelGroup(
-																		javax.swing.GroupLayout.Alignment.LEADING)
-																.addComponent(mostPopularLabel)
-																.addComponent(mostPopularContainer,
-																		javax.swing.GroupLayout.PREFERRED_SIZE, 140,
-																		javax.swing.GroupLayout.PREFERRED_SIZE))
-														.addPreferredGap(
-																javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-														.addGroup(layout
-																.createParallelGroup(
-																		javax.swing.GroupLayout.Alignment.LEADING)
-																.addComponent(previousListensLabel)
-																.addComponent(previousListensContainer,
-																		javax.swing.GroupLayout.PREFERRED_SIZE, 141,
-																		javax.swing.GroupLayout.PREFERRED_SIZE)))
-												.addComponent(currentSongTitleLabel,
-														javax.swing.GroupLayout.PREFERRED_SIZE, 117,
-														javax.swing.GroupLayout.PREFERRED_SIZE)))
-								.addGroup(layout.createSequentialGroup().addGap(140, 140, 140).addComponent(
-										startStreamButton, javax.swing.GroupLayout.PREFERRED_SIZE, 123,
-										javax.swing.GroupLayout.PREFERRED_SIZE))
-								.addGroup(layout.createSequentialGroup().addGroup(layout
-										.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-										.addGroup(layout.createSequentialGroup()
-												.addGroup(layout
-														.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-														.addComponent(currentSessionLabel).addComponent(chatsLabel))
-												.addGap(166, 166, 166))
-										.addGroup(layout.createSequentialGroup()
-												.addComponent(chatsContainer, javax.swing.GroupLayout.PREFERRED_SIZE,
-														110, javax.swing.GroupLayout.PREFERRED_SIZE)
-												.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED,
-														javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-												.addGroup(layout
-														.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-														.addComponent(startListenButton,
-																javax.swing.GroupLayout.Alignment.TRAILING,
-																javax.swing.GroupLayout.PREFERRED_SIZE, 123,
-																javax.swing.GroupLayout.PREFERRED_SIZE)
-														.addComponent(stopStreamButton,
-																javax.swing.GroupLayout.Alignment.TRAILING,
-																javax.swing.GroupLayout.PREFERRED_SIZE, 123,
-																javax.swing.GroupLayout.PREFERRED_SIZE))
-												.addGap(18, 18, 18)))
-										.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-												.addComponent(playlistLabel)
-												.addGroup(layout.createSequentialGroup()
-														.addComponent(playlistContainer,
-																javax.swing.GroupLayout.PREFERRED_SIZE, 89,
-																javax.swing.GroupLayout.PREFERRED_SIZE)
-														.addPreferredGap(
-																javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-														.addGroup(layout
-																.createParallelGroup(
-																		javax.swing.GroupLayout.Alignment.LEADING)
-																.addComponent(loadToPlaylistButton,
-																		javax.swing.GroupLayout.PREFERRED_SIZE, 117,
-																		javax.swing.GroupLayout.PREFERRED_SIZE)
-																.addComponent(favouriteButton))))))
-								.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-								.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-										.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-												.addComponent(musicButton, javax.swing.GroupLayout.Alignment.TRAILING,
-														javax.swing.GroupLayout.PREFERRED_SIZE, 77,
-														javax.swing.GroupLayout.PREFERRED_SIZE)
-												.addComponent(accountButton, javax.swing.GroupLayout.Alignment.TRAILING,
-														javax.swing.GroupLayout.PREFERRED_SIZE, 77,
-														javax.swing.GroupLayout.PREFERRED_SIZE)
-												.addComponent(mainScreenButton,
-														javax.swing.GroupLayout.Alignment.TRAILING,
-														javax.swing.GroupLayout.PREFERRED_SIZE, 77,
+												.addComponent(producerLabel).addComponent(producer,
+														javax.swing.GroupLayout.PREFERRED_SIZE,
+														javax.swing.GroupLayout.DEFAULT_SIZE,
 														javax.swing.GroupLayout.PREFERRED_SIZE))
-										.addComponent(peopleButton, javax.swing.GroupLayout.Alignment.TRAILING,
-												javax.swing.GroupLayout.PREFERRED_SIZE, 77,
-												javax.swing.GroupLayout.PREFERRED_SIZE))))
-				.addContainerGap()));
-		layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout
-				.createSequentialGroup()
-				.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING).addGroup(layout
-						.createSequentialGroup()
-						.addComponent(logoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 58,
-								javax.swing.GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(addSongLabel)
-						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-								.addComponent(loadedMusicFileLabel).addComponent(loadedMusicFile))
-						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-								.addComponent(titleLabel).addComponent(title, javax.swing.GroupLayout.PREFERRED_SIZE,
-										javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-								.addComponent(producerLabel).addComponent(producer,
-										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-										javax.swing.GroupLayout.PREFERRED_SIZE))
-						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-								.addComponent(uploadedLabel).addComponent(uploaded,
-										javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-										javax.swing.GroupLayout.PREFERRED_SIZE))
-						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-								.addComponent(genreLabel).addComponent(genre, javax.swing.GroupLayout.PREFERRED_SIZE,
-										javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-						.addGap(9, 9, 9).addComponent(uploadButton)
-						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-						.addComponent(removeSongLabel).addGap(7, 7, 7)
-						.addComponent(songNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 16,
-								javax.swing.GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-						.addComponent(songName, javax.swing.GroupLayout.PREFERRED_SIZE, 25,
-								javax.swing.GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-								.addComponent(rewriteLabel).addComponent(rewriteCodeLabel))
-						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-						.addComponent(rewrite, javax.swing.GroupLayout.PREFERRED_SIZE,
-								javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-								.addComponent(disclaimerLabel).addComponent(removeButton))
-						.addGap(109, 109, 109))
-						.addGroup(layout.createSequentialGroup().addGap(12, 12, 12).addGroup(layout
-								.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-								.addGroup(layout.createSequentialGroup()
+										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 										.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-												.addComponent(currentSessionLabel).addComponent(playlistLabel))
-										.addGap(4, 4, 4)
+												.addComponent(uploadedLabel).addComponent(uploaded,
+														javax.swing.GroupLayout.PREFERRED_SIZE,
+														javax.swing.GroupLayout.DEFAULT_SIZE,
+														javax.swing.GroupLayout.PREFERRED_SIZE))
+										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+										.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+												.addComponent(genreLabel)
+												.addComponent(genre, javax.swing.GroupLayout.PREFERRED_SIZE,
+														javax.swing.GroupLayout.DEFAULT_SIZE,
+														javax.swing.GroupLayout.PREFERRED_SIZE))
+										.addGap(9, 9, 9).addComponent(uploadButton)
+										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+										.addComponent(removeSongLabel).addGap(7, 7, 7)
+										.addComponent(songNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 16,
+												javax.swing.GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+										.addComponent(songName, javax.swing.GroupLayout.PREFERRED_SIZE, 25,
+												javax.swing.GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+										.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+												.addComponent(rewriteLabel).addComponent(rewriteCodeLabel))
+										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+										.addComponent(rewrite, javax.swing.GroupLayout.PREFERRED_SIZE,
+												javax.swing.GroupLayout.DEFAULT_SIZE,
+												javax.swing.GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+										.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+												.addComponent(disclaimerLabel).addComponent(removeButton))
+										.addGap(0, 296, Short.MAX_VALUE))
+								.addGroup(layout.createSequentialGroup().addGap(12, 12, 12)
 										.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 												.addGroup(layout.createSequentialGroup().addGroup(layout
-														.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-														.addGroup(layout.createSequentialGroup()
-																.addGroup(layout.createParallelGroup(
-																		javax.swing.GroupLayout.Alignment.BASELINE)
-																		.addComponent(chatsLabel)
-																		.addComponent(currentSongLabel))
-																.addPreferredGap(
-																		javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-																.addGroup(layout.createParallelGroup(
-																		javax.swing.GroupLayout.Alignment.LEADING,
-																		false)
-																		.addComponent(chatsContainer,
-																				javax.swing.GroupLayout.PREFERRED_SIZE,
-																				103,
-																				javax.swing.GroupLayout.PREFERRED_SIZE)
-																		.addGroup(layout.createSequentialGroup()
-																				.addComponent(currentSongTitleLabel)
-																				.addPreferredGap(
-																						javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-																				.addComponent(startStreamButton)
-																				.addPreferredGap(
-																						javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-																				.addComponent(startListenButton)
-																				.addPreferredGap(
-																						javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-																				.addComponent(stopStreamButton))))
-														.addComponent(playlistContainer,
-																javax.swing.GroupLayout.PREFERRED_SIZE, 123,
-																javax.swing.GroupLayout.PREFERRED_SIZE))
-														.addGap(21, 21, 21)
+														.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING,
+																false)
 														.addGroup(layout
 																.createParallelGroup(
-																		javax.swing.GroupLayout.Alignment.LEADING,
-																		false)
-																.addGroup(layout.createParallelGroup(
 																		javax.swing.GroupLayout.Alignment.BASELINE)
-																		.addComponent(uploadedByYouLabel)
-																		.addComponent(favouritesLabel)
-																		.addComponent(mostPopularLabel))
-																.addComponent(previousListensLabel,
-																		javax.swing.GroupLayout.Alignment.TRAILING)))
-												.addGroup(layout.createSequentialGroup()
-														.addComponent(loadToPlaylistButton)
+																.addComponent(uploadedByYouLabel)
+																.addComponent(favouritesLabel)
+																.addComponent(mostPopularLabel))
+														.addComponent(
+																previousListensLabel,
+																javax.swing.GroupLayout.Alignment.TRAILING))
+														.addGroup(layout
+																.createParallelGroup(
+																		javax.swing.GroupLayout.Alignment.LEADING)
+																.addGroup(layout.createSequentialGroup().addGap(7, 7, 7)
+																		.addComponent(uploadedByYouContainer,
+																				javax.swing.GroupLayout.DEFAULT_SIZE,
+																				385, Short.MAX_VALUE))
+																.addGroup(layout.createSequentialGroup()
+																		.addPreferredGap(
+																				javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+																		.addGroup(layout.createParallelGroup(
+																				javax.swing.GroupLayout.Alignment.LEADING)
+																				.addComponent(mostPopularContainer)
+																				.addComponent(
+																						favouritesContainer)
+																				.addComponent(
+																						previousListensContainer,
+																						javax.swing.GroupLayout.Alignment.TRAILING))))
 														.addPreferredGap(
 																javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-														.addComponent(favouriteButton))))
-								.addGroup(layout.createSequentialGroup()
-										.addComponent(peopleButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35,
-												javax.swing.GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-										.addComponent(musicButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35,
-												javax.swing.GroupLayout.PREFERRED_SIZE)
-										.addGap(12, 12, 12)
-										.addComponent(accountButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35,
-												javax.swing.GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-										.addComponent(mainScreenButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35,
-												javax.swing.GroupLayout.PREFERRED_SIZE)))
-								.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-										.addGroup(layout.createSequentialGroup().addGap(7, 7, 7).addComponent(
-												uploadedByYouContainer, javax.swing.GroupLayout.DEFAULT_SIZE, 286,
-												Short.MAX_VALUE))
-										.addGroup(layout.createSequentialGroup()
-												.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-												.addGroup(layout
-														.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-														.addComponent(mostPopularContainer)
-														.addComponent(favouritesContainer)
-														.addComponent(previousListensContainer,
-																javax.swing.GroupLayout.Alignment.TRAILING))))
-								.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-								.addComponent(chooseSongLabel)
-								.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-				.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-						.addGroup(layout.createSequentialGroup()
-								.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-										.addComponent(views, javax.swing.GroupLayout.DEFAULT_SIZE,
-												javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-										.addComponent(viewsLabel, javax.swing.GroupLayout.DEFAULT_SIZE,
-												javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-								.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-								.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-										.addComponent(uploadedOnLabel, javax.swing.GroupLayout.DEFAULT_SIZE,
-												javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-										.addComponent(uploadedOn, javax.swing.GroupLayout.DEFAULT_SIZE,
-												javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-								.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-								.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-										.addComponent(uploadedByLabel, javax.swing.GroupLayout.DEFAULT_SIZE,
-												javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-										.addComponent(uploadedBy, javax.swing.GroupLayout.DEFAULT_SIZE,
-												javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-								.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-								.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-										.addComponent(genreLabel2, javax.swing.GroupLayout.DEFAULT_SIZE,
-												javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-										.addComponent(genre2, javax.swing.GroupLayout.DEFAULT_SIZE,
-												javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-								.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-								.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-										.addComponent(popularityLabel, javax.swing.GroupLayout.DEFAULT_SIZE,
-												javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-										.addComponent(popularity, javax.swing.GroupLayout.DEFAULT_SIZE,
-												javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-								.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-								.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-										.addComponent(lastPlayedLabel, javax.swing.GroupLayout.DEFAULT_SIZE,
-												javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-										.addComponent(lastPlayed, javax.swing.GroupLayout.DEFAULT_SIZE,
-												javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-								.addGap(59, 59, 59))
-						.addGroup(layout.createSequentialGroup()
-								.addComponent(chooseSongContainer, javax.swing.GroupLayout.PREFERRED_SIZE, 155,
-										javax.swing.GroupLayout.PREFERRED_SIZE)
-								.addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))));
+														.addComponent(chooseSongLabel)
+														.addPreferredGap(
+																javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+														.addGroup(layout
+																.createParallelGroup(
+																		javax.swing.GroupLayout.Alignment.LEADING)
+																.addGroup(layout.createSequentialGroup().addGroup(layout
+																		.createParallelGroup(
+																				javax.swing.GroupLayout.Alignment.LEADING)
+																		.addComponent(views,
+																				javax.swing.GroupLayout.DEFAULT_SIZE,
+																				javax.swing.GroupLayout.DEFAULT_SIZE,
+																				Short.MAX_VALUE)
+																		.addComponent(viewsLabel,
+																				javax.swing.GroupLayout.DEFAULT_SIZE,
+																				javax.swing.GroupLayout.DEFAULT_SIZE,
+																				Short.MAX_VALUE))
+																		.addPreferredGap(
+																				javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+																		.addGroup(layout.createParallelGroup(
+																				javax.swing.GroupLayout.Alignment.LEADING)
+																				.addComponent(uploadedOnLabel,
+																						javax.swing.GroupLayout.DEFAULT_SIZE,
+																						javax.swing.GroupLayout.DEFAULT_SIZE,
+																						Short.MAX_VALUE)
+																				.addComponent(
+																						uploadedOn,
+																						javax.swing.GroupLayout.DEFAULT_SIZE,
+																						javax.swing.GroupLayout.DEFAULT_SIZE,
+																						Short.MAX_VALUE))
+																		.addPreferredGap(
+																				javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+																		.addGroup(layout.createParallelGroup(
+																				javax.swing.GroupLayout.Alignment.LEADING)
+																				.addComponent(uploadedByLabel,
+																						javax.swing.GroupLayout.DEFAULT_SIZE,
+																						javax.swing.GroupLayout.DEFAULT_SIZE,
+																						Short.MAX_VALUE)
+																				.addComponent(
+																						uploadedBy,
+																						javax.swing.GroupLayout.DEFAULT_SIZE,
+																						javax.swing.GroupLayout.DEFAULT_SIZE,
+																						Short.MAX_VALUE))
+																		.addPreferredGap(
+																				javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+																		.addGroup(layout.createParallelGroup(
+																				javax.swing.GroupLayout.Alignment.BASELINE)
+																				.addComponent(genreLabel2,
+																						javax.swing.GroupLayout.DEFAULT_SIZE,
+																						javax.swing.GroupLayout.DEFAULT_SIZE,
+																						Short.MAX_VALUE)
+																				.addComponent(genre2,
+																						javax.swing.GroupLayout.DEFAULT_SIZE,
+																						javax.swing.GroupLayout.DEFAULT_SIZE,
+																						Short.MAX_VALUE))
+																		.addPreferredGap(
+																				javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+																		.addGroup(layout.createParallelGroup(
+																				javax.swing.GroupLayout.Alignment.BASELINE)
+																				.addComponent(popularityLabel,
+																						javax.swing.GroupLayout.DEFAULT_SIZE,
+																						javax.swing.GroupLayout.DEFAULT_SIZE,
+																						Short.MAX_VALUE)
+																				.addComponent(
+																						popularity,
+																						javax.swing.GroupLayout.DEFAULT_SIZE,
+																						javax.swing.GroupLayout.DEFAULT_SIZE,
+																						Short.MAX_VALUE))
+																		.addPreferredGap(
+																				javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+																		.addGroup(layout.createParallelGroup(
+																				javax.swing.GroupLayout.Alignment.BASELINE)
+																				.addComponent(lastPlayedLabel,
+																						javax.swing.GroupLayout.DEFAULT_SIZE,
+																						javax.swing.GroupLayout.DEFAULT_SIZE,
+																						Short.MAX_VALUE)
+																				.addComponent(lastPlayed,
+																						javax.swing.GroupLayout.DEFAULT_SIZE,
+																						javax.swing.GroupLayout.DEFAULT_SIZE,
+																						Short.MAX_VALUE))
+																		.addGap(29, 29, 29))
+																.addComponent(
+																		chooseSongContainer,
+																		javax.swing.GroupLayout.PREFERRED_SIZE, 155,
+																		javax.swing.GroupLayout.PREFERRED_SIZE)))
+												.addGroup(layout.createSequentialGroup()
+														.addComponent(peopleButton,
+																javax.swing.GroupLayout.PREFERRED_SIZE, 35,
+																javax.swing.GroupLayout.PREFERRED_SIZE)
+														.addPreferredGap(
+																javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+														.addComponent(musicButton,
+																javax.swing.GroupLayout.PREFERRED_SIZE, 35,
+																javax.swing.GroupLayout.PREFERRED_SIZE)
+														.addGap(12, 12, 12)
+														.addComponent(accountButton,
+																javax.swing.GroupLayout.PREFERRED_SIZE, 35,
+																javax.swing.GroupLayout.PREFERRED_SIZE)
+														.addPreferredGap(
+																javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+														.addComponent(mainScreenButton,
+																javax.swing.GroupLayout.PREFERRED_SIZE, 35,
+																javax.swing.GroupLayout.PREFERRED_SIZE)
+														.addGap(0, 515, Short.MAX_VALUE)))))
+						.addContainerGap()));
 	}// </editor-fold>
 
 	private void uploadButtonActionPerformed(java.awt.event.ActionEvent evt) {
-
-	}
-
-	private void loadToPlaylistButtonActionPerformed(java.awt.event.ActionEvent evt) {
-
-	}
-
-	private void favouriteButtonActionPerformed(java.awt.event.ActionEvent evt) {
-		// TODO add your handling code here:
-	}
-
-	private void startStreamButtonActionPerformed(java.awt.event.ActionEvent evt) {
 
 	}
 
@@ -781,17 +654,10 @@ public class Music extends javax.swing.JPanel {
 	// Variables declaration - do not modify
 	private javax.swing.JButton accountButton;
 	private javax.swing.JLabel addSongLabel;
-	private javax.swing.JScrollPane chatsContainer;
-	private javax.swing.JLabel chatsLabel;
-	private javax.swing.JList<String> chatsList;
 	private javax.swing.JScrollPane chooseSongContainer;
 	private javax.swing.JLabel chooseSongLabel;
 	private javax.swing.JList<String> chooseSongList;
-	private javax.swing.JLabel currentSessionLabel;
-	private javax.swing.JLabel currentSongLabel;
-	private javax.swing.JLabel currentSongTitleLabel;
 	private javax.swing.JLabel disclaimerLabel;
-	private javax.swing.JButton favouriteButton;
 	private javax.swing.JScrollPane favouritesContainer;
 	private javax.swing.JLabel favouritesLabel;
 	private javax.swing.JList<String> favouritesList;
@@ -804,7 +670,6 @@ public class Music extends javax.swing.JPanel {
 	private javax.swing.JMenuBar jMenuBar1;
 	private javax.swing.JLabel lastPlayed;
 	private javax.swing.JLabel lastPlayedLabel;
-	private javax.swing.JButton loadToPlaylistButton;
 	private javax.swing.JLabel loadedMusicFile;
 	private javax.swing.JLabel loadedMusicFileLabel;
 	private javax.swing.JLabel logoLabel;
@@ -814,9 +679,6 @@ public class Music extends javax.swing.JPanel {
 	private javax.swing.JList<String> mostPopularList;
 	private javax.swing.JButton musicButton;
 	private javax.swing.JButton peopleButton;
-	private javax.swing.JList<String> playlist;
-	private javax.swing.JScrollPane playlistContainer;
-	private javax.swing.JLabel playlistLabel;
 	private javax.swing.JLabel popularity;
 	private javax.swing.JLabel popularityLabel;
 	private javax.swing.JScrollPane previousListensContainer;
@@ -831,9 +693,6 @@ public class Music extends javax.swing.JPanel {
 	private javax.swing.JLabel rewriteLabel;
 	private javax.swing.JTextField songName;
 	private javax.swing.JLabel songNameLabel;
-	private javax.swing.JButton startListenButton;
-	private javax.swing.JButton startStreamButton;
-	private javax.swing.JButton stopStreamButton;
 	private javax.swing.JTextField title;
 	private javax.swing.JLabel titleLabel;
 	private javax.swing.JButton uploadButton;

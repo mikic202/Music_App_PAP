@@ -30,6 +30,14 @@ import client.GUI.guiListeners.SwitchConversationListener;
 import client.GUI.guiWorkers.ChatWorker;
 import client.ServerConnectionConstants.ChatMessagesConstants;
 
+import javax.swing.JScrollBar;
+import javax.swing.SwingUtilities;
+import net.miginfocom.swing.MigLayout;
+
+/**
+ *
+ * @author Adam
+ */
 public class People extends javax.swing.JPanel {
 
 	boolean light = false;
@@ -70,6 +78,7 @@ public class People extends javax.swing.JPanel {
 				ChatContentsUpdater.updateChat(chat.getCurrentMessages(), chat, chatPanel);
 			}
 		}).start();
+		chatContainer.getVerticalScrollBar().setUnitIncrement(16);
 	}
 
 	public void Theme() {
@@ -221,7 +230,7 @@ public class People extends javax.swing.JPanel {
 		chatsLabel.setText("Chats:");
 
 		userOrGroupNameLabel.setFont(new java.awt.Font("Segoe UI Black", 1, 14)); // NOI18N
-		userOrGroupNameLabel.setText("");
+		userOrGroupNameLabel.setText("123");
 
 		var convNamesSet = chat.getConversationsNamesToIds().keySet();
 
@@ -262,7 +271,6 @@ public class People extends javax.swing.JPanel {
 
 		createButton.setText("Create");
 		createButton.addActionListener(new CreateGroupListener(chat, groupName, membersList, chatsList));
-
 		peopleButton.setText("jButton1");
 		peopleButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -391,12 +399,10 @@ public class People extends javax.swing.JPanel {
 								.addGroup(layout.createSequentialGroup().addGroup(layout
 										.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 										.addGroup(layout.createSequentialGroup()
-												.addComponent(changeChatName, javax.swing.GroupLayout.PREFERRED_SIZE,
-														315, javax.swing.GroupLayout.PREFERRED_SIZE)
-												.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED,
-														javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-												.addComponent(changeButton, javax.swing.GroupLayout.DEFAULT_SIZE, 73,
-														Short.MAX_VALUE))
+												.addComponent(changeChatName, javax.swing.GroupLayout.DEFAULT_SIZE, 315,
+														Short.MAX_VALUE)
+												.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+												.addComponent(changeButton).addGap(1, 1, 1))
 										.addGroup(layout.createSequentialGroup().addGap(307, 307, 307).addComponent(
 												addButton, javax.swing.GroupLayout.DEFAULT_SIZE,
 												javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -492,108 +498,128 @@ public class People extends javax.swing.JPanel {
 								javax.swing.GroupLayout.PREFERRED_SIZE))
 				.addContainerGap()));
 		layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-								.addGroup(layout.createSequentialGroup().addComponent(logo)
-										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-										.addComponent(addPersonToGroupLabel, javax.swing.GroupLayout.DEFAULT_SIZE,
-												javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-								.addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-										.addContainerGap()
-										.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-												.addComponent(chatsLabel).addComponent(userOrGroupNameLabel))))
-						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-								.addGroup(layout.createSequentialGroup().addGroup(layout
-										.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-										.addGroup(layout.createSequentialGroup()
-												.addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 24,
-														Short.MAX_VALUE)
+				.addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
+						layout.createSequentialGroup()
+								.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+										.addGroup(layout.createSequentialGroup().addComponent(logo)
 												.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-												.addComponent(addButton)
-												.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-												.addComponent(removePersonFromGroupLabel,
-														javax.swing.GroupLayout.DEFAULT_SIZE, 23, Short.MAX_VALUE)
-												.addGap(18, 18, 18)
-												.addGroup(layout
-														.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-														.addComponent(removePersonFromGroupLabel1,
-																javax.swing.GroupLayout.DEFAULT_SIZE, 26,
-																Short.MAX_VALUE)
-														.addComponent(removeButton))
-												.addGap(25, 25, 25).addComponent(changeChatNameLabel)
-												.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-												.addGroup(layout
-														.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-														.addComponent(changeChatName,
-																javax.swing.GroupLayout.PREFERRED_SIZE,
-																javax.swing.GroupLayout.DEFAULT_SIZE,
-																javax.swing.GroupLayout.PREFERRED_SIZE)
-														.addComponent(changeButton))
-												.addGap(29, 29, 29).addComponent(createGroupLabel)
-												.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-												.addGroup(layout
-														.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-														.addComponent(groupName, javax.swing.GroupLayout.PREFERRED_SIZE,
-																javax.swing.GroupLayout.DEFAULT_SIZE,
-																javax.swing.GroupLayout.PREFERRED_SIZE)
-														.addComponent(groupNameLabel))
-												.addGap(10, 10, 10))
-										.addComponent(chatsContainer))
-										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-										.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-												.addComponent(membersLabel).addComponent(membersInConvLabel))
-										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-										.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+												.addComponent(addPersonToGroupLabel))
+										.addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
+												layout.createSequentialGroup().addContainerGap().addGroup(layout
+														.createParallelGroup(
+																javax.swing.GroupLayout.Alignment.BASELINE)
+														.addComponent(chatsLabel).addComponent(userOrGroupNameLabel))))
+								.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+								.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+										.addGroup(layout.createSequentialGroup().addGroup(layout
+												.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 												.addGroup(layout.createSequentialGroup()
-														.addComponent(membersContainer,
-																javax.swing.GroupLayout.DEFAULT_SIZE, 150,
+														.addComponent(jScrollPane1,
+																javax.swing.GroupLayout.DEFAULT_SIZE, 24,
 																Short.MAX_VALUE)
 														.addPreferredGap(
 																javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-														.addComponent(createButton).addGap(24, 24, 24)
-														.addComponent(joinToGroupLabel)
+														.addComponent(addButton)
 														.addPreferredGap(
-																javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+																javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+														.addComponent(removePersonFromGroupLabel,
+																javax.swing.GroupLayout.PREFERRED_SIZE, 23,
+																javax.swing.GroupLayout.PREFERRED_SIZE)
+														.addGap(18, 18, 18)
 														.addGroup(layout
 																.createParallelGroup(
-																		javax.swing.GroupLayout.Alignment.LEADING)
-																.addComponent(groupCodeLabel2).addComponent(groupCode2,
-																		javax.swing.GroupLayout.PREFERRED_SIZE,
-																		javax.swing.GroupLayout.DEFAULT_SIZE,
-																		javax.swing.GroupLayout.PREFERRED_SIZE))
+																		javax.swing.GroupLayout.Alignment.BASELINE)
+																.addComponent(removePersonFromGroupLabel1,
+																		javax.swing.GroupLayout.PREFERRED_SIZE, 26,
+																		javax.swing.GroupLayout.PREFERRED_SIZE)
+																.addComponent(removeButton))
+														.addGap(25, 25, 25).addComponent(changeChatNameLabel)
 														.addPreferredGap(
 																javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-														.addComponent(joinButton,
-																javax.swing.GroupLayout.PREFERRED_SIZE, 20,
-																javax.swing.GroupLayout.PREFERRED_SIZE)
-														.addGap(9, 9, 9))
-												.addComponent(membersInConContainer)))
-								.addGroup(layout.createSequentialGroup()
-										.addComponent(chatContainer, javax.swing.GroupLayout.PREFERRED_SIZE, 0,
-												Short.MAX_VALUE)
-										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-										.addGroup(layout
-												.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-												.addComponent(sendButton, javax.swing.GroupLayout.DEFAULT_SIZE,
-														javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-												.addComponent(textContainer, javax.swing.GroupLayout.PREFERRED_SIZE, 0,
-														Short.MAX_VALUE))
-										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-										.addGroup(layout
-												.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+														.addGroup(layout
+																.createParallelGroup(
+																		javax.swing.GroupLayout.Alignment.BASELINE)
+																.addComponent(changeChatName,
+																		javax.swing.GroupLayout.PREFERRED_SIZE,
+																		javax.swing.GroupLayout.DEFAULT_SIZE,
+																		javax.swing.GroupLayout.PREFERRED_SIZE)
+																.addComponent(changeButton))
+														.addGap(29, 29, 29).addComponent(createGroupLabel)
+														.addPreferredGap(
+																javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+														.addGroup(layout
+																.createParallelGroup(
+																		javax.swing.GroupLayout.Alignment.BASELINE)
+																.addComponent(groupName,
+																		javax.swing.GroupLayout.PREFERRED_SIZE,
+																		javax.swing.GroupLayout.DEFAULT_SIZE,
+																		javax.swing.GroupLayout.PREFERRED_SIZE)
+																.addComponent(groupNameLabel))
+														.addGap(10, 10, 10))
+												.addComponent(chatsContainer))
+												.addPreferredGap(
+														javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 												.addGroup(layout
 														.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-														.addComponent(pathFileLabel).addComponent(chosenFileLabel))
+														.addComponent(membersLabel).addComponent(membersInConvLabel))
+												.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
 												.addGroup(layout
-														.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-														.addComponent(sendPhotoButton,
+														.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+														.addGroup(layout.createSequentialGroup()
+																.addComponent(membersContainer,
+																		javax.swing.GroupLayout.DEFAULT_SIZE, 150,
+																		Short.MAX_VALUE)
+																.addPreferredGap(
+																		javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+																.addComponent(createButton).addGap(24, 24, 24)
+																.addComponent(joinToGroupLabel)
+																.addPreferredGap(
+																		javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+																.addGroup(layout.createParallelGroup(
+																		javax.swing.GroupLayout.Alignment.LEADING)
+																		.addComponent(groupCodeLabel2)
+																		.addComponent(groupCode2,
+																				javax.swing.GroupLayout.PREFERRED_SIZE,
+																				javax.swing.GroupLayout.DEFAULT_SIZE,
+																				javax.swing.GroupLayout.PREFERRED_SIZE))
+																.addPreferredGap(
+																		javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+																.addComponent(joinButton,
+																		javax.swing.GroupLayout.PREFERRED_SIZE, 20,
+																		javax.swing.GroupLayout.PREFERRED_SIZE)
+																.addGap(9, 9, 9))
+														.addComponent(membersInConContainer)))
+										.addGroup(layout.createSequentialGroup()
+												.addComponent(chatContainer, javax.swing.GroupLayout.PREFERRED_SIZE, 0,
+														Short.MAX_VALUE)
+												.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+												.addGroup(layout
+														.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING,
+																false)
+														.addComponent(sendButton, javax.swing.GroupLayout.DEFAULT_SIZE,
+																javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+														.addComponent(textContainer,
 																javax.swing.GroupLayout.PREFERRED_SIZE, 0,
-																Short.MAX_VALUE)
-														.addComponent(photoButton,
-																javax.swing.GroupLayout.PREFERRED_SIZE, 16,
-																javax.swing.GroupLayout.PREFERRED_SIZE)))))
-						.addGap(10, 10, 10))
+																Short.MAX_VALUE))
+												.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+												.addGroup(layout
+														.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING,
+																false)
+														.addGroup(layout
+																.createParallelGroup(
+																		javax.swing.GroupLayout.Alignment.BASELINE)
+																.addComponent(pathFileLabel)
+																.addComponent(chosenFileLabel))
+														.addGroup(layout
+																.createParallelGroup(
+																		javax.swing.GroupLayout.Alignment.BASELINE)
+																.addComponent(sendPhotoButton,
+																		javax.swing.GroupLayout.PREFERRED_SIZE, 0,
+																		Short.MAX_VALUE)
+																.addComponent(photoButton,
+																		javax.swing.GroupLayout.PREFERRED_SIZE, 16,
+																		javax.swing.GroupLayout.PREFERRED_SIZE)))))
+								.addGap(10, 10, 10))
 				.addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
 						layout.createSequentialGroup().addGap(12, 12, 12)
 								.addComponent(peopleButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35,

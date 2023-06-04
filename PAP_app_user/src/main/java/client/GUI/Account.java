@@ -21,6 +21,14 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
 
+import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatLightLaf;
+import javax.swing.SwingUtilities;
+
+/**
+ *
+ * @author Adam
+ */
 public class Account extends javax.swing.JPanel {
 
 	MainScreen mainScreenWindow;
@@ -89,12 +97,14 @@ public class Account extends javax.swing.JPanel {
 		confirmPassword = new javax.swing.JPasswordField();
 		passwordAccept = new javax.swing.JButton();
 		avatarLabel = new javax.swing.JLabel();
-		avatar = new javax.swing.JLabel();
-		jEditorPane1 = new javax.swing.JEditorPane();
 		peopleButton = new javax.swing.JButton();
 		msuicButton = new javax.swing.JButton();
 		accountButton = new javax.swing.JButton();
-		mainScreenButton = new javax.swing.JButton();
+        mainScreenButton = new javax.swing.JButton();
+		changeAvatarLabel = new javax.swing.JLabel();
+		selectFileButton = new javax.swing.JButton();
+		changeAvatarButton = new javax.swing.JButton();
+		avatar = new javax.swing.JLabel();
 		passwordChangeOutcome = new javax.swing.JLabel();
 
 		jMenu1.setText("File");
@@ -178,16 +188,37 @@ public class Account extends javax.swing.JPanel {
 			}
 		});
 
-		passwordChangeOutcome.setText("Change avatar:");
+		changeAvatarLabel.setText("Change avatar:");
+
+		selectFileButton.setText("Select file");
+		selectFileButton.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				selectFileButtonActionPerformed(evt);
+			}
+		});
+
+		changeAvatarButton.setText("ChangeAvatar");
+		changeAvatarButton.setToolTipText("");
+		changeAvatarButton.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				changeAvatarButtonActionPerformed(evt);
+			}
+		});
+
+		avatar.setText("");
+
+		passwordChangeOutcome.setText("Password Changed!");
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
 		this.setLayout(layout);
 		layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 				.addGroup(layout.createSequentialGroup().addComponent(logo).addGap(0, 0, Short.MAX_VALUE))
-				.addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup().addContainerGap()
-						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout
-								.createSequentialGroup()
-								.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+				.addGroup(layout.createSequentialGroup().addGroup(layout
+						.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+						.addGroup(layout.createSequentialGroup().addContainerGap().addGroup(layout
+								.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(layout.createSequentialGroup().addGroup(layout
+										.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
 										.addComponent(nick, javax.swing.GroupLayout.DEFAULT_SIZE, 181, Short.MAX_VALUE)
 										.addComponent(nickLabel, javax.swing.GroupLayout.DEFAULT_SIZE,
 												javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -197,17 +228,15 @@ public class Account extends javax.swing.JPanel {
 										.addComponent(emailLabel, javax.swing.GroupLayout.Alignment.LEADING,
 												javax.swing.GroupLayout.DEFAULT_SIZE,
 												javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-								.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-								.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-										.addComponent(emailChangeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 449,
-												javax.swing.GroupLayout.PREFERRED_SIZE)
-										.addComponent(nickChangeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 448,
-												javax.swing.GroupLayout.PREFERRED_SIZE)
-										.addComponent(nickChange, javax.swing.GroupLayout.DEFAULT_SIZE, 660,
-												Short.MAX_VALUE)
-										.addComponent(emailChange)))
-								.addComponent(passwordLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 159,
-										javax.swing.GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+										.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+												.addComponent(emailChangeLabel, javax.swing.GroupLayout.PREFERRED_SIZE,
+														449, javax.swing.GroupLayout.PREFERRED_SIZE)
+												.addComponent(nickChangeLabel, javax.swing.GroupLayout.PREFERRED_SIZE,
+														448, javax.swing.GroupLayout.PREFERRED_SIZE)
+												.addComponent(nickChange, javax.swing.GroupLayout.DEFAULT_SIZE, 662,
+														Short.MAX_VALUE)
+												.addComponent(emailChange)))
 								.addGroup(layout.createSequentialGroup()
 										.addComponent(oldPasswordLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 181,
 												javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -221,8 +250,8 @@ public class Account extends javax.swing.JPanel {
 												.addComponent(confirmPasswordLabel,
 														javax.swing.GroupLayout.DEFAULT_SIZE, 181, Short.MAX_VALUE))
 												.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-												.addGroup(layout
-														.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+												.addGroup(layout.createParallelGroup(
+														javax.swing.GroupLayout.Alignment.LEADING)
 														.addComponent(newPassword).addComponent(confirmPassword)))
 								.addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
 										.addGap(0, 0, Short.MAX_VALUE)
@@ -235,20 +264,36 @@ public class Account extends javax.swing.JPanel {
 														javax.swing.GroupLayout.Alignment.TRAILING,
 														javax.swing.GroupLayout.PREFERRED_SIZE, 144,
 														javax.swing.GroupLayout.PREFERRED_SIZE)))
-								.addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-										.addComponent(passwordChangeOutcome, javax.swing.GroupLayout.PREFERRED_SIZE,
-												159, javax.swing.GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED,
-												javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-										.addComponent(passwordAccept, javax.swing.GroupLayout.PREFERRED_SIZE, 144,
-												javax.swing.GroupLayout.PREFERRED_SIZE)))
-						.addGap(4, 4, 4)
+								.addGroup(layout.createSequentialGroup().addGroup(layout
+										.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+										.addComponent(passwordLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 159,
+												javax.swing.GroupLayout.PREFERRED_SIZE)
+										.addGroup(layout.createSequentialGroup()
+												.addComponent(changeAvatarLabel, javax.swing.GroupLayout.PREFERRED_SIZE,
+														181, javax.swing.GroupLayout.PREFERRED_SIZE)
+												.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+												.addGroup(layout
+														.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+														.addComponent(passwordChangeOutcome)
+														.addComponent(selectFileButton))))
+										.addGap(0, 0, Short.MAX_VALUE)))
+								.addGap(4, 4, 4))
+						.addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+								.addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+										.addComponent(passwordAccept, javax.swing.GroupLayout.Alignment.TRAILING,
+												javax.swing.GroupLayout.PREFERRED_SIZE, 144,
+												javax.swing.GroupLayout.PREFERRED_SIZE)
+										.addComponent(changeAvatarButton, javax.swing.GroupLayout.Alignment.TRAILING,
+												javax.swing.GroupLayout.PREFERRED_SIZE, 144,
+												javax.swing.GroupLayout.PREFERRED_SIZE))
+								.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
 						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-								.addComponent(avatar, javax.swing.GroupLayout.PREFERRED_SIZE, 336,
-										javax.swing.GroupLayout.PREFERRED_SIZE)
 								.addComponent(avatarLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 159,
+										javax.swing.GroupLayout.PREFERRED_SIZE)
+								.addComponent(avatar, javax.swing.GroupLayout.PREFERRED_SIZE, 322,
 										javax.swing.GroupLayout.PREFERRED_SIZE))
-						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+						.addGap(18, 18, 18)
 						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 								.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 										.addComponent(msuicButton, javax.swing.GroupLayout.Alignment.TRAILING,
@@ -264,78 +309,116 @@ public class Account extends javax.swing.JPanel {
 										javax.swing.GroupLayout.PREFERRED_SIZE, 77,
 										javax.swing.GroupLayout.PREFERRED_SIZE))
 						.addContainerGap()));
-		layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout
-				.createSequentialGroup()
-				.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout
-						.createSequentialGroup().addGap(12, 12, 12)
-						.addComponent(peopleButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35,
-								javax.swing.GroupLayout.PREFERRED_SIZE)
-						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-								.addGroup(layout.createSequentialGroup()
-										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-										.addComponent(msuicButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35,
-												javax.swing.GroupLayout.PREFERRED_SIZE)
-										.addGap(12, 12, 12)
-										.addComponent(accountButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35,
-												javax.swing.GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-										.addComponent(mainScreenButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35,
-												javax.swing.GroupLayout.PREFERRED_SIZE)
-										.addGap(34, 34, 34).addComponent(passwordLabel)
-										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-										.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-												.addComponent(oldPasswordLabel).addComponent(oldPassword,
-														javax.swing.GroupLayout.PREFERRED_SIZE,
-														javax.swing.GroupLayout.DEFAULT_SIZE,
-														javax.swing.GroupLayout.PREFERRED_SIZE))
-										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-										.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-												.addComponent(newPasswordLabel).addComponent(newPassword,
-														javax.swing.GroupLayout.PREFERRED_SIZE,
-														javax.swing.GroupLayout.DEFAULT_SIZE,
-														javax.swing.GroupLayout.PREFERRED_SIZE))
-										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-										.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-												.addComponent(confirmPasswordLabel).addComponent(confirmPassword,
-														javax.swing.GroupLayout.PREFERRED_SIZE,
-														javax.swing.GroupLayout.DEFAULT_SIZE,
-														javax.swing.GroupLayout.PREFERRED_SIZE))
-										.addGap(18, 18, 18).addComponent(passwordChangeOutcome))
-								.addGroup(layout.createSequentialGroup().addGap(17, 17, 17).addComponent(avatarLabel)
-										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-										.addComponent(avatar, javax.swing.GroupLayout.PREFERRED_SIZE, 264,
-												javax.swing.GroupLayout.PREFERRED_SIZE))))
+		layout.setVerticalGroup(
+				layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
 						.addGroup(layout.createSequentialGroup()
-								.addComponent(logo, javax.swing.GroupLayout.PREFERRED_SIZE, 58,
-										javax.swing.GroupLayout.PREFERRED_SIZE)
+								.addGroup(layout
+										.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout
+												.createSequentialGroup().addGap(12, 12, 12).addComponent(
+														peopleButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35,
+														javax.swing.GroupLayout.PREFERRED_SIZE)
+												.addGroup(layout
+														.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING,
+																false)
+														.addGroup(layout.createSequentialGroup().addPreferredGap(
+																javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+																.addComponent(msuicButton,
+																		javax.swing.GroupLayout.PREFERRED_SIZE, 35,
+																		javax.swing.GroupLayout.PREFERRED_SIZE)
+																.addGap(12, 12, 12)
+																.addComponent(
+																		accountButton,
+																		javax.swing.GroupLayout.PREFERRED_SIZE, 35,
+																		javax.swing.GroupLayout.PREFERRED_SIZE)
+																.addPreferredGap(
+																		javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+																.addComponent(mainScreenButton,
+																		javax.swing.GroupLayout.PREFERRED_SIZE, 35,
+																		javax.swing.GroupLayout.PREFERRED_SIZE)
+																.addGap(34, 34, 34).addComponent(passwordLabel)
+																.addPreferredGap(
+																		javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+																.addGroup(layout.createParallelGroup(
+																		javax.swing.GroupLayout.Alignment.BASELINE)
+																		.addComponent(oldPasswordLabel)
+																		.addComponent(oldPassword,
+																				javax.swing.GroupLayout.PREFERRED_SIZE,
+																				javax.swing.GroupLayout.DEFAULT_SIZE,
+																				javax.swing.GroupLayout.PREFERRED_SIZE))
+																.addPreferredGap(
+																		javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+																.addGroup(layout.createParallelGroup(
+																		javax.swing.GroupLayout.Alignment.BASELINE)
+																		.addComponent(newPasswordLabel)
+																		.addComponent(newPassword,
+																				javax.swing.GroupLayout.PREFERRED_SIZE,
+																				javax.swing.GroupLayout.DEFAULT_SIZE,
+																				javax.swing.GroupLayout.PREFERRED_SIZE))
+																.addPreferredGap(
+																		javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+																.addGroup(layout.createParallelGroup(
+																		javax.swing.GroupLayout.Alignment.BASELINE)
+																		.addComponent(confirmPasswordLabel)
+																		.addComponent(
+																				confirmPassword,
+																				javax.swing.GroupLayout.PREFERRED_SIZE,
+																				javax.swing.GroupLayout.DEFAULT_SIZE,
+																				javax.swing.GroupLayout.PREFERRED_SIZE))
+																.addPreferredGap(
+																		javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+																.addGroup(layout.createParallelGroup(
+																		javax.swing.GroupLayout.Alignment.BASELINE)
+																		.addComponent(
+																				passwordAccept,
+																				javax.swing.GroupLayout.PREFERRED_SIZE,
+																				22,
+																				javax.swing.GroupLayout.PREFERRED_SIZE)
+																		.addComponent(passwordChangeOutcome)))
+														.addGroup(layout.createSequentialGroup().addGap(17, 17, 17)
+																.addComponent(avatarLabel)
+																.addPreferredGap(
+																		javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+																.addComponent(
+																		avatar, javax.swing.GroupLayout.DEFAULT_SIZE,
+																		javax.swing.GroupLayout.DEFAULT_SIZE,
+																		Short.MAX_VALUE))))
+										.addGroup(layout.createSequentialGroup()
+												.addComponent(logo, javax.swing.GroupLayout.PREFERRED_SIZE, 58,
+														javax.swing.GroupLayout.PREFERRED_SIZE)
+												.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+												.addGroup(layout
+														.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+														.addComponent(emailLabel).addComponent(emailChangeLabel))
+												.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+												.addGroup(layout
+														.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+														.addComponent(email).addComponent(emailChange,
+																javax.swing.GroupLayout.PREFERRED_SIZE,
+																javax.swing.GroupLayout.DEFAULT_SIZE,
+																javax.swing.GroupLayout.PREFERRED_SIZE))
+												.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+												.addComponent(emailChangeAccept, javax.swing.GroupLayout.PREFERRED_SIZE,
+														22, javax.swing.GroupLayout.PREFERRED_SIZE)
+												.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+												.addGroup(layout
+														.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+														.addComponent(nickLabel).addComponent(nickChangeLabel))
+												.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+												.addGroup(layout
+														.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+														.addComponent(nick).addComponent(nickChange,
+																javax.swing.GroupLayout.PREFERRED_SIZE,
+																javax.swing.GroupLayout.DEFAULT_SIZE,
+																javax.swing.GroupLayout.PREFERRED_SIZE))
+												.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+												.addComponent(nickChangeAccept, javax.swing.GroupLayout.PREFERRED_SIZE,
+														22, javax.swing.GroupLayout.PREFERRED_SIZE)))
 								.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-								.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-										.addComponent(emailLabel).addComponent(emailChangeLabel))
-								.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-								.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-										.addComponent(email).addComponent(emailChange,
-												javax.swing.GroupLayout.PREFERRED_SIZE,
-												javax.swing.GroupLayout.DEFAULT_SIZE,
-												javax.swing.GroupLayout.PREFERRED_SIZE))
-								.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-								.addComponent(emailChangeAccept, javax.swing.GroupLayout.PREFERRED_SIZE, 22,
-										javax.swing.GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-								.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-										.addComponent(nickLabel).addComponent(nickChangeLabel))
-								.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-								.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-										.addComponent(nick).addComponent(nickChange,
-												javax.swing.GroupLayout.PREFERRED_SIZE,
-												javax.swing.GroupLayout.DEFAULT_SIZE,
-												javax.swing.GroupLayout.PREFERRED_SIZE))
-								.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-								.addComponent(nickChangeAccept, javax.swing.GroupLayout.PREFERRED_SIZE, 22,
-										javax.swing.GroupLayout.PREFERRED_SIZE)
-								.addGap(114, 114, 114).addComponent(passwordAccept,
-										javax.swing.GroupLayout.PREFERRED_SIZE, 22,
-										javax.swing.GroupLayout.PREFERRED_SIZE)))
-				.addContainerGap(371, Short.MAX_VALUE)));
+								.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+										.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+												.addComponent(changeAvatarLabel).addComponent(selectFileButton))
+										.addComponent(changeAvatarButton))
+								.addContainerGap(348, Short.MAX_VALUE)));
 	}// </editor-fold>
 
 	private void peopleButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -365,11 +448,25 @@ public class Account extends javax.swing.JPanel {
 		// TODO add your handling code here:
 	}
 
+	private void selectFileButtonActionPerformed(java.awt.event.ActionEvent evt) {
+		AvatarChooser avatarChooser = new AvatarChooser(new StringBuilder()); // TODO add changing avatar
+		avatarChooser.setVisible(true);
+	}
+
+	private void passwordAcceptActionPerformed(java.awt.event.ActionEvent evt) {
+		// TODO add your handling code here:
+	}
+
+	private void changeAvatarButtonActionPerformed(java.awt.event.ActionEvent evt) {
+		// TODO add your handling code here:
+	}
+
 	// Variables declaration - do not modify
 	private javax.swing.JButton accountButton;
 	private javax.swing.JLabel avatar;
 	private javax.swing.JLabel avatarLabel;
-	private javax.swing.JLabel passwordChangeOutcome;
+	private javax.swing.JButton changeAvatarButton;
+	private javax.swing.JLabel changeAvatarLabel;
 	private javax.swing.JPasswordField confirmPassword;
 	private javax.swing.JLabel confirmPasswordLabel;
 	private javax.swing.JLabel email;
@@ -394,7 +491,9 @@ public class Account extends javax.swing.JPanel {
 	private javax.swing.JPasswordField oldPassword;
 	private javax.swing.JLabel oldPasswordLabel;
 	private javax.swing.JButton passwordAccept;
+	private javax.swing.JLabel passwordChangeOutcome;
 	private javax.swing.JLabel passwordLabel;
 	private javax.swing.JButton peopleButton;
+	private javax.swing.JButton selectFileButton;
 	// End of variables declaration
 }

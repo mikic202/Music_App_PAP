@@ -21,7 +21,6 @@ import javax.sound.sampled.FloatControl;
 import client.GUI.guiListeners.MusicEventListener;
 import client.Music.MusicManager;
 import client.ServerConnectionConstants.ChatMessagesConstants;
-
 public class MainScreen extends javax.swing.JFrame {
 
 	/**
@@ -143,7 +142,6 @@ public class MainScreen extends javax.swing.JFrame {
 		currentSongLabel1 = new javax.swing.JLabel();
 		menu = new javax.swing.JMenuBar();
 		chooseMusic = new javax.swing.JMenu();
-		changeAvatar = new javax.swing.JMenu();
 
 		jScrollPane5.setViewportView(jEditorPane1);
 
@@ -748,25 +746,6 @@ public class MainScreen extends javax.swing.JFrame {
 		});
 		menu.add(chooseMusic);
 
-		changeAvatar.setText("Change avatar");
-		changeAvatar.addMenuKeyListener(new javax.swing.event.MenuKeyListener() {
-			public void menuKeyPressed(javax.swing.event.MenuKeyEvent evt) {
-				changeAvatarMenuKeyPressed(evt);
-			}
-
-			public void menuKeyReleased(javax.swing.event.MenuKeyEvent evt) {
-			}
-
-			public void menuKeyTyped(javax.swing.event.MenuKeyEvent evt) {
-			}
-		});
-		changeAvatar.addMouseListener(new java.awt.event.MouseAdapter() {
-			public void mouseClicked(java.awt.event.MouseEvent evt) {
-				changeAvatarMouseClicked(evt);
-			}
-		});
-		menu.add(changeAvatar);
-
 		setJMenuBar(menu);
 
 		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -876,15 +855,6 @@ public class MainScreen extends javax.swing.JFrame {
 		this.musicChooser = musicChooserNew;
 	}
 
-	private void changeAvatarMenuKeyPressed(javax.swing.event.MenuKeyEvent evt) {
-		//
-	}
-
-	private void changeAvatarMouseClicked(java.awt.event.MouseEvent evt) {
-		// AvatarChooser avatarChooser = new AvatarChooser();
-		// avatarChooser.setVisible(true);
-	}
-
 	private void leaveStreamButton1ActionPerformed(java.awt.event.ActionEvent evt) {
 		// TODO add your handling code here:
 	}
@@ -942,7 +912,6 @@ public class MainScreen extends javax.swing.JFrame {
 	// Variables declaration - do not modify
 	private javax.swing.JButton accountButton;
 	private javax.swing.JLabel authorLabel;
-	private javax.swing.JMenu changeAvatar;
 	private javax.swing.JScrollPane chatsContainer;
 	private javax.swing.JScrollPane chatsContainer1;
 	private javax.swing.JLabel chatsLabel;
