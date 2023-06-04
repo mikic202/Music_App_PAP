@@ -24,8 +24,8 @@ public class MusicPlayer implements Runnable
     private StreamStatusCallback streamStatusCb;
     private int currentMinute = 0;
     private int currentSecond = 0;
-    private int totalSecondSize;
-    private int totalMinuteSize;
+    private int totalSeconds = 0;
+    private int totalMinutes = 0;
     private int currentPacketCount = 0;
 
 
@@ -34,8 +34,8 @@ public class MusicPlayer implements Runnable
         this.format = fileFormat;
         int size = (int) (lengthInBytes/(format.getSampleRate()*format.getChannels()*(format.getSampleSizeInBits()/8)));
 
-        totalSecondSize = size % 60;
-        totalMinuteSize = size / 60;
+        totalSeconds = size % 60;
+        totalMinutes = size / 60;
 
         int frameSize = format.getFrameSize();
         bufferSize = frameSize*128; //amount of read bytes must be multiplication of frames/second
@@ -148,9 +148,8 @@ public class MusicPlayer implements Runnable
         void checkIfPaused();
     }
 
-    public synchronized /*ArrayList<Integer>*/ void updateTime()
+    private synchronized void updateTime()
     {
-        //ArrayList<Integer> time = new ArrayList<Integer>();
 
         int absSecond = (int) ((bufferSize - 4)*currentPacketCount/(format.getSampleRate()*format.getChannels()*(format.getSampleSizeInBits()/8)));
 
@@ -162,7 +161,7 @@ public class MusicPlayer implements Runnable
         currentSecond = absSecond - (60*currentMinute);
 
 
-        System.out.println(String.format(("%d:%d ||||| Total %d:%d"), currentMinute, currentSecond, totalMinuteSize, totalSecondSize));
+        System.out.println(String.format(("%d:%d ||||| Total %d:%d"), currentMinute, currentSecond, totalMinutes, totalSeconds));
     }
 
     public static final int byteArrayToInt(byte[] bytes) {
@@ -172,6 +171,31 @@ public class MusicPlayer implements Runnable
         byteArrayInt[2] = bytes[bytes.length - 2];
         byteArrayInt[3] = bytes[bytes.length - 1];
         return ByteBuffer.wrap(byteArrayInt).getInt();
+    }
+
+    public synchronized ArrayList<Integer> getCurrentTime()
+    {
+        ArrayList<Integer> time = new ArrayList<Integer>();
+        time.add(currentSecond);
+        time.add(currentMinute);
+        return time;
+    }
+
+    public synchronized ArrayList<Integer> getTotalTime()
+    {
+        ArrayList<Integer> time = new ArrayList<Integer>();
+        time.add(totalSeconds);
+        time.add(totalMinutes);
+        return time;
+    }
+
+    public synchronized int getPercentageOfSongPlayed()
+    {
+        if(totalMinutes == 0 || totalSeconds == 0)
+        {
+            return 0;
+        }
+        return (int) (totalMinutes * 60 + totalSeconds)/(currentMinute*60 + currentSecond);
     }
 }
 
