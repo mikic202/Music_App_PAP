@@ -33,7 +33,6 @@ public class ChatContentsUpdater {
     };
 
     static public void updateChat(ArrayList<JSONObject> newMessages, Chat chat, JPanel messagesArea) {
-    	System.out.println(newMessages);
         messagesArea.removeAll();
         for (int i = newMessages.size() - 1; i >= 0; i--) {
             var message = newMessages.get(i);
@@ -69,7 +68,6 @@ public class ChatContentsUpdater {
     }
 
     static JPanel addImage(JSONObject message, Chat chat, JPanel messagesArea) {
-    	System.out.println("Adding image");
         ImageChatPanel chatPanel = new ImageChatPanel();
         if (message.getInt(ChatMessagesConstants.MESSAGE_SENDER_ID.value()) == chat.userId()) {
             chatPanel.chatText.setBackground(new java.awt.Color(0, 137, 255));
