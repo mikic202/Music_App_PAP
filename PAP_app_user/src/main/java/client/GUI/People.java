@@ -122,8 +122,10 @@ public class People extends javax.swing.JPanel {
 			}
 		});
 
-		changeChatNameLabel.setText("<html>Current conversation code:" + chat.getConversationCode()
-				+ "<br> Change current conversation name:</html>");
+		removePersonFromGroupLabel.setText("Conversation code: " + chat.getConversationCode());
+
+		userOrGroupNameLabel
+				.setText(chat.getCurentConversationInfo().getString(ChatMessagesConstants.CONVERSATION_NAME.value()));
 
 		// System.out.println(345);
 
@@ -342,7 +344,7 @@ public class People extends javax.swing.JPanel {
 		}));
 
 		changeChatNameLabel.setFont(new java.awt.Font("Segoe UI Black", 0, 13)); // NOI18N
-		changeChatNameLabel.setText("<html>Current conversation code: <br> Change current conversation name:</html>");
+		changeChatNameLabel.setText("Change current conversation name:");
 
 		changeChatName.setText("jTextField1");
 
