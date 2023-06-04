@@ -1,18 +1,23 @@
 package client.Chat.tests;
 
+import client.ServerConnector.ServerConnector;
+import client.ServerConnectionConstants.ChatMessagesConstants;
+import client.ServerConnectionConstants.MessagesTopLevelConstants;
+import client.Chat.RequestTypes;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+
+import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Before;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import client.Chat.ChatAccesors;
-import client.ServerConnector.ServerConnector;
 
 public class ChatAccersorTests {
 
@@ -25,28 +30,26 @@ public class ChatAccersorTests {
     // // calcService = mock(CalculatorService.class);
     // // mathApplication.setCalculatorService(calcService);
     // }
-    @Before
-    public void setUp() {
-        serverConnector = mock(ServerConnector.class);
-        chatAccesor = new ChatAccesors(serverConnector);
-    }
+    // @Before
+    // public void setUp() {
+    // serverConnector = Mockito.(ServerConnector.class);
+    // chatAccesor = new ChatAccesors(serverConnector);
+    // }
 
     @Test
     public void testUserInfoRequest() {
         //
-        when
-        // try (MockedStatic<ServerConnector> dummyAccesor =
-        // Mockito.mockStatic(ServerConnector.class)) {
-        // Hashtable<String, String> userData = new Hashtable<String, String>();
+        serverConnector = Mockito.mock(ServerConnector.class);
+        chatAccesor = new ChatAccesors(serverConnector);
 
-        //
-        // dummyAccesor.when(() -> ServerConnector.send).thenReturn(userData);
-        // var expectedResponse = _convertResponseToJson(userData,
-        // RequestTypes.USER_INFO);
-        // Response.getJSONObject("value").remove("password");
-        // ssertEquals(
-        // expectedResponse.toString(),
-        // Chat.procesRequests(RequestTypes.USER_INFO, request).toString());
-        // }
+        var response = new JSONObject();
+        response.put(MessagesTopLevelConstants.TYPE.value(), RequestTypes.USER_INFO.value());
+        var responseValue = new JSONObject();
+        responseValue.put(ChatMessagesConstants.USER_ID.value(), 1);
+        responseValue.put(ChatMessagesConstants.EMAIL.value(), "some@email");
+        response.put(MessagesTopLevelConstants.VALUE.value(), responseValue);
+
+        when(serverConnector.sendRequest(any(JSONObject.class))).thenReturn(response);
+        Assert.assertEquals(response.toString(), chatAccesor.getUserInfo(1).toString());
     }
 }
