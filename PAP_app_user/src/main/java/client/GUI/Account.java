@@ -163,6 +163,7 @@ public class Account extends javax.swing.JPanel {
 
 		avatarLabel.setText("Avatar:");
 
+		peopleButton.setIcon(new javax.swing.ImageIcon("src/main/java/client/GUI/PeoplePAP.png")); // NOI18N
 		peopleButton.setText("jButton1");
 		peopleButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -186,6 +187,7 @@ public class Account extends javax.swing.JPanel {
 			}
 		});
 
+		mainScreenButton.setIcon(new javax.swing.ImageIcon("src/main/java/client/GUI/MainScreenPAP.png")); // NOI18N
 		mainScreenButton.setText("jButton1");
 		mainScreenButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
