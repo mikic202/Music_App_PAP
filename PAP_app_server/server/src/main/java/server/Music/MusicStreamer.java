@@ -135,7 +135,7 @@ class MusicStreamer extends Thread {
     }
 
     public synchronized boolean checkIfPaused() {
-        return running;
+        return !running;
     }
 
     public synchronized int getLength() {
@@ -177,7 +177,6 @@ class MusicStreamer extends Thread {
 
             while ((in.read(buffer = new byte[PACKET_SIZE], 0, buffer.length - 4)) > 0) {
                 Instant start = Instant.now();
-                System.out.println(count);
                 count += 1;
                 intToByteArray(buffer, count);
                 sendPacketToListeners(buffer);

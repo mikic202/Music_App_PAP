@@ -80,6 +80,8 @@ public class MainScreen extends javax.swing.JFrame {
 		FlatDarkLaf.setup();
 		this.musicEventListenerInstance = new MusicEventListener(serverConnector,
 				userInfo.getInt(ChatMessagesConstants.USER_ID.value()));
+
+		this.songListListenerInstance = new SongListSelectionListener();
 		initComponents();
 
 		chatsList.addListSelectionListener(new SwitchConversationFromMainWindwoListener(chat, new Callable<Void>() {
