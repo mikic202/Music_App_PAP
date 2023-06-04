@@ -16,12 +16,6 @@ public class MusicAccessors {
         return response;
     }
 
-    public JSONObject sendTerminateStream(int userId) {
-        JSONObject processedRequest = MusicRequestCreator.createTerminateStreamRequest(userId);
-        JSONObject response = serverConnectorInstance.sendRequest(processedRequest);
-        return response;
-    }
-
     public JSONObject sendCheckIfPlaying(int chatId) {
         JSONObject processedRequest = MusicRequestCreator.createCheckIfPlayingRequest(chatId);
         JSONObject response = serverConnectorInstance.sendRequest(processedRequest);

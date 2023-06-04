@@ -18,15 +18,6 @@ public class MusicRequestCreator {
         return data;
     }
 
-    public static JSONObject createTerminateStreamRequest(int userId) {
-        var value = new JSONObject();
-        value.put(ChatMessagesConstants.USER_ID.value(), userId);
-        var data = new JSONObject();
-        data.put(MessagesTopLevelConstants.TYPE.value(), MusicRequestTypes.TERMINATE_STREAM.value());
-        data.put(MessagesTopLevelConstants.VALUE.value(), value);
-        return data;
-    }
-
     public static JSONObject createCheckIfPlayingRequest(int chatId) {
         var value = new JSONObject();
         value.put("chat_id", chatId);

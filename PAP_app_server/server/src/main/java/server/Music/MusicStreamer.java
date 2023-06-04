@@ -8,6 +8,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketTimeoutException;
+import java.nio.Buffer;
 import java.time.Duration;
 import java.time.Instant;
 import java.io.DataInputStream;
@@ -134,7 +135,7 @@ class MusicStreamer extends Thread {
     }
 
     public synchronized boolean checkIfPaused() {
-        return running;
+        return !running;
     }
 
     public synchronized int getLength() {
@@ -164,23 +165,28 @@ class MusicStreamer extends Thread {
     public void run() {
         initiateNewConnection(true);
         socket.close();
+        running = false;
+        terminated = true;
     }
 
     private void startStreaming(InetAddress address, int port) {
         try {
             byte[] buffer;
             DataInputStream in = new DataInputStream(stream);
+            int count = 0;
 
-            while ((in.read(buffer = new byte[PACKET_SIZE], 0, buffer.length)) > 0) {
+            while ((in.read(buffer = new byte[PACKET_SIZE], 0, buffer.length - 4)) > 0) {
                 Instant start = Instant.now();
+                count += 1;
+                intToByteArray(buffer, count);
                 sendPacketToListeners(buffer);
                 Instant finish = Instant.now();
                 long time = Duration.between(start, finish).toNanos();
-                if (time < 2500){
-                    time = 2500 - time;
+                if (time < 3000000){
+                    time = 3000000 - time;
                     try
                     {
-                        Thread.sleep(time / 1000);
+                        Thread.sleep(time/1000000);
                     }
                     catch (InterruptedException e){}
                 }
@@ -241,6 +247,13 @@ class MusicStreamer extends Thread {
             System.out.println(e);
             return false;
         }
+    }
+
+    public static final void intToByteArray(byte[] bytes, int value) {
+        bytes[bytes.length - 4] = (byte) ((value & 0xFF000000) >> 24);
+        bytes[bytes.length - 3] = (byte) ((value & 0x00FF0000) >> 16);
+        bytes[bytes.length - 2] = (byte) ((value & 0x0000FF00) >> 8);
+        bytes[bytes.length - 1] = (byte) ((value & 0x000000FF) >> 0);
     }
 
 }

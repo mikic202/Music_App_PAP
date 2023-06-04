@@ -18,25 +18,26 @@ public class MusicEventListener implements ActionListener {
 
     public MusicEventListener(ServerConnector serverConnector, int userId) {
         musicManagerInstance = new MusicManager(serverConnector, userId);
+        System.out.println(musicManagerInstance);
     }
 
     public static synchronized void onChatIdChange(int chatId)
     {
+        System.out.println(chatId);
         chosenChatId = chatId;
     }
 
     public static synchronized void onSongIdChange(int songId)
     {
+        System.out.println(songId);
         chosenSongId = songId;
     }
 
     @Override
     public void actionPerformed(ActionEvent event) {
         String text = new String();
-        //if(event.getSource() instanceof JButton) {
-            text = ((JButton) event.getSource()).getText();
-            System.out.println(text);
-        //}
+        text = ((JButton) event.getSource()).getText();
+        System.out.println(text);
         if(text == "Play")
         {
             onEventPlay();
@@ -57,13 +58,16 @@ public class MusicEventListener implements ActionListener {
         {
             onEventJoinStream();
         }
+        else if(text == "Leave stream")
+        {
+            onEventLeaveStream();
+        }
     }
 
     private void onEventPlay()
     {
         if(!musicManagerInstance.resumePlaying())
         {
-            //TODO error msg
             System.out.println("failed to resume");
         }
     }
@@ -82,6 +86,8 @@ public class MusicEventListener implements ActionListener {
 
         if(chosenChatId == -1 || chosenSongId == -1)
         {
+            System.out.println(chosenChatId);
+            System.out.println(chosenSongId);
             popupText = "Song or chat not chosen!";
         }
         else
@@ -138,6 +144,25 @@ public class MusicEventListener implements ActionListener {
         else
         {
             popupText = "Chat not chosen!";
+        }
+
+        System.out.println(popupText);
+    }
+
+    private void onEventLeaveStream()
+    {
+        String popupText = new String();
+
+        if(chosenChatId == -1)
+        {
+            popupText = "Chat not chosen!";
+        }
+        else
+        {
+            if(!musicManagerInstance.leaveStream())
+            {
+                popupText = "Error";
+            }
         }
 
         System.out.println(popupText);

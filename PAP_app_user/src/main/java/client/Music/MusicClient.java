@@ -10,6 +10,7 @@ import java.io.PipedOutputStream;
 import java.net.SocketTimeoutException;
 import client.Music.MusicPlayer;
 import client.Music.MusicPlayer.StreamStatusCallback;
+import java.util.ArrayList;
 
 public class MusicClient implements Runnable
 {
@@ -28,13 +29,13 @@ public class MusicClient implements Runnable
 
     private PipedOutputStream pipedOutStream;
 
-    public MusicClient(AudioFormat fileFormat, int serverUdpPort, boolean startNow, StreamStatusCallback streamStatusCb)
+    public MusicClient(AudioFormat fileFormat, int serverUdpPort, boolean startNow, StreamStatusCallback streamStatusCb, int lengthInBytes)
     {
         try
         {
             socket = new DatagramSocket();
             pipedOutStream = new PipedOutputStream();
-            player = new MusicPlayer(pipedOutStream, fileFormat, streamStatusCb);
+            player = new MusicPlayer(pipedOutStream, fileFormat, streamStatusCb, lengthInBytes);
             this.serverUdpPort = serverUdpPort;
             System.out.println(serverUdpPort);
             address = InetAddress.getByName(SERVER_ADDRESS);
@@ -52,6 +53,7 @@ public class MusicClient implements Runnable
     public synchronized void terminateReceiving()
     {
         receive = false;
+        active = false;
         player.terminatePlayer();
     }
 
@@ -75,6 +77,21 @@ public class MusicClient implements Runnable
     public synchronized boolean isActive()
     {
         return active;
+    }
+
+    public synchronized ArrayList<Integer> getCurrentTime()
+    {
+        return player.getCurrentTime();
+    }
+
+    public synchronized ArrayList<Integer> getTotalTime()
+    {
+        return player.getTotalTime();
+    }
+
+    public synchronized int getPercentageOfSongPlayed()
+    {
+        return player.getPercentageOfSongPlayed();
     }
 
     public void run()
@@ -124,7 +141,7 @@ public class MusicClient implements Runnable
                     DatagramPacket packet = new DatagramPacket(buf, buf.length);
                     socket.receive(packet);
                     connectionEstablished = true;
-
+                    terminationCount = 0;
                     pipedOutStream.write(packet.getData());
                     sendMessage(".");
                 }
@@ -137,8 +154,11 @@ public class MusicClient implements Runnable
                     }
                     else
                     {
-                        terminationCount += 1;
-                        if (terminationCount > 20)
+                        if(!player.isPlaying())
+                        {
+                            terminationCount += 1;
+                        }
+                        if (terminationCount > 5)
                         {
                             terminateReceiving();
                             socket.close();
@@ -152,7 +172,6 @@ public class MusicClient implements Runnable
         {
             e.printStackTrace();
         }
-        active = false;
     }
 
     private void startPlayer()
