@@ -277,7 +277,8 @@ public class Chat {
 
     public boolean joinConversationUsingCode(String code) {
         JSONObject response = chatAccesor.joinConversationUsingCode(code, userId);
-        boolean outcome = response.getJSONObject(MessagesTopLevelConstants.VALUE.value()).getBoolean("outcome");
+        boolean outcome = response.getJSONObject(MessagesTopLevelConstants.VALUE.value())
+                .getBoolean(MessagesTopLevelConstants.OUTCOME.value());
         if (outcome) {
             JSONObject conversations = chatAccesor.getUsersConversations(userId);
             convertConversationsResponseToHashtable(conversations);
@@ -294,7 +295,8 @@ public class Chat {
 
     public String changeCurrentConversationName(String newName) {
         JSONObject response = chatAccesor.changeConversationName(currentConversation, newName);
-        if (response.getJSONObject(MessagesTopLevelConstants.VALUE.value()).getBoolean("outcome")) {
+        if (response.getJSONObject(MessagesTopLevelConstants.VALUE.value())
+                .getBoolean(MessagesTopLevelConstants.OUTCOME.value())) {
             usersConversations.get(currentConversation).put(ChatMessagesConstants.CONVERSATION_NAME.value(), newName);
             return newName;
         }
@@ -307,10 +309,12 @@ public class Chat {
             return false;
         }
         JSONObject result = chatAccesor.RemoveUserFromConversation(currentConversation, userId);
-        if (result.getJSONObject(MessagesTopLevelConstants.VALUE.value()).getBoolean("outcome")) {
+        if (result.getJSONObject(MessagesTopLevelConstants.VALUE.value())
+                .getBoolean(MessagesTopLevelConstants.OUTCOME.value())) {
             usersInConversarion.get(currentConversation).remove(userId);
         }
-        return result.getJSONObject(MessagesTopLevelConstants.VALUE.value()).getBoolean("outcome");
+        return result.getJSONObject(MessagesTopLevelConstants.VALUE.value())
+                .getBoolean(MessagesTopLevelConstants.OUTCOME.value());
     }
 
     private int findUsersId(String username) {

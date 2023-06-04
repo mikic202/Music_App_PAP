@@ -35,7 +35,8 @@ public class ChatWorker extends SwingWorker<Boolean, Void> {
     protected Boolean doInBackground() throws Exception {
         while (true) {
             var data = serverConnector.waitForData();
-            if (!data.getJSONObject(MessagesTopLevelConstants.VALUE.value()).keySet().contains("outcome")) {
+            if (!data.getJSONObject(MessagesTopLevelConstants.VALUE.value()).keySet()
+                    .contains(MessagesTopLevelConstants.OUTCOME.value())) {
                 chat.addExternalMessage(data.getJSONObject(MessagesTopLevelConstants.VALUE.value()));
                 chat.updateStatus();
                 if (!addMesageToCurrentConversationView(data.getJSONObject(MessagesTopLevelConstants.VALUE.value()))) {
@@ -43,8 +44,10 @@ public class ChatWorker extends SwingWorker<Boolean, Void> {
                 }
             }
             System.out.println("status updated");
-            if (data.getJSONObject(MessagesTopLevelConstants.VALUE.value()).keySet().contains("outcome")
-                    && !data.getJSONObject(MessagesTopLevelConstants.VALUE.value()).getBoolean("outcome")) {
+            if (data.getJSONObject(MessagesTopLevelConstants.VALUE.value()).keySet()
+                    .contains(MessagesTopLevelConstants.OUTCOME.value())
+                    && !data.getJSONObject(MessagesTopLevelConstants.VALUE.value())
+                            .getBoolean(MessagesTopLevelConstants.OUTCOME.value())) {
                 return false;
             }
             System.out.println(123);
@@ -55,7 +58,8 @@ public class ChatWorker extends SwingWorker<Boolean, Void> {
         LoginAccessors loggingAccesor = new LoginAccessors(serverConnector);
         var response = loggingAccesor.sendUserLoginData(
                 chat.getCurrentUserInfo().getString(ChatMessagesConstants.EMAIL.value()), userPassword);
-        return response.getJSONObject(MessagesTopLevelConstants.VALUE.value()).getBoolean("outcome");
+        return response.getJSONObject(MessagesTopLevelConstants.VALUE.value())
+                .getBoolean(MessagesTopLevelConstants.OUTCOME.value());
     }
 
     private Boolean addMesageToCurrentConversationView(JSONObject message) {
