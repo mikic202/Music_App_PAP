@@ -150,7 +150,7 @@ public class Chat {
             return _convertResponseToJson(hashResponse, RequestTypes.USER_INFO);
         }
         Hashtable<String, String> hashResponse = UserDataAccesor
-                .getData(UserDatabaseInformation.ID_COLUMN.value(), request.getInt("user_id"));
+                .getData(request.getInt("user_id"));
         hashResponse.remove("password");
         return _convertResponseToJson(hashResponse, RequestTypes.USER_INFO);
     }
