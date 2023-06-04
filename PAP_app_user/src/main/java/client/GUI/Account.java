@@ -53,6 +53,11 @@ public class Account extends javax.swing.JPanel {
 		email.setText(chat.getCurrentUserInfo().getString(ChatMessagesConstants.EMAIL.value()));
 		nick.setText(chat.getCurrentUserInfo().getString(ChatMessagesConstants.USERNAME.value()));
 
+		this.peopleButton.setIcon(new ImageIcon("src/main/java/client/GUI/PeoplePAP.png"));
+		this.msuicButton.setIcon(new ImageIcon("src/main/java/client/GUI/MusicPAP.png"));
+		this.accountButton.setIcon(new ImageIcon("src/main/java/client/GUI/AccountSettingsPAP.png"));
+		mainScreenButton.setIcon(new ImageIcon("src/main/java/client/GUI/MainScreenPAP.png"));
+
 	}
 
 	public void Theme() {
@@ -100,7 +105,7 @@ public class Account extends javax.swing.JPanel {
 		peopleButton = new javax.swing.JButton();
 		msuicButton = new javax.swing.JButton();
 		accountButton = new javax.swing.JButton();
-        mainScreenButton = new javax.swing.JButton();
+		mainScreenButton = new javax.swing.JButton();
 		changeAvatarLabel = new javax.swing.JLabel();
 		selectFileButton = new javax.swing.JButton();
 		changeAvatarButton = new javax.swing.JButton();

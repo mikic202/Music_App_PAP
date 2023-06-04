@@ -31,6 +31,7 @@ import client.GUI.guiWorkers.ChatWorker;
 import client.ServerConnectionConstants.ChatMessagesConstants;
 import client.GUI.AvatarChooser;
 
+import javax.swing.ImageIcon;
 import javax.swing.JScrollBar;
 import javax.swing.SwingUtilities;
 import net.miginfocom.swing.MigLayout;
@@ -81,6 +82,11 @@ public class People extends javax.swing.JPanel {
 			}
 		}).start();
 		chatContainer.getVerticalScrollBar().setUnitIncrement(16);
+
+		this.peopleButton.setIcon(new ImageIcon("src/main/java/client/GUI/PeoplePAP.png"));
+		this.musicButton.setIcon(new ImageIcon("src/main/java/client/GUI/MusicPAP.png"));
+		this.accountButton.setIcon(new ImageIcon("src/main/java/client/GUI/AccountSettingsPAP.png"));
+		mainScreenButton.setIcon(new ImageIcon("src/main/java/client/GUI/MainScreenPAP.png"));
 	}
 
 	public void goBackToLatestConversation() {
