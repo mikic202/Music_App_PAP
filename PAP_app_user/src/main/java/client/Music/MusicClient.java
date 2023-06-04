@@ -140,13 +140,12 @@ public class MusicClient implements Runnable
                     }
                     else
                     {
-                        if(player.isPlaying())
+                        if(!player.isPlaying())
                         {
                             terminationCount += 1;
                         }
                         if (terminationCount > 5)
                         {
-                            System.out.println("terminate called");
                             terminateReceiving();
                             socket.close();
                         }

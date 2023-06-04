@@ -54,7 +54,6 @@ public class MusicPlayer implements Runnable
         try
         {
             System.out.println("AAAAAAAAAAAAAAAAAA");
-            BufferedInputStream bis = new BufferedInputStream(pipedInputStream);
 
             while (pipedInputStream.available() < bufferSize*64)
             {
@@ -70,17 +69,23 @@ public class MusicPlayer implements Runnable
 
             while (terminated == false)
             {
+                System.out.println("in loop");
                 if (playing)
                 {
-                    if(bis.read(buf = new byte[bufferSize], 0, buf.length) > 0)
+                    if(pipedInputStream.available() > (bufferSize - 1))
                     {
-                        this.currentPacketCount = byteArrayToInt(buf);
-                        byte[] strippedBuf = Arrays.copyOfRange(buf, 0, buf.length - 4);
-                        sourceDataLine.write(strippedBuf, 0, strippedBuf.length);
-                        updateTime();
+                        if(pipedInputStream.read(buf = new byte[bufferSize], 0, buf.length) > 0)
+                        {
+                            System.out.println(buf);
+                            this.currentPacketCount = byteArrayToInt(buf);
+                            byte[] strippedBuf = Arrays.copyOfRange(buf, 0, buf.length - 4);
+                            sourceDataLine.write(strippedBuf, 0, strippedBuf.length);
+                            updateTime();
+                        }
                     }
                     else
                     {
+                        System.out.println("start check if paused");
                         checkIfStreamPaused();
                         System.out.println("check if paused");
                         Thread.sleep(500);
@@ -88,20 +93,26 @@ public class MusicPlayer implements Runnable
                 }
                 else
                 {
-                    
-                    pipedInputStream.skip(pipedInputStream.available());
-                    Thread.sleep(10);
+                    System.out.println("skipping");
+                    int toSkip = pipedInputStream.available() - bufferSize*32;
+                    if(toSkip < 0)
+                    {
+                        toSkip = 0;
+                    }
+                    pipedInputStream.skip(toSkip);
+                    Thread.sleep(1000);
                 }
             }
+            System.out.println("outside loop");
             playing = false;
             sourceDataLine.drain();
             sourceDataLine.close();
-            bis.close();
             pipedInputStream.close();
             System.out.println("All available data has been read");
         }
         catch (Exception e)
         {
+            System.out.println("Exception");
             e.printStackTrace();
         }
     }
