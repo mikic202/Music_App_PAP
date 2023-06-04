@@ -86,6 +86,8 @@ public class MusicEventListener implements ActionListener {
 
         if(chosenChatId == -1 || chosenSongId == -1)
         {
+            System.out.println(chosenChatId);
+            System.out.println(chosenSongId);
             popupText = "Song or chat not chosen!";
         }
         else

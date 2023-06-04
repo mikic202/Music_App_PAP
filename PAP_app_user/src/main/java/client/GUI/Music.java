@@ -247,7 +247,7 @@ public class Music extends javax.swing.JPanel {
 
 		});
 
-		chooseSongList.addListSelectionListener(new SongListSelectionListener());
+		chooseSongList.addListSelectionListener(mainScreenWindow.songListListenerInstance);
 
 		chooseSongContainer.setViewportView(chooseSongList);
 
