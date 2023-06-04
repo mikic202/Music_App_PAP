@@ -1,13 +1,24 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ */
 package client.GUI;
 
 import java.awt.Dimension;
 
+/**
+ *
+ * @author Adam
+ */
 public class InformationWindow extends javax.swing.JFrame {
 
+    /**
+     * Creates new form RegistrationDenied
+     */
     public InformationWindow(String displayedText) {
-        this.setMinimumSize(new Dimension(100, 30));
         initComponents();
         TextLable.setText(displayedText);
+        this.setMinimumSize(new Dimension(300, 50));
     }
 
     /**
@@ -21,8 +32,18 @@ public class InformationWindow extends javax.swing.JFrame {
     private void initComponents() {
 
         TextLable = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        TextLable.setText("");
+
+        jButton1.setText("OK");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -30,20 +51,24 @@ public class InformationWindow extends javax.swing.JFrame {
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
                                 .addComponent(TextLable)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)));
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButton1)));
         layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(TextLable)));
+                                .addComponent(TextLable)
+                                .addComponent(jButton1)));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * @param args the command line arguments
-     */
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+    }// GEN-LAST:event_jButton1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel TextLable;
+    // End of variables declaration//GEN-END:variables
 }
-//
