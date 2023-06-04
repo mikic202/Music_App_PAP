@@ -47,6 +47,7 @@ public class People extends javax.swing.JPanel {
 	private ChatWorker chatWorker;
 	private Chat chat;
 	StringBuilder choosenImagePath;
+	int lastConversation = 0;
 
 	public People(MainScreen mainScreenParam, Chat chat, char[] userPassword) {
 		choosenImagePath = new StringBuilder();
@@ -79,6 +80,14 @@ public class People extends javax.swing.JPanel {
 			}
 		}).start();
 		chatContainer.getVerticalScrollBar().setUnitIncrement(16);
+	}
+
+	public void goBackToLatestConversation() {
+		try {
+			chat.switchConversations(lastConversation);
+		} catch (Exception e) {
+			System.out.println(e);
+		}
 	}
 
 	public void Theme() {
@@ -136,6 +145,7 @@ public class People extends javax.swing.JPanel {
 				return convNames[i];
 			}
 		});
+		lastConversation = chat.getCurrentChatId();
 		// System.out.println(234);
 	}
 

@@ -8,6 +8,7 @@ import javax.swing.JTextField;
 
 import org.json.JSONObject;
 
+import client.GUI.InformationWindow;
 import client.ServerConnectionConstants.MessagesTopLevelConstants;
 import client.ServerConnector.ServerConnector;
 import client.login_and_account_accessors.LoginAccessors;
@@ -36,10 +37,12 @@ public class RetrievePasswordListener implements ActionListener {
             JSONObject response = loggingAccessors.sendRetrievePassword(emailField.getText());
             if (response.getJSONObject(MessagesTopLevelConstants.VALUE.value())
                     .getBoolean(MessagesTopLevelConstants.OUTCOME.value())) {
-                forgotPasswordLabel.setText("New Pasword sent to email");
+                new InformationWindow("New Pasword sent to email").setVisible(true);
+                // forgotPasswordLabel.setText("New Pasword sent to email");
             } else {
                 emailField.setText("");
-                forgotPasswordLabel.setText("Given Email does not have an account");
+                new InformationWindow("Given Email does not have an account").setVisible(true);
+                // forgotPasswordLabel.setText("Given Email does not have an account");
             }
 
         }
