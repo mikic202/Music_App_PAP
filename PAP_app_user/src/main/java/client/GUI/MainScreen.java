@@ -221,19 +221,11 @@ public class MainScreen extends javax.swing.JFrame {
 
                 playButton.setText("Play");
                 playButton.setToolTipText("");
-                playButton.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                playButtonActionPerformed(evt);
-                        }
-                });
+                playButton.addActionListener(musicEventListenerInstance);
 
                 pauseLabel.setText("Pause");
                 pauseLabel.setToolTipText("");
-                pauseLabel.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                pauseLabelActionPerformed(evt);
-                        }
-                });
+                pauseLabel.addActionListener(musicEventListenerInstance);
 
                 muteButton.setText("Mute");
 

@@ -25,16 +25,17 @@ public class MusicClient implements Runnable
     private boolean connectionEstablished = false;
     private boolean playerPaused = false;
     private boolean active = false;
+    private int packetNum = 0;
 
     private PipedOutputStream pipedOutStream;
 
-    public MusicClient(AudioFormat fileFormat, int serverUdpPort, boolean startNow, StreamStatusCallback streamStatusCb)
+    public MusicClient(AudioFormat fileFormat, int serverUdpPort, boolean startNow, StreamStatusCallback streamStatusCb, int lengthInBytes)
     {
         try
         {
             socket = new DatagramSocket();
             pipedOutStream = new PipedOutputStream();
-            player = new MusicPlayer(pipedOutStream, fileFormat, streamStatusCb);
+            player = new MusicPlayer(pipedOutStream, fileFormat, streamStatusCb, lengthInBytes);
             this.serverUdpPort = serverUdpPort;
             System.out.println(serverUdpPort);
             address = InetAddress.getByName(SERVER_ADDRESS);
@@ -53,6 +54,7 @@ public class MusicClient implements Runnable
     {
         receive = false;
         active = false;
+        packetNum = 0;
         player.terminatePlayer();
     }
 
@@ -138,9 +140,13 @@ public class MusicClient implements Runnable
                     }
                     else
                     {
-                        terminationCount += 1;
-                        if (terminationCount > 20)
+                        if(player.isPlaying())
                         {
+                            terminationCount += 1;
+                        }
+                        if (terminationCount > 5)
+                        {
+                            System.out.println("terminate called");
                             terminateReceiving();
                             socket.close();
                         }

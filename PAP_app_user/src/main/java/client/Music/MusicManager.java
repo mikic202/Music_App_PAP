@@ -28,7 +28,7 @@ public class MusicManager {
     private static int thisUserId = -1;
     private int playingSongId = -1;
     private AudioFormat format = null;
-    private long songLengthInBytes = 0;
+    private int songLengthInBytes = 0;
     private EStreamStatus currentStreamStatus = EStreamStatus.STREAM_INVALID;
     private int currentChatId = -1;
     private static Hashtable<String, Integer> userSongs = new Hashtable<String, Integer>();
@@ -111,7 +111,7 @@ public class MusicManager {
         this.songLengthInBytes = lengthInBytes;
         this.currentChatId = chatId;
 
-        musicClient = new MusicClient(format, port, true, streamStatusCb);
+        musicClient = new MusicClient(format, port, true, streamStatusCb, lengthInBytes);
         Thread musicClienThread = new Thread(musicClient);
         musicClienThread.start();
 
@@ -134,7 +134,7 @@ public class MusicManager {
             int port = response.getJSONObject(MessagesTopLevelConstants.VALUE.value()).getInt("port");
             if (port != 0) {
                 boolean startNow = (streamStatus == EStreamStatus.STREAM_PLAYING) ? true : false;
-                musicClient = new MusicClient(format, port, startNow, streamStatusCb);
+                musicClient = new MusicClient(format, port, startNow, streamStatusCb, songLengthInBytes);
                 Thread musicClienThread = new Thread(musicClient);
                 musicClienThread.start();
                 currentStreamStatus = streamStatus;
