@@ -39,7 +39,8 @@ public class LoggingListener implements ActionListener {
         public void run() {
             JSONObject response = loggingAccessors.sendUserLoginData(emailField.getText(),
                     passwordField.getPassword());
-            if (response.getJSONObject(MessagesTopLevelConstants.VALUE.value()).getBoolean("outcome")) {
+            if (response.getJSONObject(MessagesTopLevelConstants.VALUE.value())
+                    .getBoolean(MessagesTopLevelConstants.OUTCOME.value())) {
                 response.getJSONObject(MessagesTopLevelConstants.VALUE.value()).put(ChatMessagesConstants.EMAIL.value(),
                         emailField.getText());
                 logIn(response.getJSONObject(MessagesTopLevelConstants.VALUE.value()), passwordField.getPassword());
@@ -55,7 +56,7 @@ public class LoggingListener implements ActionListener {
     }
 
     void logIn(JSONObject userInfo, char[] userPassword) {
-        userInfo.remove("outcome");
+        userInfo.remove(MessagesTopLevelConstants.OUTCOME.value());
         loggingScreen.dispose();
         MainScreen mainScreen = new MainScreen(serverConnector, userInfo, userPassword);
         mainScreen.setVisible(true);

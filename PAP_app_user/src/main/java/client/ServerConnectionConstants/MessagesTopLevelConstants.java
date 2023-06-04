@@ -1,7 +1,7 @@
 package client.ServerConnectionConstants;
 
 public enum MessagesTopLevelConstants {
-    VALUE("value"), TYPE("type");
+    VALUE("value"), TYPE("type"), OUTCOME("outcome");
 
     private String _value;
 
