@@ -284,20 +284,21 @@ public class People extends javax.swing.JPanel {
 
 		createButton.setText("Create");
 		createButton.addActionListener(new CreateGroupListener(chat, groupName, membersList, chatsList));
+		peopleButton.setIcon(new javax.swing.ImageIcon("src/main/java/client/GUI/PeoplePAP.png")); // NOI18N
 		peopleButton.setText("jButton1");
 		peopleButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				peopleButtonActionPerformed(evt);
 			}
 		});
-
+		musicButton.setIcon(new javax.swing.ImageIcon("src/main/java/client/GUI/MusicPAP.png")); // NOI18N
 		musicButton.setText("jButton1");
 		musicButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				musicButtonActionPerformed(evt);
 			}
 		});
-
+		accountButton.setIcon(new javax.swing.ImageIcon("src/main/java/client/GUI/AccountSettingsPAP.png")); // NOI18N
 		accountButton.setText("jButton1");
 		accountButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -305,6 +306,7 @@ public class People extends javax.swing.JPanel {
 			}
 		});
 
+		mainScreenButton.setIcon(new javax.swing.ImageIcon("src/main/java/client/GUI/MainScreenPAP.png")); // NOI18N
 		mainScreenButton.setText("jButton1");
 		mainScreenButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
