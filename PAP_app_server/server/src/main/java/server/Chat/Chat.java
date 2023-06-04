@@ -193,8 +193,11 @@ public class Chat {
     private static JSONObject _processSendImage(JSONObject request) {
         request.put("text", (request.getJSONArray("image")).toString());
         int newMessage = _putMessageInDatabase(request);
-
         MessageDataSetter.setIsImage(newMessage);
+        
+        Hashtable<String, String> data = MessageDataAccesor.getData(newMessage);
+        Main.updater.sendMessage(newMessage, data.get("conversation_id"));
+
         return _convertResponseToJson(MessageDataAccesor.getData(newMessage), RequestTypes.SEND_IMAGE);
     }
 
