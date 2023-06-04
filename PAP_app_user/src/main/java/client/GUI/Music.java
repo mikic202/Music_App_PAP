@@ -290,7 +290,7 @@ public class Music extends javax.swing.JPanel {
 				accountButtonActionPerformed(evt);
 			}
 		});
-
+		mainScreenButton.setIcon(new javax.swing.ImageIcon("src/main/java/client/GUI/MainScreenPAP.png")); // NOI18N
 		mainScreenButton.setText("jButton1");
 		mainScreenButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
