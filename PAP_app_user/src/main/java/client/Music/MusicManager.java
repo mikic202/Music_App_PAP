@@ -247,7 +247,8 @@ public class MusicManager {
         boolean streamCreated = value.getBoolean("created");
         boolean streamPlaying = value.getBoolean("playing");
         boolean formatAvailable = value.getBoolean("format_available");
-        if (!formatAvailable || !streamCreated) {
+        System.out.println(String.format(("format available: %b, stream created: %b, playing: %b"), formatAvailable, streamCreated, streamPlaying)); 
+        if (!(formatAvailable && streamCreated)) {
             return EStreamStatus.STREAM_INVALID;
         }
         JSONObject format = value.getJSONObject("format");
@@ -260,12 +261,12 @@ public class MusicManager {
         int songId = format.getInt("song_id");
         String encodingStr = format.getString("encoding");
         boolean signed = true;
-        if (encodingStr == "pcm_signed") {
+        System.out.println(encodingStr);
+        if (encodingStr.equals("PCM_SIGNED")) {
             signed = true;
-        } else if (encodingStr == "pcm_unsigned") {
+        } else if (encodingStr.equals("PCM_UNSIGNED")) {
             signed = false;
         } else {
-            // Unsupported file format
             return EStreamStatus.STREAM_INVALID;
         }
         this.format = new AudioFormat(sampleRate, sampleSizeInBits, channels, signed, bigEndian);
