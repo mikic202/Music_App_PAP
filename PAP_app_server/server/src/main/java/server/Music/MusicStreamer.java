@@ -215,15 +215,30 @@ class MusicStreamer extends Thread {
 
     private boolean initiateNewConnection(boolean initiatorConnection) {
         try {
-            byte[] messageBuffer = new byte[PACKET_SIZE];
-            DatagramPacket packet = new DatagramPacket(messageBuffer, messageBuffer.length);
-            socket.setSoTimeout(10000);
-            socket.receive(packet);
-            InetAddress address = packet.getAddress();
-            int port = packet.getPort();
-            String received = new String(packet.getData(), 0, packet.getLength());
+            String addressString;
+            InetAddress address;
+            int port;
+            String received;
+            while(true)
+            {
+                byte[] messageBuffer = new byte[PACKET_SIZE];
+                DatagramPacket packet = new DatagramPacket(messageBuffer, messageBuffer.length);
+                socket.setSoTimeout(10000);
+                socket.receive(packet);
+                address = packet.getAddress();
+                port = packet.getPort();
+                received = new String(packet.getData(), 0, packet.getLength());
+                if(received.equals("hello"))
+                {
+                    break;
+                }
+                else
+                {
+                    Thread.sleep(100);
+                }
+            }
 
-            String addressString = address.toString();
+            addressString = address.toString();
             System.out.println(
                     "Client ip: " + addressString + "Client port: " + Integer.toString(port) + "Msg: " + received);
 

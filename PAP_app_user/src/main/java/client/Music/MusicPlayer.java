@@ -55,7 +55,7 @@ public class MusicPlayer implements Runnable
         {
             System.out.println("AAAAAAAAAAAAAAAAAA");
 
-            while (pipedInputStream.available() < bufferSize*1024)
+            while (pipedInputStream.available() < bufferSize*512)
             {
                 Thread.sleep(100);
             }

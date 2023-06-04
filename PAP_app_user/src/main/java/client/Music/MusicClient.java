@@ -11,6 +11,8 @@ import java.net.SocketTimeoutException;
 import client.Music.MusicPlayer;
 import client.Music.MusicPlayer.StreamStatusCallback;
 import java.util.ArrayList;
+import java.time.Instant;
+import java.time.Duration;
 
 public class MusicClient implements Runnable
 {
@@ -128,6 +130,8 @@ public class MusicClient implements Runnable
         {
             sendMessage("hello");
             socket.setSoTimeout(500);
+            Instant start = Instant.now();
+            long refreshConnectionTime = 10000000000L;
             int terminationCount = 0;
             while (receive)
             {
@@ -143,7 +147,12 @@ public class MusicClient implements Runnable
                     connectionEstablished = true;
                     terminationCount = 0;
                     pipedOutStream.write(packet.getData());
-                    sendMessage(".");
+                    Instant finish = Instant.now();
+                    if(Duration.between(start, finish).toNanos() > refreshConnectionTime)
+                    {
+                        sendMessage(".");
+                        start = Instant.now();
+                    }
                 }
                 catch (SocketTimeoutException e)
                 {
