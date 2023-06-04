@@ -10,6 +10,7 @@ import java.io.PipedOutputStream;
 import java.net.SocketTimeoutException;
 import client.Music.MusicPlayer;
 import client.Music.MusicPlayer.StreamStatusCallback;
+import java.util.ArrayList;
 
 public class MusicClient implements Runnable
 {
@@ -25,7 +26,6 @@ public class MusicClient implements Runnable
     private boolean connectionEstablished = false;
     private boolean playerPaused = false;
     private boolean active = false;
-    private int packetNum = 0;
 
     private PipedOutputStream pipedOutStream;
 
@@ -54,7 +54,6 @@ public class MusicClient implements Runnable
     {
         receive = false;
         active = false;
-        packetNum = 0;
         player.terminatePlayer();
     }
 
@@ -78,6 +77,21 @@ public class MusicClient implements Runnable
     public synchronized boolean isActive()
     {
         return active;
+    }
+
+    public synchronized ArrayList<Integer> getCurrentTime()
+    {
+        return player.getCurrentTime();
+    }
+
+    public synchronized ArrayList<Integer> getTotalTime()
+    {
+        return player.getTotalTime();
+    }
+
+    public synchronized int getPercentageOfSongPlayed()
+    {
+        return player.getPercentageOfSongPlayed();
     }
 
     public void run()
@@ -140,13 +154,12 @@ public class MusicClient implements Runnable
                     }
                     else
                     {
-                        if(player.isPlaying())
+                        if(!player.isPlaying())
                         {
                             terminationCount += 1;
                         }
                         if (terminationCount > 5)
                         {
-                            System.out.println("terminate called");
                             terminateReceiving();
                             socket.close();
                         }

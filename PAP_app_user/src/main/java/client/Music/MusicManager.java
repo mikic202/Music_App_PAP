@@ -62,6 +62,39 @@ public class MusicManager {
         userSongs.put("song", 2);
     }
 
+    public synchronized ArrayList<Integer> getCurrentTime()
+    {
+        if(musicClient == null)
+        {
+            ArrayList<Integer> emptyList = new ArrayList<Integer>();
+            emptyList.add(0);
+            emptyList.add(0);
+            return emptyList;
+        }
+        return musicClient.getCurrentTime();
+    }
+
+    public synchronized ArrayList<Integer> getTotalTime()
+    {
+        if(musicClient == null)
+        {
+            ArrayList<Integer> emptyList = new ArrayList<Integer>();
+            emptyList.add(0);
+            emptyList.add(0);
+            return emptyList;
+        }
+        return musicClient.getTotalTime();
+    }
+
+    public synchronized int getPercentageOfSongPlayed()
+    {   
+        if(musicClient == null)
+        {
+            return 0;
+        }
+        return musicClient.getPercentageOfSongPlayed();
+    }
+
     public static synchronized Hashtable<String, Integer> getUserSongsData() {
         return userSongs;
     }
