@@ -19,6 +19,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.sound.sampled.FloatControl;
 import client.GUI.guiListeners.MusicEventListener;
+import client.GUI.guiListeners.SongListSelectionListener;
 import client.Music.MusicManager;
 import client.ServerConnectionConstants.ChatMessagesConstants;
 public class MainScreen extends javax.swing.JFrame {
@@ -33,8 +34,8 @@ public class MainScreen extends javax.swing.JFrame {
 	Music music;
 	Account account;
 	private ServerConnector serverConnector;
-	MusicManager musicManagerInstance;
 	MusicEventListener musicEventListenerInstance;
+	SongListSelectionListener songListListenerInstance;
 
 	private Chat chat;
 
@@ -51,6 +52,10 @@ public class MainScreen extends javax.swing.JFrame {
 		}
 		chat = new Chat(userInfo, -1, serverConnector);
 		FlatDarkLaf.setup();
+		this.musicEventListenerInstance = new MusicEventListener(serverConnector,
+				userInfo.getInt(ChatMessagesConstants.USER_ID.value()));
+		this.songListListenerInstance = new SongListSelectionListener();
+
 		initComponents();
 		this.peopleButton.setIcon(new ImageIcon("src/main/java/client/GUI/PeoplePAP.png"));
 		this.musicButton.setIcon(new ImageIcon("src/main/java/client/GUI/MusicPAP.png"));
@@ -59,16 +64,14 @@ public class MainScreen extends javax.swing.JFrame {
 		people = new People(this, chat, userPassword);
 		music = new Music(this);
 		account = new Account(this, serverConnector, chat);
-		this.musicManagerInstance = new MusicManager(serverConnector,
-				userInfo.getInt(ChatMessagesConstants.USER_ID.value()));
-		this.musicEventListenerInstance = new MusicEventListener(serverConnector,
-				userInfo.getInt(ChatMessagesConstants.USER_ID.value()));
 	}
 
 	public MainScreen(ServerConnector serverConnector, JSONObject userInfo, char[] userPassword) {
 		chat = new Chat(userInfo, -1, serverConnector);
 		this.serverConnector = serverConnector;
 		FlatDarkLaf.setup();
+		this.musicEventListenerInstance = new MusicEventListener(serverConnector,
+				userInfo.getInt(ChatMessagesConstants.USER_ID.value()));
 		initComponents();
 		this.peopleButton.setIcon(new ImageIcon("src/main/java/client/GUI/PeoplePAP.png"));
 		this.musicButton.setIcon(new ImageIcon("src/main/java/client/GUI/MusicPAP.png"));
@@ -76,10 +79,6 @@ public class MainScreen extends javax.swing.JFrame {
 		people = new People(this, chat, userPassword);
 		music = new Music(this);
 		account = new Account(this, serverConnector, chat);
-		this.musicManagerInstance = new MusicManager(serverConnector,
-				userInfo.getInt(ChatMessagesConstants.USER_ID.value()));
-		this.musicEventListenerInstance = new MusicEventListener(serverConnector,
-				userInfo.getInt(ChatMessagesConstants.USER_ID.value()));
 	}
 
 	/**
@@ -138,7 +137,7 @@ public class MainScreen extends javax.swing.JFrame {
 		currentSessionLabel = new javax.swing.JLabel();
 		currentSongLabel = new javax.swing.JLabel();
 		chatsContainer1 = new javax.swing.JScrollPane();
-		chatsList1 = new javax.swing.JList<>();
+		chooseSongList = new javax.swing.JList<>();
 		currentSongLabel1 = new javax.swing.JLabel();
 		menu = new javax.swing.JMenuBar();
 		chooseMusic = new javax.swing.JMenu();
@@ -214,19 +213,11 @@ public class MainScreen extends javax.swing.JFrame {
 
 		playButton.setText("Play");
 		playButton.setToolTipText("");
-		playButton.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				playButtonActionPerformed(evt);
-			}
-		});
+		playButton.addActionListener(musicEventListenerInstance);
 
 		pauseLabel.setText("Pause");
 		pauseLabel.setToolTipText("");
-		pauseLabel.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				pauseLabelActionPerformed(evt);
-			}
-		});
+		pauseLabel.addActionListener(musicEventListenerInstance);
 
 		muteButton.setText("Mute");
 
@@ -286,11 +277,7 @@ public class MainScreen extends javax.swing.JFrame {
 		});
 
 		leaveStreamButton1.setText("Leave stream");
-		leaveStreamButton1.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				leaveStreamButton1ActionPerformed(evt);
-			}
-		});
+		leaveStreamButton1.addActionListener(musicEventListenerInstance);
 
 		chatsList.setModel(new javax.swing.AbstractListModel<String>() {
 			String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5", "a", "b", "c", "d", "e" };
@@ -306,20 +293,13 @@ public class MainScreen extends javax.swing.JFrame {
 		chatsContainer.setViewportView(chatsList);
 
 		joinStreamButton.setText("Join stream");
-		joinStreamButton.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				joinStreamButtonActionPerformed(evt);
-			}
-		});
+		joinStreamButton.addActionListener(musicEventListenerInstance);
 
 		stopStreamButton.setText("Stop stream");
+		stopStreamButton.addActionListener(musicEventListenerInstance);
 
 		startStreamButton.setText("Start stream");
-		startStreamButton.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				startStreamButtonActionPerformed(evt);
-			}
-		});
+		startStreamButton.addActionListener(musicEventListenerInstance);
 
 		currentSongTitleLabel1.setText("jLabel3");
 
@@ -330,8 +310,19 @@ public class MainScreen extends javax.swing.JFrame {
 
 		currentSongLabel.setText("Current song:");
 
-		chatsList1.setModel(new javax.swing.AbstractListModel<String>() {
-			String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5", "a", "b", "c", "d", "e" };
+		//TODO song list shoul be updated after uploading/removing files
+        MusicManager.updateUserSongsList();
+        var songNameSet = MusicManager.getUserSongsData().keySet();
+
+        String[] songNames = new String[songNameSet.size()];
+        int i = 0;
+        for (String name : songNameSet) {
+                songNames[i++] = name;
+        }
+
+        chooseSongList.setModel(new javax.swing.AbstractListModel<String>() {
+                String[] strings = songNames;
+
 
 			public int getSize() {
 				return strings.length;
@@ -341,7 +332,9 @@ public class MainScreen extends javax.swing.JFrame {
 				return strings[i];
 			}
 		});
-		chatsContainer1.setViewportView(chatsList1);
+        chooseSongList.addListSelectionListener(songListListenerInstance);
+        chatsContainer1.setViewportView(chooseSongList);
+
 
 		currentSongLabel1.setText("Songs:");
 
@@ -855,18 +848,6 @@ public class MainScreen extends javax.swing.JFrame {
 		this.musicChooser = musicChooserNew;
 	}
 
-	private void leaveStreamButton1ActionPerformed(java.awt.event.ActionEvent evt) {
-		// TODO add your handling code here:
-	}
-
-	private void joinStreamButtonActionPerformed(java.awt.event.ActionEvent evt) {
-		// TODO add your handling code here:
-	}
-
-	private void startStreamButtonActionPerformed(java.awt.event.ActionEvent evt) {
-
-	}
-
 	/**
 	 * @param args the command line arguments
 	 */
@@ -916,7 +897,7 @@ public class MainScreen extends javax.swing.JFrame {
 	private javax.swing.JScrollPane chatsContainer1;
 	private javax.swing.JLabel chatsLabel;
 	private javax.swing.JList<String> chatsList;
-	private javax.swing.JList<String> chatsList1;
+	private javax.swing.JList<String> chooseSongList;
 	private javax.swing.JMenu chooseMusic;
 	private javax.swing.JLabel currentSessionLabel;
 	private javax.swing.JLabel currentSongLabel;

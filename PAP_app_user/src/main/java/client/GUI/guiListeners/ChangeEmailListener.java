@@ -14,6 +14,7 @@ import client.ServerConnectionConstants.MessagesTopLevelConstants;
 import client.ServerConnectionConstants.ChatMessagesConstants;
 import client.ServerConnector.ServerConnector;
 import client.login_and_account_accessors.AccountChangeRequestAccessors;
+import client.ServerConnectionConstants.ChatMessagesConstants;
 
 public class ChangeEmailListener implements ActionListener {
 

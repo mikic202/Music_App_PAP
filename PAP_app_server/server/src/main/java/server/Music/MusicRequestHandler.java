@@ -52,21 +52,6 @@ public class MusicRequestHandler {
         return result;
     }
 
-    private static JSONObject _terminateStream(JSONObject request) {
-        int userId = request.getInt("user_id");
-
-        MusicStreamsManager streamsManagerInstance = MusicStreamsManager.getInstance();
-        boolean rtnStopStream = streamsManagerInstance.terminateStream(userId);
-
-        JSONObject valueResult = new JSONObject();
-        JSONObject result = new JSONObject();
-        result.put("type", MusicRequestTypes.TERMINATE_STREAM.value());
-        valueResult.put("outcome", rtnStopStream);
-        result.put("value", valueResult);
-
-        return result;
-    }
-
     private static JSONObject _checkIfPlaying(JSONObject request) {
         int chatId = request.getInt("chat_id");
 
@@ -173,7 +158,6 @@ public class MusicRequestHandler {
     private static JSONObject _getUserSongs(JSONObject request)
     {
         int userId = request.getInt("user_id");
-        JSONObject valueResult = new JSONObject();
         JSONObject result = new JSONObject();
 
         JSONArray songsList = new JSONArray();
@@ -202,9 +186,6 @@ public class MusicRequestHandler {
             case START_STREAM:
                 response = _startStream(request);
                 System.out.print("response returned");
-                break;
-            case TERMINATE_STREAM:
-                response = _terminateStream(request);
                 break;
             case CHECK_IF_PLAYING:
                 response = _checkIfPlaying(request);

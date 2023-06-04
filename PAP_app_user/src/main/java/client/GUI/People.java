@@ -29,6 +29,7 @@ import client.GUI.guiListeners.SendPhotoListener;
 import client.GUI.guiListeners.SwitchConversationListener;
 import client.GUI.guiWorkers.ChatWorker;
 import client.ServerConnectionConstants.ChatMessagesConstants;
+import client.GUI.AvatarChooser;
 
 import javax.swing.JScrollBar;
 import javax.swing.SwingUtilities;
