@@ -34,9 +34,9 @@ public class LoginRequestCreator {
 			char[] confirm_old_password, char[] new_password, char[] confirm_new_password) {
 		var value = new JSONObject();
 		value.put("nickname", nickname);
-		value.put("old_password", new String(old_password));
+		value.put(LoggingMessagesConstants.OLD_PASSWORD.value(), new String(old_password));
 		value.put("confirm_old_password", new String(confirm_old_password));
-		value.put("new_password", new String(new_password));
+		value.put(LoggingMessagesConstants.NEW_PASSWORD.value(), new String(new_password));
 		value.put("confirm_new_password", new String(confirm_new_password));
 		var data = new JSONObject();
 		data.put(MessagesTopLevelConstants.TYPE.value(), LoginRequestTypes.SEND_CHANGE_PASSWORD.value());
