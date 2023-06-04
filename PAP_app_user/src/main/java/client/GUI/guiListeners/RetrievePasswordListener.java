@@ -35,9 +35,10 @@ public class RetrievePasswordListener implements ActionListener {
         @Override
         public void run() {
             JSONObject response = loggingAccessors.sendRetrievePassword(emailField.getText());
-            if (response.getJSONObject(MessagesTopLevelConstants.VALUE.value()).getBoolean("outcome")) {
-                // forgotPasswordLabel.setText("New Pasword sent to email");
+            if (response.getJSONObject(MessagesTopLevelConstants.VALUE.value())
+                    .getBoolean(MessagesTopLevelConstants.OUTCOME.value())) {
                 new InformationWindow("New Pasword sent to email").setVisible(true);
+                // forgotPasswordLabel.setText("New Pasword sent to email");
             } else {
                 emailField.setText("");
                 new InformationWindow("Given Email does not have an account").setVisible(true);

@@ -147,7 +147,8 @@ public class MusicManager {
             return false;
         }
         JSONObject response = musicAccessors.sendTerminateStream(thisUserId);
-        boolean outcome = response.getJSONObject(MessagesTopLevelConstants.VALUE.value()).getBoolean("outcome");
+        boolean outcome = response.getJSONObject(MessagesTopLevelConstants.VALUE.value())
+                .getBoolean(MessagesTopLevelConstants.OUTCOME.value());
         if (outcome) {
             terminatePlayer();
             initializeMusicManager();
@@ -160,7 +161,8 @@ public class MusicManager {
             return false;
         }
         JSONObject response = musicAccessors.sendPause(thisUserId);
-        boolean outcome = response.getJSONObject(MessagesTopLevelConstants.VALUE.value()).getBoolean("outcome");
+        boolean outcome = response.getJSONObject(MessagesTopLevelConstants.VALUE.value())
+                .getBoolean(MessagesTopLevelConstants.OUTCOME.value());
         if (outcome) {
             currentStreamStatus = EStreamStatus.STREAM_PAUSED;
         }
@@ -169,7 +171,8 @@ public class MusicManager {
 
     public synchronized boolean resumeStream() {
         JSONObject response = musicAccessors.sendResume(thisUserId);
-        boolean outcome = response.getJSONObject(MessagesTopLevelConstants.VALUE.value()).getBoolean("outcome");
+        boolean outcome = response.getJSONObject(MessagesTopLevelConstants.VALUE.value())
+                .getBoolean(MessagesTopLevelConstants.OUTCOME.value());
         if (outcome) {
             currentStreamStatus = EStreamStatus.STREAM_PLAYING;
         }

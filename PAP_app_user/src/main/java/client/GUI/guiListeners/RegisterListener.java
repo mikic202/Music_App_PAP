@@ -8,6 +8,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import client.GUI.InformationWindow;
+import client.ServerConnectionConstants.MessagesTopLevelConstants;
 import client.ServerConnector.ServerConnector;
 import client.login_and_account_accessors.LoginAccessors;
 
@@ -54,7 +55,7 @@ public class RegisterListener implements ActionListener {
         var response = loggingAccessors.sendUserRegisterData(emailField.getText(), usernameField.getText(),
                 passwordField.getPassword(),
                 repaetPasswordField.getPassword());
-        return response.getBoolean("outcome");
+        return response.getBoolean(MessagesTopLevelConstants.OUTCOME.value());
     }
 
     private JTextField emailField;

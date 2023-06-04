@@ -11,6 +11,7 @@ import org.json.JSONObject;
 
 import client.Chat.Chat;
 import client.ServerConnectionConstants.MessagesTopLevelConstants;
+import client.ServerConnectionConstants.ChatMessagesConstants;
 import client.ServerConnector.ServerConnector;
 import client.login_and_account_accessors.AccountChangeRequestAccessors;
 
@@ -39,7 +40,8 @@ public class ChangeEmailListener implements ActionListener {
             String newEmail = newEmailField.getText();
             JSONObject response = accountAccesor.sendUserAccountEmailData(newEmail,
                     chat.getCurrentUserInfo().getInt(ChatMessagesConstants.USER_ID.value()));
-            if (response.getJSONObject(MessagesTopLevelConstants.VALUE.value()).getBoolean("outcome")) {
+            if (response.getJSONObject(MessagesTopLevelConstants.VALUE.value())
+                    .getBoolean(MessagesTopLevelConstants.OUTCOME.value())) {
                 emailLabel.setText(newEmail);
             }
         }

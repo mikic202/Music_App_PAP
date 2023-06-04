@@ -50,7 +50,8 @@ public class ChangePasswordListener implements ActionListener {
                 JSONObject response = accountAccesor.sendUserAccountNewPasswordData(newPasswordField.getPassword(),
                         oldPasswordField.getPassword(),
                         chat.getCurrentUserInfo().getInt(ChatMessagesConstants.USER_ID.value()));
-                if (response.getJSONObject(MessagesTopLevelConstants.VALUE.value()).getBoolean("outcome")) {
+                if (response.getJSONObject(MessagesTopLevelConstants.VALUE.value())
+                        .getBoolean(MessagesTopLevelConstants.OUTCOME.value())) {
                     succesfulPasswordChangeLable.setText("Password Changed succesully");
                 } else {
                     succesfulPasswordChangeLable.setText("Couldn't change the password");
