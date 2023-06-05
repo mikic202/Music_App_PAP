@@ -30,13 +30,13 @@ public class MainScreen extends javax.swing.JFrame {
 	 */
 	boolean dark = true;
 	boolean light = false;
-	MusicChooser musicChooser;
 	People people;
 	Music music;
 	Account account;
 	private ServerConnector serverConnector;
 	MusicEventListener musicEventListenerInstance;
 	SongListSelectionListener songListListenerInstance;
+	public StringBuilder path = new StringBuilder();
 
 	private Chat chat;
 
@@ -70,7 +70,7 @@ public class MainScreen extends javax.swing.JFrame {
 		this.accountButton.setIcon(new ImageIcon("src/main/java/client/GUI/AccountSettingsPAP.png"));
 		char[] userPassword = { '1', '2', '3', '4', '5', '6', '7' };
 		people = new People(this, chat, userPassword);
-		music = new Music(this);
+		music = new Music(this, serverConnector, chat);
 		account = new Account(this, serverConnector, chat);
 	}
 
@@ -95,7 +95,7 @@ public class MainScreen extends javax.swing.JFrame {
 		this.musicButton.setIcon(new ImageIcon("src/main/java/client/GUI/MusicPAP.png"));
 		this.accountButton.setIcon(new ImageIcon("src/main/java/client/GUI/AccountSettingsPAP.png"));
 		people = new People(this, chat, userPassword);
-		music = new Music(this);
+		music = new Music(this, serverConnector, chat);
 		account = new Account(this, serverConnector, chat);
 	}
 
@@ -869,9 +869,8 @@ public class MainScreen extends javax.swing.JFrame {
 	}
 
 	private void chooseMusicMouseClicked(java.awt.event.MouseEvent evt) {
-		MusicChooser musicChooserNew = new MusicChooser();
+		MusicChooser musicChooserNew = new MusicChooser(path);
 		musicChooserNew.setVisible(true);
-		this.musicChooser = musicChooserNew;
 	}
 
 	/**

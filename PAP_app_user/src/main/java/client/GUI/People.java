@@ -29,7 +29,7 @@ import client.GUI.guiListeners.SendPhotoListener;
 import client.GUI.guiListeners.SwitchConversationListener;
 import client.GUI.guiWorkers.ChatWorker;
 import client.ServerConnectionConstants.ChatMessagesConstants;
-import client.GUI.AvatarChooser;
+import client.GUI.ImageChooser;
 
 import javax.swing.ImageIcon;
 import javax.swing.JScrollBar;
@@ -704,7 +704,7 @@ public class People extends javax.swing.JPanel {
 	}
 
 	private void photoButtonActionPerformed(java.awt.event.ActionEvent evt) {
-		AvatarChooser photoChooser = new AvatarChooser(choosenImagePath);
+		ImageChooser photoChooser = new ImageChooser(choosenImagePath);
 		photoChooser.setVisible(true);
 	}
 
