@@ -14,10 +14,11 @@ public class UploadRequestProcessor {
 	private static JSONObject start(JSONObject request) {
 		String user_id = String.valueOf(request.getInt("user_id"));
 		String file_name = request.getString("file_name");
+		boolean is_image = request.getBoolean("is_image");
 		JSONObject result = new JSONObject();
 		result.put("type", UploadRequestTypes.START_UPLOAD.value());
 		String uuid = UUID.randomUUID().toString();
-		Main.uploader.startUpload(uuid, user_id, file_name);
+		Main.uploader.startUpload(uuid, user_id, file_name, is_image);
 		JSONObject value = new JSONObject();
 		value.put("outcome", true);
 		value.put("uuid", uuid);

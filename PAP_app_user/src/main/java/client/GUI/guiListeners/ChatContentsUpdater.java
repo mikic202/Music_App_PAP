@@ -23,14 +23,17 @@ import client.ServerConnectionConstants.ChatMessagesConstants;
 public class ChatContentsUpdater {
     static final int PROFILE_PICTURE_SIZE = 40;
 
-    private static Image defaultImage;
-    static {
-        try {
-            defaultImage = ImageIO.read(new File("src/main/java/client/GUI/deaudlt.png"));
-        } catch (Exception e) {
+	private static ImageIcon defaultIcon;
+	static {
+		try {
+			Image defaultImage = ImageIO.read(new File("src/main/java/client/GUI/deaudlt.png"));
+			Image scaledImage = defaultImage.getScaledInstance(PROFILE_PICTURE_SIZE, PROFILE_PICTURE_SIZE,
+					Image.SCALE_DEFAULT);
+			defaultIcon = new ImageIcon(scaledImage);
+		} catch (Exception e) {
 
-        }
-    };
+		}
+	};
 
     static public void updateChat(ArrayList<JSONObject> newMessages, Chat chat, JPanel messagesArea) {
         messagesArea.removeAll();
@@ -91,9 +94,9 @@ public class ChatContentsUpdater {
             chatPanel.avatarChat.setIcon((new ImageIcon(convertStringArrayToImageBytes(imageString))));
         } else {
             try {
-                Image scaledImage = defaultImage.getScaledInstance(PROFILE_PICTURE_SIZE, PROFILE_PICTURE_SIZE,
-                        Image.SCALE_DEFAULT);
-                chatPanel.avatarChat.setIcon(new ImageIcon(scaledImage));
+//                Image scaledImage = defaultImage.getScaledInstance(PROFILE_PICTURE_SIZE, PROFILE_PICTURE_SIZE,
+//                        Image.SCALE_DEFAULT);
+                chatPanel.avatarChat.setIcon(defaultIcon);
             } catch (Exception e) {
                 System.out.println(e);
             }
@@ -115,10 +118,10 @@ public class ChatContentsUpdater {
             chatPanel.avatarChat.setIcon((new ImageIcon(convertStringArrayToImageBytes(imageString))));
         } else {
             try {
-                Image defaultImage = ImageIO.read(new File("src/main/java/client/GUI/deaudlt.png"));
-                Image scaledImage = defaultImage.getScaledInstance(PROFILE_PICTURE_SIZE, PROFILE_PICTURE_SIZE,
-                        Image.SCALE_DEFAULT);
-                chatPanel.avatarChat.setIcon(new ImageIcon(scaledImage));
+//                Image defaultImage = ImageIO.read(new File("src/main/java/client/GUI/deaudlt.png"));
+//                Image scaledImage = defaultImage.getScaledInstance(PROFILE_PICTURE_SIZE, PROFILE_PICTURE_SIZE,
+//                        Image.SCALE_DEFAULT);
+                chatPanel.avatarChat.setIcon(defaultIcon);
             } catch (Exception e) {
                 System.out.println(e);
             }
