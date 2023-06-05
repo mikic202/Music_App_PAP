@@ -140,13 +140,11 @@ public class MainScreen extends javax.swing.JFrame {
 
 	public void updateSongTime()
 	{
-		System.out.println("updater called");
 		ArrayList<Integer> currentTime = musicManagerInstance.getCurrentTime();
 		ArrayList<Integer> totalTime = musicManagerInstance.getTotalTime();
 		int percentage = musicManagerInstance.getPercentageOfSongPlayed();
 		timeSlashLabel.setText((String.format(("%d: %d"), totalTime.get(1), totalTime.get(0))));
 		currentTimeLabel.setText((String.format(("%d: %d"), currentTime.get(1), currentTime.get(0))));
-		System.out.println(percentage);
 		jProgressBar1.setValue(percentage);
 	}
 

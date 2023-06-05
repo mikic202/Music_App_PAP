@@ -53,6 +53,7 @@ class MusicStreamer extends Thread {
     // port to start streaming from it
     public MusicStreamer(int port, int initiator, String path, int songId) {
         try {
+            this.usersSockets = new Hashtable<Integer, DatagramSocket>();
             this.serverPort = port;
             this.initiator = initiator;
             this.port = port;
@@ -252,8 +253,8 @@ class MusicStreamer extends Thread {
             usersSockets.put(userId, socket);
             if(initiatorConnection)
             {
-                startStreaming(port);
                 running = true;
+                startStreaming(port);
             }
             return true;
         } catch (SocketTimeoutException e) {

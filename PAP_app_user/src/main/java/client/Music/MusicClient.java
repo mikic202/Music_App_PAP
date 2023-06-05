@@ -144,6 +144,7 @@ public class MusicClient implements Runnable
                     byte[] buf = new byte[PACKET_SIZE];
                     DatagramPacket packet = new DatagramPacket(buf, buf.length);
                     socket.receive(packet);
+                    System.out.println(buf);
                     connectionEstablished = true;
                     terminationCount = 0;
                     pipedOutStream.write(packet.getData());
