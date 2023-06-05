@@ -7,6 +7,9 @@ package client.GUI;
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+
 import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
 
@@ -14,8 +17,13 @@ import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import javax.swing.SwingUtilities;
 
+import client.Chat.Chat;
 import client.GUI.guiListeners.SongListSelectionListener;
 import client.Music.MusicManager;
+import client.ServerConnectionConstants.ChatMessagesConstants;
+import client.ServerConnector.ServerConnector;
+import client.files.FileUploader;
+import client.files.UploadAccessors;
 
 /**
  *
@@ -24,11 +32,15 @@ import client.Music.MusicManager;
 public class Music extends javax.swing.JPanel {
 
 	MainScreen mainScreenWindow;
+	private Chat chat;
 	boolean light = false;
 	boolean dark = true;
+	private UploadAccessors accessors;
 
-	public Music(MainScreen mainScreenParam) {
+	public Music(MainScreen mainScreenParam, ServerConnector serverConnector, Chat chat) {
 		mainScreenWindow = mainScreenParam;
+		this.chat = chat;
+		accessors = new UploadAccessors(serverConnector);
 		initComponents();
 		this.peopleButton.setIcon(new ImageIcon("src/main/java/client/GUI/PeoplePAP.png"));
 		this.musicButton.setIcon(new ImageIcon("src/main/java/client/GUI/MusicPAP.png"));
@@ -627,7 +639,22 @@ public class Music extends javax.swing.JPanel {
 	}// </editor-fold>
 
 	private void uploadButtonActionPerformed(java.awt.event.ActionEvent evt) {
-
+		if(mainScreenWindow.path == null) {
+			return;
+		}
+		File file = new File(mainScreenWindow.path.toString());
+		mainScreenWindow.path = null;
+		String name = title.getText();
+		String uuid = accessors.startUpload(Integer.parseInt(chat.getCurrentUserInfo().getString(ChatMessagesConstants.USER_ID.value())), name, false).getJSONObject("value").getString("uuid");
+		FileUploader uploader;
+		try {
+			uploader = new FileUploader(file, uuid, accessors);
+			Thread uploadThread = new Thread(uploader);
+			uploadThread.start();
+		}
+		catch (FileNotFoundException e) {
+			return;
+		}
 	}
 
 	private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {

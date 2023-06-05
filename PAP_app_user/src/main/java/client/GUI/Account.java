@@ -463,7 +463,7 @@ public class Account extends javax.swing.JPanel {
 	}
 
 	private void selectFileButtonActionPerformed(java.awt.event.ActionEvent evt) {
-		AvatarChooser avatarChooser = new AvatarChooser(path); // TODO add changing avatar
+		ImageChooser avatarChooser = new ImageChooser(path); // TODO add changing avatar
 		avatarChooser.setVisible(true);
 	}
 
@@ -472,7 +472,11 @@ public class Account extends javax.swing.JPanel {
 	}
 
 	private void changeAvatarButtonActionPerformed(java.awt.event.ActionEvent evt) {
+		if(path == null) {
+			return;
+		}
 		File file = new File(path.toString());
+		path = null;
 		String name = "profile_picture";
 		String uuid = accessors.startUpload(Integer.parseInt(chat.getCurrentUserInfo().getString(ChatMessagesConstants.USER_ID.value())), name, true).getJSONObject("value").getString("uuid");
 		FileUploader uploader;

@@ -12,17 +12,17 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  *
  * @author Adam
  */
-public class AvatarChooser extends javax.swing.JFrame {
+public class ImageChooser extends javax.swing.JFrame {
 
     /**
      * Creates new form AvatarChooser
      */
     StringBuilder outputPath;
 
-    public AvatarChooser(StringBuilder outputPath) {
+    public ImageChooser(StringBuilder outputPath) {
         this.outputPath = outputPath;
         initComponents();
-        avatarChooser.setFileFilter(new FileNameExtensionFilter("Images", "jpg", "png"));
+        imageChooser.setFileFilter(new FileNameExtensionFilter("Images", "jpg", "png"));
     }
 
     /**
@@ -34,11 +34,11 @@ public class AvatarChooser extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">
     private void initComponents() {
 
-        avatarChooser = new javax.swing.JFileChooser();
+        imageChooser = new javax.swing.JFileChooser();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        avatarChooser.addActionListener(new java.awt.event.ActionListener() {
+        imageChooser.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 avatarChooserActionPerformed(evt);
             }
@@ -49,13 +49,13 @@ public class AvatarChooser extends javax.swing.JFrame {
         layout.setHorizontalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
-                                .addComponent(avatarChooser, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                .addComponent(imageChooser, javax.swing.GroupLayout.PREFERRED_SIZE,
                                         javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE)));
         layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
-                                .addComponent(avatarChooser, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                .addComponent(imageChooser, javax.swing.GroupLayout.PREFERRED_SIZE,
                                         javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE)));
 
@@ -65,10 +65,14 @@ public class AvatarChooser extends javax.swing.JFrame {
     private void avatarChooserActionPerformed(java.awt.event.ActionEvent evt) {
         System.out.println(1234);
         String returnVal = evt.getActionCommand();
-        String path = avatarChooser.getSelectedFile().getAbsolutePath();
+        if (returnVal.equals(this.imageChooser.CANCEL_SELECTION)) {
+            this.dispose();
+            return;
+        }
+        String path = imageChooser.getSelectedFile().getAbsolutePath();
         System.out.println(path);
         System.out.println(234);
-        if (returnVal.equals(this.avatarChooser.APPROVE_SELECTION)
+        if (returnVal.equals(this.imageChooser.APPROVE_SELECTION)
                 && (path.substring(path.lastIndexOf("."), path.length()).equals(".png")
                         || path.substring(path.lastIndexOf("."), path.length()).equals(".jpg"))) {
             System.out.println(path);
@@ -76,12 +80,9 @@ public class AvatarChooser extends javax.swing.JFrame {
             outputPath.append(path);
             this.dispose();
         }
-        if (returnVal.equals(this.avatarChooser.CANCEL_SELECTION)) {
-            this.dispose();
-        }
     }
 
     // Variables declaration - do not modify
-    private javax.swing.JFileChooser avatarChooser;
+    private javax.swing.JFileChooser imageChooser;
     // End of variables declaration
 }
