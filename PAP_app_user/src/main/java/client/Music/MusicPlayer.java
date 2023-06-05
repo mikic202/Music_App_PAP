@@ -53,8 +53,6 @@ public class MusicPlayer implements Runnable
     {
         try
         {
-            System.out.println("AAAAAAAAAAAAAAAAAA");
-
             while (pipedInputStream.available() < bufferSize*512)
             {
                 Thread.sleep(100);
@@ -65,18 +63,15 @@ public class MusicPlayer implements Runnable
             sourceDataLine.start();
 
             byte[] buf = new byte[bufferSize];
-            System.out.println("BBBBBBB");
 
             while (terminated == false)
             {
-                System.out.println("in loop");
                 if (playing)
                 {
                     if(pipedInputStream.available() > (bufferSize - 1))
                     {
                         if(pipedInputStream.read(buf = new byte[bufferSize], 0, buf.length) > 0)
                         {
-                            System.out.println(buf);
                             this.currentPacketCount = byteArrayToInt(buf);
                             byte[] strippedBuf = Arrays.copyOfRange(buf, 0, buf.length - 4);
                             sourceDataLine.write(strippedBuf, 0, strippedBuf.length);
@@ -161,7 +156,7 @@ public class MusicPlayer implements Runnable
         currentSecond = absSecond - (60*currentMinute);
 
 
-        System.out.println(String.format(("%d:%d ||||| Total %d:%d"), currentMinute, currentSecond, totalMinutes, totalSeconds));
+        //System.out.println(String.format(("%d:%d ||||| Total %d:%d"), currentMinute, currentSecond, totalMinutes, totalSeconds));
     }
 
     public static final int byteArrayToInt(byte[] bytes) {
@@ -191,11 +186,8 @@ public class MusicPlayer implements Runnable
 
     public synchronized int getPercentageOfSongPlayed()
     {
-        if(totalMinutes == 0 || totalSeconds == 0)
-        {
-            return 0;
-        }
-        return (int) (totalMinutes * 60 + totalSeconds)/(currentMinute*60 + currentSecond);
+        float percentage = 100*((currentMinute*60 + currentSecond)/(totalMinutes * 60 + totalSeconds));
+        return (int) percentage;
     }
 }
 

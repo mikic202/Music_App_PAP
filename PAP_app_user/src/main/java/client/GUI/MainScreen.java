@@ -5,6 +5,7 @@
 package client.GUI;
 
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.concurrent.Callable;
 
 import javax.swing.ImageIcon;
@@ -22,6 +23,7 @@ import client.GUI.guiListeners.SwitchConversationFromMainWindwoListener;
 import client.Music.MusicManager;
 import client.ServerConnectionConstants.ChatMessagesConstants;
 import client.ServerConnector.ServerConnector;
+import client.GUI.guiWorkers.SongTimeUpdater;
 
 public class MainScreen extends javax.swing.JFrame {
 
@@ -37,6 +39,8 @@ public class MainScreen extends javax.swing.JFrame {
 	private ServerConnector serverConnector;
 	MusicEventListener musicEventListenerInstance;
 	SongListSelectionListener songListListenerInstance;
+	SongTimeUpdater songTimeUpdaterInstance;
+	MusicManager musicManagerInstance;
 
 	private Chat chat;
 
@@ -53,8 +57,9 @@ public class MainScreen extends javax.swing.JFrame {
 		}
 		chat = new Chat(userInfo, -1, serverConnector);
 		FlatDarkLaf.setup();
-		this.musicEventListenerInstance = new MusicEventListener(serverConnector,
-				userInfo.getInt(ChatMessagesConstants.USER_ID.value()));
+
+		musicManagerInstance = new MusicManager(serverConnector, userInfo.getInt(ChatMessagesConstants.USER_ID.value()));
+		this.musicEventListenerInstance = new MusicEventListener(userInfo.getInt(ChatMessagesConstants.USER_ID.value()), musicManagerInstance);
 		chatsList.addListSelectionListener(new SwitchConversationFromMainWindwoListener(chat, new Callable<Void>() {
 			@Override
 			public Void call() throws Exception {
@@ -63,6 +68,21 @@ public class MainScreen extends javax.swing.JFrame {
 		}));
 
 		this.songListListenerInstance = new SongListSelectionListener();
+		songTimeUpdaterInstance = new SongTimeUpdater(new Callable<Void>() {
+			@Override
+			public Void call() throws Exception {
+				updateSongTime();
+				return null;
+			}
+		});
+		songTimeUpdaterInstance.execute();
+
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				updateSongTime();
+			}
+		}).start();
 
 		initComponents();
 		this.peopleButton.setIcon(new ImageIcon("src/main/java/client/GUI/PeoplePAP.png"));
@@ -78,9 +98,13 @@ public class MainScreen extends javax.swing.JFrame {
 		chat = new Chat(userInfo, -1, serverConnector);
 		this.serverConnector = serverConnector;
 		FlatDarkLaf.setup();
-		this.musicEventListenerInstance = new MusicEventListener(serverConnector,
-				userInfo.getInt(ChatMessagesConstants.USER_ID.value()));
+		musicManagerInstance = new MusicManager(serverConnector, userInfo.getInt(ChatMessagesConstants.USER_ID.value()));
+		this.musicEventListenerInstance = new MusicEventListener(userInfo.getInt(ChatMessagesConstants.USER_ID.value()), musicManagerInstance);
 
+		this.songListListenerInstance = new SongListSelectionListener();
+
+		musicManagerInstance = new MusicManager(serverConnector, userInfo.getInt(ChatMessagesConstants.USER_ID.value()));
+		this.musicEventListenerInstance = new MusicEventListener(userInfo.getInt(ChatMessagesConstants.USER_ID.value()), musicManagerInstance);
 		this.songListListenerInstance = new SongListSelectionListener();
 		initComponents();
 
@@ -90,6 +114,21 @@ public class MainScreen extends javax.swing.JFrame {
 				return null;
 			}
 		}));
+		songTimeUpdaterInstance = new SongTimeUpdater(new Callable<Void>() {
+			@Override
+			public Void call() throws Exception {
+				updateSongTime();
+				return null;
+			}
+		});
+		songTimeUpdaterInstance.execute();
+
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				updateSongTime();
+			}
+		}).start();
 
 		this.peopleButton.setIcon(new ImageIcon("src/main/java/client/GUI/PeoplePAP.png"));
 		this.musicButton.setIcon(new ImageIcon("src/main/java/client/GUI/MusicPAP.png"));
@@ -97,6 +136,18 @@ public class MainScreen extends javax.swing.JFrame {
 		people = new People(this, chat, userPassword);
 		music = new Music(this);
 		account = new Account(this, serverConnector, chat);
+	}
+
+	public void updateSongTime()
+	{
+		System.out.println("updater called");
+		ArrayList<Integer> currentTime = musicManagerInstance.getCurrentTime();
+		ArrayList<Integer> totalTime = musicManagerInstance.getTotalTime();
+		int percentage = musicManagerInstance.getPercentageOfSongPlayed();
+		timeSlashLabel.setText((String.format(("%d: %d"), totalTime.get(1), totalTime.get(0))));
+		currentTimeLabel.setText((String.format(("%d: %d"), currentTime.get(1), currentTime.get(0))));
+		System.out.println(percentage);
+		jProgressBar1.setValue(percentage);
 	}
 
 	/**

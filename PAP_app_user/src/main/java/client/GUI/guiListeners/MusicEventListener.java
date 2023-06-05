@@ -16,8 +16,8 @@ public class MusicEventListener implements ActionListener {
     private static int chosenSongId = -1;
     private static int chosenChatId = -1;
 
-    public MusicEventListener(ServerConnector serverConnector, int userId) {
-        musicManagerInstance = new MusicManager(serverConnector, userId);
+    public MusicEventListener(int userId, MusicManager newMusicManagerInstance) {
+        musicManagerInstance = newMusicManagerInstance;
         System.out.println(musicManagerInstance);
     }
 
