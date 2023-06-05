@@ -43,7 +43,7 @@ public class MusicManager {
     }
 
     public static synchronized void updateUserSongsList() {
-        /*JSONObject result = musicAccessors.sendGetUserSongs(thisUserId);
+        JSONObject result = musicAccessors.sendGetUserSongs(thisUserId);
         JSONArray songs = result.getJSONArray(MessagesTopLevelConstants.VALUE.value());
 
         for(int i = 0; i < songs.length(); i++)
@@ -57,9 +57,8 @@ public class MusicManager {
                 userSongs.put(songName, songId);
             }
         }
-        */
-        userSongs.put("inva", 3);
-        userSongs.put("song", 2);
+//        userSongs.put("inva", 3);
+//        userSongs.put("song", 2);
     }
 
     public synchronized ArrayList<Integer> getCurrentTime()

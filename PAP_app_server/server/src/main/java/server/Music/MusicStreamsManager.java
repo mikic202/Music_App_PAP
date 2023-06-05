@@ -78,7 +78,7 @@ public final class MusicStreamsManager {
             nextPort += 1;
         }
 
-        Hashtable<String, String> querryResult = FileDataAccesor.getData(FileDatabsaeInformation.ID_COLUMN.value(), songId);
+        Hashtable<String, String> querryResult = FileDataAccesor.getData(FileDatabsaeInformation.ID_COLUMN.value(), songId).get(0);
         String filePath = querryResult.get("file_path");
 
         MusicStreamer createdStreamer = new MusicStreamer(freePort, initiatorUserId, filePath, songId);
