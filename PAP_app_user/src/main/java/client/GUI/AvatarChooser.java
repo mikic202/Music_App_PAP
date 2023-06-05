@@ -22,7 +22,7 @@ public class AvatarChooser extends javax.swing.JFrame {
     public AvatarChooser(StringBuilder outputPath) {
         this.outputPath = outputPath;
         initComponents();
-        avatarChooser.addChoosableFileFilter(new FileNameExtensionFilter("Images", "jpg", "png"));
+        avatarChooser.setFileFilter(new FileNameExtensionFilter("Images", "jpg", "png"));
     }
 
     /**
@@ -64,11 +64,11 @@ public class AvatarChooser extends javax.swing.JFrame {
 
     private void avatarChooserActionPerformed(java.awt.event.ActionEvent evt) {
         System.out.println(1234);
-        int returnVal = this.avatarChooser.showOpenDialog(this);
+        String returnVal = evt.getActionCommand();
         String path = avatarChooser.getSelectedFile().getAbsolutePath();
         System.out.println(path);
         System.out.println(234);
-        if (returnVal == this.avatarChooser.APPROVE_OPTION
+        if (returnVal.equals(this.avatarChooser.APPROVE_SELECTION)
                 && (path.substring(path.lastIndexOf("."), path.length()).equals(".png")
                         || path.substring(path.lastIndexOf("."), path.length()).equals(".jpg"))) {
             System.out.println(path);
@@ -76,7 +76,7 @@ public class AvatarChooser extends javax.swing.JFrame {
             outputPath.append(path);
             this.dispose();
         }
-        if (returnVal == this.avatarChooser.CANCEL_OPTION) {
+        if (returnVal.equals(this.avatarChooser.CANCEL_SELECTION)) {
             this.dispose();
         }
     }
