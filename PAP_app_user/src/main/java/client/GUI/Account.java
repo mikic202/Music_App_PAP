@@ -13,9 +13,12 @@ import client.GUI.guiListeners.ChangePasswordListener;
 import client.GUI.guiListeners.ChangeUsernameListener;
 import client.ServerConnectionConstants.ChatMessagesConstants;
 import client.ServerConnector.ServerConnector;
+import client.files.FileUploader;
+import client.files.UploadAccessors;
 
 import java.awt.Image;
 import java.io.File;
+import java.io.FileNotFoundException;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -37,11 +40,15 @@ public class Account extends javax.swing.JPanel {
 
 	private Chat chat;
 	private ServerConnector serverConnector;
+	
+	private StringBuilder path = new StringBuilder();
+	private UploadAccessors accessors;
 
 	public Account(MainScreen mainScreenParam, ServerConnector serverConnector, Chat chat) {
 		mainScreenWindow = mainScreenParam;
 		this.serverConnector = serverConnector;
 		this.chat = chat;
+		accessors = new UploadAccessors(serverConnector);
 		initComponents();
 		try {
 			Image defaultImage = ImageIO.read(new File("src/main/java/client/GUI/deaudlt.png"));
@@ -456,7 +463,7 @@ public class Account extends javax.swing.JPanel {
 	}
 
 	private void selectFileButtonActionPerformed(java.awt.event.ActionEvent evt) {
-		AvatarChooser avatarChooser = new AvatarChooser(new StringBuilder()); // TODO add changing avatar
+		AvatarChooser avatarChooser = new AvatarChooser(path); // TODO add changing avatar
 		avatarChooser.setVisible(true);
 	}
 
@@ -465,7 +472,18 @@ public class Account extends javax.swing.JPanel {
 	}
 
 	private void changeAvatarButtonActionPerformed(java.awt.event.ActionEvent evt) {
-		// TODO add your handling code here:
+		File file = new File(path.toString());
+		String name = "profile_picture";
+		String uuid = accessors.startUpload(Integer.parseInt(chat.getCurrentUserInfo().getString(ChatMessagesConstants.USER_ID.value())), name, true).getJSONObject("value").getString("uuid");
+		FileUploader uploader;
+		try {
+			uploader = new FileUploader(file, uuid, accessors);
+			Thread uploadThread = new Thread(uploader);
+			uploadThread.start();
+		}
+		catch (FileNotFoundException e) {
+			return;
+		}
 	}
 
 	// Variables declaration - do not modify

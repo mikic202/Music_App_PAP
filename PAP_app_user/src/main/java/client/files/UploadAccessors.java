@@ -11,8 +11,8 @@ public class UploadAccessors {
         this.serverConnector = serverConnector;
     }
 
-    public JSONObject startUpload(int userId, String file_name) {
-        JSONObject procesed_request = UploadRequestCreator.create_start_upload_request(userId, file_name);
+    public JSONObject startUpload(int userId, String file_name, boolean isImage) {
+        JSONObject procesed_request = UploadRequestCreator.create_start_upload_request(userId, file_name, isImage);
         JSONObject response = serverConnector.sendRequest(procesed_request);
         return response;
     }

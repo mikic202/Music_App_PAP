@@ -35,10 +35,10 @@ public class FileUploader implements Runnable {
 	private HashMap<String, FileConnector> files = new HashMap<String, FileConnector>();
 	private List<UploadingSocket> uploadingSockets = new ArrayList<UploadingSocket>();
 
-	public boolean startUpload(String uuid, String user_id, String file_name) {
+	public boolean startUpload(String uuid, String user_id, String file_name, boolean is_image) {
 		synchronized (files) {
 			try {
-				files.put(uuid, new FileConnector(user_id, file_name, uuid));
+				files.put(uuid, new FileConnector(user_id, file_name, uuid, is_image));
 			} catch (IOException e) {
 				return false;
 			}
@@ -82,6 +82,7 @@ public class FileUploader implements Runnable {
 				fileInfo.put("file_name", files.get(uuid).file_name);
 				fileInfo.put("user_id", files.get(uuid).user_id);
 				fileInfo.put("file_path", newPath);
+				fileInfo.put("is_image", files.get(uuid).is_image ? "true" : "false");
 				FileDataSetter.addData(fileInfo);
 			} catch (FileNotFoundException e) {
 				return false;
@@ -227,11 +228,13 @@ class UploadingSocket {
 class FileConnector {
 	public String user_id;
 	public String file_name;
+	public boolean is_image;
 	private FileOutputStream output;
 
-	public FileConnector(String user_id, String file_name, String uuid) throws IOException {
+	public FileConnector(String user_id, String file_name, String uuid, boolean is_image) throws IOException {
 		this.user_id = user_id;
 		this.file_name = file_name;
+		this.is_image = is_image;
 		String path = "files/upload/" + uuid;
 		Files.createDirectories(Paths.get(path).getParent());
 		output = new FileOutputStream(path);
