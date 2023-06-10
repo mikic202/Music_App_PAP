@@ -10,6 +10,8 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,6 +29,7 @@ import server.Music.MusicRequestTypes;
 public class ClientHandler implements Runnable {
 	List<Client> clients = new ArrayList<Client>();
 	boolean running = true;
+	final int THREAD_COUNT = 5;
 
 	public ClientHandler() {
 
@@ -48,13 +51,21 @@ public class ClientHandler implements Runnable {
 			Instant start = Instant.now();
 			synchronized (clients) {
 				ListIterator<Client> it = clients.listIterator();
+				ThreadPoolExecutor threadPool = (ThreadPoolExecutor) Executors.newFixedThreadPool(THREAD_COUNT);
 				// System.out.println("Processing clients.");
 				while (it.hasNext()) {
 					// System.out.println("Processing client.");
 					Client client = it.next();
 					try {
 						if (client.hasMessage()) {
-							handleClient(client);
+							threadPool.submit(() -> {
+								try {
+									handleClient(client);
+								} catch (IOException exception) {
+									client.close();
+								}
+							});
+
 						}
 					} catch (IOException exception) {
 						client.close();
@@ -63,6 +74,7 @@ public class ClientHandler implements Runnable {
 						it.remove();
 						System.out.println("Client disconnected.");
 					}
+
 				}
 			}
 			Instant finish = Instant.now();
