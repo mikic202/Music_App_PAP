@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.json.JSONObject;
 
 import server.Main;
+import server.ServerConnectionConstants.MessagesTopLevelConstants;
 
 public class UploadRequestProcessor {
 	public static JSONObject procesRequests(UploadRequestTypes req_type, JSONObject request) {
@@ -22,7 +23,7 @@ public class UploadRequestProcessor {
 		JSONObject value = new JSONObject();
 		value.put("outcome", true);
 		value.put("uuid", uuid);
-		result.put("value", value);
+		result.put(MessagesTopLevelConstants.VALUE.value(), value);
 
 		return result;
 	}
@@ -34,12 +35,12 @@ public class UploadRequestProcessor {
 		if (Main.uploader.finishUpload(uuid)) {
 			JSONObject value = new JSONObject();
 			value.put("outcome", true);
-			result.put("value", value);
+			result.put(MessagesTopLevelConstants.VALUE.value(), value);
 			return result;
 		}
 		JSONObject value = new JSONObject();
 		value.put("outcome", false);
-		result.put("value", value);
+		result.put(MessagesTopLevelConstants.VALUE.value(), value);
 
 		return result;
 	}

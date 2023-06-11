@@ -17,6 +17,7 @@ import server.DatabaseInteractors.MessageDataSetter;
 import server.DatabaseInteractors.UserDataAccesor;
 import server.DatabaseInteractors.UserDataSetter;
 import server.DatabaseInteractors.UserDatabaseInformation;
+import server.ServerConnectionConstants.MessagesTopLevelConstants;
 
 public class Chat {
 
@@ -30,7 +31,7 @@ public class Chat {
             jsonResponse.put("type", reqType.value());
             JSONObject errorJson = new JSONObject(String.format("{ \"outcome\":false}"));
             errorJson.put("error", e);
-            jsonResponse.put("value", errorJson);
+            jsonResponse.put(MessagesTopLevelConstants.VALUE.value(), errorJson);
             return jsonResponse;
 
         }
@@ -138,7 +139,7 @@ public class Chat {
         for (String key : keys) {
             jsonResponseValue.put(key, response.get(key));
         }
-        jsonResponse.put("value", jsonResponseValue);
+        jsonResponse.put(MessagesTopLevelConstants.VALUE.value(), jsonResponseValue);
         return jsonResponse;
     }
 
@@ -168,7 +169,7 @@ public class Chat {
             }
             jsonResponseValue.put(jsonElement);
         }
-        jsonResponse.put("value", jsonResponseValue);
+        jsonResponse.put(MessagesTopLevelConstants.VALUE.value(), jsonResponseValue);
         return jsonResponse;
     }
 
@@ -180,7 +181,7 @@ public class Chat {
         for (Integer user : users) {
             jsonUsers.put(user);
         }
-        jsonResponse.put("value", jsonUsers);
+        jsonResponse.put(MessagesTopLevelConstants.VALUE.value(), jsonUsers);
         return jsonResponse;
     }
 
@@ -194,7 +195,7 @@ public class Chat {
         request.put("text", (request.getJSONArray("image")).toString());
         int newMessage = _putMessageInDatabase(request);
         MessageDataSetter.setIsImage(newMessage);
-        
+
         Hashtable<String, String> data = MessageDataAccesor.getData(newMessage);
         Main.updater.sendMessage(newMessage, data.get("conversation_id"));
 
@@ -220,7 +221,7 @@ public class Chat {
         JSONObject response = new JSONObject();
         JSONObject responseValue = new JSONObject();
         responseValue.put("conversation code", code);
-        response.put("value", responseValue);
+        response.put(MessagesTopLevelConstants.VALUE.value(), responseValue);
         response.put("type", RequestTypes.GET_CONVERSATION_CODE.value());
         return response;
     }
@@ -238,7 +239,7 @@ public class Chat {
             responseValue.put("conversation_id", conversationId);
         }
         JSONObject response = new JSONObject();
-        response.put("value", responseValue);
+        response.put(MessagesTopLevelConstants.VALUE.value(), responseValue);
         response.put("type", RequestTypes.JOIN_CONVERSATION_WITH_CODE.value());
         return response;
     }
@@ -262,7 +263,7 @@ public class Chat {
         JSONObject responseValue = new JSONObject();
         responseValue.put("outcome", true);
         JSONObject response = new JSONObject();
-        response.put("value", responseValue);
+        response.put(MessagesTopLevelConstants.VALUE.value(), responseValue);
         response.put("type", RequestTypes.CHANGE_CONVERSATION_NAME.value());
         return response;
     }
@@ -274,7 +275,7 @@ public class Chat {
         if (!UserDataAccesor.getUserConversations(request.getInt("user_id"))
                 .contains(request.getInt("conversation_id"))) {
             responseValue.put("outcome", false);
-            response.put("value", responseValue);
+            response.put(MessagesTopLevelConstants.VALUE.value(), responseValue);
             response.put("type", RequestTypes.REMOVE_USER_FROM_CONVERSATION.value());
             return response;
         }
@@ -286,7 +287,7 @@ public class Chat {
                         - 1));
         ConversationDataSetter.setData(request.getInt("conversation_id"), conversationInfo);
         responseValue.put("outcome", true);
-        response.put("value", responseValue);
+        response.put(MessagesTopLevelConstants.VALUE.value(), responseValue);
         response.put("type", RequestTypes.REMOVE_USER_FROM_CONVERSATION.value());
         return response;
     }

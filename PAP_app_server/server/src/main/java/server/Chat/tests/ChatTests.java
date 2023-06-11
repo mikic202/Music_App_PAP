@@ -13,6 +13,7 @@ import org.mockito.Mockito;
 import server.Chat.Chat;
 import server.Chat.RequestTypes;
 import server.DatabaseInteractors.UserDataAccesor;
+import server.ServerConnectionConstants.MessagesTopLevelConstants;
 
 public class ChatTests {
     private static JSONObject _convertResponseToJson(Hashtable<String, String> response, RequestTypes reqType) {
@@ -23,7 +24,7 @@ public class ChatTests {
         for (String key : keys) {
             jsonResponseValue.put(key, response.get(key));
         }
-        jsonResponse.put("value", jsonResponseValue);
+        jsonResponse.put(MessagesTopLevelConstants.VALUE.value(), jsonResponseValue);
         return jsonResponse;
     }
 
@@ -41,7 +42,7 @@ public class ChatTests {
             userData.put("profile_picture", "0");
             dummyAccesor.when(() -> UserDataAccesor.getData(1)).thenReturn(userData);
             var expectedResponse = _convertResponseToJson(userData, RequestTypes.USER_INFO);
-            expectedResponse.getJSONObject("value").remove("password");
+            expectedResponse.getJSONObject(MessagesTopLevelConstants.VALUE.value()).remove("password");
             Assert.assertEquals(
                     expectedResponse.toString(),
                     Chat.procesRequests(RequestTypes.USER_INFO, request).toString());
@@ -62,7 +63,7 @@ public class ChatTests {
             userData.put("profile_picture", "0");
             dummyAccesor.when(() -> UserDataAccesor.getData("username", "some_user")).thenReturn(userData);
             var expectedResponse = _convertResponseToJson(userData, RequestTypes.USER_INFO);
-            expectedResponse.getJSONObject("value").remove("password");
+            expectedResponse.getJSONObject(MessagesTopLevelConstants.VALUE.value()).remove("password");
             Assert.assertEquals(
                     expectedResponse.toString(),
                     Chat.procesRequests(RequestTypes.USER_INFO, request).toString());

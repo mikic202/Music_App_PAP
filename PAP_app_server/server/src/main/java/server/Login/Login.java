@@ -19,6 +19,7 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import server.ServerConnectionConstants.MessagesTopLevelConstants;
 
 public class Login {
     public static JSONObject procesRequests(LoginRequestTypes req_type, JSONObject request) {
@@ -34,7 +35,7 @@ public class Login {
         if (user_info.isEmpty()) {
             JSONObject false_result = new JSONObject();
             false_result.put("outcome", false);
-            result.put("value", false_result);
+            result.put(MessagesTopLevelConstants.VALUE.value(), false_result);
         } else {
             if (written_password.equals(user_info.get("password"))) {
                 JSONObject true_result = new JSONObject();
@@ -42,11 +43,11 @@ public class Login {
                 true_result.put("username", user_info.get("username"));
                 true_result.put("user_id", user_info.get("ID"));
                 true_result.put("profile_picture", user_info.get("profile_picture"));
-                result.put("value", true_result);
+                result.put(MessagesTopLevelConstants.VALUE.value(), true_result);
             } else {
                 JSONObject false_result = new JSONObject();
                 false_result.put("outcome", false);
-                result.put("value", false_result);
+                result.put(MessagesTopLevelConstants.VALUE.value(), false_result);
             }
         }
         return result;
@@ -95,7 +96,7 @@ public class Login {
         if (user_info.isEmpty() || !user_info.get("password").equals(old_password)) {
             result.put("outcome", false);
             JSONObject response = new JSONObject();
-            response.put("value", result);
+            response.put(MessagesTopLevelConstants.VALUE.value(), result);
             response.put("type", LoginRequestTypes.SEND_CHANGE_PASSWORD.value());
             return response;
         }
@@ -103,7 +104,7 @@ public class Login {
         UserDataSetter.setData(request.getInt("user_id"), user_info);
         result.put("outcome", true);
         JSONObject response = new JSONObject();
-        response.put("value", result);
+        response.put(MessagesTopLevelConstants.VALUE.value(), result);
         response.put("type", LoginRequestTypes.SEND_CHANGE_PASSWORD.value());
         return response;
     }
@@ -116,7 +117,7 @@ public class Login {
         if (user_info.isEmpty()) {
             result.put("outcome", false);
             JSONObject response = new JSONObject();
-            response.put("value", result);
+            response.put(MessagesTopLevelConstants.VALUE.value(), result);
             response.put("type", LoginRequestTypes.SEND_CHANGE_NICKNAME.value());
             return response;
         }
@@ -124,7 +125,7 @@ public class Login {
         UserDataSetter.setData(request.getInt("user_id"), user_info);
         result.put("outcome", true);
         JSONObject response = new JSONObject();
-        response.put("value", result);
+        response.put(MessagesTopLevelConstants.VALUE.value(), result);
         response.put("type", LoginRequestTypes.SEND_CHANGE_NICKNAME.value());
         return response;
     }
@@ -136,7 +137,7 @@ public class Login {
         if (user_info.isEmpty()) {
             result.put("outcome", false);
             JSONObject response = new JSONObject();
-            response.put("value", result);
+            response.put(MessagesTopLevelConstants.VALUE.value(), result);
             response.put("type", LoginRequestTypes.SEND_CHANGE_EMAIL.value());
             return response;
         }
@@ -144,7 +145,7 @@ public class Login {
         UserDataSetter.setData(request.getInt("user_id"), user_info);
         result.put("outcome", true);
         JSONObject response = new JSONObject();
-        response.put("value", result);
+        response.put(MessagesTopLevelConstants.VALUE.value(), result);
         response.put("type", LoginRequestTypes.SEND_CHANGE_EMAIL.value());
         return response;
     }
@@ -155,7 +156,7 @@ public class Login {
         if (user_info.isEmpty()) {
             result.put("outcome", false);
             JSONObject response = new JSONObject();
-            response.put("value", result);
+            response.put(MessagesTopLevelConstants.VALUE.value(), result);
             response.put("type", LoginRequestTypes.SEND_CHANGE_PASSWORD.value());
             return response;
         }
@@ -173,7 +174,7 @@ public class Login {
         }).start();
         result.put("outcome", true);
         JSONObject response = new JSONObject();
-        response.put("value", result);
+        response.put(MessagesTopLevelConstants.VALUE.value(), result);
         response.put("type", LoginRequestTypes.SEND_CHANGE_PASSWORD.value());
         return response;
     }

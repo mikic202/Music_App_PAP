@@ -24,6 +24,7 @@ import server.Login.Login;
 import server.Login.LoginRequestTypes;
 import server.Music.MusicRequestHandler;
 import server.Music.MusicRequestTypes;
+import server.ServerConnectionConstants.MessagesTopLevelConstants;
 import server.files.UploadRequestProcessor;
 import server.files.UploadRequestTypes;
 
@@ -42,7 +43,7 @@ public class ClientUpdater implements Runnable {
 			JSONObject response = new JSONObject();
 			JSONObject value = new JSONObject();
 			value.put("outcome", true);
-			response.put("value", value);
+			response.put(MessagesTopLevelConstants.VALUE.value(), value);
 			var out = client.getOutputStream();
 			out.write((response.toString() + "\n").getBytes());
 			System.out.println("Added client to the updater.");
@@ -62,7 +63,7 @@ public class ClientUpdater implements Runnable {
 		while (running) {
 			Instant start = Instant.now();
 			synchronized (clients) {
-				//System.out.println("Client updater client count: " + waitingClients.size());
+				// System.out.println("Client updater client count: " + waitingClients.size());
 				ListIterator<Client> it = waitingClients.listIterator();
 				// System.out.println("Processing clients.");
 				while (it.hasNext()) {
@@ -70,7 +71,7 @@ public class ClientUpdater implements Runnable {
 					Client client = it.next();
 					try {
 						if (client.hasMessage()) {
-							if(handleClient(client)) {
+							if (handleClient(client)) {
 								it.remove();
 							}
 						}
@@ -120,7 +121,7 @@ public class ClientUpdater implements Runnable {
 								messageJSON.put(key, message.get(key));
 							}
 							JSONObject data = new JSONObject();
-							data.put("value", messageJSON);
+							data.put(MessagesTopLevelConstants.VALUE.value(), messageJSON);
 							client.write((data.toString() + "\n").getBytes());
 							System.out.println(data.toString() + "\n");
 						}
@@ -155,7 +156,7 @@ public class ClientUpdater implements Runnable {
 		}
 		JSONObject value = null;
 		try {
-			value = messageJSON.getJSONObject("value");
+			value = messageJSON.getJSONObject(MessagesTopLevelConstants.VALUE.value());
 		} catch (JSONException e) {
 			System.out.println("Received request without value:");
 			System.out.println(message);
@@ -165,8 +166,8 @@ public class ClientUpdater implements Runnable {
 		String response = responseJSON.toString() + "\n";
 		System.out.print("\tResponse: " + response);
 		client.write(response.getBytes());
-		if (responseJSON.getJSONObject("value").getBoolean("outcome")) {
-			client.userID = responseJSON.getJSONObject("value").getString("user_id");
+		if (responseJSON.getJSONObject(MessagesTopLevelConstants.VALUE.value()).getBoolean("outcome")) {
+			client.userID = responseJSON.getJSONObject(MessagesTopLevelConstants.VALUE.value()).getString("user_id");
 			clients.add(client);
 			return true;
 		}
