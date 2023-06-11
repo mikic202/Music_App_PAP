@@ -146,9 +146,10 @@ public class Chat {
     }
 
     private static JSONObject _checkUsersInfo(JSONObject request) {
-        if (request.getString(MessagesTopLevelConstants.TYPE.value()).equals("username")) {
+        if (request.getString(MessagesTopLevelConstants.TYPE.value()).equals(ChatMessagesConstants.USERNAME.value())) {
             Hashtable<String, String> hashResponse = UserDataAccesor
-                    .getData(UserDatabaseInformation.USERNAME_COLUMN.value(), request.getString("username"));
+                    .getData(UserDatabaseInformation.USERNAME_COLUMN.value(),
+                            request.getString(ChatMessagesConstants.USERNAME.value()));
             hashResponse.remove("password");
             return _convertResponseToJson(hashResponse, RequestTypes.USER_INFO);
         }

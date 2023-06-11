@@ -37,7 +37,7 @@ public class ChatTests {
         try (MockedStatic<UserDataAccesor> dummyAccesor = Mockito.mockStatic(UserDataAccesor.class)) {
             Hashtable<String, String> userData = new Hashtable<String, String>();
             userData.put("ID", "1");
-            userData.put("username", "some_user");
+            userData.put(ChatMessagesConstants.USERNAME.value(), "some_user");
             userData.put("email", "some@email");
             userData.put("password", "12345");
             userData.put("profile_picture", "0");
@@ -53,16 +53,17 @@ public class ChatTests {
     @Test
     public void testUserInfoRequestWithUsername() {
         var request = new JSONObject();
-        request.put("username", "some_user");
-        request.put(MessagesTopLevelConstants.TYPE.value(), "username");
+        request.put(ChatMessagesConstants.USERNAME.value(), "some_user");
+        request.put(MessagesTopLevelConstants.TYPE.value(), ChatMessagesConstants.USERNAME.value());
         try (MockedStatic<UserDataAccesor> dummyAccesor = Mockito.mockStatic(UserDataAccesor.class)) {
             Hashtable<String, String> userData = new Hashtable<String, String>();
             userData.put("ID", "1");
-            userData.put("username", "some_user");
+            userData.put(ChatMessagesConstants.USERNAME.value(), "some_user");
             userData.put("email", "some@email");
             userData.put("password", "12345");
             userData.put("profile_picture", "0");
-            dummyAccesor.when(() -> UserDataAccesor.getData("username", "some_user")).thenReturn(userData);
+            dummyAccesor.when(() -> UserDataAccesor.getData(ChatMessagesConstants.USERNAME.value(), "some_user"))
+                    .thenReturn(userData);
             var expectedResponse = _convertResponseToJson(userData, RequestTypes.USER_INFO);
             expectedResponse.getJSONObject(MessagesTopLevelConstants.VALUE.value()).remove("password");
             Assert.assertEquals(

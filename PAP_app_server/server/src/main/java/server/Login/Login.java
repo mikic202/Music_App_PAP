@@ -41,7 +41,8 @@ public class Login {
             if (written_password.equals(user_info.get("password"))) {
                 JSONObject true_result = new JSONObject();
                 true_result.put(MessagesTopLevelConstants.OUTCOME.value(), true);
-                true_result.put("username", user_info.get("username"));
+                true_result.put(ChatMessagesConstants.USERNAME.value(),
+                        user_info.get(ChatMessagesConstants.USERNAME.value()));
                 true_result.put(ChatMessagesConstants.USER_ID.value(), user_info.get("ID"));
                 true_result.put("profile_picture", user_info.get("profile_picture"));
                 result.put(MessagesTopLevelConstants.VALUE.value(), true_result);
@@ -76,7 +77,7 @@ public class Login {
             return result;
         }
         var data = new Hashtable<String, String>();
-        data.put("username", nickname);
+        data.put(ChatMessagesConstants.USERNAME.value(), nickname);
         data.put("email", email);
         data.put("password", password);
         UserDataSetter.addData(data);
@@ -124,7 +125,7 @@ public class Login {
             response.put(MessagesTopLevelConstants.TYPE.value(), LoginRequestTypes.SEND_CHANGE_NICKNAME.value());
             return response;
         }
-        user_info.put("username", username);
+        user_info.put(ChatMessagesConstants.USERNAME.value(), username);
         UserDataSetter.setData(request.getInt(ChatMessagesConstants.USER_ID.value()), user_info);
         result.put(MessagesTopLevelConstants.OUTCOME.value(), true);
         JSONObject response = new JSONObject();
