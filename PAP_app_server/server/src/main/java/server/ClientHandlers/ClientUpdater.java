@@ -42,7 +42,7 @@ public class ClientUpdater implements Runnable {
 			waitingClients.add(new Client(client));
 			JSONObject response = new JSONObject();
 			JSONObject value = new JSONObject();
-			value.put("outcome", true);
+			value.put(MessagesTopLevelConstants.OUTCOME.value(), true);
 			response.put(MessagesTopLevelConstants.VALUE.value(), value);
 			var out = client.getOutputStream();
 			out.write((response.toString() + "\n").getBytes());
@@ -166,7 +166,8 @@ public class ClientUpdater implements Runnable {
 		String response = responseJSON.toString() + "\n";
 		System.out.print("\tResponse: " + response);
 		client.write(response.getBytes());
-		if (responseJSON.getJSONObject(MessagesTopLevelConstants.VALUE.value()).getBoolean("outcome")) {
+		if (responseJSON.getJSONObject(MessagesTopLevelConstants.VALUE.value())
+				.getBoolean(MessagesTopLevelConstants.OUTCOME.value())) {
 			client.userID = responseJSON.getJSONObject(MessagesTopLevelConstants.VALUE.value()).getString("user_id");
 			clients.add(client);
 			return true;

@@ -127,7 +127,7 @@ public class Chat {
                         + numberOfUsers));
         ConversationDataSetter.setData(conversationId, previousData);
         Hashtable<String, String> outcome = new Hashtable<>();
-        outcome.put("outcome", "true");
+        outcome.put(MessagesTopLevelConstants.OUTCOME.value(), "true");
         return _convertResponseToJson(outcome, RequestTypes.ADD_USER_TO_CONVERSATION);
     }
 
@@ -234,7 +234,7 @@ public class Chat {
         _addUsersToConversation(users, conversationId);
         JSONObject responseValue = new JSONObject();
         var usersConversations = UserDataAccesor.getUserConversations(users.get(0));
-        responseValue.put("outcome", usersConversations.contains(conversationId));
+        responseValue.put(MessagesTopLevelConstants.OUTCOME.value(), usersConversations.contains(conversationId));
         if (usersConversations.contains(conversationId)) {
             responseValue.put("conversation_id", conversationId);
         }
@@ -261,7 +261,7 @@ public class Chat {
         oldConversationData.put("name", newName);
         ConversationDataSetter.setData(request.getInt("conversation_id"), oldConversationData);
         JSONObject responseValue = new JSONObject();
-        responseValue.put("outcome", true);
+        responseValue.put(MessagesTopLevelConstants.OUTCOME.value(), true);
         JSONObject response = new JSONObject();
         response.put(MessagesTopLevelConstants.VALUE.value(), responseValue);
         response.put(MessagesTopLevelConstants.TYPE.value(), RequestTypes.CHANGE_CONVERSATION_NAME.value());
@@ -274,7 +274,7 @@ public class Chat {
         System.out.println(UserDataAccesor.getUserConversations(request.getInt("user_id")));
         if (!UserDataAccesor.getUserConversations(request.getInt("user_id"))
                 .contains(request.getInt("conversation_id"))) {
-            responseValue.put("outcome", false);
+            responseValue.put(MessagesTopLevelConstants.OUTCOME.value(), false);
             response.put(MessagesTopLevelConstants.VALUE.value(), responseValue);
             response.put(MessagesTopLevelConstants.TYPE.value(), RequestTypes.REMOVE_USER_FROM_CONVERSATION.value());
             return response;
@@ -286,7 +286,7 @@ public class Chat {
                 Integer.parseInt(conversationInfo.get(ConversationDatabsaeInformation.NUMBER_OF_USERS_COLUMN.value()))
                         - 1));
         ConversationDataSetter.setData(request.getInt("conversation_id"), conversationInfo);
-        responseValue.put("outcome", true);
+        responseValue.put(MessagesTopLevelConstants.OUTCOME.value(), true);
         response.put(MessagesTopLevelConstants.VALUE.value(), responseValue);
         response.put(MessagesTopLevelConstants.TYPE.value(), RequestTypes.REMOVE_USER_FROM_CONVERSATION.value());
         return response;

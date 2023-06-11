@@ -121,7 +121,7 @@ public class MusicRequestHandler {
         JSONObject valueResult = new JSONObject();
         JSONObject result = new JSONObject();
         result.put(MessagesTopLevelConstants.TYPE.value(), MusicRequestTypes.PAUSE_STREAM.value());
-        valueResult.put("outcome", rtnPauseStream);
+        valueResult.put(MessagesTopLevelConstants.OUTCOME.value(), rtnPauseStream);
         result.put(MessagesTopLevelConstants.VALUE.value(), valueResult);
 
         return result;
@@ -136,7 +136,7 @@ public class MusicRequestHandler {
         JSONObject valueResult = new JSONObject();
         JSONObject result = new JSONObject();
         result.put(MessagesTopLevelConstants.TYPE.value(), MusicRequestTypes.RESUME_STREAM.value());
-        valueResult.put("outcome", rtnResumeStream);
+        valueResult.put(MessagesTopLevelConstants.OUTCOME.value(), rtnResumeStream);
         result.put(MessagesTopLevelConstants.VALUE.value(), valueResult);
 
         return result;
@@ -151,7 +151,7 @@ public class MusicRequestHandler {
         JSONObject valueResult = new JSONObject();
         JSONObject result = new JSONObject();
         result.put(MessagesTopLevelConstants.TYPE.value(), MusicRequestTypes.LEAVE_STREAM.value());
-        valueResult.put("outcome", removeListenerFromCreatedStream);
+        valueResult.put(MessagesTopLevelConstants.OUTCOME.value(), removeListenerFromCreatedStream);
         result.put(MessagesTopLevelConstants.VALUE.value(), valueResult);
 
         return result;

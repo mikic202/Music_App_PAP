@@ -34,19 +34,19 @@ public class Login {
         Hashtable<String, String> user_info = UserDataAccesor.getDataWithEmail(wanted_email);
         if (user_info.isEmpty()) {
             JSONObject false_result = new JSONObject();
-            false_result.put("outcome", false);
+            false_result.put(MessagesTopLevelConstants.OUTCOME.value(), false);
             result.put(MessagesTopLevelConstants.VALUE.value(), false_result);
         } else {
             if (written_password.equals(user_info.get("password"))) {
                 JSONObject true_result = new JSONObject();
-                true_result.put("outcome", true);
+                true_result.put(MessagesTopLevelConstants.OUTCOME.value(), true);
                 true_result.put("username", user_info.get("username"));
                 true_result.put("user_id", user_info.get("ID"));
                 true_result.put("profile_picture", user_info.get("profile_picture"));
                 result.put(MessagesTopLevelConstants.VALUE.value(), true_result);
             } else {
                 JSONObject false_result = new JSONObject();
-                false_result.put("outcome", false);
+                false_result.put(MessagesTopLevelConstants.OUTCOME.value(), false);
                 result.put(MessagesTopLevelConstants.VALUE.value(), false_result);
             }
         }
@@ -61,17 +61,17 @@ public class Login {
         JSONObject result = new JSONObject();
         result.put(MessagesTopLevelConstants.TYPE.value(), LoginRequestTypes.SEND_REGISTER.value());
         if (!password.equals(confirm_password)) {
-            result.put("outcome", false);
+            result.put(MessagesTopLevelConstants.OUTCOME.value(), false);
             return result;
         }
         Hashtable<String, String> user_info = UserDataAccesor.getDataWithEmail(email);
         if (!user_info.isEmpty()) {
-            result.put("outcome", false);
+            result.put(MessagesTopLevelConstants.OUTCOME.value(), false);
             return result;
         }
         user_info = UserDataAccesor.getDataWithName(nickname);
         if (!user_info.isEmpty()) {
-            result.put("outcome", false);
+            result.put(MessagesTopLevelConstants.OUTCOME.value(), false);
             return result;
         }
         var data = new Hashtable<String, String>();
@@ -79,7 +79,7 @@ public class Login {
         data.put("email", email);
         data.put("password", password);
         UserDataSetter.addData(data);
-        result.put("outcome", true);
+        result.put(MessagesTopLevelConstants.OUTCOME.value(), true);
         return result;
 
     }
@@ -89,12 +89,12 @@ public class Login {
         String new_password = request.getString("new_password");
         JSONObject result = new JSONObject();
         if (new_password.equals(old_password)) {
-            result.put("outcome", false);
+            result.put(MessagesTopLevelConstants.OUTCOME.value(), false);
             return result;
         }
         Hashtable<String, String> user_info = UserDataAccesor.getData(request.getInt("user_id"));
         if (user_info.isEmpty() || !user_info.get("password").equals(old_password)) {
-            result.put("outcome", false);
+            result.put(MessagesTopLevelConstants.OUTCOME.value(), false);
             JSONObject response = new JSONObject();
             response.put(MessagesTopLevelConstants.VALUE.value(), result);
             response.put(MessagesTopLevelConstants.TYPE.value(), LoginRequestTypes.SEND_CHANGE_PASSWORD.value());
@@ -102,7 +102,7 @@ public class Login {
         }
         user_info.put("password", new_password);
         UserDataSetter.setData(request.getInt("user_id"), user_info);
-        result.put("outcome", true);
+        result.put(MessagesTopLevelConstants.OUTCOME.value(), true);
         JSONObject response = new JSONObject();
         response.put(MessagesTopLevelConstants.VALUE.value(), result);
         response.put(MessagesTopLevelConstants.TYPE.value(), LoginRequestTypes.SEND_CHANGE_PASSWORD.value());
@@ -115,7 +115,7 @@ public class Login {
         JSONObject result = new JSONObject();
         Hashtable<String, String> user_info = UserDataAccesor.getData(request.getInt("user_id"));
         if (user_info.isEmpty()) {
-            result.put("outcome", false);
+            result.put(MessagesTopLevelConstants.OUTCOME.value(), false);
             JSONObject response = new JSONObject();
             response.put(MessagesTopLevelConstants.VALUE.value(), result);
             response.put(MessagesTopLevelConstants.TYPE.value(), LoginRequestTypes.SEND_CHANGE_NICKNAME.value());
@@ -123,7 +123,7 @@ public class Login {
         }
         user_info.put("username", username);
         UserDataSetter.setData(request.getInt("user_id"), user_info);
-        result.put("outcome", true);
+        result.put(MessagesTopLevelConstants.OUTCOME.value(), true);
         JSONObject response = new JSONObject();
         response.put(MessagesTopLevelConstants.VALUE.value(), result);
         response.put(MessagesTopLevelConstants.TYPE.value(), LoginRequestTypes.SEND_CHANGE_NICKNAME.value());
@@ -135,7 +135,7 @@ public class Login {
         JSONObject result = new JSONObject();
         Hashtable<String, String> user_info = UserDataAccesor.getData(request.getInt("user_id"));
         if (user_info.isEmpty()) {
-            result.put("outcome", false);
+            result.put(MessagesTopLevelConstants.OUTCOME.value(), false);
             JSONObject response = new JSONObject();
             response.put(MessagesTopLevelConstants.VALUE.value(), result);
             response.put(MessagesTopLevelConstants.TYPE.value(), LoginRequestTypes.SEND_CHANGE_EMAIL.value());
@@ -143,7 +143,7 @@ public class Login {
         }
         user_info.put("email", email);
         UserDataSetter.setData(request.getInt("user_id"), user_info);
-        result.put("outcome", true);
+        result.put(MessagesTopLevelConstants.OUTCOME.value(), true);
         JSONObject response = new JSONObject();
         response.put(MessagesTopLevelConstants.VALUE.value(), result);
         response.put(MessagesTopLevelConstants.TYPE.value(), LoginRequestTypes.SEND_CHANGE_EMAIL.value());
@@ -154,7 +154,7 @@ public class Login {
         JSONObject result = new JSONObject();
         Hashtable<String, String> user_info = UserDataAccesor.getDataWithEmail(request.getString("email"));
         if (user_info.isEmpty()) {
-            result.put("outcome", false);
+            result.put(MessagesTopLevelConstants.OUTCOME.value(), false);
             JSONObject response = new JSONObject();
             response.put(MessagesTopLevelConstants.VALUE.value(), result);
             response.put(MessagesTopLevelConstants.TYPE.value(), LoginRequestTypes.SEND_CHANGE_PASSWORD.value());
@@ -172,7 +172,7 @@ public class Login {
                 _sendMessage(email, message);
             }
         }).start();
-        result.put("outcome", true);
+        result.put(MessagesTopLevelConstants.OUTCOME.value(), true);
         JSONObject response = new JSONObject();
         response.put(MessagesTopLevelConstants.VALUE.value(), result);
         response.put(MessagesTopLevelConstants.TYPE.value(), LoginRequestTypes.SEND_CHANGE_PASSWORD.value());

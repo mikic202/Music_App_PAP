@@ -21,7 +21,7 @@ public class UploadRequestProcessor {
 		String uuid = UUID.randomUUID().toString();
 		Main.uploader.startUpload(uuid, user_id, file_name, is_image);
 		JSONObject value = new JSONObject();
-		value.put("outcome", true);
+		value.put(MessagesTopLevelConstants.OUTCOME.value(), true);
 		value.put("uuid", uuid);
 		result.put(MessagesTopLevelConstants.VALUE.value(), value);
 
@@ -34,12 +34,12 @@ public class UploadRequestProcessor {
 		result.put(MessagesTopLevelConstants.TYPE.value(), UploadRequestTypes.FINISH_UPLOAD.value());
 		if (Main.uploader.finishUpload(uuid)) {
 			JSONObject value = new JSONObject();
-			value.put("outcome", true);
+			value.put(MessagesTopLevelConstants.OUTCOME.value(), true);
 			result.put(MessagesTopLevelConstants.VALUE.value(), value);
 			return result;
 		}
 		JSONObject value = new JSONObject();
-		value.put("outcome", false);
+		value.put(MessagesTopLevelConstants.OUTCOME.value(), false);
 		result.put(MessagesTopLevelConstants.VALUE.value(), value);
 
 		return result;
