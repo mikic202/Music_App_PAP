@@ -14,6 +14,7 @@ import server.Chat.Chat;
 import server.Chat.RequestTypes;
 import server.DatabaseInteractors.UserDataAccesor;
 import server.ServerConnectionConstants.MessagesTopLevelConstants;
+import server.ServerConnectionConstants.ChatMessagesConstants;
 
 public class ChatTests {
     private static JSONObject _convertResponseToJson(Hashtable<String, String> response, RequestTypes reqType) {
@@ -31,8 +32,8 @@ public class ChatTests {
     @Test
     public void testUserInfoRequest() {
         var request = new JSONObject();
-        request.put("user_id", 1);
-        request.put(MessagesTopLevelConstants.TYPE.value(), "user_id");
+        request.put(ChatMessagesConstants.USER_ID.value(), 1);
+        request.put(MessagesTopLevelConstants.TYPE.value(), ChatMessagesConstants.USER_ID.value());
         try (MockedStatic<UserDataAccesor> dummyAccesor = Mockito.mockStatic(UserDataAccesor.class)) {
             Hashtable<String, String> userData = new Hashtable<String, String>();
             userData.put("ID", "1");

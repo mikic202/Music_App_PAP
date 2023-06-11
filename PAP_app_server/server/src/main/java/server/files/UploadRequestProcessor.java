@@ -6,6 +6,7 @@ import org.json.JSONObject;
 
 import server.Main;
 import server.ServerConnectionConstants.MessagesTopLevelConstants;
+import server.ServerConnectionConstants.ChatMessagesConstants;
 
 public class UploadRequestProcessor {
 	public static JSONObject procesRequests(UploadRequestTypes req_type, JSONObject request) {
@@ -13,7 +14,7 @@ public class UploadRequestProcessor {
 	}
 
 	private static JSONObject start(JSONObject request) {
-		String user_id = String.valueOf(request.getInt("user_id"));
+		String user_id = String.valueOf(request.getInt(ChatMessagesConstants.USER_ID.value()));
 		String file_name = request.getString("file_name");
 		boolean is_image = request.getBoolean("is_image");
 		JSONObject result = new JSONObject();

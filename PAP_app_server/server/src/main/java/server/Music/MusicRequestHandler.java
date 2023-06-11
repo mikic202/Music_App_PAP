@@ -9,6 +9,7 @@ import javax.sound.sampled.AudioFormat;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import server.ServerConnectionConstants.MessagesTopLevelConstants;
+import server.ServerConnectionConstants.ChatMessagesConstants;
 
 public class MusicRequestHandler {
 
@@ -17,7 +18,7 @@ public class MusicRequestHandler {
     }
 
     private static JSONObject _startStream(JSONObject request) {
-        int userId = request.getInt("user_id");
+        int userId = request.getInt(ChatMessagesConstants.USER_ID.value());
         int chatId = request.getInt("chat_id");
         int songId = request.getInt("song_id");
 
@@ -97,7 +98,7 @@ public class MusicRequestHandler {
     }
 
     private static JSONObject _joinPlayingStream(JSONObject request) {
-        int userId = request.getInt("user_id");
+        int userId = request.getInt(ChatMessagesConstants.USER_ID.value());
         int chatId = request.getInt("chat_id");
 
         JSONObject result = new JSONObject();
@@ -113,7 +114,7 @@ public class MusicRequestHandler {
     }
 
     private static JSONObject _pauseStream(JSONObject request) {
-        int userId = request.getInt("user_id");
+        int userId = request.getInt(ChatMessagesConstants.USER_ID.value());
 
         MusicStreamsManager streamsManagerInstance = MusicStreamsManager.getInstance();
         boolean rtnPauseStream = streamsManagerInstance.pauseStream(userId);
@@ -128,7 +129,7 @@ public class MusicRequestHandler {
     }
 
     private static JSONObject _resumeStream(JSONObject request) {
-        int userId = request.getInt("user_id");
+        int userId = request.getInt(ChatMessagesConstants.USER_ID.value());
 
         MusicStreamsManager streamsManagerInstance = MusicStreamsManager.getInstance();
         boolean rtnResumeStream = streamsManagerInstance.resumeStream(userId);
@@ -143,7 +144,7 @@ public class MusicRequestHandler {
     }
 
     private static JSONObject _leaveStream(JSONObject request) {
-        int userId = request.getInt("user_id");
+        int userId = request.getInt(ChatMessagesConstants.USER_ID.value());
 
         MusicStreamsManager streamsManagerInstance = MusicStreamsManager.getInstance();
         boolean removeListenerFromCreatedStream = streamsManagerInstance.removeListenerFromCreatedStream(userId);
@@ -158,7 +159,7 @@ public class MusicRequestHandler {
     }
 
     private static JSONObject _getUserSongs(JSONObject request) {
-        int userId = request.getInt("user_id");
+        int userId = request.getInt(ChatMessagesConstants.USER_ID.value());
         JSONObject result = new JSONObject();
 
         JSONArray songsList = new JSONArray();

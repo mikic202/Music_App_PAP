@@ -27,6 +27,7 @@ import server.Music.MusicRequestTypes;
 import server.ServerConnectionConstants.MessagesTopLevelConstants;
 import server.files.UploadRequestProcessor;
 import server.files.UploadRequestTypes;
+import server.ServerConnectionConstants.ChatMessagesConstants;
 
 public class ClientUpdater implements Runnable {
 	List<Client> clients = new ArrayList<Client>();
@@ -168,7 +169,8 @@ public class ClientUpdater implements Runnable {
 		client.write(response.getBytes());
 		if (responseJSON.getJSONObject(MessagesTopLevelConstants.VALUE.value())
 				.getBoolean(MessagesTopLevelConstants.OUTCOME.value())) {
-			client.userID = responseJSON.getJSONObject(MessagesTopLevelConstants.VALUE.value()).getString("user_id");
+			client.userID = responseJSON.getJSONObject(MessagesTopLevelConstants.VALUE.value())
+					.getString(ChatMessagesConstants.USER_ID.value());
 			clients.add(client);
 			return true;
 		}

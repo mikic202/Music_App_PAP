@@ -20,6 +20,7 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import server.ServerConnectionConstants.MessagesTopLevelConstants;
+import server.ServerConnectionConstants.ChatMessagesConstants;
 
 public class Login {
     public static JSONObject procesRequests(LoginRequestTypes req_type, JSONObject request) {
@@ -41,7 +42,7 @@ public class Login {
                 JSONObject true_result = new JSONObject();
                 true_result.put(MessagesTopLevelConstants.OUTCOME.value(), true);
                 true_result.put("username", user_info.get("username"));
-                true_result.put("user_id", user_info.get("ID"));
+                true_result.put(ChatMessagesConstants.USER_ID.value(), user_info.get("ID"));
                 true_result.put("profile_picture", user_info.get("profile_picture"));
                 result.put(MessagesTopLevelConstants.VALUE.value(), true_result);
             } else {
@@ -92,7 +93,8 @@ public class Login {
             result.put(MessagesTopLevelConstants.OUTCOME.value(), false);
             return result;
         }
-        Hashtable<String, String> user_info = UserDataAccesor.getData(request.getInt("user_id"));
+        Hashtable<String, String> user_info = UserDataAccesor
+                .getData(request.getInt(ChatMessagesConstants.USER_ID.value()));
         if (user_info.isEmpty() || !user_info.get("password").equals(old_password)) {
             result.put(MessagesTopLevelConstants.OUTCOME.value(), false);
             JSONObject response = new JSONObject();
@@ -101,7 +103,7 @@ public class Login {
             return response;
         }
         user_info.put("password", new_password);
-        UserDataSetter.setData(request.getInt("user_id"), user_info);
+        UserDataSetter.setData(request.getInt(ChatMessagesConstants.USER_ID.value()), user_info);
         result.put(MessagesTopLevelConstants.OUTCOME.value(), true);
         JSONObject response = new JSONObject();
         response.put(MessagesTopLevelConstants.VALUE.value(), result);
@@ -113,7 +115,8 @@ public class Login {
         String username = request.getString("nickname");
         ;
         JSONObject result = new JSONObject();
-        Hashtable<String, String> user_info = UserDataAccesor.getData(request.getInt("user_id"));
+        Hashtable<String, String> user_info = UserDataAccesor
+                .getData(request.getInt(ChatMessagesConstants.USER_ID.value()));
         if (user_info.isEmpty()) {
             result.put(MessagesTopLevelConstants.OUTCOME.value(), false);
             JSONObject response = new JSONObject();
@@ -122,7 +125,7 @@ public class Login {
             return response;
         }
         user_info.put("username", username);
-        UserDataSetter.setData(request.getInt("user_id"), user_info);
+        UserDataSetter.setData(request.getInt(ChatMessagesConstants.USER_ID.value()), user_info);
         result.put(MessagesTopLevelConstants.OUTCOME.value(), true);
         JSONObject response = new JSONObject();
         response.put(MessagesTopLevelConstants.VALUE.value(), result);
@@ -133,7 +136,8 @@ public class Login {
     private static JSONObject _changeEmail(JSONObject request) {
         String email = request.getString("email");
         JSONObject result = new JSONObject();
-        Hashtable<String, String> user_info = UserDataAccesor.getData(request.getInt("user_id"));
+        Hashtable<String, String> user_info = UserDataAccesor
+                .getData(request.getInt(ChatMessagesConstants.USER_ID.value()));
         if (user_info.isEmpty()) {
             result.put(MessagesTopLevelConstants.OUTCOME.value(), false);
             JSONObject response = new JSONObject();
@@ -142,7 +146,7 @@ public class Login {
             return response;
         }
         user_info.put("email", email);
-        UserDataSetter.setData(request.getInt("user_id"), user_info);
+        UserDataSetter.setData(request.getInt(ChatMessagesConstants.USER_ID.value()), user_info);
         result.put(MessagesTopLevelConstants.OUTCOME.value(), true);
         JSONObject response = new JSONObject();
         response.put(MessagesTopLevelConstants.VALUE.value(), result);
