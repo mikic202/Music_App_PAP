@@ -97,7 +97,7 @@ public class ClientHandler implements Runnable {
 		String typeStr;
 		try {
 			messageJSON = new JSONObject(message);
-			typeStr = messageJSON.getString("type");
+			typeStr = messageJSON.getString(MessagesTopLevelConstants.TYPE.value());
 		} catch (JSONException e) {
 			System.out.println("Received request without type:");
 			System.out.println(message);

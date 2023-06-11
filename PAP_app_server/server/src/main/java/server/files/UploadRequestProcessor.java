@@ -17,7 +17,7 @@ public class UploadRequestProcessor {
 		String file_name = request.getString("file_name");
 		boolean is_image = request.getBoolean("is_image");
 		JSONObject result = new JSONObject();
-		result.put("type", UploadRequestTypes.START_UPLOAD.value());
+		result.put(MessagesTopLevelConstants.TYPE.value(), UploadRequestTypes.START_UPLOAD.value());
 		String uuid = UUID.randomUUID().toString();
 		Main.uploader.startUpload(uuid, user_id, file_name, is_image);
 		JSONObject value = new JSONObject();
@@ -31,7 +31,7 @@ public class UploadRequestProcessor {
 	private static JSONObject finish(JSONObject request) {
 		String uuid = request.getString("uuid");
 		JSONObject result = new JSONObject();
-		result.put("type", UploadRequestTypes.FINISH_UPLOAD.value());
+		result.put(MessagesTopLevelConstants.TYPE.value(), UploadRequestTypes.FINISH_UPLOAD.value());
 		if (Main.uploader.finishUpload(uuid)) {
 			JSONObject value = new JSONObject();
 			value.put("outcome", true);

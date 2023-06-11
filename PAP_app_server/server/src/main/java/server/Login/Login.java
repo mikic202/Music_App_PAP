@@ -29,7 +29,7 @@ public class Login {
     private static JSONObject _login(JSONObject request) {
         String wanted_email = request.getString("email");
         JSONObject result = new JSONObject();
-        result.put("type", LoginRequestTypes.SEND_LOGIN.value());
+        result.put(MessagesTopLevelConstants.TYPE.value(), LoginRequestTypes.SEND_LOGIN.value());
         String written_password = request.getString("password");
         Hashtable<String, String> user_info = UserDataAccesor.getDataWithEmail(wanted_email);
         if (user_info.isEmpty()) {
@@ -59,7 +59,7 @@ public class Login {
         String password = request.getString("password");
         String confirm_password = request.getString("confirm_password");
         JSONObject result = new JSONObject();
-        result.put("type", LoginRequestTypes.SEND_REGISTER.value());
+        result.put(MessagesTopLevelConstants.TYPE.value(), LoginRequestTypes.SEND_REGISTER.value());
         if (!password.equals(confirm_password)) {
             result.put("outcome", false);
             return result;
@@ -97,7 +97,7 @@ public class Login {
             result.put("outcome", false);
             JSONObject response = new JSONObject();
             response.put(MessagesTopLevelConstants.VALUE.value(), result);
-            response.put("type", LoginRequestTypes.SEND_CHANGE_PASSWORD.value());
+            response.put(MessagesTopLevelConstants.TYPE.value(), LoginRequestTypes.SEND_CHANGE_PASSWORD.value());
             return response;
         }
         user_info.put("password", new_password);
@@ -105,7 +105,7 @@ public class Login {
         result.put("outcome", true);
         JSONObject response = new JSONObject();
         response.put(MessagesTopLevelConstants.VALUE.value(), result);
-        response.put("type", LoginRequestTypes.SEND_CHANGE_PASSWORD.value());
+        response.put(MessagesTopLevelConstants.TYPE.value(), LoginRequestTypes.SEND_CHANGE_PASSWORD.value());
         return response;
     }
 
@@ -118,7 +118,7 @@ public class Login {
             result.put("outcome", false);
             JSONObject response = new JSONObject();
             response.put(MessagesTopLevelConstants.VALUE.value(), result);
-            response.put("type", LoginRequestTypes.SEND_CHANGE_NICKNAME.value());
+            response.put(MessagesTopLevelConstants.TYPE.value(), LoginRequestTypes.SEND_CHANGE_NICKNAME.value());
             return response;
         }
         user_info.put("username", username);
@@ -126,7 +126,7 @@ public class Login {
         result.put("outcome", true);
         JSONObject response = new JSONObject();
         response.put(MessagesTopLevelConstants.VALUE.value(), result);
-        response.put("type", LoginRequestTypes.SEND_CHANGE_NICKNAME.value());
+        response.put(MessagesTopLevelConstants.TYPE.value(), LoginRequestTypes.SEND_CHANGE_NICKNAME.value());
         return response;
     }
 
@@ -138,7 +138,7 @@ public class Login {
             result.put("outcome", false);
             JSONObject response = new JSONObject();
             response.put(MessagesTopLevelConstants.VALUE.value(), result);
-            response.put("type", LoginRequestTypes.SEND_CHANGE_EMAIL.value());
+            response.put(MessagesTopLevelConstants.TYPE.value(), LoginRequestTypes.SEND_CHANGE_EMAIL.value());
             return response;
         }
         user_info.put("email", email);
@@ -146,7 +146,7 @@ public class Login {
         result.put("outcome", true);
         JSONObject response = new JSONObject();
         response.put(MessagesTopLevelConstants.VALUE.value(), result);
-        response.put("type", LoginRequestTypes.SEND_CHANGE_EMAIL.value());
+        response.put(MessagesTopLevelConstants.TYPE.value(), LoginRequestTypes.SEND_CHANGE_EMAIL.value());
         return response;
     }
 
@@ -157,7 +157,7 @@ public class Login {
             result.put("outcome", false);
             JSONObject response = new JSONObject();
             response.put(MessagesTopLevelConstants.VALUE.value(), result);
-            response.put("type", LoginRequestTypes.SEND_CHANGE_PASSWORD.value());
+            response.put(MessagesTopLevelConstants.TYPE.value(), LoginRequestTypes.SEND_CHANGE_PASSWORD.value());
             return response;
         }
         final String email = request.getString("email");
@@ -175,7 +175,7 @@ public class Login {
         result.put("outcome", true);
         JSONObject response = new JSONObject();
         response.put(MessagesTopLevelConstants.VALUE.value(), result);
-        response.put("type", LoginRequestTypes.SEND_CHANGE_PASSWORD.value());
+        response.put(MessagesTopLevelConstants.TYPE.value(), LoginRequestTypes.SEND_CHANGE_PASSWORD.value());
         return response;
     }
 

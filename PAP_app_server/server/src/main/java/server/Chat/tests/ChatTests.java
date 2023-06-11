@@ -18,7 +18,7 @@ import server.ServerConnectionConstants.MessagesTopLevelConstants;
 public class ChatTests {
     private static JSONObject _convertResponseToJson(Hashtable<String, String> response, RequestTypes reqType) {
         JSONObject jsonResponse = new JSONObject();
-        jsonResponse.put("type", reqType.value());
+        jsonResponse.put(MessagesTopLevelConstants.TYPE.value(), reqType.value());
         JSONObject jsonResponseValue = new JSONObject();
         Set<String> keys = response.keySet();
         for (String key : keys) {
@@ -32,7 +32,7 @@ public class ChatTests {
     public void testUserInfoRequest() {
         var request = new JSONObject();
         request.put("user_id", 1);
-        request.put("type", "user_id");
+        request.put(MessagesTopLevelConstants.TYPE.value(), "user_id");
         try (MockedStatic<UserDataAccesor> dummyAccesor = Mockito.mockStatic(UserDataAccesor.class)) {
             Hashtable<String, String> userData = new Hashtable<String, String>();
             userData.put("ID", "1");
@@ -53,7 +53,7 @@ public class ChatTests {
     public void testUserInfoRequestWithUsername() {
         var request = new JSONObject();
         request.put("username", "some_user");
-        request.put("type", "username");
+        request.put(MessagesTopLevelConstants.TYPE.value(), "username");
         try (MockedStatic<UserDataAccesor> dummyAccesor = Mockito.mockStatic(UserDataAccesor.class)) {
             Hashtable<String, String> userData = new Hashtable<String, String>();
             userData.put("ID", "1");

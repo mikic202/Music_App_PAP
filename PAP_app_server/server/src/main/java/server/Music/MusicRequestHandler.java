@@ -26,7 +26,7 @@ public class MusicRequestHandler {
 
         JSONObject valueResult = new JSONObject();
         JSONObject result = new JSONObject();
-        result.put("type", MusicRequestTypes.START_STREAM.value());
+        result.put(MessagesTopLevelConstants.TYPE.value(), MusicRequestTypes.START_STREAM.value());
         valueResult.put("port", port);
         System.out.println("got out of start stream method");
         ;
@@ -61,7 +61,7 @@ public class MusicRequestHandler {
         boolean streamCurrentlyPlaying = streamsManagerInstance.checkIfStreamCurrentlyPlaying(chatId);
 
         JSONObject result = new JSONObject();
-        result.put("type", MusicRequestTypes.CHECK_IF_PLAYING.value());
+        result.put(MessagesTopLevelConstants.TYPE.value(), MusicRequestTypes.CHECK_IF_PLAYING.value());
 
         JSONObject valueResult = new JSONObject();
         valueResult.put("created", streamCreated);
@@ -120,7 +120,7 @@ public class MusicRequestHandler {
 
         JSONObject valueResult = new JSONObject();
         JSONObject result = new JSONObject();
-        result.put("type", MusicRequestTypes.PAUSE_STREAM.value());
+        result.put(MessagesTopLevelConstants.TYPE.value(), MusicRequestTypes.PAUSE_STREAM.value());
         valueResult.put("outcome", rtnPauseStream);
         result.put(MessagesTopLevelConstants.VALUE.value(), valueResult);
 
@@ -135,7 +135,7 @@ public class MusicRequestHandler {
 
         JSONObject valueResult = new JSONObject();
         JSONObject result = new JSONObject();
-        result.put("type", MusicRequestTypes.RESUME_STREAM.value());
+        result.put(MessagesTopLevelConstants.TYPE.value(), MusicRequestTypes.RESUME_STREAM.value());
         valueResult.put("outcome", rtnResumeStream);
         result.put(MessagesTopLevelConstants.VALUE.value(), valueResult);
 
@@ -150,7 +150,7 @@ public class MusicRequestHandler {
 
         JSONObject valueResult = new JSONObject();
         JSONObject result = new JSONObject();
-        result.put("type", MusicRequestTypes.LEAVE_STREAM.value());
+        result.put(MessagesTopLevelConstants.TYPE.value(), MusicRequestTypes.LEAVE_STREAM.value());
         valueResult.put("outcome", removeListenerFromCreatedStream);
         result.put(MessagesTopLevelConstants.VALUE.value(), valueResult);
 
@@ -174,7 +174,7 @@ public class MusicRequestHandler {
             songsList.put(data);
         }
 
-        result.put("type", MusicRequestTypes.GET_USER_SONGS.value());
+        result.put(MessagesTopLevelConstants.TYPE.value(), MusicRequestTypes.GET_USER_SONGS.value());
         result.put(MessagesTopLevelConstants.VALUE.value(), songsList);
 
         return result;

@@ -28,7 +28,7 @@ public class Chat {
             return _generateResponse(reqType, request);
         } catch (Exception e) {
             JSONObject jsonResponse = new JSONObject();
-            jsonResponse.put("type", reqType.value());
+            jsonResponse.put(MessagesTopLevelConstants.TYPE.value(), reqType.value());
             JSONObject errorJson = new JSONObject(String.format("{ \"outcome\":false}"));
             errorJson.put("error", e);
             jsonResponse.put(MessagesTopLevelConstants.VALUE.value(), errorJson);
@@ -133,7 +133,7 @@ public class Chat {
 
     private static JSONObject _convertResponseToJson(Hashtable<String, String> response, RequestTypes reqType) {
         JSONObject jsonResponse = new JSONObject();
-        jsonResponse.put("type", reqType.value());
+        jsonResponse.put(MessagesTopLevelConstants.TYPE.value(), reqType.value());
         JSONObject jsonResponseValue = new JSONObject();
         Set<String> keys = response.keySet();
         for (String key : keys) {
@@ -144,7 +144,7 @@ public class Chat {
     }
 
     private static JSONObject _checkUsersInfo(JSONObject request) {
-        if (request.getString("type").equals("username")) {
+        if (request.getString(MessagesTopLevelConstants.TYPE.value()).equals("username")) {
             Hashtable<String, String> hashResponse = UserDataAccesor
                     .getData(UserDatabaseInformation.USERNAME_COLUMN.value(), request.getString("username"));
             hashResponse.remove("password");
@@ -159,7 +159,7 @@ public class Chat {
     private static JSONObject _convertResponseToJson(ArrayList<Hashtable<String, String>> response,
             RequestTypes reqType) {
         JSONObject jsonResponse = new JSONObject();
-        jsonResponse.put("type", reqType.value());
+        jsonResponse.put(MessagesTopLevelConstants.TYPE.value(), reqType.value());
         JSONArray jsonResponseValue = new JSONArray();
         for (Hashtable<String, String> element : response) {
             Set<String> keys = element.keySet();
@@ -176,7 +176,7 @@ public class Chat {
     private static JSONObject _getUsersInConversation(JSONObject request) {
         ArrayList<Integer> users = ConversationDataAccesor.getUsersInConversation(request.getInt("conversation_id"));
         JSONObject jsonResponse = new JSONObject();
-        jsonResponse.put("type", RequestTypes.GET_USERS_CONVERSATIONS.value());
+        jsonResponse.put(MessagesTopLevelConstants.TYPE.value(), RequestTypes.GET_USERS_CONVERSATIONS.value());
         JSONArray jsonUsers = new JSONArray();
         for (Integer user : users) {
             jsonUsers.put(user);
@@ -222,7 +222,7 @@ public class Chat {
         JSONObject responseValue = new JSONObject();
         responseValue.put("conversation code", code);
         response.put(MessagesTopLevelConstants.VALUE.value(), responseValue);
-        response.put("type", RequestTypes.GET_CONVERSATION_CODE.value());
+        response.put(MessagesTopLevelConstants.TYPE.value(), RequestTypes.GET_CONVERSATION_CODE.value());
         return response;
     }
 
@@ -240,7 +240,7 @@ public class Chat {
         }
         JSONObject response = new JSONObject();
         response.put(MessagesTopLevelConstants.VALUE.value(), responseValue);
-        response.put("type", RequestTypes.JOIN_CONVERSATION_WITH_CODE.value());
+        response.put(MessagesTopLevelConstants.TYPE.value(), RequestTypes.JOIN_CONVERSATION_WITH_CODE.value());
         return response;
     }
 
@@ -264,7 +264,7 @@ public class Chat {
         responseValue.put("outcome", true);
         JSONObject response = new JSONObject();
         response.put(MessagesTopLevelConstants.VALUE.value(), responseValue);
-        response.put("type", RequestTypes.CHANGE_CONVERSATION_NAME.value());
+        response.put(MessagesTopLevelConstants.TYPE.value(), RequestTypes.CHANGE_CONVERSATION_NAME.value());
         return response;
     }
 
@@ -276,7 +276,7 @@ public class Chat {
                 .contains(request.getInt("conversation_id"))) {
             responseValue.put("outcome", false);
             response.put(MessagesTopLevelConstants.VALUE.value(), responseValue);
-            response.put("type", RequestTypes.REMOVE_USER_FROM_CONVERSATION.value());
+            response.put(MessagesTopLevelConstants.TYPE.value(), RequestTypes.REMOVE_USER_FROM_CONVERSATION.value());
             return response;
         }
         ConversationDataSetter.RemoveUserConversationRelation(request.getInt("user_id"),
@@ -288,7 +288,7 @@ public class Chat {
         ConversationDataSetter.setData(request.getInt("conversation_id"), conversationInfo);
         responseValue.put("outcome", true);
         response.put(MessagesTopLevelConstants.VALUE.value(), responseValue);
-        response.put("type", RequestTypes.REMOVE_USER_FROM_CONVERSATION.value());
+        response.put(MessagesTopLevelConstants.TYPE.value(), RequestTypes.REMOVE_USER_FROM_CONVERSATION.value());
         return response;
     }
 
