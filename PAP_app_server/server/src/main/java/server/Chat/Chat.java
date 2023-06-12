@@ -68,17 +68,18 @@ public class Chat {
 
     public static int _putMessageInDatabase(JSONObject request) {
         Hashtable<String, String> data = new Hashtable<>();
-        data.put("sender", Integer.toString(request.getInt("sender_id")));
+        data.put("sender", Integer.toString(request.getInt(ChatMessagesConstants.MESSAGE_SENDER_ID.value())));
         data.put("conversation", Integer.toString(request.getInt(ChatMessagesConstants.CONVERSATION_ID.value())));
         java.util.Date date = new java.util.Date();
         Timestamp timestamp = new Timestamp(date.getTime());
         data.put("send_date", timestamp.toString());
-        data.put("text", request.getString("text"));
+        data.put(ChatMessagesConstants.MESSAGE_TEXT.value(),
+                request.getString(ChatMessagesConstants.MESSAGE_TEXT.value()));
         return MessageDataSetter.addData(data);
     }
 
     private static JSONObject _createConversation(JSONObject request) {
-        String name = request.getString("name");
+        String name = request.getString(ChatMessagesConstants.CONVERSATION_NAME.value());
         int numberOfUsers = request.getJSONArray("users").length();
         int newConversation = _addConversation(name, numberOfUsers);
         ArrayList<Integer> users = new ArrayList<>();
@@ -92,7 +93,7 @@ public class Chat {
 
     private static int _addConversation(String name, int numberOfUsers) {
         Hashtable<String, String> data = new Hashtable<>();
-        data.put("name", name);
+        data.put(ChatMessagesConstants.CONVERSATION_NAME.value(), name);
         data.put("number_of_users", Integer.toString(numberOfUsers));
         return ConversationDataSetter.addData(data);
     }
@@ -197,7 +198,7 @@ public class Chat {
     }
 
     private static JSONObject _processSendImage(JSONObject request) {
-        request.put("text", (request.getJSONArray("image")).toString());
+        request.put(ChatMessagesConstants.MESSAGE_TEXT.value(), (request.getJSONArray("image")).toString());
         int newMessage = _putMessageInDatabase(request);
         MessageDataSetter.setIsImage(newMessage);
 
@@ -264,7 +265,7 @@ public class Chat {
         String newName = request.getString("conversation_name");
         var oldConversationData = ConversationDataAccesor
                 .getData(request.getInt(ChatMessagesConstants.CONVERSATION_ID.value()));
-        oldConversationData.put("name", newName);
+        oldConversationData.put(ChatMessagesConstants.CONVERSATION_NAME.value(), newName);
         ConversationDataSetter.setData(request.getInt(ChatMessagesConstants.CONVERSATION_ID.value()),
                 oldConversationData);
         JSONObject responseValue = new JSONObject();
