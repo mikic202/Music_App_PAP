@@ -41,7 +41,7 @@ public class Chat {
     private static JSONObject _getMessegesInConversation(JSONObject request) {
         ArrayList<Hashtable<String, String>> response = new ArrayList<Hashtable<String, String>>();
         ArrayList<Integer> messages = ConversationDataAccesor
-                .getMessagesInConversation(request.getInt("conversation_id"));
+                .getMessagesInConversation(request.getInt(ChatMessagesConstants.CONVERSATION_ID.value()));
         for (Integer messageId : messages) {
             response.add(MessageDataAccesor.getData(messageId));
         }
@@ -62,14 +62,14 @@ public class Chat {
     private static JSONObject _sendMessage(JSONObject request) {
         int addedMsg = _putMessageInDatabase(request);
         Hashtable<String, String> data = MessageDataAccesor.getData(addedMsg);
-        Main.updater.sendMessage(addedMsg, data.get("conversation_id"));
+        Main.updater.sendMessage(addedMsg, data.get(ChatMessagesConstants.CONVERSATION_ID.value()));
         return _convertResponseToJson(data, RequestTypes.GET_MESSAGES);
     }
 
     public static int _putMessageInDatabase(JSONObject request) {
         Hashtable<String, String> data = new Hashtable<>();
         data.put("sender", Integer.toString(request.getInt("sender_id")));
-        data.put("conversation", Integer.toString(request.getInt("conversation_id")));
+        data.put("conversation", Integer.toString(request.getInt(ChatMessagesConstants.CONVERSATION_ID.value())));
         java.util.Date date = new java.util.Date();
         Timestamp timestamp = new Timestamp(date.getTime());
         data.put("send_date", timestamp.toString());
@@ -108,7 +108,7 @@ public class Chat {
 
     private static JSONObject _processAddUsersToConversation(JSONObject request) {
         int numberOfUsers = request.getJSONArray("users").length();
-        int conversationId = request.getInt("conversation_id");
+        int conversationId = request.getInt(ChatMessagesConstants.CONVERSATION_ID.value());
         ArrayList<Integer> users = new ArrayList<>();
         for (int i = 0; i < numberOfUsers; i++) {
             System.out.println(UserDataAccesor.getUserConversations(request.getJSONArray("users").getInt(i)));
@@ -177,7 +177,8 @@ public class Chat {
     }
 
     private static JSONObject _getUsersInConversation(JSONObject request) {
-        ArrayList<Integer> users = ConversationDataAccesor.getUsersInConversation(request.getInt("conversation_id"));
+        ArrayList<Integer> users = ConversationDataAccesor
+                .getUsersInConversation(request.getInt(ChatMessagesConstants.CONVERSATION_ID.value()));
         JSONObject jsonResponse = new JSONObject();
         jsonResponse.put(MessagesTopLevelConstants.TYPE.value(), RequestTypes.GET_USERS_CONVERSATIONS.value());
         JSONArray jsonUsers = new JSONArray();
@@ -190,7 +191,8 @@ public class Chat {
 
     private static JSONObject _getNewMessagessInConversation(JSONObject request) {
         ArrayList<Hashtable<String, String>> messages = MessageDataAccesor
-                .getMessagesOlderThanGiven(request.getInt("latest_message"), request.getInt("conversation_id"));
+                .getMessagesOlderThanGiven(request.getInt("latest_message"),
+                        request.getInt(ChatMessagesConstants.CONVERSATION_ID.value()));
         return _convertResponseToJson(messages, RequestTypes.GET_LATEST_MESSAGE);
     }
 
@@ -200,7 +202,7 @@ public class Chat {
         MessageDataSetter.setIsImage(newMessage);
 
         Hashtable<String, String> data = MessageDataAccesor.getData(newMessage);
-        Main.updater.sendMessage(newMessage, data.get("conversation_id"));
+        Main.updater.sendMessage(newMessage, data.get(ChatMessagesConstants.CONVERSATION_ID.value()));
 
         return _convertResponseToJson(MessageDataAccesor.getData(newMessage), RequestTypes.SEND_IMAGE);
     }
@@ -220,7 +222,7 @@ public class Chat {
     }
 
     private static JSONObject _processGetConversationCode(JSONObject request) {
-        String code = _generateConversationCode(request.getInt("conversation_id"));
+        String code = _generateConversationCode(request.getInt(ChatMessagesConstants.CONVERSATION_ID.value()));
         JSONObject response = new JSONObject();
         JSONObject responseValue = new JSONObject();
         responseValue.put("conversation code", code);
@@ -239,7 +241,7 @@ public class Chat {
         var usersConversations = UserDataAccesor.getUserConversations(users.get(0));
         responseValue.put(MessagesTopLevelConstants.OUTCOME.value(), usersConversations.contains(conversationId));
         if (usersConversations.contains(conversationId)) {
-            responseValue.put("conversation_id", conversationId);
+            responseValue.put(ChatMessagesConstants.CONVERSATION_ID.value(), conversationId);
         }
         JSONObject response = new JSONObject();
         response.put(MessagesTopLevelConstants.VALUE.value(), responseValue);
@@ -260,9 +262,11 @@ public class Chat {
 
     private static JSONObject _processChangeConversationName(JSONObject request) {
         String newName = request.getString("conversation_name");
-        var oldConversationData = ConversationDataAccesor.getData(request.getInt("conversation_id"));
+        var oldConversationData = ConversationDataAccesor
+                .getData(request.getInt(ChatMessagesConstants.CONVERSATION_ID.value()));
         oldConversationData.put("name", newName);
-        ConversationDataSetter.setData(request.getInt("conversation_id"), oldConversationData);
+        ConversationDataSetter.setData(request.getInt(ChatMessagesConstants.CONVERSATION_ID.value()),
+                oldConversationData);
         JSONObject responseValue = new JSONObject();
         responseValue.put(MessagesTopLevelConstants.OUTCOME.value(), true);
         JSONObject response = new JSONObject();
@@ -276,19 +280,20 @@ public class Chat {
         JSONObject response = new JSONObject();
         System.out.println(UserDataAccesor.getUserConversations(request.getInt(ChatMessagesConstants.USER_ID.value())));
         if (!UserDataAccesor.getUserConversations(request.getInt(ChatMessagesConstants.USER_ID.value()))
-                .contains(request.getInt("conversation_id"))) {
+                .contains(request.getInt(ChatMessagesConstants.CONVERSATION_ID.value()))) {
             responseValue.put(MessagesTopLevelConstants.OUTCOME.value(), false);
             response.put(MessagesTopLevelConstants.VALUE.value(), responseValue);
             response.put(MessagesTopLevelConstants.TYPE.value(), RequestTypes.REMOVE_USER_FROM_CONVERSATION.value());
             return response;
         }
         ConversationDataSetter.RemoveUserConversationRelation(request.getInt(ChatMessagesConstants.USER_ID.value()),
-                request.getInt("conversation_id"));
-        var conversationInfo = ConversationDataAccesor.getData(request.getInt("conversation_id"));
+                request.getInt(ChatMessagesConstants.CONVERSATION_ID.value()));
+        var conversationInfo = ConversationDataAccesor
+                .getData(request.getInt(ChatMessagesConstants.CONVERSATION_ID.value()));
         conversationInfo.put(ConversationDatabsaeInformation.NUMBER_OF_USERS_COLUMN.value(), Integer.toString(
                 Integer.parseInt(conversationInfo.get(ConversationDatabsaeInformation.NUMBER_OF_USERS_COLUMN.value()))
                         - 1));
-        ConversationDataSetter.setData(request.getInt("conversation_id"), conversationInfo);
+        ConversationDataSetter.setData(request.getInt(ChatMessagesConstants.CONVERSATION_ID.value()), conversationInfo);
         responseValue.put(MessagesTopLevelConstants.OUTCOME.value(), true);
         response.put(MessagesTopLevelConstants.VALUE.value(), responseValue);
         response.put(MessagesTopLevelConstants.TYPE.value(), RequestTypes.REMOVE_USER_FROM_CONVERSATION.value());
