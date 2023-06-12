@@ -38,7 +38,7 @@ public class ChatTests {
             Hashtable<String, String> userData = new Hashtable<String, String>();
             userData.put("ID", "1");
             userData.put(ChatMessagesConstants.USERNAME.value(), "some_user");
-            userData.put("email", "some@email");
+            userData.put(ChatMessagesConstants.EMAIL.value(), "some@email");
             userData.put("password", "12345");
             userData.put("profile_picture", "0");
             dummyAccesor.when(() -> UserDataAccesor.getData(1)).thenReturn(userData);
@@ -59,7 +59,7 @@ public class ChatTests {
             Hashtable<String, String> userData = new Hashtable<String, String>();
             userData.put("ID", "1");
             userData.put(ChatMessagesConstants.USERNAME.value(), "some_user");
-            userData.put("email", "some@email");
+            userData.put(ChatMessagesConstants.EMAIL.value(), "some@email");
             userData.put("password", "12345");
             userData.put("profile_picture", "0");
             dummyAccesor.when(() -> UserDataAccesor.getData(ChatMessagesConstants.USERNAME.value(), "some_user"))
