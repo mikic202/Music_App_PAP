@@ -80,11 +80,11 @@ public class Chat {
 
     private static JSONObject _createConversation(JSONObject request) {
         String name = request.getString(ChatMessagesConstants.CONVERSATION_NAME.value());
-        int numberOfUsers = request.getJSONArray("users").length();
+        int numberOfUsers = request.getJSONArray(ChatMessagesConstants.USERS_IN_CONVERSATION.value()).length();
         int newConversation = _addConversation(name, numberOfUsers);
         ArrayList<Integer> users = new ArrayList<>();
-        for (int i = 0; i < request.getJSONArray("users").length(); i++) {
-            users.add(request.getJSONArray("users").getInt(i));
+        for (int i = 0; i < request.getJSONArray(ChatMessagesConstants.USERS_IN_CONVERSATION.value()).length(); i++) {
+            users.add(request.getJSONArray(ChatMessagesConstants.USERS_IN_CONVERSATION.value()).getInt(i));
         }
         _addUsersToConversation(users, newConversation);
         return _convertResponseToJson(ConversationDataAccesor.getData(newConversation),
@@ -108,14 +108,17 @@ public class Chat {
     }
 
     private static JSONObject _processAddUsersToConversation(JSONObject request) {
-        int numberOfUsers = request.getJSONArray("users").length();
+        int numberOfUsers = request.getJSONArray(ChatMessagesConstants.USERS_IN_CONVERSATION.value()).length();
         int conversationId = request.getInt(ChatMessagesConstants.CONVERSATION_ID.value());
         ArrayList<Integer> users = new ArrayList<>();
         for (int i = 0; i < numberOfUsers; i++) {
-            System.out.println(UserDataAccesor.getUserConversations(request.getJSONArray("users").getInt(i)));
-            if (!UserDataAccesor.getUserConversations(request.getJSONArray("users").getInt(i))
+            System.out.println(UserDataAccesor.getUserConversations(
+                    request.getJSONArray(ChatMessagesConstants.USERS_IN_CONVERSATION.value()).getInt(i)));
+            if (!UserDataAccesor
+                    .getUserConversations(
+                            request.getJSONArray(ChatMessagesConstants.USERS_IN_CONVERSATION.value()).getInt(i))
                     .contains(conversationId)) {
-                users.add(request.getJSONArray("users").getInt(i));
+                users.add(request.getJSONArray(ChatMessagesConstants.USERS_IN_CONVERSATION.value()).getInt(i));
             } else {
                 numberOfUsers -= 1;
             }
@@ -192,13 +195,14 @@ public class Chat {
 
     private static JSONObject _getNewMessagessInConversation(JSONObject request) {
         ArrayList<Hashtable<String, String>> messages = MessageDataAccesor
-                .getMessagesOlderThanGiven(request.getInt("latest_message"),
+                .getMessagesOlderThanGiven(request.getInt(ChatMessagesConstants.LATEST_MESSAGE.value()),
                         request.getInt(ChatMessagesConstants.CONVERSATION_ID.value()));
         return _convertResponseToJson(messages, RequestTypes.GET_LATEST_MESSAGE);
     }
 
     private static JSONObject _processSendImage(JSONObject request) {
-        request.put(ChatMessagesConstants.MESSAGE_TEXT.value(), (request.getJSONArray("image")).toString());
+        request.put(ChatMessagesConstants.MESSAGE_TEXT.value(),
+                (request.getJSONArray(ChatMessagesConstants.IMAGE_MESSAGE.value())).toString());
         int newMessage = _putMessageInDatabase(request);
         MessageDataSetter.setIsImage(newMessage);
 
@@ -233,7 +237,8 @@ public class Chat {
     }
 
     private static JSONObject _procesJoinConversationUsingCode(JSONObject request) {
-        int conversationId = _decodeConversationCode(request.getString("conversation_code"));
+        int conversationId = _decodeConversationCode(
+                request.getString(ChatMessagesConstants.CONVERSATION_CODE.value()));
         ArrayList<Integer> users = new ArrayList<>();
         users.add(request.getInt(ChatMessagesConstants.USER_ID.value()));
         System.out.println(users);
@@ -262,7 +267,7 @@ public class Chat {
     }
 
     private static JSONObject _processChangeConversationName(JSONObject request) {
-        String newName = request.getString("conversation_name");
+        String newName = request.getString(ChatMessagesConstants.NEW_CONVERSATION_NAME.value());
         var oldConversationData = ConversationDataAccesor
                 .getData(request.getInt(ChatMessagesConstants.CONVERSATION_ID.value()));
         oldConversationData.put(ChatMessagesConstants.CONVERSATION_NAME.value(), newName);
