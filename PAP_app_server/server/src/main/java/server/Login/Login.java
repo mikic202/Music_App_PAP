@@ -21,6 +21,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import server.ServerConnectionConstants.MessagesTopLevelConstants;
 import server.ServerConnectionConstants.ChatMessagesConstants;
+import server.ServerConnectionConstants.LoggingMessagesConstants;
 
 public class Login {
     public static JSONObject procesRequests(LoginRequestTypes req_type, JSONObject request) {
@@ -31,14 +32,14 @@ public class Login {
         String wanted_email = request.getString(ChatMessagesConstants.EMAIL.value());
         JSONObject result = new JSONObject();
         result.put(MessagesTopLevelConstants.TYPE.value(), LoginRequestTypes.SEND_LOGIN.value());
-        String written_password = request.getString("password");
+        String written_password = request.getString(LoggingMessagesConstants.PASSWORD.value());
         Hashtable<String, String> user_info = UserDataAccesor.getDataWithEmail(wanted_email);
         if (user_info.isEmpty()) {
             JSONObject false_result = new JSONObject();
             false_result.put(MessagesTopLevelConstants.OUTCOME.value(), false);
             result.put(MessagesTopLevelConstants.VALUE.value(), false_result);
         } else {
-            if (written_password.equals(user_info.get("password"))) {
+            if (written_password.equals(user_info.get(LoggingMessagesConstants.PASSWORD.value()))) {
                 JSONObject true_result = new JSONObject();
                 true_result.put(MessagesTopLevelConstants.OUTCOME.value(), true);
                 true_result.put(ChatMessagesConstants.USERNAME.value(),
@@ -58,7 +59,7 @@ public class Login {
     private static JSONObject _register(JSONObject request) {
         String email = request.getString(ChatMessagesConstants.EMAIL.value());
         String nickname = request.getString("nickname");
-        String password = request.getString("password");
+        String password = request.getString(LoggingMessagesConstants.PASSWORD.value());
         String confirm_password = request.getString("confirm_password");
         JSONObject result = new JSONObject();
         result.put(MessagesTopLevelConstants.TYPE.value(), LoginRequestTypes.SEND_REGISTER.value());
@@ -79,7 +80,7 @@ public class Login {
         var data = new Hashtable<String, String>();
         data.put(ChatMessagesConstants.USERNAME.value(), nickname);
         data.put(ChatMessagesConstants.EMAIL.value(), email);
-        data.put("password", password);
+        data.put(LoggingMessagesConstants.PASSWORD.value(), password);
         UserDataSetter.addData(data);
         result.put(MessagesTopLevelConstants.OUTCOME.value(), true);
         return result;
@@ -87,8 +88,8 @@ public class Login {
     }
 
     private static JSONObject _changePassword(JSONObject request) {
-        String old_password = request.getString("old_password");
-        String new_password = request.getString("new_password");
+        String old_password = request.getString(LoggingMessagesConstants.OLD_PASSWORD.value());
+        String new_password = request.getString(LoggingMessagesConstants.NEW_PASSWORD.value());
         JSONObject result = new JSONObject();
         if (new_password.equals(old_password)) {
             result.put(MessagesTopLevelConstants.OUTCOME.value(), false);
@@ -96,14 +97,14 @@ public class Login {
         }
         Hashtable<String, String> user_info = UserDataAccesor
                 .getData(request.getInt(ChatMessagesConstants.USER_ID.value()));
-        if (user_info.isEmpty() || !user_info.get("password").equals(old_password)) {
+        if (user_info.isEmpty() || !user_info.get(LoggingMessagesConstants.PASSWORD.value()).equals(old_password)) {
             result.put(MessagesTopLevelConstants.OUTCOME.value(), false);
             JSONObject response = new JSONObject();
             response.put(MessagesTopLevelConstants.VALUE.value(), result);
             response.put(MessagesTopLevelConstants.TYPE.value(), LoginRequestTypes.SEND_CHANGE_PASSWORD.value());
             return response;
         }
-        user_info.put("password", new_password);
+        user_info.put(LoggingMessagesConstants.PASSWORD.value(), new_password);
         UserDataSetter.setData(request.getInt(ChatMessagesConstants.USER_ID.value()), user_info);
         result.put(MessagesTopLevelConstants.OUTCOME.value(), true);
         JSONObject response = new JSONObject();
@@ -170,7 +171,7 @@ public class Login {
         String newPassword = _generateRandomString();
         final String message = "Please DO NOT responde to this email\nNew Password: " + newPassword
                 + "\n Please reset the Password after logging in";
-        user_info.put("password", newPassword);
+        user_info.put(LoggingMessagesConstants.PASSWORD.value(), newPassword);
         System.out.println(user_info);
         UserDataSetter.setData(Integer.parseInt(user_info.get("ID")), user_info);
         new Thread(new Runnable() {
