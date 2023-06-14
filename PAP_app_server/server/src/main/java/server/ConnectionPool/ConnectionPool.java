@@ -30,7 +30,15 @@ public class ConnectionPool {
 
     public static synchronized Connection getConnection() {
         Connection connection = availableConnections
-                .remove(availableConnections.size() - 1);
+                .remove(0);
+        try {
+            if (connection.isClosed()) {
+                connection = DriverManager.getConnection(DatabseInformation.URL.value(),
+                        DatabseInformation.USER.value(), DatabseInformation.PASSWORD.value());
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
         usedConnections.add(connection);
         return connection;
     }
