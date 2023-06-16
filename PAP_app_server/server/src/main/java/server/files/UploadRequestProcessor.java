@@ -5,6 +5,8 @@ import java.util.UUID;
 import org.json.JSONObject;
 
 import server.Main;
+import server.ServerConnectionConstants.MessagesTopLevelConstants;
+import server.ServerConnectionConstants.ChatMessagesConstants;
 
 public class UploadRequestProcessor {
 	public static JSONObject procesRequests(UploadRequestTypes req_type, JSONObject request) {
@@ -12,17 +14,17 @@ public class UploadRequestProcessor {
 	}
 
 	private static JSONObject start(JSONObject request) {
-		String user_id = String.valueOf(request.getInt("user_id"));
+		String user_id = String.valueOf(request.getInt(ChatMessagesConstants.USER_ID.value()));
 		String file_name = request.getString("file_name");
 		boolean is_image = request.getBoolean("is_image");
 		JSONObject result = new JSONObject();
-		result.put("type", UploadRequestTypes.START_UPLOAD.value());
+		result.put(MessagesTopLevelConstants.TYPE.value(), UploadRequestTypes.START_UPLOAD.value());
 		String uuid = UUID.randomUUID().toString();
 		Main.uploader.startUpload(uuid, user_id, file_name, is_image);
 		JSONObject value = new JSONObject();
-		value.put("outcome", true);
+		value.put(MessagesTopLevelConstants.OUTCOME.value(), true);
 		value.put("uuid", uuid);
-		result.put("value", value);
+		result.put(MessagesTopLevelConstants.VALUE.value(), value);
 
 		return result;
 	}
@@ -30,16 +32,16 @@ public class UploadRequestProcessor {
 	private static JSONObject finish(JSONObject request) {
 		String uuid = request.getString("uuid");
 		JSONObject result = new JSONObject();
-		result.put("type", UploadRequestTypes.FINISH_UPLOAD.value());
+		result.put(MessagesTopLevelConstants.TYPE.value(), UploadRequestTypes.FINISH_UPLOAD.value());
 		if (Main.uploader.finishUpload(uuid)) {
 			JSONObject value = new JSONObject();
-			value.put("outcome", true);
-			result.put("value", value);
+			value.put(MessagesTopLevelConstants.OUTCOME.value(), true);
+			result.put(MessagesTopLevelConstants.VALUE.value(), value);
 			return result;
 		}
 		JSONObject value = new JSONObject();
-		value.put("outcome", false);
-		result.put("value", value);
+		value.put(MessagesTopLevelConstants.OUTCOME.value(), false);
+		result.put(MessagesTopLevelConstants.VALUE.value(), value);
 
 		return result;
 	}

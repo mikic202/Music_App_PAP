@@ -25,6 +25,7 @@ import server.files.UploadRequestTypes;
 
 import server.Music.MusicRequestHandler;
 import server.Music.MusicRequestTypes;
+import server.ServerConnectionConstants.MessagesTopLevelConstants;
 
 public class ClientHandler implements Runnable {
 	List<Client> clients = new ArrayList<Client>();
@@ -96,7 +97,7 @@ public class ClientHandler implements Runnable {
 		String typeStr;
 		try {
 			messageJSON = new JSONObject(message);
-			typeStr = messageJSON.getString("type");
+			typeStr = messageJSON.getString(MessagesTopLevelConstants.TYPE.value());
 		} catch (JSONException e) {
 			System.out.println("Received request without type:");
 			System.out.println(message);
@@ -132,7 +133,7 @@ public class ClientHandler implements Runnable {
 		}
 		JSONObject value = null;
 		try {
-			value = messageJSON.getJSONObject("value");
+			value = messageJSON.getJSONObject(MessagesTopLevelConstants.VALUE.value());
 		} catch (JSONException e) {
 			System.out.println("Received request without value:");
 			System.out.println(message);

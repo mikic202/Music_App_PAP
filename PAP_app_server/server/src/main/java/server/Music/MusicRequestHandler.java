@@ -8,6 +8,8 @@ import javax.sound.sampled.AudioFormat;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
+import server.ServerConnectionConstants.MessagesTopLevelConstants;
+import server.ServerConnectionConstants.ChatMessagesConstants;
 
 public class MusicRequestHandler {
 
@@ -16,7 +18,7 @@ public class MusicRequestHandler {
     }
 
     private static JSONObject _startStream(JSONObject request) {
-        int userId = request.getInt("user_id");
+        int userId = request.getInt(ChatMessagesConstants.USER_ID.value());
         int chatId = request.getInt("chat_id");
         int songId = request.getInt("song_id");
 
@@ -25,11 +27,11 @@ public class MusicRequestHandler {
 
         JSONObject valueResult = new JSONObject();
         JSONObject result = new JSONObject();
-        result.put("type", MusicRequestTypes.START_STREAM.value());
+        result.put(MessagesTopLevelConstants.TYPE.value(), MusicRequestTypes.START_STREAM.value());
         valueResult.put("port", port);
-        System.out.println("got out of start stream method");;
-        if(port > 0)
-        {
+        System.out.println("got out of start stream method");
+        ;
+        if (port > 0) {
             JSONObject formatParams = new JSONObject();
             AudioFormat format = streamsManagerInstance.getFormat(chatId);
             float sampleRate = format.getSampleRate();
@@ -48,7 +50,7 @@ public class MusicRequestHandler {
             valueResult.put("format", formatParams);
         }
 
-        result.put("value", valueResult);
+        result.put(MessagesTopLevelConstants.VALUE.value(), valueResult);
         return result;
     }
 
@@ -60,7 +62,7 @@ public class MusicRequestHandler {
         boolean streamCurrentlyPlaying = streamsManagerInstance.checkIfStreamCurrentlyPlaying(chatId);
 
         JSONObject result = new JSONObject();
-        result.put("type", MusicRequestTypes.CHECK_IF_PLAYING.value());
+        result.put(MessagesTopLevelConstants.TYPE.value(), MusicRequestTypes.CHECK_IF_PLAYING.value());
 
         JSONObject valueResult = new JSONObject();
         valueResult.put("created", streamCreated);
@@ -90,13 +92,13 @@ public class MusicRequestHandler {
             formatParams.put("song_id", songId);
             valueResult.put("format", formatParams);
         }
-        result.put("value", valueResult);
+        result.put(MessagesTopLevelConstants.VALUE.value(), valueResult);
 
         return result;
     }
 
     private static JSONObject _joinPlayingStream(JSONObject request) {
-        int userId = request.getInt("user_id");
+        int userId = request.getInt(ChatMessagesConstants.USER_ID.value());
         int chatId = request.getInt("chat_id");
 
         JSONObject result = new JSONObject();
@@ -106,66 +108,65 @@ public class MusicRequestHandler {
         MusicStreamsManager streamsManagerInstance = MusicStreamsManager.getInstance();
         int port = streamsManagerInstance.addListenerToCreatedStream(chatId, userId);
         valueResult.put("port", port);
-        result.put("value", valueResult);
+        result.put(MessagesTopLevelConstants.VALUE.value(), valueResult);
 
         return result;
     }
 
     private static JSONObject _pauseStream(JSONObject request) {
-        int userId = request.getInt("user_id");
+        int userId = request.getInt(ChatMessagesConstants.USER_ID.value());
 
         MusicStreamsManager streamsManagerInstance = MusicStreamsManager.getInstance();
         boolean rtnPauseStream = streamsManagerInstance.pauseStream(userId);
 
         JSONObject valueResult = new JSONObject();
         JSONObject result = new JSONObject();
-        result.put("type", MusicRequestTypes.PAUSE_STREAM.value());
-        valueResult.put("outcome", rtnPauseStream);
-        result.put("value", valueResult);
+        result.put(MessagesTopLevelConstants.TYPE.value(), MusicRequestTypes.PAUSE_STREAM.value());
+        valueResult.put(MessagesTopLevelConstants.OUTCOME.value(), rtnPauseStream);
+        result.put(MessagesTopLevelConstants.VALUE.value(), valueResult);
 
         return result;
     }
 
     private static JSONObject _resumeStream(JSONObject request) {
-        int userId = request.getInt("user_id");
+        int userId = request.getInt(ChatMessagesConstants.USER_ID.value());
 
         MusicStreamsManager streamsManagerInstance = MusicStreamsManager.getInstance();
         boolean rtnResumeStream = streamsManagerInstance.resumeStream(userId);
 
         JSONObject valueResult = new JSONObject();
         JSONObject result = new JSONObject();
-        result.put("type", MusicRequestTypes.RESUME_STREAM.value());
-        valueResult.put("outcome", rtnResumeStream);
-        result.put("value", valueResult);
+        result.put(MessagesTopLevelConstants.TYPE.value(), MusicRequestTypes.RESUME_STREAM.value());
+        valueResult.put(MessagesTopLevelConstants.OUTCOME.value(), rtnResumeStream);
+        result.put(MessagesTopLevelConstants.VALUE.value(), valueResult);
 
         return result;
     }
 
     private static JSONObject _leaveStream(JSONObject request) {
-        int userId = request.getInt("user_id");
+        int userId = request.getInt(ChatMessagesConstants.USER_ID.value());
 
         MusicStreamsManager streamsManagerInstance = MusicStreamsManager.getInstance();
         boolean removeListenerFromCreatedStream = streamsManagerInstance.removeListenerFromCreatedStream(userId);
 
         JSONObject valueResult = new JSONObject();
         JSONObject result = new JSONObject();
-        result.put("type", MusicRequestTypes.LEAVE_STREAM.value());
-        valueResult.put("outcome", removeListenerFromCreatedStream);
-        result.put("value", valueResult);
+        result.put(MessagesTopLevelConstants.TYPE.value(), MusicRequestTypes.LEAVE_STREAM.value());
+        valueResult.put(MessagesTopLevelConstants.OUTCOME.value(), removeListenerFromCreatedStream);
+        result.put(MessagesTopLevelConstants.VALUE.value(), valueResult);
 
         return result;
     }
-    private static JSONObject _getUserSongs(JSONObject request)
-    {
-        int userId = request.getInt("user_id");
+
+    private static JSONObject _getUserSongs(JSONObject request) {
+        int userId = request.getInt(ChatMessagesConstants.USER_ID.value());
         JSONObject result = new JSONObject();
 
         JSONArray songsList = new JSONArray();
 
         Hashtable<String, Integer> songs = FileDataAccesor.getUserFiles(userId);
         Enumeration<String> e = songs.keys();
-        while(e.hasMoreElements())
-        {
+        while (e.hasMoreElements()) {
             String key = e.nextElement();
             int id = songs.get(key);
             JSONObject data = new JSONObject();
@@ -174,8 +175,8 @@ public class MusicRequestHandler {
             songsList.put(data);
         }
 
-        result.put("type", MusicRequestTypes.GET_USER_SONGS.value());
-        result.put("value", songsList);
+        result.put(MessagesTopLevelConstants.TYPE.value(), MusicRequestTypes.GET_USER_SONGS.value());
+        result.put(MessagesTopLevelConstants.VALUE.value(), songsList);
 
         return result;
     }
