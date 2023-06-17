@@ -2,6 +2,7 @@ package client.Chat;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Hashtable;
@@ -31,22 +32,15 @@ public class Chat {
     private JSONObject userInfo;
 
     public Chat(JSONObject userInfo, int currentConv, ServerConnector serverConnector) {
-        currentConversation = currentConv;
         this.userInfo = userInfo;
         this.userId = userInfo.getInt(ChatMessagesConstants.USER_ID.value());
+
         usersEncountered = new Hashtable<>();
-        usersEncountered.put(this.userId, this.userInfo);
-        chatAccesor = new ChatAccesors(serverConnector);
-        JSONObject conversations = chatAccesor.getUsersConversations(userId);
         usersConversations = new Hashtable<>();
-        convertConversationsResponseToHashtable(conversations);
-        if (currentConversation == -1 && usersConversations.size() != 0) {
-            currentConversation = Collections.min(usersConversations.keySet());
-        }
         messagesInUsersConversation = new Hashtable<>();
-        getCurrentMessages();
         usersInConversarion = new Hashtable<>();
-        getUsersInConversation(currentConversation);
+
+        initChatComponents(serverConnector, currentConv);
 
     }
 
@@ -233,28 +227,7 @@ public class Chat {
             format = path.substring(dotIndex + 1);
         }
         try {
-            BufferedImage img = ImageIO.read(new File(path));
-            Double imageHeight = 0.0;
-            Double imageWidth = 0.0;
-            if (img.getWidth() < 100.0 && img.getHeight() < 100) {
-
-            } else if (img.getWidth() > img.getHeight()) {
-                imageWidth = 100.0;
-                imageHeight = img.getHeight() * (100.0 / img.getWidth());
-                System.out.println(img.getWidth());
-                System.out.println(100.0 / img.getWidth());
-            } else {
-                imageHeight = 100.0;
-                imageWidth = img.getWidth() * (100.0 / img.getHeight());
-                System.out.println(img.getHeight());
-                System.out.println((100.0 / img.getHeight()));
-            }
-
-            Image scaledImage = img.getScaledInstance(imageWidth.intValue(), imageHeight.intValue(),
-                    Image.SCALE_SMOOTH);
-            BufferedImage imageBuff = new BufferedImage(imageWidth.intValue(), imageHeight.intValue(),
-                    BufferedImage.TYPE_INT_RGB);
-            imageBuff.getGraphics().drawImage(scaledImage, 0, 0, new Color(0, 0, 0), null);
+            BufferedImage imageBuff = convertFilepathToBufferedImage(path);
 
             ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 
@@ -324,6 +297,44 @@ public class Chat {
             }
         }
         return -1;
+    }
+
+    private void initChatComponents(ServerConnector serverConnector, int currentConv) {
+        usersEncountered.put(this.userId, this.userInfo);
+        chatAccesor = new ChatAccesors(serverConnector);
+        convertConversationsResponseToHashtable(chatAccesor.getUsersConversations(userId));
+        currentConversation = currentConv;
+        if (currentConversation == -1 && usersConversations.size() != 0) {
+            currentConversation = Collections.min(usersConversations.keySet());
+        }
+        getCurrentMessages();
+        getUsersInConversation(currentConversation);
+    }
+
+    private BufferedImage convertFilepathToBufferedImage(String path) throws IOException {
+        BufferedImage img = ImageIO.read(new File(path));
+        Double imageHeight = 0.0;
+        Double imageWidth = 0.0;
+        if (img.getWidth() < 100.0 && img.getHeight() < 100) {
+
+        } else if (img.getWidth() > img.getHeight()) {
+            imageWidth = 100.0;
+            imageHeight = img.getHeight() * (100.0 / img.getWidth());
+            System.out.println(img.getWidth());
+            System.out.println(100.0 / img.getWidth());
+        } else {
+            imageHeight = 100.0;
+            imageWidth = img.getWidth() * (100.0 / img.getHeight());
+            System.out.println(img.getHeight());
+            System.out.println((100.0 / img.getHeight()));
+        }
+
+        Image scaledImage = img.getScaledInstance(imageWidth.intValue(), imageHeight.intValue(),
+                Image.SCALE_SMOOTH);
+        BufferedImage imageBuff = new BufferedImage(imageWidth.intValue(), imageHeight.intValue(),
+                BufferedImage.TYPE_INT_RGB);
+        imageBuff.getGraphics().drawImage(scaledImage, 0, 0, new Color(0, 0, 0), null);
+        return imageBuff;
     }
 
 }
