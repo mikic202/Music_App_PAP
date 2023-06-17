@@ -128,24 +128,22 @@ public class Chat {
         return conversation_info;
     }
 
-    public JSONObject addUsersToConversation(String conversation_name, ArrayList<String> usernames) {
-        for (Integer key : usersConversations.keySet()) {
-            if (usersConversations.get(key).getString(ChatMessagesConstants.CONVERSATION_NAME.value())
-                    .equals(conversation_name)) {
-                if (usersInConversarion.get(key) == null) {
-                    getUsersInConversation(key);
-                }
-                for (String username : usernames) {
-                    JSONObject user_info = chatAccesor.getUserInfo(username)
-                            .getJSONObject(MessagesTopLevelConstants.VALUE.value());
-                    usersInConversarion.get(key).put(user_info.getInt(ChatMessagesConstants.USER_INFO_ID.value()),
-                            user_info);
-                }
-                return chatAccesor.addUsersToConversation(key, usernames)
-                        .getJSONObject(MessagesTopLevelConstants.VALUE.value());
-            }
+    public JSONObject addUsersToConversation(String conversationName, ArrayList<String> usernames) {
+        int conversationId = getConversationIdUsingName(conversationName);
+        if (conversationId == -1) {
+            return new JSONObject("{\"outcome\":false}");
         }
-        return new JSONObject("{\"outcome\":false}");
+        if (usersInConversarion.get(conversationId) == null) {
+            getUsersInConversation(conversationId);
+        }
+        for (String username : usernames) {
+            JSONObject user_info = chatAccesor.getUserInfo(username)
+                    .getJSONObject(MessagesTopLevelConstants.VALUE.value());
+            usersInConversarion.get(conversationId).put(user_info.getInt(ChatMessagesConstants.USER_INFO_ID.value()),
+                    user_info);
+        }
+        return chatAccesor.addUsersToConversation(conversationId, usernames)
+                .getJSONObject(MessagesTopLevelConstants.VALUE.value());
     }
 
     public JSONObject addUsersToCurrentConversation(ArrayList<String> usernames) {
@@ -328,6 +326,16 @@ public class Chat {
             usersConversations.put(conversations.getJSONObject(i).getInt(ChatMessagesConstants.CONVERSATION_ID.value()),
                     conversations.getJSONObject(i));
         }
+    }
+
+    private int getConversationIdUsingName(String conversationName) {
+        for (Integer key : usersConversations.keySet()) {
+            if (usersConversations.get(key).getString(ChatMessagesConstants.CONVERSATION_NAME.value())
+                    .equals(conversationName)) {
+                return key;
+            }
+        }
+        return -1;
     }
 
 }
