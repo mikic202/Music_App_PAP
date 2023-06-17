@@ -22,7 +22,7 @@ public class ChatWorker extends SwingWorker<Boolean, Void> {
         this.chat = chat;
         this.chatInfoUpdater = chatInfoUpdater;
         try {
-            serverConnector = new ServerConnector(new Socket("144.91.114.89",
+            serverConnector = new ServerConnector(new Socket("localhost",
                     8005));
         } catch (Exception e) {
             System.out.println(e);

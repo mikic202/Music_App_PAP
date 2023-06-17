@@ -28,17 +28,21 @@ public class ChatAccesors {
         ArrayList<Integer> usersIds = new ArrayList<>();
         for (String user : usernames) {
             JSONObject user_info = getUserInfo(user).getJSONObject(MessagesTopLevelConstants.VALUE.value());
-            if (user_info.has("ID")) {
-                usersIds.add(user_info.getInt("ID"));
+            if (user_info.has(ChatMessagesConstants.USER_INFO_ID.value())) {
+                usersIds.add(user_info.getInt(ChatMessagesConstants.USER_INFO_ID.value()));
             }
         }
         return usersIds;
     }
 
-    public JSONObject getMessagesInConversation(int conversationId) {
+    public ArrayList<JSONObject> getMessagesInConversation(int conversationId) {
         JSONObject procesedRequest = RequestCreator.createGetMessagesRequest(conversationId);
         JSONObject response = serverConnector.sendRequest(procesedRequest);
-        return response;
+        ArrayList<JSONObject> newMessages = new ArrayList<>();
+        for (int i = 0; i < response.getJSONArray(MessagesTopLevelConstants.VALUE.value()).length(); i += 1) {
+            newMessages.add(response.getJSONArray(MessagesTopLevelConstants.VALUE.value()).getJSONObject(i));
+        }
+        return newMessages;
     }
 
     public JSONObject getUsersConversations(int userId) {
