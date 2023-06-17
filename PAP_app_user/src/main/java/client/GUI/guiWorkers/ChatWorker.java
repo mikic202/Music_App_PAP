@@ -43,14 +43,12 @@ public class ChatWorker extends SwingWorker<Boolean, Void> {
                     chatInfoUpdater.call();
                 }
             }
-            System.out.println("status updated");
             if (data.getJSONObject(MessagesTopLevelConstants.VALUE.value()).keySet()
                     .contains(MessagesTopLevelConstants.OUTCOME.value())
                     && !data.getJSONObject(MessagesTopLevelConstants.VALUE.value())
                             .getBoolean(MessagesTopLevelConstants.OUTCOME.value())) {
                 return false;
             }
-            System.out.println(123);
         }
     }
 

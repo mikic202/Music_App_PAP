@@ -33,7 +33,6 @@ public class SwitchConversationFromMainWindwoListener implements ListSelectionLi
 
     private void updateChat() {
         try {
-            System.out.println(123);
             chatGuiUpdater.call();
         } catch (Exception e) {
             System.out.println(e);
