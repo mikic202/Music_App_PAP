@@ -49,7 +49,6 @@ public class AddUsersListener implements ActionListener {
             usernames.add(username);
         }
         usernames.add(chat.getCurrentUserInfo().getString(ChatMessagesConstants.USERNAME.value()));
-        System.out.println(chat.addUsersToCurrentConversation(usernames));
         membersToAdd.setText("");
     }
 

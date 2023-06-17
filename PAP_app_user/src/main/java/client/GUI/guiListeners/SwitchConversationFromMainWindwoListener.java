@@ -22,7 +22,6 @@ public class SwitchConversationFromMainWindwoListener implements ListSelectionLi
 
     @Override
     public void valueChanged(ListSelectionEvent event) {
-        System.out.println(((JList) event.getSource()).getSelectedValue());
         if (((JList) event.getSource()).getSelectedValue() == null) {
             return;
         }

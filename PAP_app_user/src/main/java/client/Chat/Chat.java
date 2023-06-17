@@ -320,13 +320,9 @@ public class Chat {
         } else if (img.getWidth() > img.getHeight()) {
             imageWidth = 100.0;
             imageHeight = img.getHeight() * (100.0 / img.getWidth());
-            System.out.println(img.getWidth());
-            System.out.println(100.0 / img.getWidth());
         } else {
             imageHeight = 100.0;
             imageWidth = img.getWidth() * (100.0 / img.getHeight());
-            System.out.println(img.getHeight());
-            System.out.println((100.0 / img.getHeight()));
         }
 
         Image scaledImage = img.getScaledInstance(imageWidth.intValue(), imageHeight.intValue(),

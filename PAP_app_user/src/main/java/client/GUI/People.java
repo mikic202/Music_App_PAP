@@ -133,8 +133,6 @@ public class People extends javax.swing.JPanel {
 		userOrGroupNameLabel
 				.setText(chat.getCurentConversationInfo().getString(ChatMessagesConstants.CONVERSATION_NAME.value()));
 
-		// System.out.println(345);
-
 		var convNamesSet = chat.getConversationsNamesToIds().keySet();
 
 		chatsList.removeAll();
@@ -155,7 +153,7 @@ public class People extends javax.swing.JPanel {
 			}
 		});
 		lastConversation = chat.getCurrentChatId();
-		// System.out.println(234);
+
 	}
 
 	/**
@@ -240,7 +238,6 @@ public class People extends javax.swing.JPanel {
 			@Override
 			public Void call() throws Exception {
 				updateChatUi();
-				System.out.println("updated");
 				return null;
 			}
 		}));

@@ -72,19 +72,15 @@ public class ImageChooser extends javax.swing.JFrame {
     }// </editor-fold>
 
     private void avatarChooserActionPerformed(java.awt.event.ActionEvent evt) {
-        System.out.println(1234);
         String returnVal = evt.getActionCommand();
         if (returnVal.equals(this.imageChooser.CANCEL_SELECTION)) {
             this.dispose();
             return;
         }
         String path = imageChooser.getSelectedFile().getAbsolutePath();
-        System.out.println(path);
-        System.out.println(234);
         if (returnVal.equals(this.imageChooser.APPROVE_SELECTION)
                 && (path.substring(path.lastIndexOf("."), path.length()).equals(".png")
                         || path.substring(path.lastIndexOf("."), path.length()).equals(".jpg"))) {
-            System.out.println(path);
             outputPath.delete(0, outputPath.length());
             outputPath.append(path);
             if (pathLable != null) {
