@@ -52,7 +52,7 @@ public class Account extends javax.swing.JPanel {
 		initComponents();
 		try {
 			Image defaultImage = ImageIO
-					.read(new File("src/main/java/client/GUI/GuiResources/GuiResources/deaudlt.png"));
+					.read(new File("src/main/java/client/GUI/GuiResources/deaudlt.png"));
 			Image scaledImage = defaultImage.getScaledInstance(300, 300, Image.SCALE_DEFAULT);
 			avatar.setIcon(new ImageIcon(scaledImage));
 		} catch (Exception e) {
