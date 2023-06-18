@@ -42,10 +42,10 @@ public class Music extends javax.swing.JPanel {
 		this.chat = chat;
 		accessors = new UploadAccessors(serverConnector);
 		initComponents();
-		this.peopleButton.setIcon(new ImageIcon("src/main/java/client/GUI/PeoplePAP.png"));
-		this.musicButton.setIcon(new ImageIcon("src/main/java/client/GUI/MusicPAP.png"));
-		this.accountButton.setIcon(new ImageIcon("src/main/java/client/GUI/AccountSettingsPAP.png"));
-		mainScreenButton.setIcon(new ImageIcon("src/main/java/client/GUI/MainScreenPAP.png"));
+		this.peopleButton.setIcon(new ImageIcon("src/main/java/client/GUI/GuiResources/PeoplePAP.png"));
+		this.musicButton.setIcon(new ImageIcon("src/main/java/client/GUI/GuiResources/MusicPAP.png"));
+		this.accountButton.setIcon(new ImageIcon("src/main/java/client/GUI/GuiResources/AccountSettingsPAP.png"));
+		mainScreenButton.setIcon(new ImageIcon("src/main/java/client/GUI/GuiResources/MainScreenPAP.png"));
 	}
 
 	public void Theme() {
@@ -293,7 +293,7 @@ public class Music extends javax.swing.JPanel {
 
 		lastPlayed.setText("jLabel16");
 
-		musicButton.setIcon(new javax.swing.ImageIcon("src/main/java/client/GUI/MusicPAP.png")); // NOI18N
+		musicButton.setIcon(new javax.swing.ImageIcon("src/main/java/client/GUI/GuiResources/MusicPAP.png")); // NOI18N
 		musicButton.setText("jButton1");
 		musicButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -301,14 +301,15 @@ public class Music extends javax.swing.JPanel {
 			}
 		});
 
-		accountButton.setIcon(new javax.swing.ImageIcon("src/main/java/client/GUI/AccountSettingsPAP.png")); // NOI18N
+		accountButton
+				.setIcon(new javax.swing.ImageIcon("src/main/java/client/GUI/GuiResources/AccountSettingsPAP.png")); // NOI18N
 		accountButton.setText("jButton1");
 		accountButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				accountButtonActionPerformed(evt);
 			}
 		});
-		mainScreenButton.setIcon(new javax.swing.ImageIcon("src/main/java/client/GUI/MainScreenPAP.png")); // NOI18N
+		mainScreenButton.setIcon(new javax.swing.ImageIcon("src/main/java/client/GUI/GuiResources/MainScreenPAP.png")); // NOI18N
 		mainScreenButton.setText("jButton1");
 		mainScreenButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -316,7 +317,7 @@ public class Music extends javax.swing.JPanel {
 			}
 		});
 
-		peopleButton.setIcon(new javax.swing.ImageIcon("src/main/java/client/GUI/PeoplePAP.png")); // NOI18N
+		peopleButton.setIcon(new javax.swing.ImageIcon("src/main/java/client/GUI/GuiResources/PeoplePAP.png")); // NOI18N
 		peopleButton.setText("jButton1");
 		peopleButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -639,20 +640,21 @@ public class Music extends javax.swing.JPanel {
 	}// </editor-fold>
 
 	private void uploadButtonActionPerformed(java.awt.event.ActionEvent evt) {
-		if(mainScreenWindow.path == null) {
+		if (mainScreenWindow.path == null) {
 			return;
 		}
 		File file = new File(mainScreenWindow.path.toString());
 		mainScreenWindow.path = null;
 		String name = title.getText();
-		String uuid = accessors.startUpload(Integer.parseInt(chat.getCurrentUserInfo().getString(ChatMessagesConstants.USER_ID.value())), name, false).getJSONObject("value").getString("uuid");
+		String uuid = accessors.startUpload(
+				Integer.parseInt(chat.getCurrentUserInfo().getString(ChatMessagesConstants.USER_ID.value())), name,
+				false).getJSONObject("value").getString("uuid");
 		FileUploader uploader;
 		try {
 			uploader = new FileUploader(file, uuid, accessors);
 			Thread uploadThread = new Thread(uploader);
 			uploadThread.start();
-		}
-		catch (FileNotFoundException e) {
+		} catch (FileNotFoundException e) {
 			return;
 		}
 	}

@@ -20,7 +20,7 @@ public class ChatContentsUpdater {
     private static ImageIcon defaultIcon;
     static {
         try {
-            Image defaultImage = ImageIO.read(new File("src/main/java/client/GUI/deaudlt.png"));
+            Image defaultImage = ImageIO.read(new File("src/main/java/client/GUI/GuiResources/deaudlt.png"));
             Image scaledImage = defaultImage.getScaledInstance(PROFILE_PICTURE_SIZE, PROFILE_PICTURE_SIZE,
                     Image.SCALE_DEFAULT);
             defaultIcon = new ImageIcon(scaledImage);
@@ -115,7 +115,7 @@ public class ChatContentsUpdater {
         } else {
             try {
                 // Image defaultImage = ImageIO.read(new
-                // File("src/main/java/client/GUI/deaudlt.png"));
+                // File("src/main/java/client/GUI/GuiResources/deaudlt.png"));
                 // Image scaledImage = defaultImage.getScaledInstance(PROFILE_PICTURE_SIZE,
                 // PROFILE_PICTURE_SIZE,
                 // Image.SCALE_DEFAULT);
