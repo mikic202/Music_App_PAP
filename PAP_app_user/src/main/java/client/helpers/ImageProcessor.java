@@ -3,9 +3,12 @@ package client.helpers;
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
@@ -37,5 +40,23 @@ public class ImageProcessor {
 
         data = buffer.toByteArray();
         return data;
+    }
+
+    static public BufferedImage convertStringArrayToImage(String stringImage) throws IOException {
+        BufferedImage defaultImage = ImageIO
+                .read(new ByteArrayInputStream((convertStringArrayToImageBytes(stringImage))));
+        return defaultImage;
+    }
+
+    static public byte[] convertStringArrayToImageBytes(String stringImage) {
+        stringImage = stringImage.replace("[", "");
+        stringImage = stringImage.replace("]", "");
+        List<String> byteListImage = Arrays.asList(stringImage.split(","));
+        byte[] imageData = new byte[byteListImage.size()];
+
+        for (int i = 0; i < byteListImage.size(); i++) {
+            imageData[i] = Byte.parseByte(byteListImage.get(i));
+        }
+        return imageData;
     }
 }
