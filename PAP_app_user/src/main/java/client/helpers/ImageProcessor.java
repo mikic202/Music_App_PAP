@@ -10,7 +10,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class ImageProcessor {
-    static public byte[] convertFilepathToBufferedImage(String path, String format) throws IOException {
+    static public byte[] convertFilepathToBytes(String path, String format) throws IOException {
         byte data[];
         BufferedImage img = ImageIO.read(new File(path));
         Double imageHeight = 0.0;

@@ -15,10 +15,7 @@ import org.json.JSONObject;
 import client.ServerConnectionConstants.ChatMessagesConstants;
 import client.ServerConnectionConstants.MessagesTopLevelConstants;
 import client.ServerConnector.ServerConnector;
-
-import java.awt.Color;
-import java.awt.Image;
-import java.awt.image.BufferedImage;
+import client.helpers.ImageProcessor;
 
 public class Chat {
 
@@ -184,7 +181,7 @@ public class Chat {
             return;
         }
         JSONObject conversations = chatAccesor.getUsersConversations(userId);
-        convertConversationsResponseToHashtable(conversations);
+        putConversationsResponseToHashtable(conversations);
 
         int latest_msg = 1;
         if (messagesInUsersConversation.get(currentConversation) != null
@@ -210,13 +207,7 @@ public class Chat {
             format = path.substring(dotIndex + 1);
         }
         try {
-            BufferedImage imageBuff = convertFilepathToBufferedImage(path);
-
-            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-
-            ImageIO.write(imageBuff, format, buffer);
-
-            data = buffer.toByteArray();
+            data = ImageProcessor.convertFilepathToBytes(path, format);
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -242,7 +233,7 @@ public class Chat {
                 .getBoolean(MessagesTopLevelConstants.OUTCOME.value());
         if (outcome) {
             JSONObject conversations = chatAccesor.getUsersConversations(userId);
-            convertConversationsResponseToHashtable(conversations);
+            putConversationsResponseToHashtable(conversations);
         }
         return outcome;
     }
@@ -290,7 +281,7 @@ public class Chat {
     private void initChatComponents(ServerConnector serverConnector, int currentConv) {
         usersEncountered.put(this.userId, this.userInfo);
         chatAccesor = new ChatAccesors(serverConnector);
-        convertConversationsResponseToHashtable(chatAccesor.getUsersConversations(userId));
+        putConversationsResponseToHashtable(chatAccesor.getUsersConversations(userId));
         currentConversation = currentConv;
         if (currentConversation == -1 && usersConversations.size() != 0) {
             currentConversation = Collections.min(usersConversations.keySet());
@@ -299,29 +290,7 @@ public class Chat {
         getUsersInConversation(currentConversation);
     }
 
-    private BufferedImage convertFilepathToBufferedImage(String path) throws IOException {
-        BufferedImage img = ImageIO.read(new File(path));
-        Double imageHeight = 0.0;
-        Double imageWidth = 0.0;
-        if (img.getWidth() < 100.0 && img.getHeight() < 100) {
-
-        } else if (img.getWidth() > img.getHeight()) {
-            imageWidth = 100.0;
-            imageHeight = img.getHeight() * (100.0 / img.getWidth());
-        } else {
-            imageHeight = 100.0;
-            imageWidth = img.getWidth() * (100.0 / img.getHeight());
-        }
-
-        Image scaledImage = img.getScaledInstance(imageWidth.intValue(), imageHeight.intValue(),
-                Image.SCALE_SMOOTH);
-        BufferedImage imageBuff = new BufferedImage(imageWidth.intValue(), imageHeight.intValue(),
-                BufferedImage.TYPE_INT_RGB);
-        imageBuff.getGraphics().drawImage(scaledImage, 0, 0, new Color(0, 0, 0), null);
-        return imageBuff;
-    }
-
-    private void convertConversationsResponseToHashtable(JSONObject response) {
+    private void putConversationsResponseToHashtable(JSONObject response) {
         usersConversations.clear();
         JSONArray conversations = response.getJSONArray(MessagesTopLevelConstants.VALUE.value());
         for (int i = 0; i < conversations.length(); i += 1) {
