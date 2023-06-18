@@ -1,8 +1,12 @@
 package client.Chat;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
+
+import org.json.JSONArray;
 import org.json.JSONObject;
 
+import client.ServerConnectionConstants.ChatMessagesConstants;
 import client.ServerConnectionConstants.MessagesTopLevelConstants;
 import client.ServerConnector.ServerConnector;
 
@@ -71,10 +75,16 @@ public class ChatAccesors {
         return response;
     }
 
-    public JSONObject getUsersInConversation(int conversationId) {
+    public ArrayList<Integer> getUsersInConversation(int conversationId) {
         JSONObject request = RequestCreator.getUsersInConversation(conversationId);
         JSONObject response = serverConnector.sendRequest(request);
-        return response;
+        ArrayList<Integer> usersInConv = new ArrayList<>();
+        JSONArray users = response
+                .getJSONArray(MessagesTopLevelConstants.VALUE.value());
+        for (int i = 0; i < users.length(); i += 1) {
+            usersInConv.add(users.getInt(i));
+        }
+        return usersInConv;
     }
 
     public JSONObject getNewMessagesInConverastion(int conversation, int latestMessage) {

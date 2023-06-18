@@ -24,7 +24,7 @@ public class Chat {
 
     private Hashtable<Integer, JSONObject> usersConversations;
     private Hashtable<Integer, ArrayList<JSONObject>> messagesInUsersConversation;
-    private Hashtable<Integer, Hashtable<Integer, JSONObject>> usersInConversarion;
+    private Hashtable<Integer, ArrayList<Integer>> usersInConversarion;
     private Hashtable<Integer, JSONObject> usersEncountered;
     private ChatAccesors chatAccesor;
     private int currentConversation;
@@ -139,8 +139,7 @@ public class Chat {
         for (String username : usernames) {
             JSONObject user_info = chatAccesor.getUserInfo(username)
                     .getJSONObject(MessagesTopLevelConstants.VALUE.value());
-            usersInConversarion.get(conversationId).put(user_info.getInt(ChatMessagesConstants.USER_INFO_ID.value()),
-                    user_info);
+            usersInConversarion.get(conversationId).add(user_info.getInt(ChatMessagesConstants.USER_INFO_ID.value()));
         }
         return chatAccesor.addUsersToConversation(conversationId, usernames)
                 .getJSONObject(MessagesTopLevelConstants.VALUE.value());
@@ -160,22 +159,18 @@ public class Chat {
         return conv;
     }
 
-    public Hashtable<Integer, JSONObject> getUsersInCurrentConversation() {
+    public ArrayList<Integer> getUsersInCurrentConversation() {
         return getUsersInConversation(currentConversation);
     }
 
-    private Hashtable<Integer, JSONObject> getUsersInConversation(int conversation) {
+    private ArrayList<Integer> getUsersInConversation(int conversation) {
         if (usersInConversarion.containsKey(conversation)) {
             return usersInConversarion.get(conversation);
         }
-        Hashtable<Integer, JSONObject> users_in_conv = new Hashtable<Integer, JSONObject>();
-        JSONArray users = chatAccesor.getUsersInConversation(conversation)
-                .getJSONArray(MessagesTopLevelConstants.VALUE.value());
-        for (int i = 0; i < users.length(); i += 1) {
-            users_in_conv.put(users.getInt(i), getUserInformation(users.getInt(i)));
-        }
-        usersInConversarion.put(conversation, users_in_conv);
-        return users_in_conv;
+
+        ArrayList<Integer> usersInConv = chatAccesor.getUsersInConversation(conversation);
+        usersInConversarion.put(conversation, usersInConv);
+        return usersInConv;
     }
 
     public int userId() {

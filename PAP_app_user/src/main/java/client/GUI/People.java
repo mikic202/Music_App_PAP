@@ -113,8 +113,8 @@ public class People extends javax.swing.JPanel {
 		var usersInConv = chat.getUsersInCurrentConversation();
 		String[] usersList = new String[usersInConv.size()];
 		int i = 0;
-		for (int userId : usersInConv.keySet()) {
-			usersList[i] = usersInConv.get(userId).getString(ChatMessagesConstants.USERNAME.value());
+		for (int userId : usersInConv) {
+			usersList[i] = chat.getUserInformation(userId).getString(ChatMessagesConstants.USERNAME.value());
 			i++;
 		}
 		membersInConvList.removeAll();
