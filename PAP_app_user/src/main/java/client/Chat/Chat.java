@@ -26,6 +26,7 @@ public class Chat {
     private Hashtable<Integer, ArrayList<JSONObject>> messagesInUsersConversation;
     private Hashtable<Integer, ArrayList<Integer>> usersInConversarion;
     private Hashtable<Integer, JSONObject> usersEncountered;
+    private Hashtable<Integer, String> conversationCodes;
     private ChatAccesors chatAccesor;
     private int currentConversation;
     private int userId;
@@ -39,6 +40,7 @@ public class Chat {
         usersConversations = new Hashtable<>();
         messagesInUsersConversation = new Hashtable<>();
         usersInConversarion = new Hashtable<>();
+        conversationCodes = new Hashtable<>();
 
         initChatComponents(serverConnector, currentConv);
 
@@ -221,9 +223,14 @@ public class Chat {
         return chatAccesor.sendImage(currentConversation, userId, data, format);
     }
 
-    public String getConversationCode() {
+    public String getCurrentConversationCode() {
+        if (conversationCodes.keySet().contains(currentConversation)) {
+            return conversationCodes.get(currentConversation);
+        }
         if (currentConversation != -1) {
             JSONObject response = chatAccesor.getConversationCode(currentConversation);
+            conversationCodes.put(currentConversation,
+                    response.getJSONObject(MessagesTopLevelConstants.VALUE.value()).getString("conversation code"));
             return response.getJSONObject(MessagesTopLevelConstants.VALUE.value()).getString("conversation code");
         }
         return "";

@@ -128,7 +128,7 @@ public class People extends javax.swing.JPanel {
 			}
 		});
 
-		removePersonFromGroupLabel.setText("Conversation code: " + chat.getConversationCode());
+		removePersonFromGroupLabel.setText("Conversation code: " + chat.getCurrentConversationCode());
 
 		userOrGroupNameLabel
 				.setText(chat.getCurentConversationInfo().getString(ChatMessagesConstants.CONVERSATION_NAME.value()));
