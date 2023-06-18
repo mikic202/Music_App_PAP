@@ -1,7 +1,6 @@
 package client.Chat;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

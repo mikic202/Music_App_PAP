@@ -1,19 +1,13 @@
 package client.GUI.guiListeners;
 
-import java.awt.Color;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
-
-import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
-
 import org.json.JSONObject;
-
 import client.Chat.Chat;
-import client.GUI.LeftChatPanel;
 
 public class SendMessageListener implements ActionListener {
 

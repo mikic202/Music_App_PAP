@@ -2,19 +2,14 @@ package client.GUI.guiListeners;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.JLabel;
-import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-
 import org.json.JSONObject;
-
 import client.Chat.Chat;
 import client.ServerConnectionConstants.MessagesTopLevelConstants;
 import client.ServerConnectionConstants.ChatMessagesConstants;
 import client.ServerConnector.ServerConnector;
 import client.login_and_account_accessors.AccountChangeRequestAccessors;
-import client.ServerConnectionConstants.ChatMessagesConstants;
 
 public class ChangeEmailListener implements ActionListener {
 

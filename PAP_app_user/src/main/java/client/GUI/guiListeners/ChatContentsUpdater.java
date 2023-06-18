@@ -4,13 +4,10 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
-
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
-
 import org.json.JSONObject;
-
 import client.Chat.Chat;
 import client.GUI.ImageChatPanel;
 import client.GUI.LeftChatPanel;
