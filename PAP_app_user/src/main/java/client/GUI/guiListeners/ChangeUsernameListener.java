@@ -16,7 +16,6 @@ public class ChangeUsernameListener implements ActionListener {
     public ChangeUsernameListener(JTextField newUsernameFIeld,
             ServerConnector serverConnector, Chat chat, JLabel usernameLable) {
         this.newUsernameFIeld = newUsernameFIeld;
-        this.serverConnector = serverConnector;
         this.chat = chat;
         accountAccesor = new AccountChangeRequestAccessors(serverConnector);
         this.usernameLable = usernameLable;
@@ -45,7 +44,6 @@ public class ChangeUsernameListener implements ActionListener {
     }
 
     private JTextField newUsernameFIeld;
-    private ServerConnector serverConnector;
     private AccountChangeRequestAccessors accountAccesor;
     private Chat chat;
     private JLabel usernameLable;

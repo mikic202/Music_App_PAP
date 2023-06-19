@@ -16,7 +16,6 @@ public class ChangeEmailListener implements ActionListener {
     public ChangeEmailListener(JTextField newEmailField,
             ServerConnector serverConnector, Chat chat, JLabel emailLabel) {
         this.newEmailField = newEmailField;
-        this.serverConnector = serverConnector;
         this.chat = chat;
         accountAccesor = new AccountChangeRequestAccessors(serverConnector);
         this.emailLabel = emailLabel;
@@ -45,7 +44,6 @@ public class ChangeEmailListener implements ActionListener {
     }
 
     private JTextField newEmailField;
-    private ServerConnector serverConnector;
     private AccountChangeRequestAccessors accountAccesor;
     private Chat chat;
     private JLabel emailLabel;

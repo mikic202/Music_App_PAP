@@ -63,6 +63,5 @@ public class RegisterListener implements ActionListener {
     private JPasswordField passwordField;
     private JPasswordField repaetPasswordField;;
     private LoginAccessors loggingAccessors;
-    private JLabel registerLabel;
 
 }

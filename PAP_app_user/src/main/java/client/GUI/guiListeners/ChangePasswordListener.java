@@ -19,7 +19,6 @@ public class ChangePasswordListener implements ActionListener {
         this.oldPasswordField = oldPasswordField;
         this.newPasswordField = newPasswordField;
         this.repeatNewPasswordField = repeatNewPasswordField;
-        this.serverConnector = serverConnector;
         this.chat = chat;
         accountAccesor = new AccountChangeRequestAccessors(serverConnector);
         this.succesfulPasswordChangeLable = succesfulPasswordChangeLable;
@@ -60,7 +59,6 @@ public class ChangePasswordListener implements ActionListener {
     private JPasswordField oldPasswordField;
     private JPasswordField newPasswordField;
     private JPasswordField repeatNewPasswordField;
-    private ServerConnector serverConnector;
     private AccountChangeRequestAccessors accountAccesor;
     private Chat chat;
     private JLabel succesfulPasswordChangeLable;
