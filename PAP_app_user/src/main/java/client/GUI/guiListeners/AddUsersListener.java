@@ -32,9 +32,9 @@ public class AddUsersListener implements ActionListener {
     }
 
     private void addToConversation() {
-        String[] parsed_usernames = membersToAdd.getText().split(";");
+        String[] parsedUsernames = membersToAdd.getText().split(";");
         ArrayList<String> usernames = new ArrayList<>();
-        for (String username : parsed_usernames) {
+        for (String username : parsedUsernames) {
             usernames.add(username);
         }
         usernames.add(chat.getCurrentUserInfo().getString(ChatMessagesConstants.USERNAME.value()));

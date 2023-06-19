@@ -39,8 +39,8 @@ public class CreateGroupListener implements ActionListener {
     private void createConversation() {
         String name = groupName.getText();
         ArrayList<String> usernames = new ArrayList<>();
-        String[] parsed_usernames = membersToAdd.getText().split(";");
-        for (String username : parsed_usernames) {
+        String[] parsedUsernames = membersToAdd.getText().split(";");
+        for (String username : parsedUsernames) {
             usernames.add(username);
         }
         usernames.add(chat.getCurrentUserInfo().getString(ChatMessagesConstants.USERNAME.value()));
