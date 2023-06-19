@@ -335,7 +335,13 @@ public class People extends javax.swing.JPanel {
 		});
 
 		addButton.setText("Add");
-		addButton.addActionListener(new AddUsersListener(chat, peopleToAddList));
+		addButton.addActionListener(new AddUsersListener(chat, peopleToAddList, new Callable<Void>() {
+			@Override
+			public Void call() throws Exception {
+				updateChatUi();
+				return null;
+			}
+		}));
 
 		removePersonFromGroupLabel.setFont(new java.awt.Font("Segoe UI Black", 0, 14)); // NOI18N
 		removePersonFromGroupLabel.setText("Conversaton code:");
