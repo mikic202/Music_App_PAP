@@ -1,7 +1,6 @@
 # PAP2023L-ZJK1
 
 
-
 <h2>Zespół:</h2>
 
 - Mikołaj Chomanski
@@ -15,44 +14,40 @@ Aplikacja Desktopowa do wspólnego odtwarzania muzyki.
 <h2>Technologie</h2>
 
 - GUI: Java + swing
-- Server: Java + SpringBoot
-- Bazadanych: mySQL (najlepiej z użyciem AWS free tier), Pliki muzyki będziemy przechowywać w tradycyjny sposób a w bazie danych będziemy przechowywać ścieżkę do plików
+- Server: Java
+- Bazadanych: mySQL na własnym serwerze, Pliki muzyki będziemy przechowywać w tradycyjny sposób, a w bazie danych będziemy przechowywać ścieżkę do plików
 
 
-<h2>Planowane Funkcjonalności</h2>
-Jest tu spora liczba funkcjonalności którą chcielibyśmy zaimplementować. Trudno nam określić ile dana funkcjonalność zajmie do zaimplementowania i czy uda nam się wszystkie z tej listy zaimplementować
-<h4>Konto</h4>
+<h2>Zaimplementowane Funkcjonalności</h2>
 
 - tworzenie konta
 - logowanie się z dowolnego komputer
 - zmiana hasła
 - dodawanie awatara
-- odzyskiwanie hasła
-- zmiana nazwy
-- zmiana kolorystyki aplikacji (przechowywane na danym urządzeniu)(np tryb jasny/ciemny)
-<h4>Interakcja</h4>
+- odzyskiwanie hasła przy pomocy maila
+- zmiana nazwy użytkownika
+- zmiana kolorystyki na ciemny lub jasny
 
-- dodawanie znajomych/obserwowanie osób
+
 - wysyłanie wiadomości tekstowych
+- wysyłanie zdjęć
 - tworzenie grup
 - dodawanie osób do grup
-- kody do grup (jak na teamsach)
-- słuchanie muzyki dodanej przez innych użytkowników
-- możliwość sprawdzenia ilu użytkowników odtworzyło daną muzykę
-- historia przesłuchanej muzyki (100)
+- kody do grup zależne od id grupy
 
-- zsynchronizowane odtwarzanie muzyki
-- wspólne tworzenie i modyfikowaniem muzyki (można rozbić na więcej funkcjonalności)
+
+- streamowanie muzyki z serweru
+- zsynchronizowane streamowanie muzyki
+
 
 - wgrywanie muzyki
 - usuwanie muzyki na stałe
-- różne poziomy dostępu do muzyki dla innych użytkownikóa (jak filmy na youtube)
 - przechowywanie muzyki
-- głosowanie nad następnym filmem/muzyką
-- odtwarzanie ze spotifya(na zasadzie przeglądarki)
-- odtwarzanie z youtuba (jak wyżej)
-- sortowanie muzyki na typy
-<h4>Admin</h4>
 
-- konto admina
 
+<h2>Sposób uruchomienia</h2>
+Repozytorium jest podzielone na dwie częśc, jedną z kodem do aplikacji klienta, a druga część zawiera kod do aplikacji po stronie serwera.
+Aby uruchomić program można wejść do pliku Main.java i uruchomić metodę main tej klasy. Można również spakować pakiet przy użyciu mavena i uruchomić tak otrzymany pakiet jar.
+
+Należy uważać czy serwer jest aktualnie aktywny, jeżeli nie jest można pobrać przykładowy plik sql i stworzyć własną bazę danych na swoim komputerze lub srwerze. Wtedy warto też zmienić nazwę i hasło do bazy danych w pliku DatabaseInformation.java. Aby uruchomic serwer należy wejść do pliku Main i uruchomić metodę main tej klasy. Druga opcja to spakowanie serwera do pakietu i uruchomienie pliku jar.
+Po pierwsze trzeba uważać czy serwer jest aktualnie aktywny. Jeżeli nie jest aktywny, to w sekcji serwer repozytorium znajduje się cały kod serwera. Wtedy również należy zmienić ip po stronie klienta na ip serwera.
