@@ -55,10 +55,10 @@ public class MessageDataSetter implements DataSetterInterface {
         try {
 
             var statement = connection.prepareStatement(preparedStatement);
-            statement.setString(1, data.get("sender"));
-            statement.setString(2, data.get("conversation"));
-            statement.setString(3, data.get("send_date"));
-            statement.setString(4, data.get("text"));
+            statement.setString(1, data.get(MessagesDatabaseInformation.SENDER_COLUMN.value()));
+            statement.setString(2, data.get(MessagesDatabaseInformation.CONVERSATION_COLUMN.value()));
+            statement.setString(3, data.get(MessagesDatabaseInformation.DATE_COLUMN.value()));
+            statement.setString(4, data.get(MessagesDatabaseInformation.MESSAGE_COLUMN.value()));
             statement.executeUpdate();
             connection.commit();
             added_id = MessageDataAccesor.getLatestMessage(Integer.parseInt(data.get("conversation")));
