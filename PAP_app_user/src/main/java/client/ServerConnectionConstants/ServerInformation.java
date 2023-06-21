@@ -1,4 +1,4 @@
-package client;
+package client.ServerConnectionConstants;
 
 public enum ServerInformation {
     SERVER_IP("144.91.114.89"), MAIN_PORT(8000), FILE_PORT(8001), MESSAGE_UPDATER_PORT(8005);

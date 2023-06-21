@@ -8,11 +8,11 @@ import javax.swing.SwingWorker;
 
 import org.json.JSONObject;
 
-import client.ServerInformation;
 import client.Chat.Chat;
 import client.GUI.guiListeners.ChatContentsUpdater;
 import client.ServerConnectionConstants.ChatMessagesConstants;
 import client.ServerConnectionConstants.MessagesTopLevelConstants;
+import client.ServerConnectionConstants.ServerInformation;
 import client.ServerConnector.ServerConnector;
 import client.login_and_account_accessors.LoginAccessors;
 

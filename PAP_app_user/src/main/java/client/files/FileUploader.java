@@ -7,8 +7,8 @@ import java.io.IOException;
 import java.net.Socket;
 import java.nio.ByteBuffer;
 
-import client.ServerInformation;
 import client.Music.MusicManager;
+import client.ServerConnectionConstants.ServerInformation;
 
 public class FileUploader implements Runnable {
 	private FileInputStream input;

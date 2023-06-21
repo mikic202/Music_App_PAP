@@ -8,9 +8,9 @@ import java.net.Socket;
 
 import com.formdev.flatlaf.FlatDarkLaf;
 
-import client.ServerInformation;
 import client.GUI.guiListeners.LoggingListener;
 import client.GUI.guiListeners.RetrievePasswordListener;
+import client.ServerConnectionConstants.ServerInformation;
 import client.ServerConnector.ServerConnector;
 
 public class LoginScreen extends javax.swing.JFrame {

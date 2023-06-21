@@ -16,13 +16,13 @@ import org.json.JSONObject;
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 
-import client.ServerInformation;
 import client.Chat.Chat;
 import client.GUI.guiListeners.MusicEventListener;
 import client.GUI.guiListeners.SongListSelectionListener;
 import client.GUI.guiListeners.SwitchConversationFromMainWindwoListener;
 import client.Music.MusicManager;
 import client.ServerConnectionConstants.ChatMessagesConstants;
+import client.ServerConnectionConstants.ServerInformation;
 import client.ServerConnector.ServerConnector;
 import client.GUI.guiWorkers.SongTimeUpdater;
 
