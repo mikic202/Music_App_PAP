@@ -16,6 +16,7 @@ import org.json.JSONObject;
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 
+import client.ServerInformation;
 import client.Chat.Chat;
 import client.GUI.guiListeners.MusicEventListener;
 import client.GUI.guiListeners.SongListSelectionListener;
@@ -51,7 +52,8 @@ public class MainScreen extends javax.swing.JFrame {
 		userInfo.put(ChatMessagesConstants.EMAIL.value(), "mikolaj.chomanski@gmail.com");
 		userInfo.put("profile_picture", "0");
 		try {
-			serverConnector = new ServerConnector(new Socket("144.91.114.89", 8000));
+			serverConnector = new ServerConnector(
+					new Socket(ServerInformation.SERVER_IP.value(), ServerInformation.MAIN_PORT.intValue()));
 		} catch (Exception e) {
 			System.out.println(e);
 		}

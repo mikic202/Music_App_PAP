@@ -8,6 +8,7 @@ import javax.swing.SwingWorker;
 
 import org.json.JSONObject;
 
+import client.ServerInformation;
 import client.Chat.Chat;
 import client.GUI.guiListeners.ChatContentsUpdater;
 import client.ServerConnectionConstants.ChatMessagesConstants;
@@ -22,8 +23,8 @@ public class ChatWorker extends SwingWorker<Boolean, Void> {
         this.chat = chat;
         this.chatInfoUpdater = chatInfoUpdater;
         try {
-            serverConnector = new ServerConnector(new Socket("localhost",
-                    8005));
+            serverConnector = new ServerConnector(new Socket(ServerInformation.SERVER_IP.value(),
+                    ServerInformation.MESSAGE_UPDATER_PORT.intValue()));
         } catch (Exception e) {
             System.out.println(e);
         }

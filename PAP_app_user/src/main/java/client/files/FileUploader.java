@@ -6,13 +6,15 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.Socket;
 import java.nio.ByteBuffer;
+
+import client.ServerInformation;
 import client.Music.MusicManager;
 
 public class FileUploader implements Runnable {
 	private FileInputStream input;
 	private String uuid;
 	private UploadAccessors accessors;
-	
+
 	public FileUploader(File file, String uuid, UploadAccessors accessors) throws FileNotFoundException {
 		input = new FileInputStream(file);
 		this.uuid = uuid;
@@ -23,9 +25,9 @@ public class FileUploader implements Runnable {
 	public void run() {
 		Socket socket = null;
 		try {
-			socket = new Socket("144.91.114.89", 8001);
+			socket = new Socket(ServerInformation.SERVER_IP.value(), ServerInformation.FILE_PORT.intValue());
 			socket.getOutputStream().write(uuid.getBytes());
-			byte[] buffer = new byte[1024*1024];
+			byte[] buffer = new byte[1024 * 1024];
 			int bytesRead = input.read(buffer);
 			ByteBuffer byteBuffer = ByteBuffer.allocate(4);
 			while (bytesRead != -1) {
@@ -39,8 +41,7 @@ public class FileUploader implements Runnable {
 		} catch (IOException e) {
 			e.printStackTrace();
 			return;
-		}
-		finally {
+		} finally {
 			try {
 				socket.close();
 			} catch (IOException e) {
@@ -48,5 +49,5 @@ public class FileUploader implements Runnable {
 			}
 		}
 	}
-	
+
 }

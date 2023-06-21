@@ -8,6 +8,7 @@ import java.net.Socket;
 
 import com.formdev.flatlaf.FlatDarkLaf;
 
+import client.ServerInformation;
 import client.GUI.guiListeners.LoggingListener;
 import client.GUI.guiListeners.RetrievePasswordListener;
 import client.ServerConnector.ServerConnector;
@@ -21,7 +22,8 @@ public class LoginScreen extends javax.swing.JFrame {
 
 	public LoginScreen() {
 		try {
-			serverConnector = new ServerConnector(new Socket("144.91.114.89", 8000));
+			serverConnector = new ServerConnector(
+					new Socket(ServerInformation.SERVER_IP.value(), ServerInformation.MAIN_PORT.intValue()));
 		} catch (Exception e) {
 			System.out.println(e);
 		}
