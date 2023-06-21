@@ -38,7 +38,7 @@ public class ImageChatPanel extends javax.swing.JFrame {
                 chatText.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
                 chatPanel.setViewportView(chatText);
 
-                avatarChat.setIcon(new javax.swing.ImageIcon("src/main/java/client/GUI/avatar.png")); // NOI18N
+                avatarChat.setIcon(new javax.swing.ImageIcon("src/main/java/client/GUI/GuiResources/avatar.png")); // NOI18N
 
                 nicknameLabel.setText("Nickname");
 

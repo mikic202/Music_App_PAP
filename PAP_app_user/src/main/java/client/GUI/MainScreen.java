@@ -22,6 +22,7 @@ import client.GUI.guiListeners.SongListSelectionListener;
 import client.GUI.guiListeners.SwitchConversationFromMainWindwoListener;
 import client.Music.MusicManager;
 import client.ServerConnectionConstants.ChatMessagesConstants;
+import client.ServerConnectionConstants.ServerInformation;
 import client.ServerConnector.ServerConnector;
 import client.GUI.guiWorkers.SongTimeUpdater;
 
@@ -51,15 +52,18 @@ public class MainScreen extends javax.swing.JFrame {
 		userInfo.put(ChatMessagesConstants.EMAIL.value(), "mikolaj.chomanski@gmail.com");
 		userInfo.put("profile_picture", "0");
 		try {
-			serverConnector = new ServerConnector(new Socket("144.91.114.89", 8000));
+			serverConnector = new ServerConnector(
+					new Socket(ServerInformation.SERVER_IP.value(), ServerInformation.MAIN_PORT.intValue()));
 		} catch (Exception e) {
 			System.out.println(e);
 		}
 		chat = new Chat(userInfo, -1, serverConnector);
 		FlatDarkLaf.setup();
 
-		musicManagerInstance = new MusicManager(serverConnector, userInfo.getInt(ChatMessagesConstants.USER_ID.value()));
-		this.musicEventListenerInstance = new MusicEventListener(userInfo.getInt(ChatMessagesConstants.USER_ID.value()), musicManagerInstance);
+		musicManagerInstance = new MusicManager(serverConnector,
+				userInfo.getInt(ChatMessagesConstants.USER_ID.value()));
+		this.musicEventListenerInstance = new MusicEventListener(userInfo.getInt(ChatMessagesConstants.USER_ID.value()),
+				musicManagerInstance);
 		chatsList.addListSelectionListener(new SwitchConversationFromMainWindwoListener(chat, new Callable<Void>() {
 			@Override
 			public Void call() throws Exception {
@@ -85,9 +89,9 @@ public class MainScreen extends javax.swing.JFrame {
 		}).start();
 
 		initComponents();
-		this.peopleButton.setIcon(new ImageIcon("src/main/java/client/GUI/PeoplePAP.png"));
-		this.musicButton.setIcon(new ImageIcon("src/main/java/client/GUI/MusicPAP.png"));
-		this.accountButton.setIcon(new ImageIcon("src/main/java/client/GUI/AccountSettingsPAP.png"));
+		this.peopleButton.setIcon(new ImageIcon("src/main/java/client/GUI/GuiResources/PeoplePAP.png"));
+		this.musicButton.setIcon(new ImageIcon("src/main/java/client/GUI/GuiResources/MusicPAP.png"));
+		this.accountButton.setIcon(new ImageIcon("src/main/java/client/GUI/GuiResources/AccountSettingsPAP.png"));
 		char[] userPassword = { '1', '2', '3', '4', '5', '6', '7' };
 		people = new People(this, chat, userPassword);
 		music = new Music(this, serverConnector, chat);
@@ -98,13 +102,17 @@ public class MainScreen extends javax.swing.JFrame {
 		chat = new Chat(userInfo, -1, serverConnector);
 		this.serverConnector = serverConnector;
 		FlatDarkLaf.setup();
-		musicManagerInstance = new MusicManager(serverConnector, userInfo.getInt(ChatMessagesConstants.USER_ID.value()));
-		this.musicEventListenerInstance = new MusicEventListener(userInfo.getInt(ChatMessagesConstants.USER_ID.value()), musicManagerInstance);
+		musicManagerInstance = new MusicManager(serverConnector,
+				userInfo.getInt(ChatMessagesConstants.USER_ID.value()));
+		this.musicEventListenerInstance = new MusicEventListener(userInfo.getInt(ChatMessagesConstants.USER_ID.value()),
+				musicManagerInstance);
 
 		this.songListListenerInstance = new SongListSelectionListener();
 
-		musicManagerInstance = new MusicManager(serverConnector, userInfo.getInt(ChatMessagesConstants.USER_ID.value()));
-		this.musicEventListenerInstance = new MusicEventListener(userInfo.getInt(ChatMessagesConstants.USER_ID.value()), musicManagerInstance);
+		musicManagerInstance = new MusicManager(serverConnector,
+				userInfo.getInt(ChatMessagesConstants.USER_ID.value()));
+		this.musicEventListenerInstance = new MusicEventListener(userInfo.getInt(ChatMessagesConstants.USER_ID.value()),
+				musicManagerInstance);
 		this.songListListenerInstance = new SongListSelectionListener();
 		initComponents();
 
@@ -130,16 +138,15 @@ public class MainScreen extends javax.swing.JFrame {
 			}
 		}).start();
 
-		this.peopleButton.setIcon(new ImageIcon("src/main/java/client/GUI/PeoplePAP.png"));
-		this.musicButton.setIcon(new ImageIcon("src/main/java/client/GUI/MusicPAP.png"));
-		this.accountButton.setIcon(new ImageIcon("src/main/java/client/GUI/AccountSettingsPAP.png"));
+		this.peopleButton.setIcon(new ImageIcon("src/main/java/client/GUI/GuiResources/PeoplePAP.png"));
+		this.musicButton.setIcon(new ImageIcon("src/main/java/client/GUI/GuiResources/MusicPAP.png"));
+		this.accountButton.setIcon(new ImageIcon("src/main/java/client/GUI/GuiResources/AccountSettingsPAP.png"));
 		people = new People(this, chat, userPassword);
 		music = new Music(this, serverConnector, chat);
 		account = new Account(this, serverConnector, chat);
 	}
 
-	public void updateSongTime()
-	{
+	public void updateSongTime() {
 		ArrayList<Integer> currentTime = musicManagerInstance.getCurrentTime();
 		ArrayList<Integer> totalTime = musicManagerInstance.getTotalTime();
 		int percentage = musicManagerInstance.getPercentageOfSongPlayed();
@@ -296,8 +303,8 @@ public class MainScreen extends javax.swing.JFrame {
 		});
 
 		gainSlider.setOrientation(javax.swing.JSlider.VERTICAL);
-		
-		peopleButton.setIcon(new javax.swing.ImageIcon("src/main/java/client/GUI/PeoplePAP.png")); // NOI18N
+
+		peopleButton.setIcon(new javax.swing.ImageIcon("src/main/java/client/GUI/GuiResources/PeoplePAP.png")); // NOI18N
 		peopleButton.setText("jButton1");
 		peopleButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -305,7 +312,7 @@ public class MainScreen extends javax.swing.JFrame {
 			}
 		});
 
-		musicButton.setIcon(new javax.swing.ImageIcon("src/main/java/client/GUI/MusicPAP.png")); // NOI18N
+		musicButton.setIcon(new javax.swing.ImageIcon("src/main/java/client/GUI/GuiResources/MusicPAP.png")); // NOI18N
 		musicButton.setText("jButton1");
 		musicButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -320,7 +327,8 @@ public class MainScreen extends javax.swing.JFrame {
 			}
 		});
 
-		accountButton.setIcon(new javax.swing.ImageIcon("src/main/java/client/GUI/AccountSettingsPAP.png")); // NOI18N
+		accountButton
+				.setIcon(new javax.swing.ImageIcon("src/main/java/client/GUI/GuiResources/AccountSettingsPAP.png")); // NOI18N
 		accountButton.setText("jButton1");
 		accountButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -336,7 +344,7 @@ public class MainScreen extends javax.swing.JFrame {
 			}
 		});
 
-		mainScreenButton.setIcon(new javax.swing.ImageIcon("src/main/java/client/GUI/MainScreenPAP.png")); // NOI18N
+		mainScreenButton.setIcon(new javax.swing.ImageIcon("src/main/java/client/GUI/GuiResources/MainScreenPAP.png")); // NOI18N
 		mainScreenButton.setText("jButton1");
 		mainScreenButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -346,7 +354,7 @@ public class MainScreen extends javax.swing.JFrame {
 
 		leaveStreamButton1.setText("Leave stream");
 		leaveStreamButton1.addActionListener(musicEventListenerInstance);
-		
+
 		var convNamesSet = chat.getConversationsNamesToIds().keySet();
 
 		String[] convNames = new String[convNamesSet.size()];
@@ -384,19 +392,18 @@ public class MainScreen extends javax.swing.JFrame {
 
 		currentSongLabel.setText("Current song:");
 
-		//TODO song list shoul be updated after uploading/removing files
-        MusicManager.updateUserSongsList();
-        var songNameSet = MusicManager.getUserSongsData().keySet();
+		// TODO song list shoul be updated after uploading/removing files
+		MusicManager.updateUserSongsList();
+		var songNameSet = MusicManager.getUserSongsData().keySet();
 
-        String[] songNames = new String[songNameSet.size()];
-        i = 0;
-        for (String name : songNameSet) {
-                songNames[i++] = name;
-        }
+		String[] songNames = new String[songNameSet.size()];
+		i = 0;
+		for (String name : songNameSet) {
+			songNames[i++] = name;
+		}
 
-        chooseSongList.setModel(new javax.swing.AbstractListModel<String>() {
-                String[] strings = songNames;
-
+		chooseSongList.setModel(new javax.swing.AbstractListModel<String>() {
+			String[] strings = songNames;
 
 			public int getSize() {
 				return strings.length;
@@ -406,9 +413,8 @@ public class MainScreen extends javax.swing.JFrame {
 				return strings[i];
 			}
 		});
-        chooseSongList.addListSelectionListener(songListListenerInstance);
-        chatsContainer1.setViewportView(chooseSongList);
-
+		chooseSongList.addListSelectionListener(songListListenerInstance);
+		chatsContainer1.setViewportView(chooseSongList);
 
 		currentSongLabel1.setText("Songs:");
 

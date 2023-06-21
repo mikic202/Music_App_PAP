@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.concurrent.Callable;
 
 import javax.swing.JList;
-import javax.swing.JPanel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -22,7 +21,6 @@ public class SwitchConversationFromMainWindwoListener implements ListSelectionLi
 
     @Override
     public void valueChanged(ListSelectionEvent event) {
-        System.out.println(((JList) event.getSource()).getSelectedValue());
         if (((JList) event.getSource()).getSelectedValue() == null) {
             return;
         }
@@ -34,7 +32,6 @@ public class SwitchConversationFromMainWindwoListener implements ListSelectionLi
 
     private void updateChat() {
         try {
-            System.out.println(123);
             chatGuiUpdater.call();
         } catch (Exception e) {
             System.out.println(e);

@@ -14,6 +14,7 @@ import server.DatabaseInteractors.ConversationDataSetter;
 import server.DatabaseInteractors.ConversationDatabsaeInformation;
 import server.DatabaseInteractors.MessageDataAccesor;
 import server.DatabaseInteractors.MessageDataSetter;
+import server.DatabaseInteractors.MessagesDatabaseInformation;
 import server.DatabaseInteractors.UserDataAccesor;
 import server.DatabaseInteractors.UserDataSetter;
 import server.DatabaseInteractors.UserDatabaseInformation;
@@ -38,6 +39,70 @@ public class Chat {
         }
     }
 
+    private static JSONObject _generateResponse(RequestTypes reqType, JSONObject request) {
+        JSONObject response = new JSONObject();
+        switch (reqType) {
+            case GET_MESSAGES:
+                response = _getMessegesInConversation(request);
+                break;
+            case GET_USERS_CONVERSATIONS:
+                response = _getUsersConversations(request);
+                break;
+            case SEND_MESSAGE:
+                response = _sendMessage(request);
+                break;
+            case CREATE_CONVERSATION:
+                response = _createConversation(request);
+                break;
+            case ADD_USER_TO_CONVERSATION:
+                response = _processAddUsersToConversation(request);
+                break;
+            case USER_INFO:
+                response = _checkUsersInfo(request);
+                break;
+            case GET_USERS_IN_CONVERSATION:
+                response = _getUsersInConversation(request);
+                break;
+            case GET_LATEST_MESSAGE:
+                response = _getNewMessagessInConversation(request);
+                break;
+            case SEND_IMAGE:
+                response = _processSendImage(request);
+                break;
+            case GET_CONVERSATION_CODE:
+                response = _processGetConversationCode(request);
+                break;
+            case JOIN_CONVERSATION_WITH_CODE:
+                response = _procesJoinConversationUsingCode(request);
+                break;
+            case CHANGE_CONVERSATION_NAME:
+                response = _processChangeConversationName(request);
+                break;
+            case REMOVE_USER_FROM_CONVERSATION:
+                response = _removeUserFromConversation(request);
+                break;
+
+        }
+        return response;
+    }
+
+    private static JSONObject _convertResponseToJson(ArrayList<Hashtable<String, String>> response,
+            RequestTypes reqType) {
+        JSONObject jsonResponse = new JSONObject();
+        jsonResponse.put(MessagesTopLevelConstants.TYPE.value(), reqType.value());
+        JSONArray jsonResponseValue = new JSONArray();
+        for (Hashtable<String, String> element : response) {
+            Set<String> keys = element.keySet();
+            JSONObject jsonElement = new JSONObject();
+            for (String key : keys) {
+                jsonElement.put(key, element.get(key));
+            }
+            jsonResponseValue.put(jsonElement);
+        }
+        jsonResponse.put(MessagesTopLevelConstants.VALUE.value(), jsonResponseValue);
+        return jsonResponse;
+    }
+
     private static JSONObject _getMessegesInConversation(JSONObject request) {
         ArrayList<Hashtable<String, String>> response = new ArrayList<Hashtable<String, String>>();
         ArrayList<Integer> messages = ConversationDataAccesor
@@ -52,7 +117,6 @@ public class Chat {
         ArrayList<Hashtable<String, String>> response = new ArrayList<Hashtable<String, String>>();
         ArrayList<Integer> conversations = UserDataAccesor
                 .getUserConversations(request.getInt(ChatMessagesConstants.USER_ID.value()));
-        System.out.println(conversations);
         for (Integer conversationId : conversations) {
             response.add(ConversationDataAccesor.getData(conversationId));
         }
@@ -68,12 +132,14 @@ public class Chat {
 
     public static int _putMessageInDatabase(JSONObject request) {
         Hashtable<String, String> data = new Hashtable<>();
-        data.put("sender", Integer.toString(request.getInt(ChatMessagesConstants.MESSAGE_SENDER_ID.value())));
-        data.put("conversation", Integer.toString(request.getInt(ChatMessagesConstants.CONVERSATION_ID.value())));
+        data.put(MessagesDatabaseInformation.SENDER_COLUMN.value(),
+                Integer.toString(request.getInt(ChatMessagesConstants.MESSAGE_SENDER_ID.value())));
+        data.put(MessagesDatabaseInformation.CONVERSATION_COLUMN.value(),
+                Integer.toString(request.getInt(ChatMessagesConstants.CONVERSATION_ID.value())));
         java.util.Date date = new java.util.Date();
         Timestamp timestamp = new Timestamp(date.getTime());
-        data.put("send_date", timestamp.toString());
-        data.put(ChatMessagesConstants.MESSAGE_TEXT.value(),
+        data.put(MessagesDatabaseInformation.DATE_COLUMN.value(), timestamp.toString());
+        data.put(MessagesDatabaseInformation.MESSAGE_COLUMN.value(),
                 request.getString(ChatMessagesConstants.MESSAGE_TEXT.value()));
         return MessageDataSetter.addData(data);
     }
@@ -161,23 +227,6 @@ public class Chat {
                 .getData(request.getInt(ChatMessagesConstants.USER_ID.value()));
         hashResponse.remove("password");
         return _convertResponseToJson(hashResponse, RequestTypes.USER_INFO);
-    }
-
-    private static JSONObject _convertResponseToJson(ArrayList<Hashtable<String, String>> response,
-            RequestTypes reqType) {
-        JSONObject jsonResponse = new JSONObject();
-        jsonResponse.put(MessagesTopLevelConstants.TYPE.value(), reqType.value());
-        JSONArray jsonResponseValue = new JSONArray();
-        for (Hashtable<String, String> element : response) {
-            Set<String> keys = element.keySet();
-            JSONObject jsonElement = new JSONObject();
-            for (String key : keys) {
-                jsonElement.put(key, element.get(key));
-            }
-            jsonResponseValue.put(jsonElement);
-        }
-        jsonResponse.put(MessagesTopLevelConstants.VALUE.value(), jsonResponseValue);
-        return jsonResponse;
     }
 
     private static JSONObject _getUsersInConversation(JSONObject request) {
@@ -305,52 +354,4 @@ public class Chat {
         response.put(MessagesTopLevelConstants.TYPE.value(), RequestTypes.REMOVE_USER_FROM_CONVERSATION.value());
         return response;
     }
-
-    private static JSONObject _generateResponse(RequestTypes reqType, JSONObject request) {
-        JSONObject response = new JSONObject();
-        switch (reqType) {
-            case GET_MESSAGES:
-                response = _getMessegesInConversation(request);
-                break;
-            case GET_USERS_CONVERSATIONS:
-                response = _getUsersConversations(request);
-                break;
-            case SEND_MESSAGE:
-                response = _sendMessage(request);
-                break;
-            case CREATE_CONVERSATION:
-                response = _createConversation(request);
-                break;
-            case ADD_USER_TO_CONVERSATION:
-                response = _processAddUsersToConversation(request);
-                break;
-            case USER_INFO:
-                response = _checkUsersInfo(request);
-                break;
-            case GET_USERS_IN_CONVERSATION:
-                response = _getUsersInConversation(request);
-                break;
-            case GET_LATEST_MESSAGE:
-                response = _getNewMessagessInConversation(request);
-                break;
-            case SEND_IMAGE:
-                response = _processSendImage(request);
-                break;
-            case GET_CONVERSATION_CODE:
-                response = _processGetConversationCode(request);
-                break;
-            case JOIN_CONVERSATION_WITH_CODE:
-                response = _procesJoinConversationUsingCode(request);
-                break;
-            case CHANGE_CONVERSATION_NAME:
-                response = _processChangeConversationName(request);
-                break;
-            case REMOVE_USER_FROM_CONVERSATION:
-                response = _removeUserFromConversation(request);
-                break;
-
-        }
-        return response;
-    }
-
 }

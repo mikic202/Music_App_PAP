@@ -2,14 +2,11 @@ package client.GUI.guiListeners;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
-
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-
 import org.json.JSONObject;
-
 import client.Chat.Chat;
 
 public class SwitchConversationListener implements ListSelectionListener {
@@ -24,7 +21,6 @@ public class SwitchConversationListener implements ListSelectionListener {
 
     @Override
     public void valueChanged(ListSelectionEvent event) {
-        System.out.println(((JList) event.getSource()).getSelectedValue());
         if (((JList) event.getSource()).getSelectedValue() == null) {
             return;
         }

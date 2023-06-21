@@ -12,6 +12,7 @@ import client.Chat.Chat;
 import client.GUI.guiListeners.ChatContentsUpdater;
 import client.ServerConnectionConstants.ChatMessagesConstants;
 import client.ServerConnectionConstants.MessagesTopLevelConstants;
+import client.ServerConnectionConstants.ServerInformation;
 import client.ServerConnector.ServerConnector;
 import client.login_and_account_accessors.LoginAccessors;
 
@@ -22,8 +23,8 @@ public class ChatWorker extends SwingWorker<Boolean, Void> {
         this.chat = chat;
         this.chatInfoUpdater = chatInfoUpdater;
         try {
-            serverConnector = new ServerConnector(new Socket("144.91.114.89",
-                    8005));
+            serverConnector = new ServerConnector(new Socket(ServerInformation.SERVER_IP.value(),
+                    ServerInformation.MESSAGE_UPDATER_PORT.intValue()));
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -43,14 +44,12 @@ public class ChatWorker extends SwingWorker<Boolean, Void> {
                     chatInfoUpdater.call();
                 }
             }
-            System.out.println("status updated");
             if (data.getJSONObject(MessagesTopLevelConstants.VALUE.value()).keySet()
                     .contains(MessagesTopLevelConstants.OUTCOME.value())
                     && !data.getJSONObject(MessagesTopLevelConstants.VALUE.value())
                             .getBoolean(MessagesTopLevelConstants.OUTCOME.value())) {
                 return false;
             }
-            System.out.println(123);
         }
     }
 

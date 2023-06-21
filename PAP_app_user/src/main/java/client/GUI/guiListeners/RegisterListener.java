@@ -22,7 +22,6 @@ public class RegisterListener implements ActionListener {
         this.repaetPasswordField = repeatPasswordField;
         this.usernameField = usernameField;
         loggingAccessors = new LoginAccessors(serverConnector);
-        this.registerLabel = registerLabel;
     }
 
     @Override
@@ -63,6 +62,5 @@ public class RegisterListener implements ActionListener {
     private JPasswordField passwordField;
     private JPasswordField repaetPasswordField;;
     private LoginAccessors loggingAccessors;
-    private JLabel registerLabel;
 
 }

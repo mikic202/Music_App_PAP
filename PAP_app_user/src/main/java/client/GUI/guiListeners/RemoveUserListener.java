@@ -1,22 +1,10 @@
 package client.GUI.guiListeners;
 
-import java.awt.Color;
-import java.util.List;
 import java.util.concurrent.Callable;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import javax.swing.ImageIcon;
 import javax.swing.JList;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-
-import org.json.JSONObject;
-
 import client.Chat.Chat;
-import client.GUI.LeftChatPanel;
 
 public class RemoveUserListener implements ActionListener {
 

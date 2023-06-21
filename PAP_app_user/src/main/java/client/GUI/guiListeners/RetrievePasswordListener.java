@@ -38,11 +38,9 @@ public class RetrievePasswordListener implements ActionListener {
             if (response.getJSONObject(MessagesTopLevelConstants.VALUE.value())
                     .getBoolean(MessagesTopLevelConstants.OUTCOME.value())) {
                 new InformationWindow("New Pasword sent to email").setVisible(true);
-                // forgotPasswordLabel.setText("New Pasword sent to email");
             } else {
                 emailField.setText("");
                 new InformationWindow("Given Email does not have an account").setVisible(true);
-                // forgotPasswordLabel.setText("Given Email does not have an account");
             }
 
         }

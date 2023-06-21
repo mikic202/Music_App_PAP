@@ -1,39 +1,33 @@
 package client.GUI.guiListeners;
 
-import java.util.List;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
-
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-
 import org.json.JSONObject;
-
 import client.Chat.Chat;
 import client.GUI.ImageChatPanel;
 import client.GUI.LeftChatPanel;
 import client.ServerConnectionConstants.ChatMessagesConstants;
+import client.helpers.ImageProcessor;
 
 public class ChatContentsUpdater {
     static final int PROFILE_PICTURE_SIZE = 40;
 
-	private static ImageIcon defaultIcon;
-	static {
-		try {
-			Image defaultImage = ImageIO.read(new File("src/main/java/client/GUI/deaudlt.png"));
-			Image scaledImage = defaultImage.getScaledInstance(PROFILE_PICTURE_SIZE, PROFILE_PICTURE_SIZE,
-					Image.SCALE_DEFAULT);
-			defaultIcon = new ImageIcon(scaledImage);
-		} catch (Exception e) {
+    private static ImageIcon defaultIcon;
+    static {
+        try {
+            Image defaultImage = ImageIO.read(new File("src/main/java/client/GUI/GuiResources/deaudlt.png"));
+            Image scaledImage = defaultImage.getScaledInstance(PROFILE_PICTURE_SIZE, PROFILE_PICTURE_SIZE,
+                    Image.SCALE_DEFAULT);
+            defaultIcon = new ImageIcon(scaledImage);
+        } catch (Exception e) {
 
-		}
-	};
+        }
+    };
 
     static public void updateChat(ArrayList<JSONObject> newMessages, Chat chat, JPanel messagesArea) {
         messagesArea.removeAll();
@@ -68,6 +62,8 @@ public class ChatContentsUpdater {
                 messagesArea.add(chatBlock, "wrap");
             }
         }
+        messagesArea.repaint();
+        messagesArea.revalidate();
     }
 
     static JPanel addImage(JSONObject message, Chat chat, JPanel messagesArea) {
@@ -77,8 +73,7 @@ public class ChatContentsUpdater {
         }
         String textImageString = message.getString(ChatMessagesConstants.MESSAGE_TEXT.value());
         try {
-            BufferedImage defaultImage = ImageIO
-                    .read(new ByteArrayInputStream((convertStringArrayToImageBytes(textImageString))));
+            BufferedImage defaultImage = ImageProcessor.convertStringArrayToImage(textImageString);
             Image scaledImage = defaultImage.getScaledInstance(300,
                     defaultImage.getHeight() * (300 / defaultImage.getWidth()), Image.SCALE_DEFAULT);
             chatPanel.chatText.setIcon((new ImageIcon(scaledImage)));
@@ -91,11 +86,12 @@ public class ChatContentsUpdater {
         var userInfo = chat.getUserInformation(message.getInt(ChatMessagesConstants.MESSAGE_SENDER_ID.value()));
         if (!userInfo.getString("profile_picture").equals("0")) {
             String imageString = userInfo.getString("profile_picture");
-            chatPanel.avatarChat.setIcon((new ImageIcon(convertStringArrayToImageBytes(imageString))));
+            chatPanel.avatarChat.setIcon((new ImageIcon(ImageProcessor.convertStringArrayToImageBytes(imageString))));
         } else {
             try {
-//                Image scaledImage = defaultImage.getScaledInstance(PROFILE_PICTURE_SIZE, PROFILE_PICTURE_SIZE,
-//                        Image.SCALE_DEFAULT);
+                // Image scaledImage = defaultImage.getScaledInstance(PROFILE_PICTURE_SIZE,
+                // PROFILE_PICTURE_SIZE,
+                // Image.SCALE_DEFAULT);
                 chatPanel.avatarChat.setIcon(defaultIcon);
             } catch (Exception e) {
                 System.out.println(e);
@@ -115,12 +111,14 @@ public class ChatContentsUpdater {
         JSONObject userInfo = chat.getUserInformation(message.getInt(ChatMessagesConstants.MESSAGE_SENDER_ID.value()));
         if (!userInfo.getString("profile_picture").equals("0")) {
             String imageString = userInfo.getString("profile_picture");
-            chatPanel.avatarChat.setIcon((new ImageIcon(convertStringArrayToImageBytes(imageString))));
+            chatPanel.avatarChat.setIcon((new ImageIcon(ImageProcessor.convertStringArrayToImageBytes(imageString))));
         } else {
             try {
-//                Image defaultImage = ImageIO.read(new File("src/main/java/client/GUI/deaudlt.png"));
-//                Image scaledImage = defaultImage.getScaledInstance(PROFILE_PICTURE_SIZE, PROFILE_PICTURE_SIZE,
-//                        Image.SCALE_DEFAULT);
+                // Image defaultImage = ImageIO.read(new
+                // File("src/main/java/client/GUI/GuiResources/deaudlt.png"));
+                // Image scaledImage = defaultImage.getScaledInstance(PROFILE_PICTURE_SIZE,
+                // PROFILE_PICTURE_SIZE,
+                // Image.SCALE_DEFAULT);
                 chatPanel.avatarChat.setIcon(defaultIcon);
             } catch (Exception e) {
                 System.out.println(e);
@@ -128,18 +126,6 @@ public class ChatContentsUpdater {
         }
         chatPanel.nicknameLabel.setText(userInfo.getString(ChatMessagesConstants.USERNAME.value()));
         return chatPanel.chatBlock;
-    }
-
-    static byte[] convertStringArrayToImageBytes(String stringImage) {
-        stringImage = stringImage.replace("[", "");
-        stringImage = stringImage.replace("]", "");
-        List<String> byteListImage = Arrays.asList(stringImage.split(","));
-        byte[] imageData = new byte[byteListImage.size()];
-
-        for (int i = 0; i < byteListImage.size(); i++) {
-            imageData[i] = Byte.parseByte(byteListImage.get(i));
-        }
-        return imageData;
     }
 
 }

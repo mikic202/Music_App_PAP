@@ -8,17 +8,19 @@ import javax.sound.sampled.AudioFormat;
 
 import java.io.PipedOutputStream;
 import java.net.SocketTimeoutException;
+
 import client.Music.MusicPlayer;
 import client.Music.MusicPlayer.StreamStatusCallback;
+import client.ServerConnectionConstants.ServerInformation;
+
 import java.util.ArrayList;
 import java.time.Instant;
 import java.time.Duration;
 
-public class MusicClient implements Runnable
-{
+public class MusicClient implements Runnable {
     public static final int PACKET_SIZE = 512;
 
-    public static final String SERVER_ADDRESS = "144.91.114.89";
+    public static final String SERVER_ADDRESS = ServerInformation.SERVER_IP.value();
 
     private MusicPlayer player;
     private DatagramSocket socket;
@@ -31,116 +33,91 @@ public class MusicClient implements Runnable
 
     private PipedOutputStream pipedOutStream;
 
-    public MusicClient(AudioFormat fileFormat, int serverUdpPort, boolean startNow, StreamStatusCallback streamStatusCb, int lengthInBytes)
-    {
-        try
-        {
+    public MusicClient(AudioFormat fileFormat, int serverUdpPort, boolean startNow, StreamStatusCallback streamStatusCb,
+            int lengthInBytes) {
+        try {
             socket = new DatagramSocket();
             pipedOutStream = new PipedOutputStream();
             player = new MusicPlayer(pipedOutStream, fileFormat, streamStatusCb, lengthInBytes);
             this.serverUdpPort = serverUdpPort;
             System.out.println(serverUdpPort);
             address = InetAddress.getByName(SERVER_ADDRESS);
-            if(!startNow)
-            {
+            if (!startNow) {
                 stopPlaying();
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public synchronized void terminateReceiving()
-    {
+    public synchronized void terminateReceiving() {
         receive = false;
         active = false;
         player.terminatePlayer();
     }
 
-    public synchronized void resumePlaying()
-    {
+    public synchronized void resumePlaying() {
         playerPaused = false;
         player.resumePlaying();
     }
 
-    public  synchronized void stopPlaying()
-    {
+    public synchronized void stopPlaying() {
         playerPaused = true;
         player.stopPlaying();
     }
 
-    public synchronized boolean isPlaying()
-    {
+    public synchronized boolean isPlaying() {
         return player.isPlaying();
     }
 
-    public synchronized boolean isActive()
-    {
+    public synchronized boolean isActive() {
         return active;
     }
 
-    public synchronized ArrayList<Integer> getCurrentTime()
-    {
+    public synchronized ArrayList<Integer> getCurrentTime() {
         return player.getCurrentTime();
     }
 
-    public synchronized ArrayList<Integer> getTotalTime()
-    {
+    public synchronized ArrayList<Integer> getTotalTime() {
         return player.getTotalTime();
     }
 
-    public synchronized int getPercentageOfSongPlayed()
-    {
+    public synchronized int getPercentageOfSongPlayed() {
         return player.getPercentageOfSongPlayed();
     }
 
-    public void run()
-    {
-        try
-        {
+    public void run() {
+        try {
             startPlayer();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private void sendMessage(String message)
-    {
-        try
-        {
+    private void sendMessage(String message) {
+        try {
             byte[] buf = new byte[PACKET_SIZE];
             buf = message.getBytes();
             DatagramPacket packet = new DatagramPacket(buf, buf.length, address, serverUdpPort);
             socket.send(packet);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private void receivePackets()
-    {
+    private void receivePackets() {
         active = true;
-        try
-        {
+        try {
             sendMessage("hello");
             socket.setSoTimeout(500);
             Instant start = Instant.now();
             long refreshConnectionTime = 10000000000L;
             int terminationCount = 0;
-            while (receive)
-            {
-                if(playerPaused)
-                {
+            while (receive) {
+                if (playerPaused) {
                     Thread.sleep(300);
                 }
-                try
-                {
+                try {
                     byte[] buf = new byte[PACKET_SIZE];
                     DatagramPacket packet = new DatagramPacket(buf, buf.length);
                     socket.receive(packet);
@@ -149,27 +126,19 @@ public class MusicClient implements Runnable
                     terminationCount = 0;
                     pipedOutStream.write(packet.getData());
                     Instant finish = Instant.now();
-                    if(Duration.between(start, finish).toNanos() > refreshConnectionTime)
-                    {
+                    if (Duration.between(start, finish).toNanos() > refreshConnectionTime) {
                         sendMessage(".");
                         start = Instant.now();
                     }
-                }
-                catch (SocketTimeoutException e)
-                {
-                    if (!connectionEstablished)
-                    {
+                } catch (SocketTimeoutException e) {
+                    if (!connectionEstablished) {
                         // retry sending introducing packet
                         sendMessage("hello");
-                    }
-                    else
-                    {
-                        if(!player.isPlaying())
-                        {
+                    } else {
+                        if (!player.isPlaying()) {
                             terminationCount += 1;
                         }
-                        if (terminationCount > 5)
-                        {
+                        if (terminationCount > 5) {
                             terminateReceiving();
                             socket.close();
                         }
@@ -177,15 +146,12 @@ public class MusicClient implements Runnable
                     continue;
                 }
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private void startPlayer()
-    {
+    private void startPlayer() {
         Thread thread = new Thread(player, "MusicPlayers");
         thread.start();
         System.out.println("receive=true");

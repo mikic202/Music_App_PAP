@@ -83,10 +83,10 @@ public class People extends javax.swing.JPanel {
 		}).start();
 		chatContainer.getVerticalScrollBar().setUnitIncrement(16);
 
-		this.peopleButton.setIcon(new ImageIcon("src/main/java/client/GUI/PeoplePAP.png"));
-		this.musicButton.setIcon(new ImageIcon("src/main/java/client/GUI/MusicPAP.png"));
-		this.accountButton.setIcon(new ImageIcon("src/main/java/client/GUI/AccountSettingsPAP.png"));
-		mainScreenButton.setIcon(new ImageIcon("src/main/java/client/GUI/MainScreenPAP.png"));
+		this.peopleButton.setIcon(new ImageIcon("src/main/java/client/GUI/GuiResources/PeoplePAP.png"));
+		this.musicButton.setIcon(new ImageIcon("src/main/java/client/GUI/GuiResources/MusicPAP.png"));
+		this.accountButton.setIcon(new ImageIcon("src/main/java/client/GUI/GuiResources/AccountSettingsPAP.png"));
+		mainScreenButton.setIcon(new ImageIcon("src/main/java/client/GUI/GuiResources/MainScreenPAP.png"));
 	}
 
 	public void goBackToLatestConversation() {
@@ -113,8 +113,8 @@ public class People extends javax.swing.JPanel {
 		var usersInConv = chat.getUsersInCurrentConversation();
 		String[] usersList = new String[usersInConv.size()];
 		int i = 0;
-		for (int userId : usersInConv.keySet()) {
-			usersList[i] = usersInConv.get(userId).getString(ChatMessagesConstants.USERNAME.value());
+		for (int userId : usersInConv) {
+			usersList[i] = chat.getUserInformation(userId).getString(ChatMessagesConstants.USERNAME.value());
 			i++;
 		}
 		membersInConvList.removeAll();
@@ -128,12 +128,10 @@ public class People extends javax.swing.JPanel {
 			}
 		});
 
-		removePersonFromGroupLabel.setText("Conversation code: " + chat.getConversationCode());
+		removePersonFromGroupLabel.setText("Conversation code: " + chat.getCurrentConversationCode());
 
 		userOrGroupNameLabel
 				.setText(chat.getCurentConversationInfo().getString(ChatMessagesConstants.CONVERSATION_NAME.value()));
-
-		// System.out.println(345);
 
 		var convNamesSet = chat.getConversationsNamesToIds().keySet();
 
@@ -155,7 +153,7 @@ public class People extends javax.swing.JPanel {
 			}
 		});
 		lastConversation = chat.getCurrentChatId();
-		// System.out.println(234);
+
 	}
 
 	/**
@@ -240,7 +238,6 @@ public class People extends javax.swing.JPanel {
 			@Override
 			public Void call() throws Exception {
 				updateChatUi();
-				System.out.println("updated");
 				return null;
 			}
 		}));
@@ -290,21 +287,22 @@ public class People extends javax.swing.JPanel {
 
 		createButton.setText("Create");
 		createButton.addActionListener(new CreateGroupListener(chat, groupName, membersList, chatsList));
-		peopleButton.setIcon(new javax.swing.ImageIcon("src/main/java/client/GUI/PeoplePAP.png")); // NOI18N
+		peopleButton.setIcon(new javax.swing.ImageIcon("src/main/java/client/GUI/GuiResources/PeoplePAP.png")); // NOI18N
 		peopleButton.setText("jButton1");
 		peopleButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				peopleButtonActionPerformed(evt);
 			}
 		});
-		musicButton.setIcon(new javax.swing.ImageIcon("src/main/java/client/GUI/MusicPAP.png")); // NOI18N
+		musicButton.setIcon(new javax.swing.ImageIcon("src/main/java/client/GUI/GuiResources/MusicPAP.png")); // NOI18N
 		musicButton.setText("jButton1");
 		musicButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				musicButtonActionPerformed(evt);
 			}
 		});
-		accountButton.setIcon(new javax.swing.ImageIcon("src/main/java/client/GUI/AccountSettingsPAP.png")); // NOI18N
+		accountButton
+				.setIcon(new javax.swing.ImageIcon("src/main/java/client/GUI/GuiResources/AccountSettingsPAP.png")); // NOI18N
 		accountButton.setText("jButton1");
 		accountButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -312,7 +310,7 @@ public class People extends javax.swing.JPanel {
 			}
 		});
 
-		mainScreenButton.setIcon(new javax.swing.ImageIcon("src/main/java/client/GUI/MainScreenPAP.png")); // NOI18N
+		mainScreenButton.setIcon(new javax.swing.ImageIcon("src/main/java/client/GUI/GuiResources/MainScreenPAP.png")); // NOI18N
 		mainScreenButton.setText("jButton1");
 		mainScreenButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -337,7 +335,13 @@ public class People extends javax.swing.JPanel {
 		});
 
 		addButton.setText("Add");
-		addButton.addActionListener(new AddUsersListener(chat, peopleToAddList));
+		addButton.addActionListener(new AddUsersListener(chat, peopleToAddList, new Callable<Void>() {
+			@Override
+			public Void call() throws Exception {
+				updateChatUi();
+				return null;
+			}
+		}));
 
 		removePersonFromGroupLabel.setFont(new java.awt.Font("Segoe UI Black", 0, 14)); // NOI18N
 		removePersonFromGroupLabel.setText("Conversaton code:");
@@ -704,7 +708,7 @@ public class People extends javax.swing.JPanel {
 	}
 
 	private void photoButtonActionPerformed(java.awt.event.ActionEvent evt) {
-		ImageChooser photoChooser = new ImageChooser(choosenImagePath);
+		ImageChooser photoChooser = new ImageChooser(choosenImagePath, pathFileLabel);
 		photoChooser.setVisible(true);
 	}
 

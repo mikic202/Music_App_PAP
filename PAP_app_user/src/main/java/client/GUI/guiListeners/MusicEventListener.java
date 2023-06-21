@@ -1,12 +1,10 @@
 package client.GUI.guiListeners;
 
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 
-import client.ServerConnector.ServerConnector;
 import client.Music.MusicManager;
 import client.Music.MusicManager.EStreamStatus;
 
@@ -21,14 +19,12 @@ public class MusicEventListener implements ActionListener {
         System.out.println(musicManagerInstance);
     }
 
-    public static synchronized void onChatIdChange(int chatId)
-    {
+    public static synchronized void onChatIdChange(int chatId) {
         System.out.println(chatId);
         chosenChatId = chatId;
     }
 
-    public static synchronized void onSongIdChange(int songId)
-    {
+    public static synchronized void onSongIdChange(int songId) {
         System.out.println(songId);
         chosenSongId = songId;
     }
@@ -38,129 +34,97 @@ public class MusicEventListener implements ActionListener {
         String text = new String();
         text = ((JButton) event.getSource()).getText();
         System.out.println(text);
-        if(text == "Play")
-        {
+        if (text == "Play") {
             onEventPlay();
-        }
-        else if(text == "Pause")
-        {
+        } else if (text == "Pause") {
             onEventPause();
-        }
-        else if(text == "Start stream")
-        {
+        } else if (text == "Start stream") {
             onEventStartStream();
-        }
-        else if(text =="Stop stream")
-        {
+        } else if (text == "Stop stream") {
             onEventStopStream();
-        }
-        else if(text == "Join stream")
-        {
+        } else if (text == "Join stream") {
             onEventJoinStream();
-        }
-        else if(text == "Leave stream")
-        {
+        } else if (text == "Leave stream") {
             onEventLeaveStream();
         }
     }
 
-    private void onEventPlay()
-    {
-        if(!musicManagerInstance.resumePlaying())
-        {
+    private void onEventPlay() {
+        if (!musicManagerInstance.resumePlaying()) {
             System.out.println("failed to resume");
         }
     }
 
-    private void onEventPause()
-    {
-        if(!musicManagerInstance.stopPlaying())
-        {
+    private void onEventPause() {
+        if (!musicManagerInstance.stopPlaying()) {
             System.out.println("failed to stop playing");
         }
     }
 
-    private void onEventStartStream()
-    {
+    private void onEventStartStream() {
         String popupText = new String();
 
-        if(chosenChatId == -1 || chosenSongId == -1)
-        {
+        if (chosenChatId == -1 || chosenSongId == -1) {
             System.out.println(chosenChatId);
             System.out.println(chosenSongId);
             popupText = "Song or chat not chosen!";
-        }
-        else
-        {
+        } else {
             EStreamStatus response = musicManagerInstance.startStream(chosenChatId, chosenSongId);
-    
-            switch(response)
-            {
-            case STREAM_INVALID:
-            break;
-            case STREAM_PAUSED:
-                popupText = "Stream already playing on this channel, and you are not the owner.";
-            break;
-            case STREAM_PLAYING:
-                popupText = "Stream successfully started!";
-            break;
+
+            switch (response) {
+                case STREAM_INVALID:
+                    break;
+                case STREAM_PAUSED:
+                    popupText = "Stream already playing on this channel, and you are not the owner.";
+                    break;
+                case STREAM_PLAYING:
+                    popupText = "Stream successfully started!";
+                    break;
             }
 
         }
 
         System.out.println(popupText);
-        
+
     }
 
-    private void onEventStopStream()
-    {
+    private void onEventStopStream() {
         boolean response = musicManagerInstance.pauseStream();
-        if(!response)
-        {
+        if (!response) {
             System.out.println("Stopped not successfull");
         }
     }
 
-    private void onEventJoinStream()
-    {
+    private void onEventJoinStream() {
         String popupText = new String();
 
-        if(chosenChatId != -1)
-        {
+        if (chosenChatId != -1) {
             EStreamStatus response = musicManagerInstance.joinPlayingStream(chosenChatId);
 
-            switch(response)
-            {
-            case STREAM_INVALID:
-            break;
-            case STREAM_PAUSED:
-                popupText = "Stream already playing on this channel, and you are not the owner.";
-            break;
-            case STREAM_PLAYING:
-                popupText = "Stream successfully started!";
-            break;
+            switch (response) {
+                case STREAM_INVALID:
+                    break;
+                case STREAM_PAUSED:
+                    popupText = "Stream already playing on this channel, and you are not the owner.";
+                    break;
+                case STREAM_PLAYING:
+                    popupText = "Stream successfully started!";
+                    break;
             }
-        }
-        else
-        {
+        } else {
             popupText = "Chat not chosen!";
         }
 
         System.out.println(popupText);
     }
 
-    private void onEventLeaveStream()
-    {
+    private void onEventLeaveStream() {
         String popupText = new String();
 
-        if(chosenChatId == -1)
-        {
+        if (chosenChatId == -1) {
             popupText = "Chat not chosen!";
-        }
-        else
-        {
-            if(!musicManagerInstance.leaveStream())
-            {
+        } else {
+            if (!musicManagerInstance.leaveStream()) {
                 popupText = "Error";
             }
         }

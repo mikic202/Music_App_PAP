@@ -2,13 +2,9 @@ package client.GUI.guiListeners;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.JLabel;
 import javax.swing.JPasswordField;
-import javax.swing.JTextField;
-
 import org.json.JSONObject;
-
 import client.Chat.Chat;
 import client.ServerConnectionConstants.ChatMessagesConstants;
 import client.ServerConnectionConstants.MessagesTopLevelConstants;
@@ -23,7 +19,6 @@ public class ChangePasswordListener implements ActionListener {
         this.oldPasswordField = oldPasswordField;
         this.newPasswordField = newPasswordField;
         this.repeatNewPasswordField = repeatNewPasswordField;
-        this.serverConnector = serverConnector;
         this.chat = chat;
         accountAccesor = new AccountChangeRequestAccessors(serverConnector);
         this.succesfulPasswordChangeLable = succesfulPasswordChangeLable;
@@ -64,7 +59,6 @@ public class ChangePasswordListener implements ActionListener {
     private JPasswordField oldPasswordField;
     private JPasswordField newPasswordField;
     private JPasswordField repeatNewPasswordField;
-    private ServerConnector serverConnector;
     private AccountChangeRequestAccessors accountAccesor;
     private Chat chat;
     private JLabel succesfulPasswordChangeLable;

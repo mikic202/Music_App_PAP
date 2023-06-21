@@ -3,7 +3,7 @@ package client.Chat.tests;
 import client.ServerConnector.ServerConnector;
 import client.ServerConnectionConstants.ChatMessagesConstants;
 import client.ServerConnectionConstants.MessagesTopLevelConstants;
-import client.Chat.RequestTypes;
+import client.Chat.ChatRequestTypes;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -43,7 +43,7 @@ public class ChatAccersorTests {
         chatAccesor = new ChatAccesors(serverConnector);
 
         var response = new JSONObject();
-        response.put(MessagesTopLevelConstants.TYPE.value(), RequestTypes.USER_INFO.value());
+        response.put(MessagesTopLevelConstants.TYPE.value(), ChatRequestTypes.USER_INFO.value());
         var responseValue = new JSONObject();
         responseValue.put(ChatMessagesConstants.USER_ID.value(), 1);
         responseValue.put(ChatMessagesConstants.EMAIL.value(), "some@email");

@@ -40,7 +40,7 @@ public class Account extends javax.swing.JPanel {
 
 	private Chat chat;
 	private ServerConnector serverConnector;
-	
+
 	private StringBuilder path = new StringBuilder();
 	private UploadAccessors accessors;
 
@@ -51,7 +51,8 @@ public class Account extends javax.swing.JPanel {
 		accessors = new UploadAccessors(serverConnector);
 		initComponents();
 		try {
-			Image defaultImage = ImageIO.read(new File("src/main/java/client/GUI/deaudlt.png"));
+			Image defaultImage = ImageIO
+					.read(new File("src/main/java/client/GUI/GuiResources/deaudlt.png"));
 			Image scaledImage = defaultImage.getScaledInstance(300, 300, Image.SCALE_DEFAULT);
 			avatar.setIcon(new ImageIcon(scaledImage));
 		} catch (Exception e) {
@@ -60,10 +61,10 @@ public class Account extends javax.swing.JPanel {
 		email.setText(chat.getCurrentUserInfo().getString(ChatMessagesConstants.EMAIL.value()));
 		nick.setText(chat.getCurrentUserInfo().getString(ChatMessagesConstants.USERNAME.value()));
 
-		this.peopleButton.setIcon(new ImageIcon("src/main/java/client/GUI/PeoplePAP.png"));
-		this.msuicButton.setIcon(new ImageIcon("src/main/java/client/GUI/MusicPAP.png"));
-		this.accountButton.setIcon(new ImageIcon("src/main/java/client/GUI/AccountSettingsPAP.png"));
-		mainScreenButton.setIcon(new ImageIcon("src/main/java/client/GUI/MainScreenPAP.png"));
+		this.peopleButton.setIcon(new ImageIcon("src/main/java/client/GUI/GuiResources/PeoplePAP.png"));
+		this.msuicButton.setIcon(new ImageIcon("src/main/java/client/GUI/GuiResources/MusicPAP.png"));
+		this.accountButton.setIcon(new ImageIcon("src/main/java/client/GUI/GuiResources/AccountSettingsPAP.png"));
+		mainScreenButton.setIcon(new ImageIcon("src/main/java/client/GUI/GuiResources/MainScreenPAP.png"));
 
 	}
 
@@ -170,7 +171,7 @@ public class Account extends javax.swing.JPanel {
 
 		avatarLabel.setText("Avatar:");
 
-		peopleButton.setIcon(new javax.swing.ImageIcon("src/main/java/client/GUI/PeoplePAP.png")); // NOI18N
+		peopleButton.setIcon(new javax.swing.ImageIcon("src/main/java/client/GUI/GuiResources/PeoplePAP.png")); // NOI18N
 		peopleButton.setText("jButton1");
 		peopleButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -178,7 +179,7 @@ public class Account extends javax.swing.JPanel {
 			}
 		});
 
-		msuicButton.setIcon(new javax.swing.ImageIcon("src/main/java/client/GUI/MusicPAP.png")); // NOI18N
+		msuicButton.setIcon(new javax.swing.ImageIcon("src/main/java/client/GUI/GuiResources/MusicPAP.png")); // NOI18N
 		msuicButton.setText("jButton1");
 		msuicButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -186,7 +187,8 @@ public class Account extends javax.swing.JPanel {
 			}
 		});
 
-		accountButton.setIcon(new javax.swing.ImageIcon("src/main/java/client/GUI/AccountSettingsPAP.png")); // NOI18N
+		accountButton
+				.setIcon(new javax.swing.ImageIcon("src/main/java/client/GUI/GuiResources/AccountSettingsPAP.png")); // NOI18N
 		accountButton.setText("jButton1");
 		accountButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -194,7 +196,7 @@ public class Account extends javax.swing.JPanel {
 			}
 		});
 
-		mainScreenButton.setIcon(new javax.swing.ImageIcon("src/main/java/client/GUI/MainScreenPAP.png")); // NOI18N
+		mainScreenButton.setIcon(new javax.swing.ImageIcon("src/main/java/client/GUI/GuiResources/MainScreenPAP.png")); // NOI18N
 		mainScreenButton.setText("jButton1");
 		mainScreenButton.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -472,20 +474,21 @@ public class Account extends javax.swing.JPanel {
 	}
 
 	private void changeAvatarButtonActionPerformed(java.awt.event.ActionEvent evt) {
-		if(path == null) {
+		if (path == null) {
 			return;
 		}
 		File file = new File(path.toString());
 		path = null;
 		String name = "profile_picture";
-		String uuid = accessors.startUpload(Integer.parseInt(chat.getCurrentUserInfo().getString(ChatMessagesConstants.USER_ID.value())), name, true).getJSONObject("value").getString("uuid");
+		String uuid = accessors.startUpload(
+				Integer.parseInt(chat.getCurrentUserInfo().getString(ChatMessagesConstants.USER_ID.value())), name,
+				true).getJSONObject("value").getString("uuid");
 		FileUploader uploader;
 		try {
 			uploader = new FileUploader(file, uuid, accessors);
 			Thread uploadThread = new Thread(uploader);
 			uploadThread.start();
-		}
-		catch (FileNotFoundException e) {
+		} catch (FileNotFoundException e) {
 			return;
 		}
 	}

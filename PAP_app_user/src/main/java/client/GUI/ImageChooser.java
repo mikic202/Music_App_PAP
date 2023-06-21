@@ -6,6 +6,7 @@ package client.GUI;
 
 import java.nio.file.Files;
 
+import javax.swing.JLabel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
@@ -18,11 +19,19 @@ public class ImageChooser extends javax.swing.JFrame {
      * Creates new form AvatarChooser
      */
     StringBuilder outputPath;
+    JLabel pathLable;
 
     public ImageChooser(StringBuilder outputPath) {
         this.outputPath = outputPath;
         initComponents();
         imageChooser.setFileFilter(new FileNameExtensionFilter("Images", "jpg", "png"));
+    }
+
+    public ImageChooser(StringBuilder outputPath, JLabel pathLable) {
+        this.outputPath = outputPath;
+        initComponents();
+        imageChooser.setFileFilter(new FileNameExtensionFilter("Images", "jpg", "png"));
+        this.pathLable = pathLable;
     }
 
     /**
@@ -63,21 +72,21 @@ public class ImageChooser extends javax.swing.JFrame {
     }// </editor-fold>
 
     private void avatarChooserActionPerformed(java.awt.event.ActionEvent evt) {
-        System.out.println(1234);
         String returnVal = evt.getActionCommand();
         if (returnVal.equals(this.imageChooser.CANCEL_SELECTION)) {
             this.dispose();
             return;
         }
         String path = imageChooser.getSelectedFile().getAbsolutePath();
-        System.out.println(path);
-        System.out.println(234);
         if (returnVal.equals(this.imageChooser.APPROVE_SELECTION)
                 && (path.substring(path.lastIndexOf("."), path.length()).equals(".png")
                         || path.substring(path.lastIndexOf("."), path.length()).equals(".jpg"))) {
-            System.out.println(path);
             outputPath.delete(0, outputPath.length());
             outputPath.append(path);
+            if (pathLable != null) {
+                pathLable
+                        .setText(outputPath.substring(outputPath.lastIndexOf("\\") + 1, outputPath.length()));
+            }
             this.dispose();
         }
     }

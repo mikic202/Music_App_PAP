@@ -2,13 +2,9 @@ package client.GUI.guiListeners;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.JLabel;
-import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-
 import org.json.JSONObject;
-
 import client.Chat.Chat;
 import client.ServerConnectionConstants.ChatMessagesConstants;
 import client.ServerConnectionConstants.MessagesTopLevelConstants;
@@ -20,7 +16,6 @@ public class ChangeUsernameListener implements ActionListener {
     public ChangeUsernameListener(JTextField newUsernameFIeld,
             ServerConnector serverConnector, Chat chat, JLabel usernameLable) {
         this.newUsernameFIeld = newUsernameFIeld;
-        this.serverConnector = serverConnector;
         this.chat = chat;
         accountAccesor = new AccountChangeRequestAccessors(serverConnector);
         this.usernameLable = usernameLable;
@@ -49,7 +44,6 @@ public class ChangeUsernameListener implements ActionListener {
     }
 
     private JTextField newUsernameFIeld;
-    private ServerConnector serverConnector;
     private AccountChangeRequestAccessors accountAccesor;
     private Chat chat;
     private JLabel usernameLable;
