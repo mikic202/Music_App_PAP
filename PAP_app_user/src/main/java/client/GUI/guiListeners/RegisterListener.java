@@ -22,7 +22,6 @@ public class RegisterListener implements ActionListener {
         this.repaetPasswordField = repeatPasswordField;
         this.usernameField = usernameField;
         loggingAccessors = new LoginAccessors(serverConnector);
-        this.registerLabel = registerLabel;
     }
 
     @Override
