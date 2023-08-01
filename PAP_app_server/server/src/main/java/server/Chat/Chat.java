@@ -188,9 +188,7 @@ public class Chat {
             } else {
                 numberOfUsers -= 1;
             }
-
         }
-        System.out.println(users);
         _addUsersToConversation(users, conversationId);
         Hashtable<String, String> previousData = ConversationDataAccesor.getData(conversationId);
         previousData.put(ConversationDatabsaeInformation.NUMBER_OF_USERS_COLUMN.value(),

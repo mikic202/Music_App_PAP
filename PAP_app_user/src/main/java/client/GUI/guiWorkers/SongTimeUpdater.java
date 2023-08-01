@@ -1,6 +1,6 @@
 package client.GUI.guiWorkers;
+
 import javax.swing.SwingWorker;
-import client.Music.MusicManager;
 import java.util.concurrent.Callable;
 
 public class SongTimeUpdater extends SwingWorker<Boolean, Void> {
