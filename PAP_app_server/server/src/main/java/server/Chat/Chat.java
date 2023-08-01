@@ -3,7 +3,6 @@ package server.Chat;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.Set;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -19,6 +18,7 @@ import server.DatabaseInteractors.UserDataAccesor;
 import server.DatabaseInteractors.UserDataSetter;
 import server.DatabaseInteractors.UserDatabaseInformation;
 import server.ServerConnectionConstants.ChatMessagesConstants;
+import server.ServerConnectionConstants.LoggingMessagesConstants;
 import server.ServerConnectionConstants.MessagesTopLevelConstants;
 
 public class Chat {
@@ -189,12 +189,12 @@ public class Chat {
             Hashtable<String, String> hashResponse = UserDataAccesor
                     .getData(UserDatabaseInformation.USERNAME_COLUMN.value(),
                             request.getString(ChatMessagesConstants.USERNAME.value()));
-            hashResponse.remove("password");
+            hashResponse.remove(LoggingMessagesConstants.PASSWORD.value());
             return JsonConverter.convertResponseToJson(hashResponse, RequestTypes.USER_INFO);
         }
         Hashtable<String, String> hashResponse = UserDataAccesor
                 .getData(request.getInt(ChatMessagesConstants.USER_ID.value()));
-        hashResponse.remove("password");
+        hashResponse.remove(LoggingMessagesConstants.PASSWORD.value());
         return JsonConverter.convertResponseToJson(hashResponse, RequestTypes.USER_INFO);
     }
 
@@ -248,7 +248,7 @@ public class Chat {
         String code = _generateConversationCode(request.getInt(ChatMessagesConstants.CONVERSATION_ID.value()));
         JSONObject response = new JSONObject();
         JSONObject responseValue = new JSONObject();
-        responseValue.put("conversation code", code);
+        responseValue.put(ChatMessagesConstants.CONVERSATION_CODE.value(), code);
         response.put(MessagesTopLevelConstants.VALUE.value(), responseValue);
         response.put(MessagesTopLevelConstants.TYPE.value(), RequestTypes.GET_CONVERSATION_CODE.value());
         return response;
