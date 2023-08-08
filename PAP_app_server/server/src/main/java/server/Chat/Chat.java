@@ -1,19 +1,14 @@
 package server.Chat;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import server.Main;
 import server.DatabaseInteractors.ConversationDataAccesor;
 import server.DatabaseInteractors.ConversationDataSetter;
 import server.DatabaseInteractors.ConversationDatabsaeInformation;
-import server.DatabaseInteractors.MessageDataAccesor;
-import server.DatabaseInteractors.MessageDataSetter;
-import server.DatabaseInteractors.MessagesDatabaseInformation;
 import server.DatabaseInteractors.UserDataAccesor;
 import server.DatabaseInteractors.UserDataSetter;
 import server.DatabaseInteractors.UserDatabaseInformation;
@@ -43,13 +38,13 @@ public class Chat {
         JSONObject response = new JSONObject();
         switch (reqType) {
             case GET_MESSAGES:
-                response = _getMessegesInConversation(request);
+                response = ChatMessagesHandler.getMessegesInConversation(request);
                 break;
             case GET_USERS_CONVERSATIONS:
                 response = _getUsersConversations(request);
                 break;
             case SEND_MESSAGE:
-                response = _sendMessage(request);
+                response = ChatMessagesHandler.sendMessage(request);
                 break;
             case CREATE_CONVERSATION:
                 response = _createConversation(request);
@@ -64,10 +59,10 @@ public class Chat {
                 response = _getUsersInConversation(request);
                 break;
             case GET_LATEST_MESSAGE:
-                response = _getNewMessagessInConversation(request);
+                response = ChatMessagesHandler.getNewMessagessInConversation(request);
                 break;
             case SEND_IMAGE:
-                response = _processSendImage(request);
+                response = ChatMessagesHandler.processSendImage(request);
                 break;
             case GET_CONVERSATION_CODE:
                 response = _processGetConversationCode(request);
@@ -86,16 +81,6 @@ public class Chat {
         return response;
     }
 
-    private static JSONObject _getMessegesInConversation(JSONObject request) {
-        ArrayList<Hashtable<String, String>> response = new ArrayList<Hashtable<String, String>>();
-        ArrayList<Integer> messages = ConversationDataAccesor
-                .getMessagesInConversation(request.getInt(ChatMessagesConstants.CONVERSATION_ID.value()));
-        for (Integer messageId : messages) {
-            response.add(MessageDataAccesor.getData(messageId));
-        }
-        return JsonConverter.convertResponseToJson(response, RequestTypes.GET_MESSAGES);
-    }
-
     private static JSONObject _getUsersConversations(JSONObject request) {
         ArrayList<Hashtable<String, String>> response = new ArrayList<Hashtable<String, String>>();
         ArrayList<Integer> conversations = UserDataAccesor
@@ -104,27 +89,6 @@ public class Chat {
             response.add(ConversationDataAccesor.getData(conversationId));
         }
         return JsonConverter.convertResponseToJson(response, RequestTypes.GET_USERS_CONVERSATIONS);
-    }
-
-    private static JSONObject _sendMessage(JSONObject request) {
-        int addedMsg = _putMessageInDatabase(request);
-        Hashtable<String, String> data = MessageDataAccesor.getData(addedMsg);
-        Main.updater.sendMessage(addedMsg, data.get(ChatMessagesConstants.CONVERSATION_ID.value()));
-        return JsonConverter.convertResponseToJson(data, RequestTypes.GET_MESSAGES);
-    }
-
-    public static int _putMessageInDatabase(JSONObject request) {
-        Hashtable<String, String> data = new Hashtable<>();
-        data.put(MessagesDatabaseInformation.SENDER_COLUMN.value(),
-                Integer.toString(request.getInt(ChatMessagesConstants.MESSAGE_SENDER_ID.value())));
-        data.put(MessagesDatabaseInformation.CONVERSATION_COLUMN.value(),
-                Integer.toString(request.getInt(ChatMessagesConstants.CONVERSATION_ID.value())));
-        java.util.Date date = new java.util.Date();
-        Timestamp timestamp = new Timestamp(date.getTime());
-        data.put(MessagesDatabaseInformation.DATE_COLUMN.value(), timestamp.toString());
-        data.put(MessagesDatabaseInformation.MESSAGE_COLUMN.value(),
-                request.getString(ChatMessagesConstants.MESSAGE_TEXT.value()));
-        return MessageDataSetter.addData(data);
     }
 
     private static JSONObject _createConversation(JSONObject request) {
@@ -209,25 +173,6 @@ public class Chat {
         }
         jsonResponse.put(MessagesTopLevelConstants.VALUE.value(), jsonUsers);
         return jsonResponse;
-    }
-
-    private static JSONObject _getNewMessagessInConversation(JSONObject request) {
-        ArrayList<Hashtable<String, String>> messages = MessageDataAccesor
-                .getMessagesOlderThanGiven(request.getInt(ChatMessagesConstants.LATEST_MESSAGE.value()),
-                        request.getInt(ChatMessagesConstants.CONVERSATION_ID.value()));
-        return JsonConverter.convertResponseToJson(messages, RequestTypes.GET_LATEST_MESSAGE);
-    }
-
-    private static JSONObject _processSendImage(JSONObject request) {
-        request.put(ChatMessagesConstants.MESSAGE_TEXT.value(),
-                (request.getJSONArray(ChatMessagesConstants.IMAGE_MESSAGE.value())).toString());
-        int newMessage = _putMessageInDatabase(request);
-        MessageDataSetter.setIsImage(newMessage);
-
-        Hashtable<String, String> data = MessageDataAccesor.getData(newMessage);
-        Main.updater.sendMessage(newMessage, data.get(ChatMessagesConstants.CONVERSATION_ID.value()));
-
-        return JsonConverter.convertResponseToJson(MessageDataAccesor.getData(newMessage), RequestTypes.SEND_IMAGE);
     }
 
     private static String _generateConversationCode(int conversationId) {
