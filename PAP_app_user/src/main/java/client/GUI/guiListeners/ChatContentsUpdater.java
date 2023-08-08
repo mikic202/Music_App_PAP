@@ -33,7 +33,7 @@ public class ChatContentsUpdater {
         messagesArea.removeAll();
         for (int i = newMessages.size() - 1; i >= 0; i--) {
             var message = newMessages.get(i);
-            if (message.getInt("is_image") == 1) {
+            if (message.getInt(ChatMessagesConstants.IS_IMAGE.value()) == 1) {
                 messagesArea.add(addImage(message, chat, messagesArea), "wrap");
             } else {
                 messagesArea.add(addTextMessage(message, chat, messagesArea), "wrap");
@@ -45,7 +45,7 @@ public class ChatContentsUpdater {
 
     static public void addMessageToConversation(JSONObject message, Chat chat, JPanel messagesArea,
             boolean atTheFront) {
-        if (message.getInt("is_image") == 1) {
+        if (message.getInt(ChatMessagesConstants.IS_IMAGE.value()) == 1) {
             var chatBlock = addImage(message, chat, messagesArea);
             if (atTheFront
                     && chat.getCurrentChatId() == message.getInt(ChatMessagesConstants.CONVERSATION_ID.value())) {
@@ -74,24 +74,26 @@ public class ChatContentsUpdater {
         String textImageString = message.getString(ChatMessagesConstants.MESSAGE_TEXT.value());
         try {
             BufferedImage defaultImage = ImageProcessor.convertStringArrayToImage(textImageString);
-            Image scaledImage = defaultImage.getScaledInstance(300,
-                    defaultImage.getHeight() * (300 / defaultImage.getWidth()), Image.SCALE_DEFAULT);
+            Image scaledImage = defaultImage.getScaledInstance(PROFILE_PICTURE_SIZE, PROFILE_PICTURE_SIZE,
+                    Image.SCALE_DEFAULT);
             chatPanel.chatText.setIcon((new ImageIcon(scaledImage)));
         } catch (Exception e) {
             System.out.println(e);
         }
-
-        // TODO scale images
         chatPanel.dateLabel.setText(message.getString("creation_date"));
         var userInfo = chat.getUserInformation(message.getInt(ChatMessagesConstants.MESSAGE_SENDER_ID.value()));
         if (!userInfo.getString("profile_picture").equals("0")) {
-            String imageString = userInfo.getString("profile_picture");
-            chatPanel.avatarChat.setIcon((new ImageIcon(ImageProcessor.convertStringArrayToImageBytes(imageString))));
+            try {
+                String imageString = userInfo.getString("profile_picture");
+                BufferedImage defaultImage = ImageProcessor.convertStringArrayToImage(imageString);
+                Image scaledImage = defaultImage.getScaledInstance(300,
+                        defaultImage.getHeight() * (300 / defaultImage.getWidth()), Image.SCALE_DEFAULT);
+                chatPanel.avatarChat.setIcon((new ImageIcon(scaledImage)));
+            } catch (Exception e) {
+                System.out.println(e);
+            }
         } else {
             try {
-                // Image scaledImage = defaultImage.getScaledInstance(PROFILE_PICTURE_SIZE,
-                // PROFILE_PICTURE_SIZE,
-                // Image.SCALE_DEFAULT);
                 chatPanel.avatarChat.setIcon(defaultIcon);
             } catch (Exception e) {
                 System.out.println(e);
@@ -114,11 +116,6 @@ public class ChatContentsUpdater {
             chatPanel.avatarChat.setIcon((new ImageIcon(ImageProcessor.convertStringArrayToImageBytes(imageString))));
         } else {
             try {
-                // Image defaultImage = ImageIO.read(new
-                // File("src/main/java/client/GUI/GuiResources/deaudlt.png"));
-                // Image scaledImage = defaultImage.getScaledInstance(PROFILE_PICTURE_SIZE,
-                // PROFILE_PICTURE_SIZE,
-                // Image.SCALE_DEFAULT);
                 chatPanel.avatarChat.setIcon(defaultIcon);
             } catch (Exception e) {
                 System.out.println(e);

@@ -10,7 +10,7 @@ public class UploadRequestCreator {
 		var value = new JSONObject();
 		value.put(ChatMessagesConstants.USER_ID.value(), userId);
 		value.put("file_name", file_name);
-		value.put("is_image", isImage);
+		value.put(ChatMessagesConstants.IS_IMAGE.value(), isImage);
 		var data = new JSONObject();
 		data.put(MessagesTopLevelConstants.TYPE.value(), UploadRequestTypes.START_UPLOAD.value());
 		data.put(MessagesTopLevelConstants.VALUE.value(), value);
