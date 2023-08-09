@@ -17,7 +17,7 @@ import org.json.JSONObject;
 import com.sun.tools.javac.Main;
 
 import server.Chat.Chat;
-import server.Chat.RequestTypes;
+import server.Chat.ChatRequestTypes;
 import server.DatabaseInteractors.MessageDataAccesor;
 import server.DatabaseInteractors.UserDataAccesor;
 import server.Login.Login;

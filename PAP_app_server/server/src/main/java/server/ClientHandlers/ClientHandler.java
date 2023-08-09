@@ -17,7 +17,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import server.Chat.Chat;
-import server.Chat.RequestTypes;
+import server.Chat.ChatRequestTypes;
 import server.Login.Login;
 import server.Login.LoginRequestTypes;
 import server.files.UploadRequestProcessor;
@@ -103,8 +103,8 @@ public class ClientHandler implements Runnable {
 			System.out.println(message);
 			return;
 		}
-		RequestTypes type = null;
-		for (RequestTypes t : RequestTypes.values()) {
+		ChatRequestTypes type = null;
+		for (ChatRequestTypes t : ChatRequestTypes.values()) {
 			if (t.value().equals(typeStr)) {
 				type = t;
 			}

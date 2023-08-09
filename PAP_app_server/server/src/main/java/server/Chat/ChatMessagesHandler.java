@@ -21,14 +21,14 @@ public class ChatMessagesHandler {
         for (Integer messageId : messages) {
             response.add(MessageDataAccesor.getData(messageId));
         }
-        return JsonConverter.convertResponseToJson(response, RequestTypes.GET_MESSAGES);
+        return JsonConverter.convertResponseToJson(response, ChatRequestTypes.GET_MESSAGES);
     }
 
     public static JSONObject sendMessage(JSONObject request) {
         int addedMsg = _putMessageInDatabase(request);
         Hashtable<String, String> data = MessageDataAccesor.getData(addedMsg);
         Main.updater.sendMessage(addedMsg, data.get(ChatMessagesConstants.CONVERSATION_ID.value()));
-        return JsonConverter.convertResponseToJson(data, RequestTypes.GET_MESSAGES);
+        return JsonConverter.convertResponseToJson(data, ChatRequestTypes.GET_MESSAGES);
     }
 
     public static JSONObject processSendImage(JSONObject request) {
@@ -40,14 +40,14 @@ public class ChatMessagesHandler {
         Hashtable<String, String> data = MessageDataAccesor.getData(newMessage);
         Main.updater.sendMessage(newMessage, data.get(ChatMessagesConstants.CONVERSATION_ID.value()));
 
-        return JsonConverter.convertResponseToJson(MessageDataAccesor.getData(newMessage), RequestTypes.SEND_IMAGE);
+        return JsonConverter.convertResponseToJson(MessageDataAccesor.getData(newMessage), ChatRequestTypes.SEND_IMAGE);
     }
 
     public static JSONObject getNewMessagessInConversation(JSONObject request) {
         ArrayList<Hashtable<String, String>> messages = MessageDataAccesor
                 .getMessagesOlderThanGiven(request.getInt(ChatMessagesConstants.LATEST_MESSAGE.value()),
                         request.getInt(ChatMessagesConstants.CONVERSATION_ID.value()));
-        return JsonConverter.convertResponseToJson(messages, RequestTypes.GET_LATEST_MESSAGE);
+        return JsonConverter.convertResponseToJson(messages, ChatRequestTypes.GET_LATEST_MESSAGE);
     }
 
     private static int _putMessageInDatabase(JSONObject request) {

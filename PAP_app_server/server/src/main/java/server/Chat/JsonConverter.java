@@ -12,7 +12,7 @@ import server.ServerConnectionConstants.MessagesTopLevelConstants;
 public class JsonConverter {
 
     public static JSONObject convertResponseToJson(ArrayList<Hashtable<String, String>> response,
-            RequestTypes reqType) {
+            ChatRequestTypes reqType) {
         JSONObject jsonResponse = new JSONObject();
         jsonResponse.put(MessagesTopLevelConstants.TYPE.value(), reqType.value());
         JSONArray jsonResponseValue = new JSONArray();
@@ -28,7 +28,7 @@ public class JsonConverter {
         return jsonResponse;
     }
 
-    public static JSONObject convertResponseToJson(Hashtable<String, String> response, RequestTypes reqType) {
+    public static JSONObject convertResponseToJson(Hashtable<String, String> response, ChatRequestTypes reqType) {
         JSONObject jsonResponse = new JSONObject();
         jsonResponse.put(MessagesTopLevelConstants.TYPE.value(), reqType.value());
         JSONObject jsonResponseValue = new JSONObject();

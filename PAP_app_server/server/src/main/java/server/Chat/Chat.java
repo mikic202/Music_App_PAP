@@ -20,7 +20,7 @@ public class Chat {
 
     static final String[] CONVERSATION_CODE_KEYS = { "ocvdt&zvfl", "KzA#biPnxc", "*G$favyhmo", "!bs?j@iztq" };
 
-    public static JSONObject procesRequests(RequestTypes reqType, JSONObject request) {
+    public static JSONObject procesRequests(ChatRequestTypes reqType, JSONObject request) {
         try {
             return _generateResponse(reqType, request);
         } catch (Exception e) {
@@ -34,7 +34,7 @@ public class Chat {
         }
     }
 
-    private static JSONObject _generateResponse(RequestTypes reqType, JSONObject request) {
+    private static JSONObject _generateResponse(ChatRequestTypes reqType, JSONObject request) {
         JSONObject response = new JSONObject();
         switch (reqType) {
             case GET_MESSAGES:
@@ -88,7 +88,7 @@ public class Chat {
         for (Integer conversationId : conversations) {
             response.add(ConversationDataAccesor.getData(conversationId));
         }
-        return JsonConverter.convertResponseToJson(response, RequestTypes.GET_USERS_CONVERSATIONS);
+        return JsonConverter.convertResponseToJson(response, ChatRequestTypes.GET_USERS_CONVERSATIONS);
     }
 
     private static JSONObject _createConversation(JSONObject request) {
@@ -101,7 +101,7 @@ public class Chat {
         }
         _addUsersToConversation(users, newConversation);
         return JsonConverter.convertResponseToJson(ConversationDataAccesor.getData(newConversation),
-                RequestTypes.CREATE_CONVERSATION);
+                ChatRequestTypes.CREATE_CONVERSATION);
     }
 
     private static int _addConversation(String name, int numberOfUsers) {
@@ -145,7 +145,7 @@ public class Chat {
         ConversationDataSetter.setData(conversationId, previousData);
         Hashtable<String, String> outcome = new Hashtable<>();
         outcome.put(MessagesTopLevelConstants.OUTCOME.value(), "true");
-        return JsonConverter.convertResponseToJson(outcome, RequestTypes.ADD_USER_TO_CONVERSATION);
+        return JsonConverter.convertResponseToJson(outcome, ChatRequestTypes.ADD_USER_TO_CONVERSATION);
     }
 
     private static JSONObject _checkUsersInfo(JSONObject request) {
@@ -154,19 +154,19 @@ public class Chat {
                     .getData(UserDatabaseInformation.USERNAME_COLUMN.value(),
                             request.getString(ChatMessagesConstants.USERNAME.value()));
             hashResponse.remove(LoggingMessagesConstants.PASSWORD.value());
-            return JsonConverter.convertResponseToJson(hashResponse, RequestTypes.USER_INFO);
+            return JsonConverter.convertResponseToJson(hashResponse, ChatRequestTypes.USER_INFO);
         }
         Hashtable<String, String> hashResponse = UserDataAccesor
                 .getData(request.getInt(ChatMessagesConstants.USER_ID.value()));
         hashResponse.remove(LoggingMessagesConstants.PASSWORD.value());
-        return JsonConverter.convertResponseToJson(hashResponse, RequestTypes.USER_INFO);
+        return JsonConverter.convertResponseToJson(hashResponse, ChatRequestTypes.USER_INFO);
     }
 
     private static JSONObject _getUsersInConversation(JSONObject request) {
         ArrayList<Integer> users = ConversationDataAccesor
                 .getUsersInConversation(request.getInt(ChatMessagesConstants.CONVERSATION_ID.value()));
         JSONObject jsonResponse = new JSONObject();
-        jsonResponse.put(MessagesTopLevelConstants.TYPE.value(), RequestTypes.GET_USERS_CONVERSATIONS.value());
+        jsonResponse.put(MessagesTopLevelConstants.TYPE.value(), ChatRequestTypes.GET_USERS_CONVERSATIONS.value());
         JSONArray jsonUsers = new JSONArray();
         for (Integer user : users) {
             jsonUsers.put(user);
@@ -195,7 +195,7 @@ public class Chat {
         JSONObject responseValue = new JSONObject();
         responseValue.put(ChatMessagesConstants.CONVERSATION_CODE.value(), code);
         response.put(MessagesTopLevelConstants.VALUE.value(), responseValue);
-        response.put(MessagesTopLevelConstants.TYPE.value(), RequestTypes.GET_CONVERSATION_CODE.value());
+        response.put(MessagesTopLevelConstants.TYPE.value(), ChatRequestTypes.GET_CONVERSATION_CODE.value());
         return response;
     }
 
@@ -214,7 +214,7 @@ public class Chat {
         }
         JSONObject response = new JSONObject();
         response.put(MessagesTopLevelConstants.VALUE.value(), responseValue);
-        response.put(MessagesTopLevelConstants.TYPE.value(), RequestTypes.JOIN_CONVERSATION_WITH_CODE.value());
+        response.put(MessagesTopLevelConstants.TYPE.value(), ChatRequestTypes.JOIN_CONVERSATION_WITH_CODE.value());
         return response;
     }
 
@@ -240,7 +240,7 @@ public class Chat {
         responseValue.put(MessagesTopLevelConstants.OUTCOME.value(), true);
         JSONObject response = new JSONObject();
         response.put(MessagesTopLevelConstants.VALUE.value(), responseValue);
-        response.put(MessagesTopLevelConstants.TYPE.value(), RequestTypes.CHANGE_CONVERSATION_NAME.value());
+        response.put(MessagesTopLevelConstants.TYPE.value(), ChatRequestTypes.CHANGE_CONVERSATION_NAME.value());
         return response;
     }
 
@@ -252,7 +252,8 @@ public class Chat {
                 .contains(request.getInt(ChatMessagesConstants.CONVERSATION_ID.value()))) {
             responseValue.put(MessagesTopLevelConstants.OUTCOME.value(), false);
             response.put(MessagesTopLevelConstants.VALUE.value(), responseValue);
-            response.put(MessagesTopLevelConstants.TYPE.value(), RequestTypes.REMOVE_USER_FROM_CONVERSATION.value());
+            response.put(MessagesTopLevelConstants.TYPE.value(),
+                    ChatRequestTypes.REMOVE_USER_FROM_CONVERSATION.value());
             return response;
         }
         ConversationDataSetter.RemoveUserConversationRelation(request.getInt(ChatMessagesConstants.USER_ID.value()),
@@ -265,7 +266,7 @@ public class Chat {
         ConversationDataSetter.setData(request.getInt(ChatMessagesConstants.CONVERSATION_ID.value()), conversationInfo);
         responseValue.put(MessagesTopLevelConstants.OUTCOME.value(), true);
         response.put(MessagesTopLevelConstants.VALUE.value(), responseValue);
-        response.put(MessagesTopLevelConstants.TYPE.value(), RequestTypes.REMOVE_USER_FROM_CONVERSATION.value());
+        response.put(MessagesTopLevelConstants.TYPE.value(), ChatRequestTypes.REMOVE_USER_FROM_CONVERSATION.value());
         return response;
     }
 }
