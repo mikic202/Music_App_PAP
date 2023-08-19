@@ -30,7 +30,7 @@ import server.ServerConnectionConstants.MessagesTopLevelConstants;
 public class ClientHandler implements Runnable {
 	List<Client> clients = new ArrayList<Client>();
 	boolean running = true;
-	final int THREAD_COUNT = 5;
+	final int THREAD_COUNT = 25;
 
 	public ClientHandler() {
 
@@ -48,11 +48,11 @@ public class ClientHandler implements Runnable {
 	}
 
 	public void run() {
+		ThreadPoolExecutor threadPool = (ThreadPoolExecutor) Executors.newFixedThreadPool(THREAD_COUNT);
 		while (true) {
 			Instant start = Instant.now();
 			synchronized (clients) {
 				ListIterator<Client> it = clients.listIterator();
-				ThreadPoolExecutor threadPool = (ThreadPoolExecutor) Executors.newFixedThreadPool(THREAD_COUNT);
 				// System.out.println("Processing clients.");
 				while (it.hasNext()) {
 					// System.out.println("Processing client.");
