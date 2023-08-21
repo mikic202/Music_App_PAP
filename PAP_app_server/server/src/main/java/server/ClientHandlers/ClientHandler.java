@@ -25,9 +25,11 @@ import server.files.UploadRequestTypes;
 
 import server.Music.MusicRequestHandler;
 import server.Music.MusicRequestTypes;
+import server.ServerConnectionConstants.ChatMessagesConstants;
 import server.ServerConnectionConstants.MessagesTopLevelConstants;
 
 public class ClientHandler implements Runnable {
+	String MULTI_REQUEST = "multi request";
 	List<Client> clients = new ArrayList<Client>();
 	boolean running = true;
 	final int THREAD_COUNT = 25;
@@ -94,14 +96,30 @@ public class ClientHandler implements Runnable {
 		String message = client.getMessage();
 		System.out.println("\tRequest: " + message);
 		JSONObject messageJSON = null;
-		String typeStr;
 		try {
 			messageJSON = new JSONObject(message);
-			typeStr = messageJSON.getString(MessagesTopLevelConstants.TYPE.value());
 		} catch (JSONException e) {
 			System.out.println("Received request without type:");
 			System.out.println(message);
 			return;
+		}
+		handleMessage(messageJSON, client);
+	}
+
+	void handleMessage(JSONObject messageJSON, Client client) throws IOException {
+		String typeStr;
+		try {
+			typeStr = messageJSON.getString(MessagesTopLevelConstants.TYPE.value());
+		} catch (JSONException e) {
+			System.out.println("Received request without type:");
+			System.out.println(messageJSON);
+			return;
+		}
+		if (typeStr.equals(MULTI_REQUEST)) {
+			for (int i = 0; i < messageJSON.getJSONArray(MessagesTopLevelConstants.VALUE.value())
+					.length(); i++) {
+				handleMessage(messageJSON, client);
+			}
 		}
 		ChatRequestTypes type = null;
 		for (ChatRequestTypes t : ChatRequestTypes.values()) {
@@ -136,7 +154,7 @@ public class ClientHandler implements Runnable {
 			value = messageJSON.getJSONObject(MessagesTopLevelConstants.VALUE.value());
 		} catch (JSONException e) {
 			System.out.println("Received request without value:");
-			System.out.println(message);
+			System.out.println(messageJSON);
 			return;
 		}
 		String response = "";
