@@ -61,7 +61,8 @@ public class MessageDataSetter implements DataSetterInterface {
             statement.setString(4, data.get(MessagesDatabaseInformation.MESSAGE_COLUMN.value()));
             statement.executeUpdate();
             connection.commit();
-            added_id = MessageDataAccesor.getLatestMessage(Integer.parseInt(data.get("conversation")));
+            added_id = MessageDataAccesor.getLatestMessage(
+                    Integer.parseInt(data.get(MessagesDatabaseInformation.CONVERSATION_COLUMN.value())));
 
         } catch (Exception e) {
             System.out.println(e);
