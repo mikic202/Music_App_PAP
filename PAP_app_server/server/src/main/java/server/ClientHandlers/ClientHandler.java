@@ -115,40 +115,6 @@ public class ClientHandler implements Runnable {
 			System.out.println(messageJSON);
 			return;
 		}
-		if (typeStr.equals(MULTI_REQUEST)) {
-			for (int i = 0; i < messageJSON.getJSONArray(MessagesTopLevelConstants.VALUE.value())
-					.length(); i++) {
-				handleMessage(messageJSON, client);
-			}
-		}
-		ChatRequestTypes type = null;
-		for (ChatRequestTypes t : ChatRequestTypes.values()) {
-			if (t.value().equals(typeStr)) {
-				type = t;
-			}
-		}
-		LoginRequestTypes login_type = null;
-		for (LoginRequestTypes t : LoginRequestTypes.values()) {
-			if (t.value().equals(typeStr)) {
-				login_type = t;
-			}
-		}
-		UploadRequestTypes upload_type = null;
-		for (UploadRequestTypes t : UploadRequestTypes.values()) {
-			if (t.value().equals(typeStr)) {
-				upload_type = t;
-			}
-		}
-		MusicRequestTypes music_type = null;
-		for (MusicRequestTypes t : MusicRequestTypes.values()) {
-			if (t.value().equals(typeStr)) {
-				music_type = t;
-			}
-		}
-		if (type == null && login_type == null && upload_type == null && music_type == null) {
-			System.out.println("Received request of incorrect type: " + typeStr);
-			return;
-		}
 		JSONObject value = null;
 		try {
 			value = messageJSON.getJSONObject(MessagesTopLevelConstants.VALUE.value());
@@ -157,18 +123,53 @@ public class ClientHandler implements Runnable {
 			System.out.println(messageJSON);
 			return;
 		}
-		String response = "";
-		if (type != null) {
-			response = Chat.procesRequests(type, value).toString() + "\n";
-		} else if (login_type != null) {
-			response = Login.procesRequests(login_type, value).toString() + "\n";
-		} else if (upload_type != null) {
-			response = UploadRequestProcessor.procesRequests(upload_type, value).toString() + "\n";
-		} else if (music_type != null) {
-			response = MusicRequestHandler.processRequests(music_type, value).toString() + "\n";
+		if (typeStr.equals(MULTI_REQUEST)) {
+			for (int i = 0; i < messageJSON.getJSONArray(MessagesTopLevelConstants.VALUE.value())
+					.length(); i++) {
+				handleMessage(messageJSON, client);
+			}
 		}
-
-		System.out.print("\tResponse: " + response);
-		client.write(response.getBytes());
+		ChatRequestTypes chatType = null;
+		String response = "";
+		for (ChatRequestTypes t : ChatRequestTypes.values()) {
+			if (t.value().equals(typeStr)) {
+				chatType = t;
+				response = Chat.procesRequests(chatType, value).toString() + "\n";
+				System.out.print("\tResponse: " + response);
+				client.write(response.getBytes());
+				return;
+			}
+		}
+		MusicRequestTypes music_type = null;
+		for (MusicRequestTypes t : MusicRequestTypes.values()) {
+			if (t.value().equals(typeStr)) {
+				music_type = t;
+				response = MusicRequestHandler.processRequests(music_type, value).toString() + "\n";
+				System.out.print("\tResponse: " + response);
+				client.write(response.getBytes());
+				return;
+			}
+		}
+		LoginRequestTypes login_type = null;
+		for (LoginRequestTypes t : LoginRequestTypes.values()) {
+			if (t.value().equals(typeStr)) {
+				login_type = t;
+				response = Login.procesRequests(login_type, value).toString() + "\n";
+				System.out.print("\tResponse: " + response);
+				client.write(response.getBytes());
+				return;
+			}
+		}
+		UploadRequestTypes upload_type = null;
+		for (UploadRequestTypes t : UploadRequestTypes.values()) {
+			if (t.value().equals(typeStr)) {
+				upload_type = t;
+				response = UploadRequestProcessor.procesRequests(upload_type, value).toString() + "\n";
+				System.out.print("\tResponse: " + response);
+				client.write(response.getBytes());
+				return;
+			}
+		}
+		System.out.println("Received request of incorrect type: " + typeStr);
 	}
 }
