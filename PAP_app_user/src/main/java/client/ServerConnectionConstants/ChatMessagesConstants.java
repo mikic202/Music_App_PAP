@@ -5,7 +5,7 @@ public enum ChatMessagesConstants {
     MESSAGE_TEXT("text"),
     MESSAGE_SENDER_ID("sender_id"), CONVERSATION_NAME("name"), USERS_IN_CONVERSATION("users"),
     LATEST_MESSAGE("latest_message"), IMAGE_MESSAGE("image"), IMAGE_MESSAGE_FORMAT("format"),
-    CONVERSATION_CODE("conversation_code"), NEW_CONVERSATION_NAME("conversation_name");
+    CONVERSATION_CODE("conversation_code"), NEW_CONVERSATION_NAME("conversation_name"), IS_IMAGE("is_image");
 
     private String _value;
 

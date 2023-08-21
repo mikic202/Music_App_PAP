@@ -1,6 +1,6 @@
 package server.Chat;
 
-public enum RequestTypes {
+public enum ChatRequestTypes {
     GET_MESSAGES("messages"), GET_USERS_CONVERSATIONS("user conversations"), SEND_MESSAGE("send message"),
     CREATE_CONVERSATION("create_conversation"), ADD_USER_TO_CONVERSATION("add user to cconversation"),
     USER_INFO("user information"), GET_USERS_IN_CONVERSATION("get users in conversation"),
@@ -10,7 +10,7 @@ public enum RequestTypes {
 
     private String _value;
 
-    RequestTypes(String value) {
+    ChatRequestTypes(String value) {
         _value = value;
     }
 

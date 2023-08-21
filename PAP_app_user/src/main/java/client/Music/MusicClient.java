@@ -9,7 +9,6 @@ import javax.sound.sampled.AudioFormat;
 import java.io.PipedOutputStream;
 import java.net.SocketTimeoutException;
 
-import client.Music.MusicPlayer;
 import client.Music.MusicPlayer.StreamStatusCallback;
 import client.ServerConnectionConstants.ServerInformation;
 

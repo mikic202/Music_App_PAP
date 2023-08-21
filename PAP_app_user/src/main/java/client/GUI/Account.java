@@ -24,10 +24,6 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
 
-import com.formdev.flatlaf.FlatDarkLaf;
-import com.formdev.flatlaf.FlatLightLaf;
-import javax.swing.SwingUtilities;
-
 /**
  *
  * @author Adam

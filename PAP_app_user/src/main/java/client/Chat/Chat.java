@@ -216,8 +216,10 @@ public class Chat {
         if (currentConversation != -1) {
             JSONObject response = chatAccesor.getConversationCode(currentConversation);
             conversationCodes.put(currentConversation,
-                    response.getJSONObject(MessagesTopLevelConstants.VALUE.value()).getString("conversation code"));
-            return response.getJSONObject(MessagesTopLevelConstants.VALUE.value()).getString("conversation code");
+                    response.getJSONObject(MessagesTopLevelConstants.VALUE.value())
+                            .getString(ChatMessagesConstants.CONVERSATION_CODE.value()));
+            return response.getJSONObject(MessagesTopLevelConstants.VALUE.value())
+                    .getString(ChatMessagesConstants.CONVERSATION_CODE.value());
         }
         return "";
     }

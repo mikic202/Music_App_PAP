@@ -1,7 +1,5 @@
 package client.Music;
 
-import client.Music.MusicClient;
-import client.Music.MusicAccessors;
 import client.ServerConnector.ServerConnector;
 
 import javax.sound.sampled.AudioFormat;
@@ -46,25 +44,20 @@ public class MusicManager {
         JSONObject result = musicAccessors.sendGetUserSongs(thisUserId);
         JSONArray songs = result.getJSONArray(MessagesTopLevelConstants.VALUE.value());
 
-        for(int i = 0; i < songs.length(); i++)
-        {
+        for (int i = 0; i < songs.length(); i++) {
             JSONObject data = songs.getJSONObject(i);
-            String songName =
-            data.getString(ChatMessagesConstants.CONVERSATION_NAME.value());
+            String songName = data.getString(ChatMessagesConstants.CONVERSATION_NAME.value());
             int songId = data.getInt("id");
-            if(songName != "none")
-            {
+            if (songName != "none") {
                 userSongs.put(songName, songId);
             }
         }
-//        userSongs.put("inva", 3);
-//        userSongs.put("song", 2);
+        // userSongs.put("inva", 3);
+        // userSongs.put("song", 2);
     }
 
-    public synchronized ArrayList<Integer> getCurrentTime()
-    {
-        if(musicClient == null)
-        {
+    public synchronized ArrayList<Integer> getCurrentTime() {
+        if (musicClient == null) {
             ArrayList<Integer> emptyList = new ArrayList<Integer>();
             emptyList.add(0);
             emptyList.add(0);
@@ -73,10 +66,8 @@ public class MusicManager {
         return musicClient.getCurrentTime();
     }
 
-    public synchronized ArrayList<Integer> getTotalTime()
-    {
-        if(musicClient == null)
-        {
+    public synchronized ArrayList<Integer> getTotalTime() {
+        if (musicClient == null) {
             ArrayList<Integer> emptyList = new ArrayList<Integer>();
             emptyList.add(0);
             emptyList.add(0);
@@ -85,10 +76,8 @@ public class MusicManager {
         return musicClient.getTotalTime();
     }
 
-    public synchronized int getPercentageOfSongPlayed()
-    {   
-        if(musicClient == null)
-        {
+    public synchronized int getPercentageOfSongPlayed() {
+        if (musicClient == null) {
             return 0;
         }
         return musicClient.getPercentageOfSongPlayed();
@@ -104,8 +93,7 @@ public class MusicManager {
 
     public synchronized EStreamStatus startStream(int chatId, int songId) {
         if (musicClient != null) {
-            if(musicClient.isActive())
-            {
+            if (musicClient.isActive()) {
                 musicAccessors.sendLeaveStream(thisUserId);
                 musicClient.terminateReceiving();
             }
@@ -154,8 +142,7 @@ public class MusicManager {
 
     public synchronized EStreamStatus joinPlayingStream(int chatId) {
         if (musicClient != null) {
-            if(musicClient.isActive())
-            {
+            if (musicClient.isActive()) {
                 musicAccessors.sendLeaveStream(thisUserId);
                 musicClient.terminateReceiving();
             }
@@ -246,7 +233,8 @@ public class MusicManager {
         boolean streamCreated = value.getBoolean("created");
         boolean streamPlaying = value.getBoolean("playing");
         boolean formatAvailable = value.getBoolean("format_available");
-        System.out.println(String.format(("format available: %b, stream created: %b, playing: %b"), formatAvailable, streamCreated, streamPlaying)); 
+        System.out.println(String.format(("format available: %b, stream created: %b, playing: %b"), formatAvailable,
+                streamCreated, streamPlaying));
         if (!(formatAvailable && streamCreated)) {
             return EStreamStatus.STREAM_INVALID;
         }
@@ -280,9 +268,7 @@ public class MusicManager {
         EStreamStatus status = getPlayingStreamInfo(currentChatId);
         if (status == EStreamStatus.STREAM_PAUSED) {
             musicClient.stopPlaying();
-        }
-        else if(status == EStreamStatus.STREAM_INVALID)
-        {
+        } else if (status == EStreamStatus.STREAM_INVALID) {
             musicClient.terminateReceiving();
         }
     }

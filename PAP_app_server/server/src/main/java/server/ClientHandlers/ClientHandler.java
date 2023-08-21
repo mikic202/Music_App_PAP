@@ -17,7 +17,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import server.Chat.Chat;
-import server.Chat.RequestTypes;
+import server.Chat.ChatRequestTypes;
 import server.Login.Login;
 import server.Login.LoginRequestTypes;
 import server.files.UploadRequestProcessor;
@@ -30,7 +30,7 @@ import server.ServerConnectionConstants.MessagesTopLevelConstants;
 public class ClientHandler implements Runnable {
 	List<Client> clients = new ArrayList<Client>();
 	boolean running = true;
-	final int THREAD_COUNT = 5;
+	final int THREAD_COUNT = 25;
 
 	public ClientHandler() {
 
@@ -48,11 +48,11 @@ public class ClientHandler implements Runnable {
 	}
 
 	public void run() {
+		ThreadPoolExecutor threadPool = (ThreadPoolExecutor) Executors.newFixedThreadPool(THREAD_COUNT);
 		while (true) {
 			Instant start = Instant.now();
 			synchronized (clients) {
 				ListIterator<Client> it = clients.listIterator();
-				ThreadPoolExecutor threadPool = (ThreadPoolExecutor) Executors.newFixedThreadPool(THREAD_COUNT);
 				// System.out.println("Processing clients.");
 				while (it.hasNext()) {
 					// System.out.println("Processing client.");
@@ -103,8 +103,8 @@ public class ClientHandler implements Runnable {
 			System.out.println(message);
 			return;
 		}
-		RequestTypes type = null;
-		for (RequestTypes t : RequestTypes.values()) {
+		ChatRequestTypes type = null;
+		for (ChatRequestTypes t : ChatRequestTypes.values()) {
 			if (t.value().equals(typeStr)) {
 				type = t;
 			}

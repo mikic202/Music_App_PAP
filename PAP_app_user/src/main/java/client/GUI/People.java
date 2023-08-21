@@ -7,13 +7,9 @@ package client.GUI;
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import java.awt.Color;
-import java.util.ArrayList;
 import java.util.concurrent.Callable;
 
 import javax.swing.SwingUtilities;
-import javax.swing.filechooser.FileNameExtensionFilter;
-
-import org.json.JSONObject;
 
 import net.miginfocom.swing.MigLayout;
 

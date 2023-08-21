@@ -11,13 +11,13 @@ import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
 import server.Chat.Chat;
-import server.Chat.RequestTypes;
+import server.Chat.ChatRequestTypes;
 import server.DatabaseInteractors.UserDataAccesor;
 import server.ServerConnectionConstants.MessagesTopLevelConstants;
 import server.ServerConnectionConstants.ChatMessagesConstants;
 
 public class ChatTests {
-    private static JSONObject _convertResponseToJson(Hashtable<String, String> response, RequestTypes reqType) {
+    private static JSONObject _convertResponseToJson(Hashtable<String, String> response, ChatRequestTypes reqType) {
         JSONObject jsonResponse = new JSONObject();
         jsonResponse.put(MessagesTopLevelConstants.TYPE.value(), reqType.value());
         JSONObject jsonResponseValue = new JSONObject();
@@ -42,11 +42,11 @@ public class ChatTests {
             userData.put("password", "12345");
             userData.put("profile_picture", "0");
             dummyAccesor.when(() -> UserDataAccesor.getData(1)).thenReturn(userData);
-            var expectedResponse = _convertResponseToJson(userData, RequestTypes.USER_INFO);
+            var expectedResponse = _convertResponseToJson(userData, ChatRequestTypes.USER_INFO);
             expectedResponse.getJSONObject(MessagesTopLevelConstants.VALUE.value()).remove("password");
             Assert.assertEquals(
                     expectedResponse.toString(),
-                    Chat.procesRequests(RequestTypes.USER_INFO, request).toString());
+                    Chat.procesRequests(ChatRequestTypes.USER_INFO, request).toString());
         }
     }
 
@@ -64,11 +64,11 @@ public class ChatTests {
             userData.put("profile_picture", "0");
             dummyAccesor.when(() -> UserDataAccesor.getData(ChatMessagesConstants.USERNAME.value(), "some_user"))
                     .thenReturn(userData);
-            var expectedResponse = _convertResponseToJson(userData, RequestTypes.USER_INFO);
+            var expectedResponse = _convertResponseToJson(userData, ChatRequestTypes.USER_INFO);
             expectedResponse.getJSONObject(MessagesTopLevelConstants.VALUE.value()).remove("password");
             Assert.assertEquals(
                     expectedResponse.toString(),
-                    Chat.procesRequests(RequestTypes.USER_INFO, request).toString());
+                    Chat.procesRequests(ChatRequestTypes.USER_INFO, request).toString());
         }
     }
 }

@@ -1,6 +1,5 @@
 package client.Music;
 
-import java.io.BufferedInputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 
@@ -8,13 +7,11 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.SourceDataLine;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
-public class MusicPlayer implements Runnable
-{
+public class MusicPlayer implements Runnable {
     private int bufferSize;
 
     private PipedInputStream pipedInputStream;
@@ -28,33 +25,29 @@ public class MusicPlayer implements Runnable
     private int totalMinutes = 0;
     private int currentPacketCount = 0;
 
-
-    public MusicPlayer(PipedOutputStream pipedOutput, AudioFormat fileFormat, StreamStatusCallback streamStatusCb, int lengthInBytes) throws Exception
-    {
+    public MusicPlayer(PipedOutputStream pipedOutput, AudioFormat fileFormat, StreamStatusCallback streamStatusCb,
+            int lengthInBytes) throws Exception {
         this.format = fileFormat;
-        int size = (int) (lengthInBytes/(format.getSampleRate()*format.getChannels()*(format.getSampleSizeInBits()/8)));
+        int size = (int) (lengthInBytes
+                / (format.getSampleRate() * format.getChannels() * (format.getSampleSizeInBits() / 8)));
 
         totalSeconds = size % 60;
         totalMinutes = size / 60;
 
         int frameSize = format.getFrameSize();
-        bufferSize = frameSize*128; //amount of read bytes must be multiplication of frames/second
-        this.pipedInputStream = new PipedInputStream(pipedOutput, bufferSize*1024*128);
+        bufferSize = frameSize * 128; // amount of read bytes must be multiplication of frames/second
+        this.pipedInputStream = new PipedInputStream(pipedOutput, bufferSize * 1024 * 128);
         this.streamStatusCb = streamStatusCb;
     }
 
-    public void run()
-    {
+    public void run() {
         this.playing = true;
         startPlayer();
     }
 
-    public void startPlayer()
-    {
-        try
-        {
-            while (pipedInputStream.available() < bufferSize*512)
-            {
+    public void startPlayer() {
+        try {
+            while (pipedInputStream.available() < bufferSize * 512) {
                 Thread.sleep(100);
             }
             DataLine.Info dataLineInfo = new DataLine.Info(SourceDataLine.class, format);
@@ -64,34 +57,25 @@ public class MusicPlayer implements Runnable
 
             byte[] buf = new byte[bufferSize];
 
-            while (terminated == false)
-            {
-                if (playing)
-                {
-                    if(pipedInputStream.available() > (bufferSize - 1))
-                    {
-                        if(pipedInputStream.read(buf = new byte[bufferSize], 0, buf.length) > 0)
-                        {
+            while (terminated == false) {
+                if (playing) {
+                    if (pipedInputStream.available() > (bufferSize - 1)) {
+                        if (pipedInputStream.read(buf = new byte[bufferSize], 0, buf.length) > 0) {
                             this.currentPacketCount = byteArrayToInt(buf);
                             byte[] strippedBuf = Arrays.copyOfRange(buf, 0, buf.length - 4);
                             sourceDataLine.write(strippedBuf, 0, strippedBuf.length);
                             updateTime();
                         }
-                    }
-                    else
-                    {
+                    } else {
                         System.out.println("start check if paused");
                         checkIfStreamPaused();
                         System.out.println("check if paused");
                         Thread.sleep(500);
                     }
-                }
-                else
-                {
+                } else {
                     System.out.println("skipping");
-                    int toSkip = pipedInputStream.available() - bufferSize*32;
-                    if(toSkip < 0)
-                    {
+                    int toSkip = pipedInputStream.available() - bufferSize * 32;
+                    if (toSkip < 0) {
                         toSkip = 0;
                     }
                     pipedInputStream.skip(toSkip);
@@ -104,59 +88,50 @@ public class MusicPlayer implements Runnable
             sourceDataLine.close();
             pipedInputStream.close();
             System.out.println("All available data has been read");
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             System.out.println("Exception");
             e.printStackTrace();
         }
     }
 
-    public synchronized void stopPlaying()
-    {
+    public synchronized void stopPlaying() {
         playing = false;
     }
 
-    public synchronized void resumePlaying()
-    {
+    public synchronized void resumePlaying() {
         playing = true;
     }
 
-    public synchronized boolean isPlaying()
-    {
+    public synchronized boolean isPlaying() {
         return playing;
     }
 
-    public synchronized void terminatePlayer()
-    {
+    public synchronized void terminatePlayer() {
         playing = false;
         terminated = true;
     }
 
-    private void checkIfStreamPaused()
-    {
+    private void checkIfStreamPaused() {
         streamStatusCb.checkIfPaused();
     }
 
-    interface StreamStatusCallback
-    {
+    interface StreamStatusCallback {
         void checkIfPaused();
     }
 
-    private synchronized void updateTime()
-    {
+    private synchronized void updateTime() {
 
-        int absSecond = (int) ((bufferSize - 4)*currentPacketCount/(format.getSampleRate()*format.getChannels()*(format.getSampleSizeInBits()/8)));
+        int absSecond = (int) ((bufferSize - 4) * currentPacketCount
+                / (format.getSampleRate() * format.getChannels() * (format.getSampleSizeInBits() / 8)));
 
-        if(absSecond >= 60 * (currentMinute + 1))
-        {
+        if (absSecond >= 60 * (currentMinute + 1)) {
             currentMinute += 1;
         }
 
-        currentSecond = absSecond - (60*currentMinute);
+        currentSecond = absSecond - (60 * currentMinute);
 
-
-        //System.out.println(String.format(("%d:%d ||||| Total %d:%d"), currentMinute, currentSecond, totalMinutes, totalSeconds));
+        // System.out.println(String.format(("%d:%d ||||| Total %d:%d"), currentMinute,
+        // currentSecond, totalMinutes, totalSeconds));
     }
 
     public static final int byteArrayToInt(byte[] bytes) {
@@ -168,27 +143,22 @@ public class MusicPlayer implements Runnable
         return ByteBuffer.wrap(byteArrayInt).getInt();
     }
 
-    public synchronized ArrayList<Integer> getCurrentTime()
-    {
+    public synchronized ArrayList<Integer> getCurrentTime() {
         ArrayList<Integer> time = new ArrayList<Integer>();
         time.add(currentSecond);
         time.add(currentMinute);
         return time;
     }
 
-    public synchronized ArrayList<Integer> getTotalTime()
-    {
+    public synchronized ArrayList<Integer> getTotalTime() {
         ArrayList<Integer> time = new ArrayList<Integer>();
         time.add(totalSeconds);
         time.add(totalMinutes);
         return time;
     }
 
-    public synchronized int getPercentageOfSongPlayed()
-    {
-        float percentage = 100*((currentMinute*60 + currentSecond)/(totalMinutes * 60 + totalSeconds));
+    public synchronized int getPercentageOfSongPlayed() {
+        float percentage = 100 * ((currentMinute * 60 + currentSecond) / (totalMinutes * 60 + totalSeconds));
         return (int) percentage;
     }
 }
-
-

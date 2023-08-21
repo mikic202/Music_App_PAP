@@ -13,12 +13,7 @@ import java.io.FileNotFoundException;
 import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
 
-import com.formdev.flatlaf.FlatDarkLaf;
-import com.formdev.flatlaf.FlatLightLaf;
-import javax.swing.SwingUtilities;
-
 import client.Chat.Chat;
-import client.GUI.guiListeners.SongListSelectionListener;
 import client.Music.MusicManager;
 import client.ServerConnectionConstants.ChatMessagesConstants;
 import client.ServerConnector.ServerConnector;

@@ -4,8 +4,6 @@
  */
 package client.GUI;
 
-import java.nio.file.Files;
-
 import javax.swing.JLabel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
