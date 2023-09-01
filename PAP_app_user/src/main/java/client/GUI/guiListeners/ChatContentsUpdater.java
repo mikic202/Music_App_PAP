@@ -74,8 +74,8 @@ public class ChatContentsUpdater {
         String textImageString = message.getString(ChatMessagesConstants.MESSAGE_TEXT.value());
         try {
             BufferedImage defaultImage = ImageProcessor.convertStringArrayToImage(textImageString);
-            Image scaledImage = defaultImage.getScaledInstance(PROFILE_PICTURE_SIZE, PROFILE_PICTURE_SIZE,
-                    Image.SCALE_DEFAULT);
+            Image scaledImage = defaultImage.getScaledInstance(300,
+                    defaultImage.getHeight() * (300 / defaultImage.getWidth()), Image.SCALE_DEFAULT);
             chatPanel.chatText.setIcon((new ImageIcon(scaledImage)));
         } catch (Exception e) {
             System.out.println(e);
@@ -86,8 +86,8 @@ public class ChatContentsUpdater {
             try {
                 String imageString = userInfo.getString("profile_picture");
                 BufferedImage defaultImage = ImageProcessor.convertStringArrayToImage(imageString);
-                Image scaledImage = defaultImage.getScaledInstance(300,
-                        defaultImage.getHeight() * (300 / defaultImage.getWidth()), Image.SCALE_DEFAULT);
+                Image scaledImage = defaultImage.getScaledInstance(PROFILE_PICTURE_SIZE, PROFILE_PICTURE_SIZE,
+                        Image.SCALE_DEFAULT);
                 chatPanel.avatarChat.setIcon((new ImageIcon(scaledImage)));
             } catch (Exception e) {
                 System.out.println(e);
