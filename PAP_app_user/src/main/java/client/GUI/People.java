@@ -354,7 +354,7 @@ public class People extends javax.swing.JPanel {
 		changeChatNameLabel.setFont(new java.awt.Font("Segoe UI Black", 0, 13)); // NOI18N
 		changeChatNameLabel.setText("Change current conversation name:");
 
-		changeChatName.setText("jTextField1");
+		changeChatName.setText("");
 
 		changeButton.setText("Chnage");
 		changeButton.addActionListener(new ChangeConversationNameListener(changeChatName, chat, new Callable<Void>() {
