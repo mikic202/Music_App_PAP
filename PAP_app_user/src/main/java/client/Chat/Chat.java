@@ -18,7 +18,6 @@ public class Chat {
     private Hashtable<Integer, ArrayList<JSONObject>> messagesInUsersConversation;
     private Hashtable<Integer, ArrayList<Integer>> usersInConversarion;
     private Hashtable<Integer, JSONObject> usersEncountered;
-    private Hashtable<Integer, String> conversationCodes;
     private ChatAccesors chatAccesor;
     private int currentConversation;
     private int userId;
@@ -32,7 +31,6 @@ public class Chat {
         usersConversations = new Hashtable<>();
         messagesInUsersConversation = new Hashtable<>();
         usersInConversarion = new Hashtable<>();
-        conversationCodes = new Hashtable<>();
 
         initChatComponents(serverConnector, currentConv);
 
@@ -210,16 +208,18 @@ public class Chat {
     }
 
     public String getCurrentConversationCode() {
-        if (conversationCodes.keySet().contains(currentConversation)) {
-            return conversationCodes.get(currentConversation);
+        if (usersConversations.keySet().contains(currentConversation)
+                && usersConversations.get(currentConversation).has(ChatMessagesConstants.CONVERSATION_CODE.value())) {
+            System.out.println(usersConversations.get(currentConversation));
+            return usersConversations.get(currentConversation)
+                    .getString(ChatMessagesConstants.CONVERSATION_CODE.value());
         }
         if (currentConversation != -1) {
             JSONObject response = chatAccesor.getConversationCode(currentConversation);
-            conversationCodes.put(currentConversation,
-                    response.getJSONObject(MessagesTopLevelConstants.VALUE.value())
-                            .getString(ChatMessagesConstants.CONVERSATION_CODE.value()));
-            return response.getJSONObject(MessagesTopLevelConstants.VALUE.value())
+            var convCode = response.getJSONObject(MessagesTopLevelConstants.VALUE.value())
                     .getString(ChatMessagesConstants.CONVERSATION_CODE.value());
+            usersConversations.get(currentConversation).put(ChatMessagesConstants.CONVERSATION_CODE.value(), convCode);
+            return convCode;
         }
         return "";
     }

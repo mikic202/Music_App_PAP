@@ -132,7 +132,7 @@ public class Music extends javax.swing.JPanel {
 
 		titleLabel.setText("Title:");
 
-		title.setText("jTextField1");
+		title.setText("");
 
 		producerLabel.setText("Producer:");
 
@@ -140,11 +140,11 @@ public class Music extends javax.swing.JPanel {
 
 		genreLabel.setText("Genre:");
 
-		uploaded.setText("jTextField1");
+		uploaded.setText("");
 
-		producer.setText("jTextField1");
+		producer.setText("");
 
-		genre.setText("jTextField1");
+		genre.setText("");
 
 		uploadButton.setText("Upload");
 		uploadButton.addActionListener(new java.awt.event.ActionListener() {
@@ -158,13 +158,13 @@ public class Music extends javax.swing.JPanel {
 
 		songNameLabel.setText("Song name:");
 
-		songName.setText("jTextField1");
+		songName.setText("");
 
 		rewriteLabel.setText("Rewrite:");
 
 		rewriteCodeLabel.setText("jLabel3");
 
-		rewrite.setText("jTextField1");
+		rewrite.setText("");
 
 		disclaimerLabel.setText("Disclaimer: You can only remove songs that have been uploaded by you!");
 

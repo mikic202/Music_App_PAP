@@ -76,7 +76,7 @@ public class LoginScreen extends javax.swing.JFrame {
 		Password.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
 		Password.setText("Password:");
 
-		PasswordField.setText("jPasswordField1");
+		PasswordField.setText("");
 		PasswordField.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				PasswordFieldActionPerformed(evt);
