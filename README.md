@@ -1,21 +1,23 @@
-# PAP2023L-ZJK1
+# PAP MUsic App
+This is project of music app calle "Connected by Music" created during 2023L semestrer of PAP cours at Warsaw University of Technology. This project was a colaboration between four people. This project was developed on gitlab of our faculty and only after finishing it it was moved to GitHub.
 
 
-<h2>Zespół:</h2>
+## Colaborators:
 
-- Mikołaj Chomanski
-- Adam Czubak
-- Władysław Młynik
-- Jakub Kierasiński
+|Contributors| Git nicknames|
+|------------|:--------------:|
+|Mikołaj Chomanski| mchomans, [mikic202](https://github.com/mikic202)|
+|Władysław Młynik | wmlynik|
+|Adam Czubak| aczubak |
+|Jakub Kierasiński| jkierasi |
+
+## Technologies
+- GUI: Java + swing
+- Server: Java
+- Database: mySQL
 
 <h2>Pomysł</h2>
 Aplikacja Desktopowa do wspólnego odtwarzania muzyki.
-
-<h2>Technologie</h2>
-
-- GUI: Java + swing
-- Server: Java
-- Bazadanych: mySQL na własnym serwerze, Pliki muzyki będziemy przechowywać w tradycyjny sposób, a w bazie danych będziemy przechowywać ścieżkę do plików
 
 
 <h2>Zaimplementowane Funkcjonalności</h2>
